@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <meta name="robots" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Techneketax Admin" />
+    <meta property="og:title" content="Techneketax" />
+    <meta property="og:description" content="Techneketax" />
+    <meta property="og:image" content="https://techneketax.local/assets/img/icon-300.webp" />
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- PAGE TITLE HERE -->
+    <title>404 Page not found</title>
+    <!-- FAVICONS ICON -->
+    <script>
+        window.baseUrl = 'https://techneketax.local/assets/backend';
+    </script>
+    <link rel="shortcut icon" type="image/png" href="https://techneketax.local/assets/img/favicon.webp" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/2.4.85/css/materialdesignicons.min.css" integrity="sha512-QrjjD03/pcxwALR6g6MztfAzX9CLxxfbdBP5vamjZGlBQeOQg3fE1ZQH6UMc4U5W4NRkKw+6mwVZ6NnXJujInw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.css" integrity="sha512-9Tu/Gu0+bXW+oGrTGJOeNz2RG4MaF52FznXCciXFrXehFTLF6phJnJFNVOU2mmj9FWIXk9ap0H1ocygu1ZTRqg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css" integrity="sha512-vebUliqxrVkBy3gucMhClmyQP9On/HAWQdKDXRaAlb/FKuTbxkjPKUyqVOxAcGwFDka79eTF+YXwfke1h3/wfg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons"rel="stylesheet">
+    <link href="https://techneketax.local/assets/backend/css/style.css" rel="stylesheet">
+
+</head>
+<body class="h-100" data-typography="poppins" data-theme-version="light" data-layout="vertical" data-nav-headerbg="color_13" data-headerbg="color_13" data-sidebar-style="mini" data-sidebarbg="color_13" data-sidebar-position="fixed" data-header-position="fixed" data-container="wide" direction="ltr" data-primary="color_13">
+<div class="authincation h-100">
+    <div class="container h-100">
+        <div class="row justify-content-center h-100 align-items-center">
+            <div class="col-md-6">
+                <div class="form-input-content text-center error-page">
+                    <h1 class="error-text font-weight-bold">404</h1>
+                    <h4><i class="fa fa-exclamation-triangle text-warning"></i> The page you were looking for is not found!</h4>
+                    <p>You may have mistyped the address or the page may have moved.</p>
+                    <div>
+                        <a class="btn btn-primary" href="/">Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--**********************************
+    Scripts
+***********************************-->
+<!-- Required vendors -->
+<script src="https://techneketax.local/assets/backend/vendor/global/global.min.js"></script>
+<script src="https://techneketax.local/assets/backend/js/custom.min.js"></script>
+</body>
+</html>
+
+
+
+<!-- Tracy Debug Bar -->
+<script src="/uploads/firm_document/60-firmfirmm/college_one_KcSiH.pdf?_tracy_bar=js&amp;v=2.10.7&amp;XDEBUG_SESSION_STOP=1" data-id="affef2c056"></script>
+<script>
+Tracy.Debug.init("<div id=tracy-debug-bar>\r\n<ul class=\"tracy-row\" data-tracy-group=\"main\">\r\n\t<li id=\"tracy-debug-logo\" title=\"Tracy Debugger 2.10.7 \nhttps://tracy.nette.org\">\r\n\t\t<svg viewBox=\"0 -10 1561 333\"><path fill=\"#585755\" d=\"m176 327h-57v-269h-119v-57h291v57h-115v269zm208-191h114c50 0 47-78 0-78h-114v78zm106-135c17 0 33 2 46 7 75 30 75 144 1 175-13 6-29 8-47 8h-27l132 74v68l-211-128v122h-57v-326h163zm300 57c-5 0-9 3-11 9l-56 156h135l-55-155c-2-7-6-10-13-10zm-86 222l-17 47h-61l102-285c20-56 107-56 126 0l102 285h-61l-17-47h-174zm410 47c-98 0-148-55-148-163v-2c0-107 50-161 149-161h118v57h-133c-26 0-45 8-58 25-12 17-19 44-19 81 0 71 26 106 77 106h133v57h-119zm270-145l-121-181h68l81 130 81-130h68l-121 178v148h-56v-145z\"/><\/svg>\r\n\t</li>\r\n\r\n\t<li><a href=\"#\" rel=\"tracy-debug-panel-Tracy-info\"><span title=\"Execution time\">\r\n<svg viewBox=\"0 0 2048 2048\"><path fill=\"#86bbf0\" d=\"m640 1153.6v639.3h-256v-639.3z\"/><path fill=\"#6ba9e6\" d=\"m1024 254.68v1538.2h-256v-1538.2z\"/><path fill=\"#4f96dc\" d=\"m1408 897.57v894.3h-256v-894.3z\"/><path fill=\"#3987d4\" d=\"m1792 513.08v1279.8h-256v-1279.8z\"/>\r\n<\/svg><span class=\"tracy-label\">93.0 ms<\/span>\r\n<\/span></a></li>\r\n\r\n\t<li><a href=\"#\" data-tracy-action=\"close\" title=\"close debug bar\">&times;</a></li>\r\n</ul>\r\n</div><div itemscope>\t<div class=\"tracy-panel tracy-panel-persist tracy-panel-main\" id=\"tracy-debug-panel-Tracy-info\" data-tracy-content='<style class=\"tracy-debug\">\r\n\t#tracy-debug .tracy-InfoPanel td {\r\n\t\twhite-space: nowrap;\r\n\t}\r\n\t#tracy-debug .tracy-InfoPanel td:nth-child(2) {\r\n\t\tfont-weight: bold;\r\n\t\twidth: 60%;\r\n\t}\r\n\t#tracy-debug .tracy-InfoPanel td[colspan=&#039;2&#039;] b {\r\n\t\tfloat: right;\r\n\t\tmargin-left: 2em;\r\n\t\twhite-space: normal;\r\n\t}\r\n<\/style>\r\n\r\n<h1>System info</h1>\r\n\r\n<div class=\"tracy-inner tracy-InfoPanel\">\r\n<div class=\"tracy-inner-container\">\r\n<table class=\"tracy-sortable\">\r\n<tr>\r\n\t<td>Execution time</td><td>93.0 ms</td>\r\n</tr>\r\n<tr>\r\n\t<td>CPU usage user + system</td><td>17 % + 34 %</td>\r\n</tr>\r\n<tr>\r\n\t<td>Peak of allocated memory</td><td>5.92 MB</td>\r\n</tr>\r\n<tr>\r\n\t<td>Included files</td><td>188</td>\r\n</tr>\r\n<tr>\r\n\t<td>Classes + interfaces + traits</td><td>119 + 32 + 11</td>\r\n</tr>\r\n<tr>\r\n\t<td>OPcache</td><td>–</td>\r\n</tr>\r\n<tr>\r\n\t<td>JIT</td><td>–</td>\r\n</tr>\r\n<tr>\r\n\t<td>Your IP</td><td>127.0.0.1 (localhost)</td>\r\n</tr>\r\n<tr>\r\n\t<td>Server IP</td><td>127.0.0.1 (localhost)</td>\r\n</tr>\r\n<tr>\r\n\t<td>HTTP method / response code</td><td>GET / 200</td>\r\n</tr>\r\n<tr>\r\n\t<td>PHP</td><td>8.1.4 TS</td>\r\n</tr>\r\n<tr>\r\n\t<td>Tracy</td><td>2.10.7</td>\r\n</tr>\r\n<tr>\r\n\t<td colspan=2>Server <b>Apache/2.4.33 (Win64) OpenSSL/1.0.2u mod_fcgid/2.3.9 PHP/8.1.4</b></td>\r\n</tr>\r\n</table>\r\n\r\n\t<h2><a class=\"tracy-toggle tracy-collapsed\" data-tracy-ref=\"^div .tracy-InfoPanel-packages\">Composer Packages (48)</a></h2>\r\n\r\n\t<div class=\"tracy-InfoPanel-packages tracy-collapsed\">\r\n\t\t<table class=\"tracy-sortable\">\r\n\t\t\t<tr><td>carbonphp/carbon-doctrine-types</td><td>3.2.0</td></tr>\r\n\t\t\t<tr><td>cboden/ratchet</td><td>v0.4.4</td></tr>\r\n\t\t\t<tr><td>cycle/annotated</td><td>v4.1.0</td></tr>\r\n\t\t\t<tr><td>cycle/database</td><td>2.11.0</td></tr>\r\n\t\t\t<tr><td>cycle/orm</td><td>v2.8.0</td></tr>\r\n\t\t\t<tr><td>cycle/schema-builder</td><td>v2.9.0</td></tr>\r\n\t\t\t<tr><td>doctrine/inflector</td><td>2.0.10</td></tr>\r\n\t\t\t<tr><td>doctrine/instantiator</td><td>2.0.0</td></tr>\r\n\t\t\t<tr><td>evenement/evenement</td><td>v3.0.2</td></tr>\r\n\t\t\t<tr><td>guzzlehttp/psr7</td><td>2.7.0</td></tr>\r\n\t\t\t<tr><td>intervention/gif</td><td>4.1.0</td></tr>\r\n\t\t\t<tr><td>intervention/image</td><td>3.7.2</td></tr>\r\n\t\t\t<tr><td>nesbot/carbon</td><td>3.7.0</td></tr>\r\n\t\t\t<tr><td>phpmailer/phpmailer</td><td>v6.9.1</td></tr>\r\n\t\t\t<tr><td>psr/cache</td><td>3.0.0</td></tr>\r\n\t\t\t<tr><td>psr/clock</td><td>1.0.0</td></tr>\r\n\t\t\t<tr><td>psr/container</td><td>2.0.2</td></tr>\r\n\t\t\t<tr><td>psr/http-factory</td><td>1.1.0</td></tr>\r\n\t\t\t<tr><td>psr/http-message</td><td>2.0</td></tr>\r\n\t\t\t<tr><td>psr/log</td><td>3.0.0</td></tr>\r\n\t\t\t<tr><td>psr/simple-cache</td><td>3.0.0</td></tr>\r\n\t\t\t<tr><td>ralouphie/getallheaders</td><td>3.0.3</td></tr>\r\n\t\t\t<tr><td>ratchet/rfc6455</td><td>v0.3.1</td></tr>\r\n\t\t\t<tr><td>react/cache</td><td>v1.2.0</td></tr>\r\n\t\t\t<tr><td>react/dns</td><td>v1.13.0</td></tr>\r\n\t\t\t<tr><td>react/event-loop</td><td>v1.5.0</td></tr>\r\n\t\t\t<tr><td>react/promise</td><td>v3.2.0</td></tr>\r\n\t\t\t<tr><td>react/socket</td><td>v1.15.0</td></tr>\r\n\t\t\t<tr><td>react/stream</td><td>v1.4.0</td></tr>\r\n\t\t\t<tr><td>spiral/attributes</td><td>v3.1.6</td></tr>\r\n\t\t\t<tr><td>spiral/core</td><td>3.13.0</td></tr>\r\n\t\t\t<tr><td>spiral/logger</td><td>3.13.0</td></tr>\r\n\t\t\t<tr><td>spiral/pagination</td><td>3.13.0</td></tr>\r\n\t\t\t<tr><td>spiral/tokenizer</td><td>3.13.0</td></tr>\r\n\t\t\t<tr><td>symfony/clock</td><td>v6.4.8</td></tr>\r\n\t\t\t<tr><td>symfony/deprecation-contracts</td><td>v3.5.0</td></tr>\r\n\t\t\t<tr><td>symfony/finder</td><td>v6.4.8</td></tr>\r\n\t\t\t<tr><td>symfony/http-foundation</td><td>v6.4.8</td></tr>\r\n\t\t\t<tr><td>symfony/polyfill-ctype</td><td>v1.30.0</td></tr>\r\n\t\t\t<tr><td>symfony/polyfill-mbstring</td><td>v1.30.0</td></tr>\r\n\t\t\t<tr><td>symfony/polyfill-php80</td><td>v1.30.0</td></tr>\r\n\t\t\t<tr><td>symfony/polyfill-php83</td><td>v1.30.0</td></tr>\r\n\t\t\t<tr><td>symfony/routing</td><td>v6.4.8</td></tr>\r\n\t\t\t<tr><td>symfony/translation</td><td>v6.4.8</td></tr>\r\n\t\t\t<tr><td>symfony/translation-contracts</td><td>v3.5.0</td></tr>\r\n\t\t\t<tr><td>tracy/tracy</td><td>v2.10.7</td></tr>\r\n\t\t\t<tr><td>twig/twig</td><td>v3.10.3</td></tr>\r\n\t\t\t<tr><td>yiisoft/friendly-exception</td><td>1.1.0</td></tr>\r\n\t\t</table>\r\n\t\r\n\t\t</div>\r\n</div>\r\n</div>\r\n\n\r\n\t<div class=\"tracy-icons\">\r\n\t\t<a href=\"#\" data-tracy-action=\"window\" title=\"open in window\">&amp;curren;</a>\r\n\t\t<a href=\"#\" data-tracy-action=\"close\" title=\"close window\">&amp;times;</a>\r\n\t</div>\r\n'></div>\t<div class=\"tracy-panel tracy-panel-persist tracy-panel-main\" id=\"tracy-debug-panel-Tracy-errors\" data-tracy-content=''></div><meta itemprop=tracy-snapshot content='[]'></div>");
+</script>

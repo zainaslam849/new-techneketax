@@ -1,0 +1,252 @@
+{% extends 'public/layout.twig' %}
+
+{% block content %}
+    <input type="hidden" value="{{ csrf }}" name="csrf">
+    <!-- Hero Header Three -->
+    <div class="hero-header hero-header__three align-items-center d-flex position-relative header-gradient">
+        <div class="container position-relative">
+            <div class="row justify-content-center justify-content-lg-between align-items-center">
+                <div class="col-sm-10 col-md-10 col-lg-6 col-xl-6 col-xxl-6 pe-xxl-5">
+                    <!-- Start Title -->
+                    <!-- <h1 class="display-3 fw-bold text-capitalize hero-title background-image" data-image-src="{{ env.APP_URL }}assets/public/img/hero-title-bg.jpg">We help people Find Their Dream Property.</h1> -->
+                    <h2 class="hero-header_title display-5 fw-bold text-capitalize">Your Dream Our Mission Real Estate Backing<span class="underline position-relative text-primary"> Entrepreneurial</span>  Spirit.</h2>
+                    <!-- /.End Title -->
+                    <!-- Start Text -->
+                    <p class=" mb-2">Every transaction with us fuels the mission of <span class="text-primary"><a class="text-primary"
+                                    href="https://www.cosgn.com"><strong>Cosgn</strong></a></span>, our tech company supporting startups without upfront costs. </p>
+                    <p>Welcome to the ideal destination for buying or selling real estate in Canada. At our esteemed real estate agency, we're committed to serving as your trusted partner in maneuvering through the dynamic and evolving Canadian real estate market. With our expert guidance and invaluable market insights, rest assured, your journey will be one of confidence and ease.</p>
+                    <!-- /.End Text -->
+                    <!-- Start Main Search Content -->
+                    <form class="row g-3 main-search" id="searchForm">
+                        <div class="col-md-12">
+                            <!-- Start Search Input -->
+                            <div class="search-input">
+                                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                                <input type="text" name="searchQuery"  class="form-control" placeholder="City, Neighbourhood, Address or MLS® number">
+                                <button type="submit" class="btn btn-primary search-btn position-absolute top-50" aria-label="Submit Search"> <!-- For search button -->
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </button>
+                            </div>
+                            <!-- /.End Search Input -->
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Start Search Select -->
+                            <div class="search-select">
+                                <select name="location"  class="select2 form-select" aria-label="Location">
+                                    <option value="">All Location</option>
+                                    {% for county in uniqueCounties %}
+                                        <option value="{{ county.Municipality }}" >{{ county.Municipality }}</option>
+                                    {% endfor %}
+                                </select>
+                                <i class="fa-solid fa-location-crosshairs search-icon"></i>
+                            </div>
+                            <!-- /.End Search Select -->
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Start Search Select -->
+                            <div class="search-select">
+                                <select class="select2 form-select" name="propertyType" aria-label="Property-type">
+                                    <option value="">All Property Type</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category.name }}" >{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <i class="fa-solid fa-house fs-17 search-icon"></i>
+                            </div>
+                            <!-- /.End Search Select -->
+                        </div>
+
+                    </form>
+                    <!-- /.End Main Search Content -->
+{#                    <h6 class="mt-5">Are you an agent?<a class="btn btn-outline-danger btn-sm ms-2 py-1" href="/get-website">Get a free website</a></h6>#}
+                </div>
+                <div class="col-lg-6 col-xl-6 col-xxl-6 ps-xl-5 d-none d-lg-block">
+                    <div class="row g-3 g-sm-5 align-items-center">
+                        <div class="col-6">
+                            <div class="position-relative">
+{#                                <div class="line-shape-home"></div>#}
+                                <div class="position-relative image-bg-shape" data-aos="zoom-in">
+                                    <div class="rounded-4 overflow-hidden position-relative">
+                                        <img src="https://res.cloudinary.com/dlqifgxtl/image/upload/v1714488542/chaisbek/03_2_i8zljj.webp" class="img-fluid position-relative image-parallax z-1 lozad" alt="">
+                                    </div>
+                                </div>
+{#                                <img width="40%" src="{{ env.APP_URL }}assets/public/img/logo-black.webp" class="img-fluid rounded-4 position-absolute shadow card-asset-home z-1 lozad" alt="" data-aos="zoom-in" data-aos-easing="ease" data-aos-delay="400">#}
+                            </div>
+                        </div>
+                        <div class="col-6 align-self-end">
+                            <div class="overflow-hidden rounded-4" data-aos="zoom-in" data-aos-easing="ease" data-aos-delay="200">
+                                <img src="https://res.cloudinary.com/dlqifgxtl/image/upload/v1714488739/chaisbek/03_3_1_a6iem8.webp" class="img-fluid rounded-4 image-parallax lozad" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.End Hero Header Three -->
+
+    <!-- Start Featured Properties Section -->
+    <div class="py-5 bg-gradient-primary">
+        <div class="container pt-5 pb-4">
+            <div class="row">
+                <div class="col-md-10 offset-md-1" data-aos="fade-down">
+                    <!-- Start Section Header Title -->
+                    <div class="section-header text-center mb-5">
+                        <!-- Start Subtitle -->
+                        <div class="bg-soft-primary d-inline-block fw-medium mb-3 rounded-pill section-header__subtitle text-capitalize text-primary">Featured Properties</div>
+                        <!-- /. End Subtitle -->
+                        <!-- Start Section Header title -->
+                        <h2 class="h1 fw-semibold mb-3 section-header__title text-capitalize">Latest <span class=" text-primary">Properties</span></h2>
+                        <!-- /.End Section Header Title -->
+                        <!-- Start Section Header Sub Title -->
+                        <div class="sub-title fs-16"> It is a long established fact that a reader will be distracted by the
+                            <br class="d-none d-lg-block"> readable content of a page when looking at its layout.
+                        </div>
+                        <!-- /.End Section Header Sub Title -->
+                    </div>
+                    <!--/. End Section Header -->
+                </div>
+            </div>
+            <div id="listings-container" class="row g-4 justify-content-center">
+
+            </div>
+            <div id="loading-indicator" class="row g-4 justify-content-center">
+                <span class="data-loader mr-3"></span>
+                <span class="data-loader mr-3"></span>
+                <span class="data-loader mr-3"></span>
+                <span class="data-loader"></span>
+            </div>
+
+            <div class="text-center mt-5" data-aos="fade-up">
+                <!-- Start Button -->
+                <a href="/real-estate" class="btn btn-primary btn-lg d-inline-flex hstack gap-2">
+                    <span>Browse All</span>
+                    <span class="vr"></span>
+                    <i class="fa-arrow-right fa-solid fs-14"></i>
+                </a>
+                <!-- /.End Button -->
+            </div>
+        </div>
+    </div>
+    <!-- /.End Featured Properties Section -->
+    <div class="bg-white py-5 angled lower-start wrapper">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    <!-- Start Section Header Title -->
+                    <div class="section-header text-center mb-5" data-aos="fade-down">
+                        <!-- Start Subtitle -->
+                        <div class="bg-soft-primary d-inline-block fw-medium mb-3 rounded-pill section-header__subtitle text-capitalize text-primary">Best Way</div>
+                        <!-- /. End Subtitle -->
+                        <!-- Start Section Header title -->
+                        <h2 class="h1 fw-semibold mb-3 section-header__title text-capitalize">Discover Your Ideal <span class="text-primary">Home</span> or Property.</h2>
+                        <!-- /.End Section Header Title -->
+                        <!-- Start Section Header Sub Title -->
+                        <div class="sub-title fs-16"> Unlocking the door to your dream home begins with the right guidance.
+                            <br class="d-none d-lg-block"> we're dedicated to making your property journey seamless and satisfying.
+                        </div>
+                        <!-- /.End Section Header Sub Title -->
+                    </div>
+                    <!--/. End Section Header -->
+                </div>
+            </div>
+            <div class="row g-4 g-md-5 justify-content-center work-process">
+                <div class="col-sm-6 col-lg-4">
+                    <!-- Start Work Process -->
+                    <div class="work-process position-relative p-3 px-xl-5" data-aos="fade" data-aos-delay="300">
+                        <!-- Start Step Box -->
+                        <div class="step-box position-relative d-inline-block mb-4 d-flex gap-3">
+                            <!-- Start Step Number -->
+                            <div class="fs-5 text-dark fw-semibold">01/</div>
+                            <!-- /.End Step Number -->
+                            <!-- Start Step Icon -->
+                            <i class="fs-50 fa-solid fa-map-location text-primary"></i>
+                            <!-- /.End Step Icon -->
+                        </div>
+                        <!-- /.End Step Box -->
+                        <div class="step-desc">
+                            <h4 class="fs-20 fw-semibold">Find your property in the best location.</h4>
+                            <p>Embark on a quest for your ideal home in prime locations that match your lifestyle and preferences. Whether it's the tranquility of suburban living or the vibrancy of city life, we help you find a residence that feels just right.</p>
+                        </div>
+                    </div>
+                    <!-- /.End Work process -->
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <!-- Start Work Process -->
+                    <div class="work-process position-relative p-3 px-xl-5" data-aos="fade" data-aos-delay="400">
+                        <!-- Start Step Box -->
+                        <div class="step-box position-relative d-inline-block mb-4 d-flex gap-3">
+                            <!-- Start Step Number -->
+                            <div class="fs-5 text-dark fw-semibold">02/</div>
+                            <!-- /.End Step Number -->
+                            <!-- Start Step Icon -->
+                            <i class="fs-50 fas fa-calendar-alt text-primary"></i>
+                            <!-- /.End Step Icon -->
+                        </div>
+                        <!-- /.End Step Box -->
+                        <div class="step-desc">
+                            <h4 class="fs-20 fw-semibold">Make a visit appointment with one of our agents.</h4>
+                            <p>Book an appointment with one of our experienced agents to explore your chosen properties firsthand. Benefit from personalized guidance as we tour each space, ensuring every aspect aligns with your vision.</p>
+                        </div>
+                    </div>
+                    <!-- /.End Work Process -->
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <!-- Start Work Process -->
+                    <div class="work-process position-relative p-3 px-xl-5" data-aos="fade" data-aos-delay="500">
+                        <!-- Start Step Box -->
+                        <div class="step-box position-relative d-inline-block mb-4 d-flex gap-3">
+                            <!-- Start Step Number -->
+                            <div class="fs-5 text-dark fw-semibold">03/</div>
+                            <!-- /.End Step Number -->
+                            <!-- Start Step Icon -->
+                            <i class="fs-50 fas fa-igloo text-primary"></i>
+                            <!-- /.End Step Icon -->
+                        </div>
+                        <!-- /.End Step Box -->
+                        <div class="step-desc">
+                            <h4 class="fs-20 fw-semibold">Secure Your Dream Home.</h4>
+                            <p>Experience the power of expert guidance in transforming your dreams into reality. Benefit from our streamlined processes and vast network to fast-track your journey from house-hunting to moving into your dream home.</p>
+                        </div>
+                    </div>
+                    <!-- /.End Work Process -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /.End Top Regions Section -->
+
+    <script>
+        function LatestPropertiesSuccess(response) {
+            $('#listings-container').empty();
+            response.listings.forEach(listing => {
+                $('#listings-container').append(listing);
+            });
+            $('#loading-indicator').hide();
+        }
+        function LatestPropertiessError() {
+            console.error('Failed to fetch listings.');
+            $('#loading-indicator').hide();
+        }
+        setTimeout(function() {
+            const csrfToken = $('input[name="csrf"]').val();
+            makeAjaxRequest('/api/latest-property', 'GET', 'json',csrfToken, LatestPropertiesSuccess, LatestPropertiessError);
+        }, 2000);
+
+        $('.main-search').on('submit', function(event) {
+            event.preventDefault();
+
+            const searchQuery = $('input[name="searchQuery"]').val();
+            const location = $('select[name="location"]').val();
+            const propertyType = $('select[name="propertyType"]').val();
+
+            const url = `/real-estate?area=${encodeURIComponent(location)}&propertyType=${encodeURIComponent(propertyType)}&searchQuery=${encodeURIComponent(searchQuery)}`;
+
+            window.location.href = url;
+        });
+
+    </script>
+
+{% endblock %}
+

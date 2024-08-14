@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" data-footer="true">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>{{ seo.title }}</title>
+    <link rel="icon" type="image/webp" href="{{ env.APP_URL }}assets/img/favicon.webp"/>
+</head>
+<body class="layout-boxed">
+
+
+
+
+<!--**********************************
+    Main wrapper start
+***********************************-->
+<div id="main-wrapper">
+    {{ include('user/includes/navbar.twig') }}
+    {{ include('user/includes/sidebar.twig') }}
+
+    {% block content %} {% endblock %}
+</div>
+{{ include('user/includes/footer.twig') }}
+<script>
+    setTimeout(function() {
+        $("#loader").css({"display":"none"});
+    }, 100);
+</script>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>{{ seo.title }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ env.APP_URL }}assets/img/favicon.webp"/>
+    <link href="{{ env.APP_URL }}assets/dashboard/layouts/css/light/loader.css" rel="stylesheet" type="text/css" />
+    <link href="{{ env.APP_URL }}assets/dashboard/layouts/css/dark/loader.css" rel="stylesheet" type="text/css" />
+    <script src="{{ env.APP_URL }}assets/dashboard/layouts/loader.js"></script>
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    <link href="{{ env.APP_URL }}assets/dashboard/src/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="{{ env.APP_URL }}assets/dashboard/layouts/css/light/plugins.css" rel="stylesheet" type="text/css" />
+    <link href="{{ env.APP_URL }}assets/dashboard/src/assets/css/light/authentication/auth-cover.css" rel="stylesheet" type="text/css" />
+
+    <link href="{{ env.APP_URL }}assets/dashboard/layouts/css/dark/plugins.css" rel="stylesheet" type="text/css" />
+    <link href="{{ env.APP_URL }}assets/dashboard/src/assets/css/dark/authentication/auth-cover.css" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <link href="{{ env.APP_URL }}assets/dashboard/custom.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+<body class="form">
+
+
+<div class="auth-container d-flex">
+
+    <div class="container mx-auto align-self-center">
+
+        <div class="row">
+
+            <div class="col-6 d-lg-flex d-none h-100 my-auto top-0 start-0 text-center justify-content-center flex-column">
+                <div class="auth-cover-bg-image" style="background-image: url('{{ env.APP_URL }}assets/img/login-bk.jpg'); background-size: cover; background-repeat: no-repeat; background-position: right;"></div>
+                {#                <div class="auth-overlay"></div>#}
+
+                <div class="auth-cover">
+
+                    <div class="position-relative">
+
+                        {#                        <img src="{{ env.APP_URL }}assets/dashboard/src/assets/img/auth-cover.svg" alt="auth-img">#}
+
+                        <h2 class="mt-5 text-white font-weight-bolder px-2">Two-factor authentication</h2>
+                        <p class="text-white px-2">Our CRM website streamlines your business processes, including managing taxes effortlessly.</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-8 col-12 d-flex flex-column align-self-center ms-lg-auto me-lg-0 mx-auto">
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="row text-center spinner">
+                            <div class="col">
+                                <span class="loader text-center"></span>
+                            </div>
+                        </div>
+                        <div class="form-data" style="display: none;">
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <img src="{{ env.APP_URL }}assets/img/logo.webp" class="mt-2 mb-4" width="60%" alt="">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+
+                                    <h2>Two-factor authentication</h2>
+                                    <p>Please check your email or spam folder. Enter your authentication code to log in.</p>
+                                    <div id="ErrorMessage"></div>
+                                </div>
+                                <input type="hidden" id="email" value="{{ loginemail }}">
+                                <input type="hidden" id="password" value="{{ loginpassword }}">
+                                <div class="col-12">
+                                    <div class="mb-4">
+                                        <label class="form-label" for="password">Two-factor authentication Code</label>
+                                        <input type="text" class="form-control" placeholder="Two-factor authentication Code" id="twofa" name="twofa">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="mb-4">
+                                        <button type="button" class="btn btn-primary w-100" id="btn" onclick="do_2fa()">Enter your Authentication Code</button>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="text-center">
+                                        <p class="mb-0">Don't have an account ? <a href="/register" class="text-dark">Sign Up</a></p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+<script src="{{ env.APP_URL }}assets/dashboard/src/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- END GLOBAL MANDATORY SCRIPTS -->
+<script>
+    $(document).ready(function() {
+        document.getElementById("cover-spin").classList.add('hide');
+    });
+    function do_2fa(){
+        document.getElementById("btn").setAttribute("disabled", "");
+        var email=$("#email").val();
+        var pass=$("#password").val();
+        var twofa=$("#twofa").val();
+        var csrf_token=$("input[name=csrf]").val();
+        if(email!="" && pass!=""){
+            $("#loader").css({"display":"block"});
+            $.ajax
+            ({
+                type:'post',
+                url:'/2fa/login',
+                data:{
+                    do_2fa:"do_2fa",
+                    email:email,
+                    password:pass,
+                    twofa:twofa,
+                    csrf:csrf_token,
+                },
+                success:function(response) {
+                    response=$.parseJSON(response);
+                    console.log(response);
+
+                    if(response['statusCode']=="200"){
+                            window.location.href=response['path'];
+                        document.getElementById("btn").removeAttribute("disabled");
+                    }else{
+                        $('#ErrorMessage').html('<div class="alert alert-danger">'+response.message+'</div>');
+                        document.getElementById("btn").removeAttribute("disabled");
+                    }
+                }
+            });
+        } else{
+            document.getElementById("btn").removeAttribute("disabled");
+            $('#ErrorMessage').html('<div class="alert alert-danger">Missing Required Input</div>');
+        }
+        return false;
+    }
+</script>
+<script>
+    $(document).ready(function() {
+        // Wait for 2 seconds
+        setTimeout(function() {
+            // Hide the spinner
+            $('.spinner').hide();
+            // Show the form-data div after 2 seconds
+            $('.form-data').show();
+        }, 1000); // 2000 milliseconds = 2 seconds
+    });
+</script>
+</body>
+</html>

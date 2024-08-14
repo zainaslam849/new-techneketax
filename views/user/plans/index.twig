@@ -1,0 +1,192 @@
+{% extends 'user/master.twig' %}
+{% block content %}
+<style>
+    .hidden{
+        display: none;
+    }
+</style>
+    <!--  BEGIN CONTENT AREA  -->
+    <div id="content" class="main-content">
+        <div class="layout-px-spacing">
+
+            <div class="middle-content container-xxl p-0">
+                <div id="call-ringing"></div>
+
+                <!-- BREADCRUMB -->
+                <div class="page-meta">
+                    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/user/dashboard">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Plans</li>
+                        </ol>
+                    </nav>
+                </div>
+                <!-- /BREADCRUMB -->
+
+                <div class="row" id="cancel-row">
+
+                    <div class="col-lg-12 layout-spacing layout-top-spacing">
+                        <div class="statbox widget box box-shadow">
+                            <div class="widget-header">
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                        <h4>Select your desire plan</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-content widget-content-area">
+
+                                <div class="pricing-table-2 ">
+
+                                    <!-- Billing Cycle  -->
+                                    <div class="billing-cycle-radios mt-5">
+
+                                        <div class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-label-toggle show">
+                                            <div class="input-checkbox">
+                                                <span class="switch-chk-label label-left">Monthly</span>
+                                                <input class="switch-input" type="checkbox" role="switch" id="toggle-pricing" checked
+                                                       onchange="this.checked ? this.closest('.inner-label-toggle').classList.add('show') : this.closest('.inner-label-toggle').classList.remove('show'); togglePricing(this.checked);">
+                                                <span class="switch-chk-label label-right">Yearly</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Pricing Plans Container -->
+                                    <div class="pricing-plans-container mt-5">
+                                        <!-- Plan -->
+                                        {% for plan in plans %}
+                                            <div class="pricing-plan mb-5" style="    margin-left: 5px;">
+                                                {% if plan.percentage == "0" or plan.percentage == "" %}
+
+                                                {% else %}
+                                                <span class="badge badge-pill badge-secondary show text-white"> {{ plan.percentage }} %  Off</span>
+                                                {% endif %}
+
+                                                <div class="pricing-header-section">
+                                                    <div class="pricing-header">
+                                                        <h3>{{ plan.name }}</h3>
+                                                        {% set tags = plan.tags|split(',') %}
+<p>
+                                                        {% for tag in tags %}
+                                                            {% if tag == "" %}
+                                                        {% else %}
+                                                      <span class="badge-secondary" style="font-weight: 600;
+    line-height: 1.4;
+    font-size: 11.9px;
+    font-weight: 600;
+    transition: all 0.3s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+    display: inline-block;
+    padding: 4.6px 8px;
+    color: #FFF;
+    border-radius: 6px ;
+    margin-right: 5px;
+}">
+                                                        {{ tag }}
+</span>{% endif %}
+                                                        {% endfor %}
+
+</p>
+                                                    </div>
+
+                                                    <div class="pricing-header-pricing">
+                                                        <!-- Monthly Price -->
+                                                        <p class="pricing monthly-pricing {% if not loop.first %}hidden{% endif %}">$ {{ plan.monthly_price }}</p>
+                                                        <!-- Yearly Price -->
+                                                        <p class="pricing yearly-pricing {% if loop.first %}hidden{% endif %}">$ {{ plan.yearly_price }}</p>
+                                                        <p class="sub-title monthly-pricing-label {% if not loop.first %}hidden{% endif %}">Per month</p>
+                                                        <p class="sub-title yearly-pricing-label {% if loop.first %}hidden{% endif %}">Per year</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="pricing-plan-features mb-4">
+                                                    <ul>
+                                                        {% set key_points = plan.key_points|split(',') %}
+                                                        {% for key_point in key_points %}
+                                                            <li>
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
+                                                                {{ key_point }}
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                                <a href="javascript:void(0);" class="button btn btn-primary btn-block margin-top-20 w-100">Get Started</a>
+                                            </div>
+                                        {% endfor %}
+
+                                    </div>
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!--  BEGIN FOOTER  -->
+        <div class="footer-wrapper">
+            <div class="footer-wrapper">
+                <div class="footer-section f-section-1">
+                    <p class="">Copyright © <span class="dynamic-year">2024</span> <a target="_blank" href="https://zotecsoft.com/">ZotecSoft</a>, All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+        <!--  END FOOTER  -->
+
+    </div>
+    <!--  END CONTENT AREA  -->
+    <script>
+        const isChecked = document.getElementById('toggle-1').checked;
+        const monthlyPricing = document.querySelector('.monthly-pricing');
+        const yearlyPricing = document.querySelector('.yearly-pricing');
+        const monthlyPricingLabel = document.querySelector('.monthly-pricing-label');
+        const yearlyPricingLabel = document.querySelector('.yearly-pricing-label');
+
+        if (isChecked) {
+            monthlyPricing.style.display = 'block';
+            monthlyPricingLabel.style.display = 'block';
+            yearlyPricing.style.display = 'none';
+            yearlyPricingLabel.style.display = 'none';
+        } else {
+            monthlyPricing.style.display = 'none';
+            monthlyPricingLabel.style.display = 'none';
+            yearlyPricing.style.display = 'block';
+            yearlyPricingLabel.style.display = 'block';
+        }
+        function togglePricing(isMonthly) {
+            const monthlyElements = document.querySelectorAll('.monthly-pricing, .monthly-pricing-label');
+            const yearlyElements = document.querySelectorAll('.yearly-pricing, .yearly-pricing-label');
+
+            if (isMonthly) {
+                yearlyElements.forEach(element => {
+                    element.classList.remove('hidden');
+                });
+                monthlyElements.forEach(element => {
+                    element.classList.add('hidden');
+                });
+            } else {
+                yearlyElements.forEach(element => {
+                    element.classList.add('hidden');
+                });
+                monthlyElements.forEach(element => {
+                    element.classList.remove('hidden');
+                });
+            }
+        }
+    </script>
+
+{% endblock %}

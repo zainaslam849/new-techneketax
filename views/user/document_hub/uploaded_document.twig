@@ -1,0 +1,235 @@
+{% extends 'user/master.twig' %}
+{% block content %}
+    <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.css">
+    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css">
+    <!--  BEGIN CONTENT AREA  -->
+    <div id="content" class="main-content">
+        <div class="layout-px-spacing">
+
+            <div class="middle-content container-xxl p-0">
+                <div id="call-ringing"></div>
+                <!-- /BREADCRUMB -->
+
+                <div class="row layout-spacing mt-5">
+                    <div class="col-lg-12 justify-content-end text-end ">
+                        <button type="button" class="btn btn-primary  me-4" data-bs-toggle="modal" data-bs-target="#editExampleModal">
+                            <span class="btn-text-inner">Upload File</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="row layout-spacing">
+                    <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                        <div class="widget-content widget-content-area">
+                            <div class="table-responsive">
+                                <table id="table"  class="table dt-table-hover" style="width:100%">
+                                    <thead>
+                                    <tr>
+                                        <th> Id </th>
+                                        <th>File Name</th>
+                                        <th>Description</th>
+                                        <th >Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="editExampleModal" tabindex="-1" aria-labelledby="editExampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content bg-white">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+                    </div>
+                    <form  method="post" id="DocumentForm" enctype="multipart/form-data">
+                        <input type="hidden" name="firm_id" value="{{ firm_id }}">
+                        <div class="modal-body">
+                            <div class="row p-1">
+                                <div class="col-md-12">
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-control" id="firm_des" name="firm_des" placeholder="Description"></textarea>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="upload_file" class="mb-2">Uploads</label>
+                                    <div id="createInput"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" name="add_new" id="btn-profile" class="btn btn-primary" onclick="upload_document()">Upload Document</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="commentModalLabel">Full Description</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="fullComment"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                  </div>
+        </div>
+
+
+
+        <!--  BEGIN FOOTER  -->
+        <div class="footer-wrapper">
+            <div class="footer-wrapper">
+                <div class="footer-section f-section-1">
+                    <p class="">Copyright © <span class="dynamic-year">2024</span> <a target="_blank" href="https://zotecsoft.com/">ZotecSoft</a>, All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+        <!--  END FOOTER  -->
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <!--  END CONTENT AREA  -->
+    <script>
+        $(document).ready(function () {
+            var csrf_token = $("input[name=csrf]").val();
+            var table = $('#table').dataTable({
+                "language": {
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+                },
+                "responsive": true,
+                "bProcessing": true,
+                "sAjaxSource": "/user/api?page_name=view_firm_documents&csrf="+csrf_token,
+                "bPaginate": true,
+                "sPaginationType": "full_numbers",
+                "iDisplayLength": 10,
+                "aoColumns": [
+                    {mData: 'ids'},
+                    {mData: 'FileName'},
+                    {mData: 'Des'},
+                    {mData: 'action'},
+                ]
+            });
+        });
+        function deleteUser(deleteid) {
+// add spinner to button
+            $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
+            var csrf_token = $("input[name=csrf]").val();
+            $.ajax({
+                url: '/user/api',
+                type: 'GET', data: {
+                    id: deleteid,
+                    page_name: "delete",
+                    table_name: "firm_upload_file",
+                    csrf: csrf_token
+                }, success: function (data) {
+                    if (data == 1) {
+                        toastr.success('Successfully deleted.');
+                        $('#table').DataTable().ajax.reload(null, false);
+                    } else {
+                        toastr.error('Something went wrong.');
+
+                    }
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            FilePond.registerPlugin(
+                FilePondPluginFileValidateSize,
+                FilePondPluginFileValidateType,
+                FilePondPluginImagePreview,
+            );
+
+            const pond = FilePond.create(document.getElementById('createInput'), {
+                allowMultiple: false,
+                maxFiles: 1,
+                labelIdle: 'Drag & Drop your image or <span class="filepond--label-action">Browse</span>',
+                acceptedFileTypes: [
+                    'image/*',
+                    'application/pdf',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/vnd.ms-excel',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'text/plain'
+                ],
+                maxFileSize: '105MB',
+            });
+
+            // Insert Data
+            window.upload_document = function() {
+                var formData = new FormData(document.getElementById("DocumentForm"));
+                const pondFiles = pond.getFiles();
+                pondFiles.forEach(file => {
+                    formData.append('file', file.file);
+                });
+
+                $.ajax({
+                    url: "/user/upload/document/all",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        console.log(data);
+                        pond.removeFiles();
+                        data= JSON.parse(data);
+                        if(data['statusCode'] == '1'){
+                            $('#editExampleModal').modal('hide');
+                            document.getElementById("DocumentForm").reset();
+                            $('#table').DataTable().ajax.reload(null, false);
+                            toastr.success(data['message']);
+                        } else if (data['statusCode'] == '2'){
+
+                            $('#table').DataTable().ajax.reload(null, false);
+                            toastr.error("Please Login Again");
+                        }else if (data['statusCode'] == '3'){
+
+                            $('#table').DataTable().ajax.reload(null, false);
+                            toastr.error(data['message']);
+                        } else if (data['statusCode'] == '4'){
+                            $('#table').DataTable().ajax.reload(null, false);
+                            toastr.error(data['message']);
+                        } else {
+                            $('#editExampleModal').modal('hide');
+                            document.getElementById("DocumentForm").reset();
+                            $('#table').DataTable().ajax.reload(null, false);
+                            toastr.error(data['message']);
+                        }
+                    }
+                });
+            }
+        });
+        $(document).ready(function(){
+            $(document).on('click', '.see-more', function(e){
+                e.preventDefault();
+                var fullComment = $(this).data('description');
+                $('#fullComment').text(fullComment);
+                $('#commentModal').modal('show');
+            });
+        });
+    </script>
+{% endblock %}

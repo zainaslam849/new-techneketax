@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en" data-footer="true">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>{{ seo.title }}</title>
+    <link rel="icon" type="image/webp" href="{{ env.APP_URL }}assets/img/favicon.webp"/>
+
+    <link href="{{ env.APP_URL }}assets/dashboard/layouts/css/light/loader.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/src/table/datatable/datatables.css">
+    <link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/light/table/datatable/dt-global_style.css">
+    <link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/light/table/datatable/custom_dt_custom.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+    <script src="https://unpkg.com/notie"></script>
+
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    <link href="{{ env.APP_URL }}assets/dashboard/src/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ env.APP_URL }}assets/dashboard/layouts/css/light/plugins.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="{{ env.APP_URL }}assets/dashboard/src/assets/css/light/main.css">
+    <link rel="stylesheet" href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/light/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="{{ env.APP_URL }}assets/dashboard/src/plugins/src/waves/waves.min.css">
+    <link rel="stylesheet" href="{{ env.APP_URL }}assets/dashboard/layouts/css/light/structure.css">
+    <link rel="stylesheet" href="{{ env.APP_URL }}assets/dashboard/src/plugins/src/highlight/styles/monokai-sublime.css">
+
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- Section CSS -->
+    <!-- jQuery UI (REQUIRED) -->
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+
+    <!-- elFinder CSS (REQUIRED) -->
+    <link rel="stylesheet" type="text/css" href="https://studio-42.github.io/elFinder/demo/css/elfinder.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}file-manager/themes/Material/css/theme-light.css">
+
+    <!-- Section JavaScript -->
+    <!-- jQuery and jQuery UI (REQUIRED) -->
+    <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <![endif]-->
+    <!--[if gte IE 9]><!-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!--<![endif]-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+
+    <!-- elFinder JS (REQUIRED) -->
+    <script src="https://studio-42.github.io/elFinder/demo/js/elfinder.min.js"></script>
+
+    <!-- Extra contents editors (OPTIONAL) -->
+    <script src="{{ env.APP_URL }}assets/file-manager/js/extras/editors.default.min.js"></script>
+
+    <!-- elFinder initialization (REQUIRED) -->
+    <script type="text/javascript" charset="utf-8">
+        // Documentation for client options:
+        // https://github.com/Studio-42/elFinder/wiki/Client-configuration-options
+        $(document).ready(function() {
+            $('#elfinder').elfinder({
+                    cssAutoLoad: false,  // Disable CSS auto loading
+                    baseUrl: '{{ env.APP_URL }}',  // Base URL to css/*, js/*
+                    url: '{{ env.APP_URL }}file-manager/php/connector.minimal.php',  // connector URL (REQUIRED)
+                    commands: ['open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook', 'download', 'rm', 'rename', 'mkdir', 'mkfile', 'upload', 'copy', 'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help'],
+                    uiOptions: {
+                        toolbar: [
+                            ['open'],
+                            ['reload'],
+                            ['home', 'up'],
+                            ['back', 'forward'],
+                            ['getfile'],
+                            ['quicklook'],
+                            ['download'],
+                            ['rm'],
+                            ['rename'],
+                            ['upload']
+                        ]
+                    },
+                    contextmenu: {
+                        // Commands that can be executed for files
+                        files: [
+                            'getfile', '|', 'quicklook', '|', 'download', '|', 'rm', '|', 'rename'
+                        ]
+                    }
+                },
+                function(fm, extraObj) {
+                    // `init` event callback function
+                    fm.bind('init', function() {
+                        // Optional for Japanese decoder "encoding-japanese.js"
+                        if (fm.lang === 'ja') {
+                            fm.loadScript(
+                                [ '//cdn.rawgit.com/polygonplanet/encoding.js/1.0.26/encoding.min.js' ],
+                                function() {
+                                    if (window.Encoding && Encoding.convert) {
+                                        fm.registRawStringDecoder(function(s) {
+                                            return Encoding.convert(s, {to:'UNICODE',type:'string'});
+                                        });
+                                    }
+                                },
+                                { loadType: 'tag' }
+                            );
+                        }
+                    });
+                    // Optional for set document.title dynamically.
+                    var title = document.title;
+                    fm.bind('open', function() {
+                        var path = '',
+                            cwd  = fm.cwd();
+                        if (cwd) {
+                            path = fm.path(cwd.hash) || null;
+                        }
+                        document.title = path ? path + ':' + title : title;
+                    }).bind('destroy', function() {
+                        document.title = title;
+                    });
+                });
+        });
+    </script>
+    <style>
+        .elfinder-toolbar {
+            background: #000000 !important;
+            border-radius: 5px;
+            border: 0;
+            padding: 3px 20px;
+        }
+        .elfinder .elfinder-statusbar {
+            border-radius: 0;
+            border: 0;
+            background: #ED141F;
+            color: #ffffff;
+            padding: 5px 20px;
+            border-bottom: 1px solid #ED141F;
+        }
+        .elfinder-navbar-dir.ui-state-hover, .elfinder-navbar-dir.ui-state-active {
+            background: #ED141F;
+            color: #fff;
+            border: 0;
+        }
+        .elfinder-cwd-file.ui-selected {
+            background: #f2878c;
+        }
+        .elfinder-cwd-icon {
+            color: #393939;
+        }
+    </style>
+</head>
+<body class="layout-boxed">
+
+<!--**********************************
+    Main wrapper start
+***********************************-->
+<div id="main-wrapper">
+    {{ include('user/includes/navbar.twig') }}
+    {{ include('user/includes/sidebar.twig') }}
+
+    <!--  BEGIN CONTENT AREA  -->
+    <div id="content"  class="main-content">
+        <div class="layout-px-spacing">
+            <div class="middle-content container-xxl p-0" >
+                <div id="call-ringing"></div>
+                <div id="elfinder" class="mt-5"></div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{{ include('user/includes/footer.twig') }}
+<script>
+    setTimeout(function() {
+        $("#loader").css({"display":"none"});
+    }, 100);
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+    "require": {
+        "cycle/orm": "^2.6",
+        "cycle/annotated": "^4.0",
+        "tracy/tracy": "^2.10",
+        "phpmailer/phpmailer": "^6.9",
+        "intervention/image": "^3.3",
+        "twig/twig": "^3.0",
+        "cboden/ratchet": "^0.4.4",
+        "nesbot/carbon": "^3.7",
+        "guzzlehttp/guzzle": "^7.9",
+        "edsdk/flmngr-server-php": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Chat\\": "src/Chat"
+        }
+    }
+}

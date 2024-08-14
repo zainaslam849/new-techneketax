@@ -1,0 +1,272 @@
+{% extends 'user/master.twig' %}
+{% block content %}
+    <div id="content" class="main-content">
+        <div class="layout-px-spacing">
+            <div class="middle-content container-xxl p-0">
+                <div id="call-ringing"></div>
+
+                <div class="account-settings-container layout-top-spacing">
+                    <div class="content-body">
+                        <div class="container-fluid">
+                            <!-- row -->
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12">
+                                    <div class="card card-bx m-b30">
+                                    <div class="card card-bx m-b30">
+                                        <div class="card-header">
+                                            <h6 class="title">Edit Questions</h6>
+                                        </div>
+
+                                        <form method="post" class="profile-form" id="editUserForm" action="/user/interviews/questions/update/{{ section[0].id }}">
+                                            <input type="hidden" name="csrf" value="{{ csrf }}">
+                                            <input type="hidden" name="section_id" value="{{ section[0].id }}">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-lg-12 mb-3">
+                                                        <label class="form-label">Section Title</label>
+                                                        <input type="text" class="form-control form-control-md" name="section_title" placeholder="Section Title" value="{{ section[0].title }}" required>
+                                                    </div>
+                                                    <div class="col-lg-12 mb-3">
+                                                        {% for question in section.questions %}
+                                                            <div class="question-block mb-3 p-3 border" id="question-block-{{ question.id }}">
+                                                                <div class="row">
+                                                                    <input type="hidden" name="questions[{{ question.id }}][id]" value="{{ question.id }}">
+                                                                    <div class="col-sm-6 mb-3">
+                                                                        <label class="form-label">Question</label>
+                                                                        <input type="text" class="form-control form-control-md" name="questions[{{ question.id }}][question]" placeholder="Question" value="{{ question.question }}" required>
+                                                                    </div>
+                                                                    <div class="col-sm-6 mb-3">
+                                                                        <label class="form-label">Type</label>
+                                                                        <select class="form-select form-select-md" name="questions[{{ question.id }}][type]" onchange="toggleOptionsField(this, {{ question.id }})" required>
+                                                                            <option value="text" {% if question.type == 'text' %}selected{% endif %}>Text</option>
+                                                                            <option value="email" {% if question.type == 'email' %}selected{% endif %}>Email</option>
+                                                                            <option value="radio" {% if question.type == 'radio' %}selected{% endif %}>Radio</option>
+                                                                            <option value="checkbox" {% if question.type == 'checkbox' %}selected{% endif %}>Checkbox</option>
+                                                                            <option value="date" {% if question.type == 'date' %}selected{% endif %}>Date</option>
+                                                                            <option value="time" {% if question.type == 'time' %}selected{% endif %}>Time</option>
+                                                                            <option value="password" {% if question.type == 'password' %}selected{% endif %}>Password</option>
+                                                                            <option value="number" {% if question.type == 'number' %}selected{% endif %}>Number</option>
+                                                                            <option value="datetime-local" {% if question.type == 'datetime-local' %}selected{% endif %}>Datetime-local</option>
+                                                                            <option value="textarea" {% if question.type == 'textarea' %}selected{% endif %}>Textarea</option>
+                                                                            <option value="select" {% if question.type == 'select' %}selected{% endif %}>Select</option>
+                                                                            <option value="file" {% if question.type == 'file' %}selected{% endif %}>File</option>
+                                                                            <option value="signature" {% if question.type == 'signature' %}selected{% endif %}>Signature</option>
+                                                                            <option value="none" {% if question.type == 'none' %}selected{% endif %}>None</option>
+                                                                        </select>
+
+                                                                        <div class="col-12 mb-3">
+                                                                            <div class="form-check">
+                                                                                <input class="form-check-input" type="checkbox" name="questions[{{ question.id }}][required]" id="question-required-{{ question.id }}" {% if question.required %}checked{% endif %}>
+                                                                                <label class="form-check-label" for="question-required-{{ question.id }}">
+                                                                                    Required
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-12 additional-options" id="additional-options-{{ question.id }}" {% if not (question.type == 'radio' or question.type == 'checkbox' or question.type == 'select') %}style="display: none;"{% endif %}>
+                                                                            <div class="row">
+                                                                                <div class="col-12 mb-3">
+                                                                                    <label for="options" class="form-label">Options</label>
+                                                                                    <div id="options-container-{{ question.id }}">
+                                                                                        {% for option in question.options %}
+                                                                                            <div class="option-block mb-2">
+                                                                                                <input type="hidden" name="questions[{{ question.id }}][option_ids][]" value="{{ option.id }}">
+                                                                                                <input type="text" class="form-control form-control-md d-inline-block w-75" name="questions[{{ question.id }}][options][]" value="{{ option.option_text }}" placeholder="Option">
+                                                                                                <button class="btn btn-danger d-inline-block w-20" type="button" onclick="removeOption(this);" style="background: #dc3545 !important; border-color: #dc3545 !important;">Delete</button>
+                                                                                            </div>
+                                                                                        {% endfor %}
+                                                                                    </div>
+                                                                                    <button class="btn btn-success" type="button" onclick="addOption({{ question.id }});" style="background: #28a745 !important; border-color: #28a745 !important;">Add Option</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-12 text-right">
+                                                                            <button class="btn btn-danger" type="button" onclick="removeQuestion({{ question.id }});" style="background: #dc3545 !important; border-color: #dc3545 !important;">Remove Question</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <div class="col-lg-12 mb-3" id="questions_container">
+                                                        <button class="btn btn-success" type="button" onclick="addQuestion();" style="background: #28a745 !important; border-color: #28a745 !important;">Add Question</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="card-footer">
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  BEGIN FOOTER  -->
+        <div class="footer-wrapper">
+            <div class="footer-section f-section-1">
+                <p class="">Copyright © <span class="dynamic-year">2024</span> <a target="_blank" href="https://zotecsoft.com/">ZotecSoft</a>, All rights reserved.</p>
+            </div>
+        </div>
+        <!--  END FOOTER  -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        let questionCount = {{ section.questions|length }};
+        let removedQuestions = [];
+
+        function addQuestion() {
+            questionCount++;
+            const container = document.getElementById('questions_container');
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question-block', 'mb-3', 'p-3', 'border');
+            questionDiv.setAttribute('id', `question-block-new_${questionCount}`);
+
+            questionDiv.innerHTML =
+                `<div class="row">
+
+            <input type="hidden" name="questions[new_${questionCount}][id]" value="">
+            <div class="col-sm-6 mb-3">
+                <label class="form-label">Question</label>
+                <input type="text" class="form-control form-control-md" name="questions[new_${questionCount}][question]" placeholder="Question" required>
+            </div>
+            <div class="col-sm-6 mb-3">
+                <label class="form-label">Type</label>
+                <select class="form-select form-select-md" name="questions[new_${questionCount}][type]" onchange="toggleOptionsField(this, 'new_${questionCount}')" required>
+                    <option value="">Choose Your Input Type</option>
+                    <option value="text">Text</option>
+                    <option value="email">Email</option>
+                    <option value="radio">Radio</option>
+                    <option value="checkbox">Checkbox</option>
+                    <option value="date">Date</option>
+                    <option value="time">Time</option>
+                    <option value="password">Password</option>
+                    <option value="number">Number</option>
+                    <option value="datetime-local">Datetime-local</option>
+                    <option value="textarea">Textarea</option>
+                    <option value="select">Select</option>
+                    <option value="file">File</option>
+                    <option value="signature">Signature</option>
+                    <option value="none">None</option>
+                </select>
+            </div>
+
+            <div class="col-12 mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="questions[new_${questionCount}][required]" id="question-required-new_${questionCount}">
+                    <label class="form-check-label" for="question-required-new_${questionCount}">
+                        Required
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-12 additional-options" id="additional-options-new_${questionCount}" style="display: none;">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="options" class="form-label">Options</label>
+                        <div id="options-container-new_${questionCount}">
+
+                            <input type="text" class="form-control form-control-md mb-2" name="questions[new_${questionCount}][options][]" placeholder="Option">
+
+                        </div>
+                        <button class="btn btn-success" type="button" onclick="addOption('new_${questionCount}');" style="background: #28a745 !important; border-color: #28a745 !important;">Add Option</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 text-right">
+                <button class="btn btn-danger remove-question-btn" type="button" style="background: #dc3545 !important; border-color: #dc3545 !important;">Remove Question</button>
+            </div>
+
+        </div>`;
+
+            container.insertBefore(questionDiv, container.children[container.children.length - 1]);
+
+            // Directly bind the click event for the newly added remove button
+            questionDiv.querySelector('.remove-question-btn').addEventListener('click', function () {
+                removeQuestion(`new_${questionCount}`);
+            });
+        }
+
+        function toggleOptionsField(selectElement, questionIndex) {
+            const additionalOptions = document.getElementById(`additional-options-${questionIndex}`);
+            if (['radio', 'checkbox', 'select'].includes(selectElement.value)) {
+                additionalOptions.style.display = 'block';
+            } else {
+                additionalOptions.style.display = 'none';
+            }
+        }
+
+        function addOption(questionIndex) {
+            const container = document.getElementById(`options-container-${questionIndex}`);
+            const div = document.createElement('div');
+            div.classList.add('option-block', 'mb-2');
+
+            div.innerHTML =
+                `<input type="text" class="form-control form-control-md d-inline-block w-75" name="questions[${questionIndex}][options][]" placeholder="Option">
+        <button class="btn btn-danger d-inline-block w-20" type="button" onclick="removeOption(this);" style="background: #dc3545 !important; border-color: #dc3545 !important;">Delete</button>`;
+            container.appendChild(div);
+        }
+
+        function removeOption(button) {
+            const optionBlock = button.closest('.option-block');
+            optionBlock.remove();
+        }
+
+        function removeQuestion(questionIndex) {
+            console.log(questionIndex);
+            const questionBlock = document.getElementById(`question-block-${questionIndex}`) || document.getElementById(`question-block-${questionIndex}`);
+            if (questionBlock) {
+                const questionIdInput = questionBlock.querySelector(`input[name^="questions[${questionIndex}]"]`);
+                if (questionIdInput && questionIdInput.value) {
+                    removedQuestions.push(questionIdInput.value);
+                }
+                questionBlock.remove();
+            }
+        }
+
+        function bindRemoveQuestionButtons() {
+            const removeButtons = document.querySelectorAll('.remove-question-btn');
+            removeButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const questionId = this.getAttribute('data-question-id');
+                    removeQuestion(questionId);
+                });
+            });
+        }
+
+        // Bind event handlers on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            bindRemoveQuestionButtons();
+        });
+
+        $('#editUserForm').on('submit', function(event) {
+            event.preventDefault();
+            let formData = $(this).serializeArray();
+            removedQuestions.forEach(function(id) {
+                formData.push({name: 'removed_questions[]', value: id});
+            });
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    console.log(response);
+                    if (response == 'Form updated successfully!') {
+                        toastr.success('Form updated successfully.');
+                    } else {
+                        toastr.error('Something went wrong. Please try again.');
+                    }
+                },
+                error: function() {
+                    toastr.error('Something went wrong. Please try again.');
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

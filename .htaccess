@@ -1,0 +1,11 @@
+RewriteEngine On
+# Allow access to the file-manager folder and its subfolders
+RewriteCond %{REQUEST_URI} ^/file-manager/ [NC]
+RewriteRule .* - [L]
+
+# Allow access to assets folder
+RewriteRule ^assets($|/) - [L]
+
+# Ignore certain file extensions
+RewriteCond %{REQUEST_URI} !(\.png|\.webp|\.jpg|\.ico|\.gif|\.jpeg|\.zip|\.css|\.svg|\.js|\.woff2|\.woff|\.ttf|\.eot|\.map|\.xml|\.txt|\.mp4|\.mp3)$
+RewriteRule ^(.*)$ index.php [QSA,L]

@@ -1,0 +1,44 @@
+
+</div>
+<!-- END MAIN CONTAINER -->
+
+<!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ env.APP_URL }}assets/dashboard/src/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="{{ env.APP_URL }}assets/dashboard/src/plugins/src/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="{{ env.APP_URL }}assets/dashboard/src/plugins/src/mousetrap/mousetrap.min.js"></script>
+<script src="{{ env.APP_URL }}assets/dashboard/src/plugins/src/waves/waves.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- END GLOBAL MANDATORY SCRIPTS -->
+
+<!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+{% if route == '/admin/dashboard' %}
+    <script src="{{ env.APP_URL }}assets/dashboard/layouts/app.js"></script>
+<script src="{{ env.APP_URL }}assets/dashboard/src/plugins/src/apex/apexcharts.min.js"></script>
+<script src="{{ env.APP_URL }}assets/dashboard/src/assets/js/dashboard/dash_2.js"></script>
+<!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+{% endif %}
+<script src="{{ env.APP_URL }}assets/dashboard/src/assets/js/custom.js"></script>
+<script src="{{ env.APP_URL }}assets/dashboard/src/plugins/src/table/datatable/datatables.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-u3fPA7V8qQmhBPNT5quvaXVa1mnnLSXUep5PS1qo5NRzHwG19aHmNJnj1Q8hpA/nBWZtZD4r4AX6YOt5ynLN2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+{% if route == '/admin/users' %}
+
+
+<script>
+
+</script>
+{% endif %}
+
+
+
+
+
+
+</body>
+</html>

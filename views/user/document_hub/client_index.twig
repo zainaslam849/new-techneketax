@@ -1,0 +1,220 @@
+{% extends 'user/master.twig' %}
+{% block content %}
+    <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.css">
+    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css">
+    <!--  BEGIN CONTENT AREA  -->
+    <div id="content"  class="main-content">
+        <div class="layout-px-spacing">
+            <div class="middle-content container-xxl p-0" >
+                <div id="call-ringing"></div>
+
+                <div class="row layout-top-spacing layout-spacing">
+                    <div class="col-xl-12 col-lg-12 col-md-12" >
+                        <div class="widget-content widget-content-area br-8">
+                            <div class="widget-content widget-content-area">
+                                <div class="table-responsive">
+                                    <table id="table"  class="table dt-table-hover" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th> Id </th>
+                                            <th>Firm Profile</th>
+                                            <th>Description</th>
+                                            <th >Status</th>
+                                            <th >Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  BEGIN FOOTER  -->
+        <div class="footer-wrapper">
+            <div class="footer-wrapper">
+                <div class="footer-section f-section-1">
+                    <p class="">Copyright © <span class="dynamic-year">2024</span> <a target="_blank" href="https://zotecsoft.com/">ZotecSoft</a>, All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+        <!--  END FOOTER  -->
+    </div>
+    <div class="modal fade" id="editExampleModal" tabindex="-1" aria-labelledby="editExampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Send Document</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+                </div>
+                <form  method="post" id="DocumentForm" enctype="multipart/form-data">
+                    <input type="hidden" name="firm_id" value="{{ client[0].firm_id }}">
+                    <input type="hidden" name="id" id="id">
+                    <div class="modal-body">
+                        <div class="row p-1">
+                            <div class="col-md-12">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" id="firm_des" name="client_des" placeholder="Description"></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="upload_file" class="mb-2">Uploads</label>
+                                <div id="createInput"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" name="add_new" id="btn-profile" class="btn btn-primary" onclick="send_document()">Send Document</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentModalLabel">Full Description</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="fullComment"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+              </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script>
+        $(document).ready(function () {
+            var csrf_token = $("input[name=csrf]").val();
+            var table = $('#table').dataTable({
+                "language": {
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+                },
+                "responsive": true,
+                "bProcessing": true,
+                "sAjaxSource": "/user/api?page_name=view_document_hub_client&csrf="+csrf_token,
+                "bPaginate": true,
+                "sPaginationType": "full_numbers",
+                "iDisplayLength": 10,
+                "aoColumns": [
+                    {mData: 'ids'},
+                    {mData: 'userView'},
+                    {mData: 'firmDes'},
+                    {mData: 'statusView'},
+                    {mData: 'action'},
+                ]
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            FilePond.registerPlugin(
+                FilePondPluginFileValidateSize,
+                FilePondPluginFileValidateType,
+                FilePondPluginImagePreview,
+            );
+
+            const pond = FilePond.create(document.getElementById('createInput'), {
+                allowMultiple: false,
+                maxFiles: 1,
+                labelIdle: 'Drag & Drop your image or <span class="filepond--label-action">Browse</span>',
+                acceptedFileTypes: [
+                    'image/*',
+                    'application/pdf',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/vnd.ms-excel',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'text/plain',
+                    'application/zip',
+                    'application/x-rar-compressed',
+                    'application/x-7z-compressed',
+                    'application/x-tar',
+                    'application/gzip'
+                ],
+                maxFileSize: '205MB',
+            });
+
+            // Insert Data
+            window.send_document = function() {
+                var formData = new FormData(document.getElementById("DocumentForm"));
+                const pondFiles = pond.getFiles();
+                pondFiles.forEach(file => {
+                    formData.append('file', file.file);
+                });
+
+                $.ajax({
+                    url: "/client/document/add",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        console.log(data);
+                        pond.removeFiles();
+                        if(data == '1'){
+                            $('#editExampleModal').modal('hide');
+                            document.getElementById("DocumentForm").reset();
+                            $('#table').DataTable().ajax.reload(null, false);
+                            toastr.success('Document Sent');
+                        } else if (data == '2'){
+                            $('#table').DataTable().ajax.reload(null, false);
+                            toastr.error('Please Upload File');
+                        } else {
+                            $('#table').DataTable().ajax.reload(null, false);
+                        }
+                    }
+                });
+            }
+        });
+        $('body').on('click', '.edit', function () {
+            var id = $(this).data('id');
+            $("#id").val(id);
+        });
+        function download_files(document_id) {
+            var csrf_token = $("input[name=csrf]").val();
+            $.ajax({
+                url: '/client/download/document',
+                type: 'POST',
+                data: {
+                    document_id: document_id,
+                    csrf: csrf_token
+                },
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (data) {
+                    var blob = new Blob([data], { type: 'application/zip' });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'documents.zip';
+                    link.click();
+                    toastr.success('Successfully downloaded.');
+                },
+                error: function () {
+                    toastr.error('Something went wrong.');
+                }
+            });
+        }
+        $(document).ready(function(){
+            $(document).on('click', '.see-more', function(e){
+                e.preventDefault();
+                var fullComment = $(this).data('description');
+                $('#fullComment').text(fullComment);
+                $('#commentModal').modal('show');
+            });
+        });
+    </script>
+{% endblock %}

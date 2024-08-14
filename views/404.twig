@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <meta name="robots" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Techneketax Admin" />
+    <meta property="og:title" content="Techneketax" />
+    <meta property="og:description" content="Techneketax" />
+    <meta property="og:image" content="{{ env.APP_URL }}assets/img/icon-300.webp" />
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- PAGE TITLE HERE -->
+    <title>404 Page not found</title>
+    <!-- FAVICONS ICON -->
+    <script>
+        window.baseUrl = '{{ env.APP_URL }}assets/backend';
+    </script>
+    <link rel="shortcut icon" type="image/png" href="{{ env.APP_URL }}assets/img/favicon.webp" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/2.4.85/css/materialdesignicons.min.css" integrity="sha512-QrjjD03/pcxwALR6g6MztfAzX9CLxxfbdBP5vamjZGlBQeOQg3fE1ZQH6UMc4U5W4NRkKw+6mwVZ6NnXJujInw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.css" integrity="sha512-9Tu/Gu0+bXW+oGrTGJOeNz2RG4MaF52FznXCciXFrXehFTLF6phJnJFNVOU2mmj9FWIXk9ap0H1ocygu1ZTRqg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css" integrity="sha512-vebUliqxrVkBy3gucMhClmyQP9On/HAWQdKDXRaAlb/FKuTbxkjPKUyqVOxAcGwFDka79eTF+YXwfke1h3/wfg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons"rel="stylesheet">
+    <link href="{{ env.APP_URL }}assets/backend/css/style.css" rel="stylesheet">
+
+</head>
+<body class="h-100" data-typography="poppins" data-theme-version="light" data-layout="vertical" data-nav-headerbg="color_13" data-headerbg="color_13" data-sidebar-style="mini" data-sidebarbg="color_13" data-sidebar-position="fixed" data-header-position="fixed" data-container="wide" direction="ltr" data-primary="color_13">
+<div class="authincation h-100">
+    <div class="container h-100">
+        <div class="row justify-content-center h-100 align-items-center">
+            <div class="col-md-6">
+                <div class="form-input-content text-center error-page">
+                    <h1 class="error-text font-weight-bold">404</h1>
+                    <h4><i class="fa fa-exclamation-triangle text-warning"></i> The page you were looking for is not found!</h4>
+                    <p>You may have mistyped the address or the page may have moved.</p>
+                    <div>
+                        <a class="btn btn-primary" href="/">Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--**********************************
+    Scripts
+***********************************-->
+<!-- Required vendors -->
+<script src="{{ env.APP_URL }}assets/backend/vendor/global/global.min.js"></script>
+<script src="{{ env.APP_URL }}assets/backend/js/custom.min.js"></script>
+</body>
+</html>

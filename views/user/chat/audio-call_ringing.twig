@@ -1,0 +1,114 @@
+{% extends 'user/master.twig' %}
+{% block content %}
+    <style>
+        /* Base styles for desktop */
+        .endbtn-col {
+            margin-top: 15%;
+        }
+
+        /* Media query for mobile devices */
+        @media (max-width: 767px) {
+            .endbtn-col {
+                margin-top: 50%;
+            }
+        }
+        .end-btn {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .end-btn i {
+            font-size: 24px !important; /* Adjust size as needed */
+            color: white; /* Adjust color as needed */
+        }
+        .call-animation {
+            background: #fff;
+            width: 135px;
+            height: 135px;
+            position: relative;
+            margin: 0 auto;
+            border-radius: 100%;
+            border: solid 5px #fff;
+
+        }
+        .call-animation:before {
+            position: absolute;
+            content: '';
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            animation: play 3s linear infinite;
+            backface-visibility: hidden;
+            border-radius: 50%;
+        }
+        .img-profile {
+            width: 125px;
+            height: 125px;
+            border-radius: 100%;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+        }
+        @keyframes play {
+
+            0% {
+                transform: scale(1);
+            }
+            15% {
+                box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.4);
+            }
+            25% {
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.4), 0 0 0 20px rgba(255, 255, 255, 0.2);
+            }
+            25% {
+                box-shadow: 0 0 0 15px rgba(255, 255, 255, 0.4), 0 0 0 30px rgba(255, 255, 255, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 0 25px rgba(255, 255, 255, 0.4), 0 0 0 50px rgba(255, 255, 255, 0.2);
+            }
+            100% {
+                box-shadow: 0 0 0 25px rgba(255, 255, 255, 0.4), 0 0 0 50px rgba(255, 255, 255, 0.2);
+                transform: scale(1.1);
+                opacity: 0;
+            }
+
+        }
+    </style>
+    <!--  BEGIN CONTENT AREA  -->
+    <div id="content" class="main-content" style="background: linear-gradient(to bottom, #434343 0%, black 100%);" >
+        <div class="layout-px-spacing">
+            <div class="middle-content container-xxl p-0">
+                <div class="chat-section layout-top-spacing">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 p-5">
+                            <div class="call-animation">
+                                <img class="img-circle img-profile" src="https://techneketax.local/assets/dashboard/src/assets/img/profile-30.png" alt="" width="135"/>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 p-2">
+                            <h5 class="text-light text-center">Audio Calling..</h5>
+                            <h2 class="text-light text-center"><strong>{{ fullname }}</strong></h2>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 endbtn-col">
+                            <a href="/user/chat">
+                                <div class="bg-danger end-btn">
+                                    <i class="fa fa-phone-slash" style="font-size: 24px;"></i>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  END CONTENT AREA  -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+
+{% endblock %}

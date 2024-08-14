@@ -1,0 +1,99 @@
+<?php
+require("config/env.php");
+if($route == '/admin/plans'):
+$seo = array(
+    'title' => 'Plans | Admin Panel',
+    'description' => 'CRM',
+    'keywords' => 'Admin Panel'
+);
+echo $twig->render('admin/plans/list.twig', ['seo'=>$seo]);
+endif;
+if($route == '/admin/add_plan'):
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        if (!empty($_POST['name'])) {
+            @$name = $_POST['name'];
+            @$tags= $_POST['tags'];
+            $percentage = $_POST['percentage'];
+            $basic = $_POST['basic'];
+            if(!empty($basic)){
+                $basicArray = json_decode($basic, true);
+                $values = array_column($basicArray, 'value');
+                $tags = implode(',', $values);
+            }else{
+                $tags ='';
+            }
+
+            if (!empty($_POST['key_points'])) {
+                $key_points = implode(',', array_filter($_POST['key_points']));
+            } else {
+                $key_points = '';
+            }
+            @$monthly_price = $_POST['monthly_price'];
+            @$yearly_price = $_POST['yearly_price'];
+            try {
+
+                $insert = $h->insert('plans')->values([ 'name' => $name, 'tags' => $tags, 'key_points' => $key_points, 'percentage' => $percentage, 'monthly_price' => $monthly_price, 'yearly_price' => $yearly_price])->run();
+                echo "1";
+                exit();
+            } catch (PDOException $e) {
+                echo "0";
+                exit();
+            }
+        }else{
+            echo "2";
+            exit();
+        }
+    }else{
+        $seo = array(
+            'title' => 'Add Plan | Admin Panel',
+            'description' => 'Add User',
+            'keywords' => 'Admin Panel'
+        );
+        echo $twig->render('admin/plans/add_plan.twig', ['seo'=>$seo, 'csrf'=>set_csrf()]);
+    }
+endif;
+if ($route == '/admin/get_plan'):
+    if(isset($_POST['edit']) && !empty($_POST['edit'])){
+        $id= $_POST['id'];
+        $plans = $h->table('plans')->select()->where('id', '=', $id)->fetchAll();
+        echo json_encode($plans);
+        exit();
+    }
+endif;
+if ($route == '/admin/plan_edit'):
+    if (!empty($_POST['name'])) {
+        @$name = $_POST['name'];
+        @$id = $_POST['id'];
+        $percentage = $_POST['percentage'];
+        $basic = $_POST['basic'];
+        if(!empty($basic)){
+            $basicArray = json_decode($basic, true);
+            $values = array_column($basicArray, 'value');
+            $tags = implode(',', $values);
+        }else{
+            $tags ='';
+        }
+
+        if(!empty($_POST['key_points'])){
+            @$key_points = implode(',', array_filter($_POST['key_points']));
+        }else{
+            @$key_points = '';
+        }
+        @$monthly_price = $_POST['monthly_price'];
+        @$yearly_price = $_POST['yearly_price'];
+        try {
+            $update = $h->update('plans')->values([ 'name' => $name, 'tags' => $tags, 'key_points' => $key_points, 'percentage' => $percentage, 'monthly_price' => $monthly_price, 'yearly_price' => $yearly_price])->where('id','=',$id)->run();
+
+            echo "1";
+            exit();
+        } catch (PDOException $e) {
+            echo "0";
+            exit();
+        }
+    }else{
+        echo "2";
+        exit();
+    }
+endif;

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>{{ seo.title }}</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="content-language" content="en">
+    <meta name="keywords" content="{{ seo.keywords }}">
+    <meta name="author" content="Chaisbek Realtor">
+    <meta name="copyright" content="Chaisbek Realtor">
+    <meta name="description" content="{{ seo.description }}">
+    <meta name="audience" content="Everyone">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="content-language" content="en">
+    <meta property="og:title" content="{{ seo.title }}">
+    <meta property="og:description" content="{{ seo.description }}">
+    <meta property="og:image" content="{{ env.APP_URL }}assets/public/img/og-chaisbek-v3.png">
+    <meta property="og:url" content="{{ env.APP_URL }}">
+    <meta property="og:type" content="website">
+
+    {{ include('public/includes/styles.twig') }}
+</head>
+<body>
+<!-- Page Loader -->
+<div class="page-loader-wrapper flex-column align-items-center justify-content-center">
+    <div class="loader">
+        <div class="preloader">
+            <div class="spinner-layer pl-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <p class="fs-12 fw-semibold mb-0 mt-3 text-uppercase">CHAISBEK...</p>
+    </div>
+</div>
+<!-- /.Page Loader -->
+{{ include('public/includes/navbar.twig') }}
+
+{% block content %} {% endblock %}
+
+{{ include('public/includes/footer.twig') }}

@@ -1,0 +1,142 @@
+{% extends 'admin/master.twig' %}
+{% block content %}
+    <div id="content" class="main-content">
+        <div class="layout-px-spacing">
+
+            <div class="middle-content container-xxl p-0">
+
+                <!-- BREADCRUMB -->
+                <div class="page-meta">
+                    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            {#                <li class="breadcrumb-item"><a href="#">Users</a></li>#}
+                            <li class="breadcrumb-item active" aria-current="page">Add Firm</li>
+                        </ol>
+                    </nav>
+                </div>
+                <!-- /BREADCRUMB -->
+
+                <div class="account-settings-container layout-top-spacing">
+                    <div class="content-body">
+                        <div class="container-fluid">
+                            <!-- row -->
+                            <div class="row">
+
+                                <div class="col-xl-12 col-lg-12">
+                                    <div id="ErrorMessage"></div>
+                                    <div class="card  card-bx m-b30">
+                                        <div class="card-header">
+                                            <h6 class="title">Add Firm</h6>
+                                        </div>
+                                        <form method="post" id="uploadForm" class="profile-form">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-6 m-b30">
+                                                        <label class="form-label">First name</label>
+                                                        <input type="text" class="form-control" id="fname" placeholder="First Name">
+                                                        <input type="hidden" name="csrf" value="{{ csrf}}">
+                                                    </div>
+                                                    <div class="col-sm-6 m-b30">
+                                                        <label class="form-label">Last name</label>
+                                                        <input type="text" class="form-control" id="lname" placeholder="Last Name">
+                                                    </div>
+                                                    <div class="col-sm-6 m-b30">
+                                                        <label class="form-label">Email adress</label>
+                                                        <input type="text" class="form-control" id="email" placeholder="Email">
+                                                    </div>
+                                                    <div class="col-sm-6 m-b30">
+                                                        <label class="form-label">Phone No</label>
+                                                        <input type="tel" class="form-control" id="phone" placeholder="Phone No">
+                                                    </div>
+                                                    <div class="col-sm-6 m-b30">
+                                                        <label class="form-label">Password</label>
+                                                        <input type="password" class="form-control" id="password" placeholder="Password">
+                                                    </div>
+                                                    <div class="col-sm-6 m-b30">
+                                                        <label class="form-label">Confirm Password</label>
+                                                        <input type="password" class="form-control" id="cpassword" placeholder="Confirm Password">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <button type="button" class="btn btn-secondary" id="btn" onclick="add_user()">ADD</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>   </div>
+
+        <!--  BEGIN FOOTER  -->
+        <div class="footer-wrapper">
+            <div class="footer-wrapper">
+                <div class="footer-section f-section-1">
+                    <p class="">Copyright © <span class="dynamic-year">2024</span> <a target="_blank" href="https://zotecsoft.com/">ZotecSoft</a>, All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+        <!--  END FOOTER  -->
+    </div>
+    <script>
+        function add_user() {
+            var fname = $("#fname").val();
+            var lname = $("#lname").val();
+            var phone = $("#phone").val();
+            var email = $("#email").val();
+            var password = $("#password").val();
+            var cpassword = $("#cpassword").val();
+            var csrf_token = $("input[name=csrf]").val();
+
+            if (fname != "" && lname != "" && email != "" && password != "" && cpassword != "") {
+                if (password == cpassword) {
+                document.getElementById("btn").innerHTML = "Loading";
+                $("#btn").attr("disabled");
+                $.ajax
+                ({
+                    type: 'post',
+                    url: '/admin/add_user',
+                    data: {
+                        add_user: "add_user",
+                        fname: fname,
+                        lname: lname,
+                        phone: phone,
+                        email: email,
+                        password: password,
+                        csrf: csrf_token,
+                    },
+                    success: function (response) {
+                        response = $.parseJSON(response);
+                        console.log(response);
+                        if (response['statusCode'] == "200") {
+                            $('#ErrorMessage').html("<div class='alert alert-success mt-4'>" + response['message'] + "</div>");
+                            location.href='/admin/users/firms'
+                        } else if (response['statusCode'] == "202") {
+                            document.getElementById("btn").innerHTML = "Register";
+                            // document.getElementById("btn").disabled = true;
+                            $('#ErrorMessage').html("<div class='alert alert-danger mt-4'>" + response['message'] + "</div>");
+                        } else {
+                            document.getElementById("btn").innerHTML = "Register";
+                            // document.getElementById("btn").disabled = true;
+                            $('#ErrorMessage').html("<div class='alert alert-danger mt-4'>" + response['message'] + "</div>");
+                        }
+                    }
+                });
+                }else {
+                    document.getElementById("btn").innerHTML = "ADD";
+                    // document.getElementById("btn").disabled = true;
+                    $('#ErrorMessage').html("<div class='alert alert-danger mt-4'>Password Not Matched</div>");
+                }
+            }else{
+                document.getElementById("btn").innerHTML = "ADD";
+                // document.getElementById("btn").disabled = true;
+                $('#ErrorMessage').html("<div class='alert alert-danger mt-4'>Missing Required Input</div>");
+            }
+            return false;
+        }
+    </script>
+{% endblock %}

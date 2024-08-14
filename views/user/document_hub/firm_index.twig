@@ -1,0 +1,217 @@
+{% extends 'user/master.twig' %}
+{% block content %}
+    <style>
+        .select2-container{
+            width: 100% !important;
+        }
+        .select2-container--default .select2-selection--multiple{
+            padding: 0.75rem 1.25rem;
+        }
+    </style>
+    <!--  BEGIN CONTENT AREA  -->
+    <div id="content"  class="main-content">
+        <div class="layout-px-spacing">
+            <div class="middle-content container-xxl p-0" >
+                <div id="call-ringing"></div>
+
+                <div class="row layout-spacing mt-4">
+                    <div class="col-lg-12 justify-content-end text-end ">
+                        <button type="button" class="btn btn-primary  me-4" role="button" data-bs-toggle="modal" data-bs-target="#editExampleModal" >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            <span class="btn-text-inner">Request For Document</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="row layout-top-spacing layout-spacing">
+                    <div class="col-xl-12 col-lg-12 col-md-12" >
+                        <div class="widget-content widget-content-area br-8">
+                            <div class="widget-content widget-content-area">
+                                <div class="table-responsive">
+                                    <table id="table"  class="table dt-table-hover" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th> Id </th>
+                                            <th>Client Name</th>
+                                            <th>Client Description</th>
+                                            <th >Status</th>
+                                            <th >Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  BEGIN FOOTER  -->
+        <div class="footer-wrapper">
+            <div class="footer-wrapper">
+                <div class="footer-section f-section-1">
+                    <p class="">Copyright © <span class="dynamic-year">2024</span> <a target="_blank" href="https://zotecsoft.com/">ZotecSoft</a>, All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+        <!--  END FOOTER  -->
+    </div>
+    <div class="modal fade" id="editExampleModal" tabindex="-1" aria-labelledby="editExampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Request For Document</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+                </div>
+                <form  method="post" id="DocumentForm" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="row p-1">
+                            <div class="col-md-12">
+                                    <label class="form-label">Client</label>
+                                    <select class="form-select" aria-label="Client"  name="client_id">
+                                        <option selected>Choose Client</option>
+                                        {% for client in clients %}
+                                            <option value="{{ client.id }}">{{ client.fname }} {{ client.lname }}</option>
+                                        {% endfor %}
+                                    </select>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="">
+                                    <label class="form-label">Documents</label>
+                                    <select class="js-example-basic-multiple" aria-label="Documents" id="document_id" name="document_id[]" multiple>
+                                        {% for document in documents %}
+                                            <option value="{{ document.id }}">{{ document.file_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" id="firm_des" name="firm_des" placeholder="Description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" name="add_new" id="btn-profile" class="btn btn-primary" onclick="request_for_document()">Request For Document</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentModalLabel">Full Description</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="fullComment"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+              </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2({
+                dropdownParent: $('#editExampleModal')
+            });
+        });
+        $(document).ready(function () {
+            var csrf_token = $("input[name=csrf]").val();
+            var table = $('#table').dataTable({
+                "language": {
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+                },
+                "responsive": true,
+                "bProcessing": true,
+                "sAjaxSource": "/user/api?page_name=view_document_hub&csrf="+csrf_token,
+                "bPaginate": true,
+                "sPaginationType": "full_numbers",
+                "iDisplayLength": 10,
+                "aoColumns": [
+                    {mData: 'ids'},
+                    {mData: 'userView'},
+                    {mData: 'ClientDes'},
+                    {mData: 'statusView'},
+                    {mData: 'action'},
+                ]
+            });
+        });
+        //Delete Data
+        function deleteUser(deleteid) {
+            var el = this;
+            $(this).prop("disabled", true);
+// add spinner to button
+            $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
+            var csrf_token = $("input[name=csrf]").val();
+            $.ajax({
+                url: '/user/api',
+                type: 'GET', data: {
+                    id: deleteid,
+                    page_name: "delete",
+                    table_name: "document_hub",
+                    csrf: csrf_token
+                }, success: function (data) {
+                    $('#table').DataTable().ajax.reload(null, false);
+                    $(el).closest("tr").fadeOut();
+                    toastr.clear();
+                    if (data == 1) {
+                        toastr.success('Successfully deleted.');
+                        $(el).closest("tr").fadeOut();
+                        $('#table').DataTable().ajax.reload(null, false);
+                    } else {
+                        toastr.error('Something went wrong.');
+
+                    }
+                }
+            });
+        }
+        //Update  Data
+        function request_for_document() {
+            var form_Data = new FormData(document.getElementById("DocumentForm"));
+
+            $.ajax({
+                url: "/user/request_for_document",
+                type: "POST",
+                data: form_Data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (dataResult) {
+                    console.log(dataResult);
+
+                    $("#btn-profile").removeAttr("disabled");
+                    if (dataResult == '1') {
+                        $('#table').DataTable().ajax.reload(null, false);
+                        $("#btn-profile").removeAttr("enabled");
+                        $('#editExampleModal').modal('hide');
+                        toastr.success(' Add Successfully.');
+                        document.getElementById("DocumentForm").reset();
+                    } else if (dataResult == 3) {
+                        toastr.error("Required fields are empty!");
+                    } else {
+                        toastr.error('Something Went Wrong.');
+                    }
+
+                }
+            });
+        }
+        $(document).ready(function(){
+            $(document).on('click', '.see-more', function(e){
+                e.preventDefault();
+                var fullComment = $(this).data('description');
+                $('#fullComment').text(fullComment);
+                $('#commentModal').modal('show');
+            });
+        });
+    </script>
+{% endblock %}

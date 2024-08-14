@@ -1,0 +1,299 @@
+{% extends 'user/master.twig' %}
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/src/stepper/bsStepper.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/light/stepper/custom-bsStepper.css">
+
+    <style>
+        .step.crossed .step-trigger.disabled .bs-stepper-circle, .step.crossed .step-trigger:disabled .bs-stepper-circle {
+            background-color: #ed141f !important;
+            color: #fff;
+        }
+        .active .bs-stepper-circle{
+            background-color: #ed141f !important;
+        }
+        .is-invalid {
+            border-color: #dc3545;
+        }
+    </style>
+
+    <div id="content" class="main-content">
+        <div class="layout-px-spacing">
+            <div class="middle-content container-xxl p-0">
+                <div class="row layout-top-spacing" id="cancel-row">
+                    <div class="col-lg-12 layout-spacing">
+                        <div class="statbox widget box box-shadow">
+                            <div class="widget-header">
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                        <h4>{{ template[0].name |capitalize}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-content widget-content-area">
+                                <div class="bs-stepper stepper-form-one">
+                                    <div class="bs-stepper-header" role="tablist">
+                                        {% for section in sections %}
+                                            <div class="step" data-target="#step-{{ loop.index }}">
+                                                <button type="button" class="step-trigger" role="tab">
+                                                    <span class="bs-stepper-circle">{{ loop.index }}</span>
+                                                    <span class="bs-stepper-label">Step {{ loop.index }}</span>
+                                                </button>
+                                            </div>
+                                            {% if not loop.last %}
+                                                <div class="line"></div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="bs-stepper-content">
+                                        <form id="dynamicForm" action="/user/template/view" method="post" enctype="multipart/form-data">
+                                            <input type="hidden" name="template_id" value="{{ template[0].id }}">
+                                            <input type="hidden" name="user_id" value="{{ template_request[0].user_id }}">
+
+                                            {% for section in sections %}
+                                                <div id="step-{{ loop.index }}" class="content m-3" role="tabpanel">
+                                                    {% for question in section.questions %}
+                                                        {% if question.type == 'none' %}
+                                                            <!-- If type is 'none', display as a heading and skip inputs -->
+                                                            <h4 class="mt-3">{{ question.question|default('No Question') }}</h4>
+                                                        {% else %}
+                                                            <div class="form-group">
+                                                                <label for="question-{{ question.id }}" class="mt-3">{{ question.question|default('No Question') }}</label>
+                                                                {% if question.type == 'text' %}
+                                                                    <input type="text" class="form-control {% if question.required %}required-input{% endif %}" id="question-{{ question.id }}" name="questions[{{ question.id }}][value]" placeholder="{{ question.question }}">
+                                                                {% elseif question.type == 'email' %}
+                                                                    <input type="email" class="form-control {% if question.required %}required-input{% endif %}" id="question-{{ question.id }}" name="questions[{{ question.id }}][value]" placeholder="{{ question.question }}">
+                                                                {% elseif question.type == 'textarea' %}
+                                                                    <textarea class="form-control {% if question.required %}required-input{% endif %}" id="question-{{ question.id }}" name="questions[{{ question.id }}][value]" placeholder="{{ question.question }}"></textarea>
+                                                                {% elseif question.type == 'radio' %}
+                                                                    {% for option in question.options %}
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input {% if question.required %}required-input{% endif %}" type="radio" name="questions[{{ question.id }}][value]" id="question-{{ option.option_text }}" value="{{ option.option_text }}">
+                                                                            <label class="form-check-label" for="question-{{ option.option_text }}">
+                                                                                {{ option.option_text|default('No Text') }}
+                                                                            </label>
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                {% elseif question.type == 'checkbox' %}
+                                                                    {% for option in question.options %}
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input {% if question.required %}required-input{% endif %}" type="checkbox" name="questions[{{ question.id }}][value][]" id="question-{{ option.option_text }}" value="{{ option.option_text }}">
+                                                                            <label class="form-check-label" for="question-{{ option.option_text }}">
+                                                                                {{ option.option_text|default('No Text') }}
+                                                                            </label>
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                {% elseif question.type == 'select' %}
+                                                                    <select class="form-select {% if question.required %}required-input{% endif %}" id="question-{{ question.id }}" name="questions[{{ question.id }}][value]">
+                                                                        {% for option in question.options %}
+                                                                            <option value="{{ option.option_text }}">{{ option.option_text|default('No Text') }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                {% elseif question.type == 'date' %}
+                                                                    <input type="date" class="form-control {% if question.required %}required-input{% endif %}" id="question-{{ question.id }}" name="questions[{{ question.id }}][value]">
+                                                                {% elseif question.type == 'time' %}
+                                                                    <input type="time" class="form-control {% if question.required %}required-input{% endif %}" id="question-{{ question.id }}" name="questions[{{ question.id }}][value]">
+                                                                {% elseif question.type == 'password' %}
+                                                                    <input type="password" class="form-control {% if question.required %}required-input{% endif %}" id="question-{{ question.id }}" name="questions[{{ question.id }}][value]">
+                                                                {% elseif question.type == 'number' %}
+                                                                    <input type="number" class="form-control {% if question.required %}required-input{% endif %}" id="question-{{ question.id }}" name="questions[{{ question.id }}][value]">
+                                                                {% elseif question.type == 'datetime-local' %}
+                                                                    <input type="datetime-local" class="form-control {% if question.required %}required-input{% endif %}" id="question-{{ question.id }}" name="questions[{{ question.id }}][value]">
+                                                                {% elseif question.type == 'file' %}
+                                                                    <input type="file" class="form-control {% if question.required %}required-input{% endif %}" id="question-{{ question.id }}" name="questions[{{ question.id }}][value]">
+                                                                {% endif %}
+                                                                <!-- Include hidden inputs unless question type is 'none' -->
+                                                                <input type="hidden" name="questions[{{ question.id }}][label]" value="{{ question.question }}">
+                                                                <input type="hidden" name="questions[{{ question.id }}][section_id]" value="{{ section[0].id }}">
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <div class="button-action mt-5">
+                                                        {% if not loop.first %}
+                                                            <button type="button" class="btn btn-secondary btn-prev me-3">Prev</button>
+                                                        {% endif %}
+                                                        {% if not loop.last %}
+                                                            <button type="button" class="btn btn-secondary btn-nxt">Next</button>
+                                                        {% else %}
+                                                            <button type="submit" class="btn btn-success me-3 submitBtn">Submit</button>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-wrapper">
+            <div class="footer-wrapper">
+                <div class="footer-section f-section-1">
+                    <p class="">Copyright © <span class="dynamic-year">2024</span> <a target="_blank" href="https://zotecsoft.com/">ZotecSoft</a>, All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script src="{{ env.APP_URL }}assets/dashboard/src/plugins/src/stepper/bsStepper.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var stepperWizardDefault = document.querySelector('.stepper-form-one');
+            var stepperDefault = new Stepper(stepperWizardDefault, {
+                animation: true
+            });
+
+            var stepperNextButtonDefault = stepperWizardDefault.querySelectorAll('.btn-nxt');
+            var stepperPrevButtonDefault = stepperWizardDefault.querySelectorAll('.btn-prev');
+
+            stepperNextButtonDefault.forEach(element => {
+                element.addEventListener('click', function () {
+                    var currentStep = stepperDefault._currentIndex;
+                    var currentStepElement = stepperWizardDefault.querySelector('.content:nth-of-type(' + (currentStep + 1) + ')');
+                    console.log('Validating step:', currentStep);
+                    console.log('Current step element:', currentStepElement);
+                    if (validateStep(currentStepElement)) {
+                        stepperDefault.next();
+                    } else {
+                        console.log('Validation failed for step:', currentStep);
+                    }
+                });
+            });
+
+            stepperPrevButtonDefault.forEach(element => {
+                element.addEventListener('click', function () {
+                    stepperDefault.previous();
+                });
+            });
+
+            stepperWizardDefault.addEventListener('show.bs-stepper', function (event) {
+                if (event.detail.from < event.detail.to) {
+                    stepperWizardDefault.querySelectorAll('.step')[event.detail.from].classList.add('crossed');
+                } else {
+                    stepperWizardDefault.querySelectorAll('.step')[event.detail.to].classList.remove('crossed');
+                }
+            });
+
+            function validateStep(stepElement) {
+                var isValid = true;
+                var requiredInputs = stepElement.querySelectorAll('.required-input');
+                console.log('Required inputs:', requiredInputs);
+
+                requiredInputs.forEach(input => {
+                    if (input.type === 'radio' || input.type === 'checkbox') {
+                        var name = input.name;
+                        var group = stepElement.querySelectorAll('input[name="' + name + '"]');
+                        var checked = stepElement.querySelectorAll('input[name="' + name + '"]:checked').length > 0;
+                        if (!checked) {
+                            group.forEach(option => {
+                                option.classList.add('is-invalid');
+                            });
+                            isValid = false;
+                        } else {
+                            group.forEach(option => {
+                                option.classList.remove('is-invalid');
+                            });
+                        }
+                    } else if (input.tagName.toLowerCase() === 'select') {
+                        if (!input.value) {
+                            input.classList.add('is-invalid');
+                            isValid = false;
+                        } else {
+                            input.classList.remove('is-invalid');
+                        }
+                    } else if (input.tagName.toLowerCase() === 'textarea') {
+                        if (!input.value.trim()) {
+                            input.classList.add('is-invalid');
+                            isValid = false;
+                        } else {
+                            input.classList.remove('is-invalid');
+                        }
+                    } else {
+                        if (!input.value) {
+                            input.classList.add('is-invalid');
+                            isValid = false;
+                        } else {
+                            input.classList.remove('is-invalid');
+                        }
+                    }
+                });
+
+                return isValid;
+            }
+
+            // Optional: Add CSS for highlighting invalid inputs
+            var style = document.createElement('style');
+            style.innerHTML = `
+                .is-invalid {
+                    border-color: #dc3545;
+                }
+            `;
+            document.head.appendChild(style);
+
+            $('#dynamicForm').on('submit', function (event) {
+                event.preventDefault();
+                var allStepsValid = true;
+                var steps = stepperWizardDefault.querySelectorAll('.content');
+
+                // Temporarily show all steps for validation
+                steps.forEach(step => step.style.display = 'block');
+
+                for (var i = 0; i < steps.length; i++) {
+                    var stepElement = steps[i];
+                    if (!validateStep(stepElement)) {
+                        allStepsValid = false;
+                        stepperDefault.to(i + 1); // Navigate to the first invalid step (index is 1-based in bsStepper)
+                        stepElement.querySelector('.is-invalid').focus(); // Focus the first invalid control
+                        break;
+                    }
+                }
+
+                // Hide all steps except the current one
+                steps.forEach((step, index) => {
+                    if (index !== stepperDefault._currentIndex) {
+                        step.style.display = 'none';
+                    }
+                });
+
+                if (allStepsValid) {
+                    var formData = new FormData(this);
+
+                    // Debugging: Log FormData entries to ensure correct submission
+                    for (var pair of formData.entries()) {
+                        console.log(pair[0]+ ', ' + pair[1]);
+                    }
+
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: 'POST',
+                        data: formData,
+                        processData: false,  // Important!
+                        contentType: false,  // Important!
+                        success: function (response) {
+                            console.log(response);
+                            if (response === 'Data saved successfully!') {
+                                toastr.success('Data saved successfully.');
+                                document.getElementById("dynamicForm").reset();
+                                setTimeout(function(){
+                                    window.location.href = 'user/template/all'; // Redirect to display page
+                                }, 2000); //Time before execution
+
+                            } else {
+                                toastr.error('Something went wrong. Please try again.');
+                            }
+                        },
+                        error: function () {
+                            toastr.error('Something went wrong. Please try again.');
+                        }
+                    });
+                } else {
+                    console.log('Form validation failed. Submission prevented.');
+                }
+            });
+
+        });
+    </script>
+{% endblock %}

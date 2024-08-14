@@ -1,0 +1,433 @@
+{% extends 'user/master.twig' %}
+{% block content %}
+<style>
+    .select2-container{
+        width: 100% !important;
+    }
+    .select2-container--default .select2-selection--multiple{
+        padding: 0.75rem 1.25rem;
+    }
+</style>
+    <!--  BEGIN CONTENT AREA  -->
+    <div id="content"  class="main-content">
+        <div class="layout-px-spacing">
+            <div class="middle-content container-xxl p-0">
+                <div id="call-ringing"></div>
+
+                <div class="row layout-top-spacing layout-spacing" id="cancel-row">
+                    <div class="col-xl-12 col-lg-12 col-md-12">
+                        <div class="calendar-container" >
+                            <div class="calendar" ></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Appointment</h5>
+                                <a role="button" class=" text-dark" data-bs-dismiss="modal" aria-label="Close" style="    font-weight: 900;
+    font-size: 25px;"><b>X</b></a>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" id="addEventForm" enctype="multipart/form-data">
+                                    <input type="hidden" id="event-id" name="event_id">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="">
+                                                <label class="form-label">Enter Title</label>
+                                                <input type="text" class="form-control" id="event-title" name="title" placeholder="Enter Title">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="">
+                                                <label class="form-label">Date</label>
+                                                <input type="datetime-local" class="form-control" id="event-start-date" name="dateTime">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="">
+                                                <label class="form-label">Clients</label>
+                                                <select class="js-example-basic-multiple" aria-label="Clients" id="event-client-id" name="client_id[]" multiple>
+                                                    {% for client in clients %}
+                                                        <option value="{{ client.id }}">{{ client.fname }} {{ client.lname }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="d-flex mt-4">
+                                                <div class="n-chk">
+                                                    <div class="form-check form-check-primary form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="purpose" value="Work" id="rwork">
+                                                        <label class="form-check-label" for="rwork">Work</label>
+                                                    </div>
+                                                </div>
+                                                <div class="n-chk">
+                                                    <div class="form-check form-check-success form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="purpose" value="Personal" id="rPersonal">
+                                                        <label class="form-check-label" for="rPersonal">Personal</label>
+                                                    </div>
+                                                </div>
+                                                <div class="n-chk">
+                                                    <div class="form-check form-check-danger form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="purpose" value="Important" id="rImportant">
+                                                        <label class="form-check-label" for="rImportant">Important</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="delete" class="btn btn-primary btn-delete-event  " onclick="deleteAppointment()">Delete</button>
+                                <a href="#" id="start-meeting" type="button" class="btn btn-primary " style="font-weight: 600; padding: 10px 25px;">Start Meeting</a>
+                                <button type="button" id="btn-profile" onclick="add_event()" class="btn btn-primary btn-add-event ">Add Appointment</button>
+                                <button type="button" id="btn" class="btn btn-secondary btn-update-event" onclick="update_event()">Update Appointment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  BEGIN FOOTER  -->
+        <div class="footer-wrapper">
+            <div class="footer-wrapper">
+                <div class="footer-section f-section-1">
+                    <p class="">Copyright © <span class="dynamic-year">2024</span> <a target="_blank" href="https://zotecsoft.com/">ZotecSoft</a>, All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+        <!--  END FOOTER  -->
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2({
+                dropdownParent: $('#exampleModal')
+            });
+        });
+        function loadData() {
+            $.ajax({
+                url: '/user/get_appointment',
+                type: 'GET',
+                success: function (data) {
+                    var data = JSON.parse(data);
+                    console.log(data);
+                        var newDate = new Date();
+                        /**
+                         *
+                         * @getDynamicMonth() fn. is used to validate 2 digit number and act accordingly
+                         *
+                         */
+                        function getDynamicMonth() {
+                            getMonthValue = newDate.getMonth();
+                            _getUpdatedMonthValue = getMonthValue + 1;
+                            if (_getUpdatedMonthValue < 10) {
+                                return `0${_getUpdatedMonthValue}`;
+                            } else {
+                                return `${_getUpdatedMonthValue}`;
+                            }
+                        }
+                        // Modal Elements
+                    var getModalTitleEl = document.querySelector('#event-title');
+                    var getModalStartDateEl = document.querySelector('#event-start-date');
+                    var getModalAddBtnEl = document.querySelector('.btn-add-event');
+                    var getModalUpdateBtnEl = document.querySelector('.btn-update-event');
+                    var getDeleteBtnEl = document.querySelector('.btn-delete-event');
+                    var getStartMeetingLinkEl = document.querySelector('#start-meeting');
+                        var calendarsEvents = {
+                            Work: 'primary',
+                            Personal: 'success',
+                            Important: 'danger',
+                            Travel: 'warning',
+                        }
+                        // Calendar Elements and options
+                        var calendarEl = document.querySelector('.calendar');
+                        var checkWidowWidth = function () {
+                            if (window.innerWidth <= 1199) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                        var calendarHeaderToolbar = {
+                            left: 'prev next addEventButton',
+                            center: 'title',
+                            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                        }
+                        if (data != '' || data != undefined){
+                            var calendarEventsList = data.map(function (appointment) {
+                                return {
+                                    id: appointment.id,
+                                    title: appointment.title,
+                                    start: appointment.date,
+                                    extendedProps: {
+                                        calendar: appointment.purpose,
+                                        client_id: appointment.client_id,
+                                        jitsi_link: appointment.jitsi_link
+                                    }
+                                };
+                            });
+                        }else{
+                            var calendarEventsList = [
+
+                            ]
+                        }
+                        // Calendar Select fn.
+                        var calendarSelect = function (info) {
+                            getModalAddBtnEl.style.display = 'block';
+                            getModalUpdateBtnEl.style.display = 'none';
+                            getDeleteBtnEl.style.display = 'none';
+                            getStartMeetingLinkEl.style.display = 'none';
+                            myModal.show()
+                            getModalStartDateEl.value = info.startStr;
+                        }
+
+                        // Calendar AddEvent fn.
+                        var calendarAddEvent = function () {
+                            var currentDate = new Date();
+                            var dd = String(currentDate.getDate()).padStart(2, '0');
+                            var mm = String(currentDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            var yyyy = currentDate.getFullYear();
+                            var combineDate = `${yyyy}-${mm}-${dd}T00:00:00`;
+                            getModalAddBtnEl.style.display = 'block';
+                            getModalUpdateBtnEl.style.display = 'none';
+                            getDeleteBtnEl.style.display = 'none';
+                            getStartMeetingLinkEl.style.display = 'none';
+                            myModal.show();
+                            getModalStartDateEl.value = combineDate;
+                        }
+
+                        // Calendar eventClick fn.
+                        var calendarEventClick = function (info) {
+                            var eventObj = info.event;
+                            if (eventObj.url) {
+                                window.open(eventObj.url);
+                                info.jsEvent.preventDefault();
+                            } else {
+                                var getModalEventId = eventObj._def.publicId;
+                                var getModalEventLevel = eventObj._def.extendedProps['calendar'];
+                                var getModalCheckedRadioBtnEl = document.querySelector(`input[value="${getModalEventLevel}"]`);
+
+                                getModalTitleEl.value = eventObj.title;
+                                document.getElementById('event-id').value = getModalEventId;
+                                const dateString = eventObj.start;
+                                const date = new Date(dateString);
+                                const year = date.getFullYear();
+                                const month = String(date.getMonth() + 1).padStart(2, '0');
+                                const day = String(date.getDate()).padStart(2, '0');
+                                const hours = String(date.getHours()).padStart(2, '0');
+                                const minutes = String(date.getMinutes()).padStart(2, '0');
+                                const seconds = String(date.getSeconds()).padStart(2, '0');
+
+                                const startDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+                                document.getElementById('event-start-date').value = startDate;
+
+                                var formIdArray = eventObj.extendedProps.client_id.split(',');
+                                var selectElement = document.getElementById('event-client-id');
+                                for (var i = 0; i < selectElement.options.length; i++) {
+                                    selectElement.options[i].selected = false;
+                                }
+                                formIdArray.forEach(function (id) {
+                                    var option = selectElement.querySelector(`option[value="${id.trim()}"]`);
+                                    if (option) {
+                                        option.selected = true;
+                                    }
+                                });
+
+                                // Trigger change event manually
+                                var event = new Event('change');
+                                selectElement.dispatchEvent(event);
+
+                                if (getModalCheckedRadioBtnEl) {
+                                    getModalCheckedRadioBtnEl.checked = true;
+                                }
+
+                                getModalUpdateBtnEl.setAttribute('data-fc-event-public-id', getModalEventId);
+                                getModalAddBtnEl.style.display = 'none';
+                                getModalUpdateBtnEl.style.display = 'block';
+                                getDeleteBtnEl.style.display = 'block';
+                                getStartMeetingLinkEl.style.display = 'block';
+
+                                // Set the delete function to use the correct ID
+                                getDeleteBtnEl.setAttribute('onclick', `deleteAppointment(${getModalEventId})`);
+
+                                // Set the Jitsi link
+                                var jitsiLink = eventObj.extendedProps.jitsi_link;
+                                getStartMeetingLinkEl.setAttribute('href','/meet/'+jitsiLink);
+
+                                myModal.show();
+                            }
+                        };
+                        // Activate Calender
+                        var calendar = new FullCalendar.Calendar(calendarEl, {
+                            selectable: true,
+                            height: checkWidowWidth() ? 900 : 1052,
+                            initialView: checkWidowWidth() ? 'listWeek' : 'dayGridMonth',
+                            initialDate: `${newDate.getFullYear()}-${getDynamicMonth()}-07`,
+                            headerToolbar: calendarHeaderToolbar,
+                            events: calendarEventsList,
+                            select: calendarSelect,
+                            unselect: function () {
+                                console.log('unselected')
+                            },
+                            customButtons: {
+                                addEventButton: {
+                                    text: 'Add Appointment',
+                                    click: calendarAddEvent
+                                }
+                            },
+                            eventClassNames: function ({event: calendarEvent}) {
+                                const getColorValue = calendarsEvents[calendarEvent._def.extendedProps.calendar];
+                                return [
+                                    // Background Color
+                                    'event-fc-color fc-bg-' + getColorValue
+                                ];
+                            },
+                             eventClick: calendarEventClick,
+                            windowResize: function (arg) {
+                                if (checkWidowWidth()) {
+                                    calendar.changeView('listWeek');
+                                    calendar.setOption('height', 900);
+                                } else {
+                                    calendar.changeView('dayGridMonth');
+                                    calendar.setOption('height', 1052);
+                                }
+                            }
+
+                        });
+
+                        // Calendar Renderation
+                        calendar.render();
+
+                        var myModal = new bootstrap.Modal(document.getElementById('exampleModal'))
+                        var modalToggle = document.querySelector('.fc-addEventButton-button ')
+
+                        document.getElementById('exampleModal').addEventListener('hidden.bs.modal', function (event) {
+                            getModalTitleEl.value = '';
+                            getModalStartDateEl.value = '';
+                            var selectElement = $('#event-client-id');
+                            if (selectElement.length) {
+                                selectElement.val(null).trigger('change');
+                            }
+                            var getModalIfCheckedRadioBtnEl = document.querySelector('input[name="purpose"]:checked');
+                            if (getModalIfCheckedRadioBtnEl !== null) {
+                                getModalIfCheckedRadioBtnEl.checked = false;
+                            }
+                        });
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching appointments:', error);
+                }
+            });
+        }
+        $(document).ready(function() {
+            loadData();
+        });
+        function add_event() {
+            var form_Data = new FormData(document.getElementById("addEventForm"));
+            $.ajax({
+                url: "/user/add/appointments",
+                type: "POST",
+                data: form_Data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (dataResult) {
+                    console.log(dataResult);
+                    $("#btn-add-event").removeAttr("disabled");
+                    if (dataResult == 1) {
+                        $("#btn-add-event").removeAttr("enabled");
+                        $('#exampleModal').modal('hide');
+                        toastr.success('User Add Successfully.');
+                        loadData();
+                        document.getElementById("addEventForm").reset();
+                    } else if (dataResult == 2) {
+                        toastr.error("Required fields are empty!");
+                    } else {
+                        toastr.error('Somthing Went Wrong.');
+                    }
+
+                }
+            });
+        }
+        function update_event() {
+            var id = $("#event-id").val();
+            var title = $("#event-title").val();
+            var dateTime = $("#event-start-date").val();
+            var client_id = $("#event-client-id").val();
+            var csrf_token = $("input[name=csrf]").val();
+            var purpose = $("input[name=purpose]:checked").val();
+
+            if (title != "" && dateTime != "" && client_id != ""&& purpose != "") {
+
+                document.getElementById("btn").innerHTML = "Loading";
+                $("#btn").attr("disabled");
+                $.ajax
+                ({
+                    type: 'post',
+                    url: '/user/update/appointments',
+                    data: {
+                        update_event: "update_event",
+                        id: id,
+                        title: title,
+                        dateTime: dateTime,
+                        client_id: client_id,
+                        purpose: purpose,
+                        csrf: csrf_token,
+                    },
+                    success: function (response) {
+                        response = $.parseJSON(response);
+                        if(response== 1){
+                            $("#btn").removeAttr("disabled");
+                            toastr.success('Update Successfully.');
+                            $('#exampleModal').modal('hide');
+                            loadData();
+                            document.getElementById("btn").innerHTML = "Update Event";
+                        } else if (dataResult == 2) {
+                            toastr.error("Required fields are empty!");
+                        } else{
+                            toastr.error('Somthing Went Wrong.');
+                            $("#btn").removeAttr("disabled");
+                        }
+                    }
+                });
+            }else{
+                document.getElementById("btn").innerHTML = "Update Event";
+                 document.getElementById("btn").disabled = false;
+                toastr.error('Missing Required Input');
+            }
+            return false;
+        }
+        function deleteAppointment(deleteid) {
+            $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
+            var csrf_token = $("input[name=csrf]").val();
+            $.ajax({
+                url: '/user/api',
+                type: 'GET', data: {
+                    id: deleteid,
+                    page_name: "delete",
+                    table_name: "appointment",
+                    csrf: csrf_token
+                }, success: function (data) {
+                    if (data == 1) {
+                        toastr.success('Successfully deleted.');
+                        loadData();
+                        $('#exampleModal').modal('hide');
+                    } else {
+                        toastr.error('Something went wrong.');
+
+                    }
+                }
+            });
+        }
+    </script>
+    <!--  END CONTENT AREA  -->
+{% endblock %}

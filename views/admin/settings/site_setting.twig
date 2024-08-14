@@ -1,0 +1,111 @@
+{% extends 'admin/master.twig' %}
+{% block content %}
+    <div id="content" class="main-content">
+        <div class="layout-px-spacing">
+
+            <div class="middle-content container-xxl p-0">
+
+                <!-- BREADCRUMB -->
+                <div class="page-meta">
+                    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            {#                <li class="breadcrumb-item"><a href="#">Users</a></li>#}
+                            <li class="breadcrumb-item active" aria-current="page">Site Settings</li>
+                        </ol>
+                    </nav>
+                </div>
+                <!-- /BREADCRUMB -->
+
+                <div class="account-settings-container layout-top-spacing">
+                    <div class="content-body">
+                        <div class="container-fluid">
+                            <!-- row -->
+                            <div class="row">
+
+                                <div class="col-xl-12 col-lg-12">
+                                    <div class="card  card-bx m-b30">
+                                        <div class="card-header">
+                                            <h6 class="title">Site Settings</h6>
+                                        </div>
+                                        <form method="post" class="profile-form" id="editUserForm">
+                                            <div class="card-body">
+
+                                                <div class="row">
+                                                    <div class="col-sm-12 m-b30">
+                                                        <label class="form-label">Site Name</label>
+                                                        <input type="text" class="form-control" name="name" id="name" value="{{ siteinfo.name }}">
+                                                        <input type="hidden" name="csrf" value="{{ csrf}}">
+                                                    </div>
+                                                    <div class="col-sm-12 m-b30">
+                                                        <img src="{{ env.APP_URL }}uploads/settings/{{ siteinfo.logo }}" style="width: 20%;"><br>
+                                                        <label class="form-label">Logo</label>
+                                                        <input type="file" class="form-control" name="logo" id="logo">
+                                                    </div>
+
+                                                    <div class="col-sm-12 m-b30">
+                                                        <img src="{{ env.APP_URL }}uploads/settings/{{ siteinfo.favicon }}" style="width: 10%;"><br>
+                                                        <label class="form-label">Favicon</label>
+                                                        <input type="file" class="form-control" name="favicon" id="favicon">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <button type="button" class="btn btn-secondary" id="btn-profile" onclick="do_siteSetting()">UPDATE</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>   </div>
+
+        <!--  BEGIN FOOTER  -->
+        <div class="footer-wrapper">
+            <div class="footer-wrapper">
+                <div class="footer-section f-section-1">
+                    <p class="">Copyright © <span class="dynamic-year">2024</span> <a target="_blank" href="https://zotecsoft.com/">ZotecSoft</a>, All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+        <!--  END FOOTER  -->
+    </div>
+    <script>
+        function do_siteSetting() {
+            var form_Data = new FormData(document.getElementById("editUserForm"));
+
+            $.ajax({
+                url: "/admin/site_settings",
+                type: "POST",
+                data: form_Data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (dataResult) {
+                    console.log(dataResult);
+
+                    $("#btn-profile").removeAttr("disabled");
+                    if (dataResult == 1) {
+                        $('#table').DataTable().ajax.reload(null, false);
+                        $("#btn-profile").removeAttr("enabled");
+                        $('#editUserFormModel').modal('hide');
+                       $('#error').html('<div class="alert-success alert alert-fill  alert-dismissible alert-icon" role="alert">   Updated Successfully <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"></div>');
+                        document.getElementById("editUserForm").reset();
+
+                    } else if (dataResult == 3) {
+                        $('#error').html('<div class="alert-danger alert alert-fill  alert-dismissible alert-icon" role="alert"> Required fields are empty! <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"></div>');
+
+                    } else {
+                        $('#error').html('<div class="alert-danger alert alert-fill  alert-dismissible alert-icon" role="alert">Somthing Went Wrong.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"></div>');
+
+                    }
+
+                }
+            });
+        }
+    </script>
+{% endblock %}

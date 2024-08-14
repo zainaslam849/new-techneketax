@@ -1,0 +1,255 @@
+{% extends 'admin/master.twig' %}
+{% block content %}
+
+    <!--  BEGIN CONTENT AREA  -->
+    <div id="content" class="main-content">
+        <div class="layout-px-spacing">
+
+            <div class="middle-content container-xxl p-0">
+
+                <!-- BREADCRUMB -->
+                <div class="page-meta">
+                    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Active Users</li>
+                        </ol>
+                    </nav>
+                </div>
+                <!-- /BREADCRUMB -->
+
+                <div class="row layout-spacing">
+                    <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                        <div class="widget-content widget-content-area br-8">
+                            <div class="widget-content widget-content-area">
+                                <div class="table-responsive">
+                                    <table id="table"  class="table dt-table-hover" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th> Id </th>
+                                            <th>Profile</th>
+                                            <th>Mobile No.</th>
+                                            <th >Status</th>
+                                            <th >Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!--  BEGIN FOOTER  -->
+        <div class="footer-wrapper">
+            <div class="footer-section f-section-1">
+                <p class="">Copyright © <span class="dynamic-year">2022</span> <a target="_blank" href="https://designreset.com/cork-admin/">DesignReset</a>, All rights reserved.</p>
+            </div>
+            <div class="footer-section f-section-2">
+                <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></p>
+            </div>
+        </div>
+        <!--  END CONTENT AREA  -->
+    </div>
+    <!--  END CONTENT AREA  -->
+    <div class="modal fade" id="editExampleModal" tabindex="-1" aria-labelledby="editExampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+                </div>
+                <form  method="post" id="editUploadForm" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="row p-1">
+                            <div class="col-sm-6 m-b30">
+                                <label class="form-label">First name</label>
+                                <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name">
+                                <input type="hidden" name="csrf" value="{{ csrf}}">
+                                <input type="hidden" name="id" id="id">
+                            </div>
+                            <div class="col-sm-6 m-b30">
+                                <label class="form-label">Last name</label>
+                                <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name">
+                            </div>
+                            <div class="col-sm-6 m-b30">
+                                <label class="form-label">Email adress</label>
+                                <input type="text" class="form-control" id="email" name="email" placeholder="Email" readonly>
+                            </div>
+                            <div class="col-sm-6 m-b30">
+                                <label class="form-label">Phone No</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone No">
+                            </div>
+                            <div class="col-sm-6 m-b30">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password " name="password" placeholder="Password">
+                            </div>
+                            <div class="col-sm-6 m-b30">
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="cpassword" name="cpassword" placeholder="Confirm Password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" name="add_new" id="btn-profile" class="btn btn-primary" onclick="update_tool()">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            var csrf_token = $("input[name=csrf]").val();
+            var table = $('#table').dataTable({
+                "language": {
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+                },
+                "responsive": true,
+                "bProcessing": true,
+                "sAjaxSource": "/admin/api?page_name=active_users&csrf="+csrf_token,
+                "bPaginate": true,
+                "sPaginationType": "full_numbers",
+                "iDisplayLength": 10,
+                "aoColumns": [
+                    {mData: 'ids'},
+                    {mData: 'userView'},
+                    {mData: 'phone'},
+                    {mData: 'statusView'},
+                    {mData: 'action'},
+                ]
+            });
+        });
+        function userStatus(userID, status) {
+            if(status == 0){
+                var currStatus= "block";
+            }else{
+                var currStatus= "active";
+            }
+            var el = this;
+            $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
+            var csrf_token = $("input[name=csrf]").val();
+            $.ajax({
+                url: '/admin/api',
+                type: 'GET', data: {
+                    id: userID,
+                    status: currStatus,
+                    page_name: "userStatusUpdate",
+                    table_name:"users",
+                    status_table:"status",
+                    csrf: csrf_token
+                }, success: function (data) {
+                    $(el).closest("tr").fadeOut();
+                    if (data == 1) {
+                        toastr.success('Status Updated.');
+                        $(el).closest("tr").fadeOut();
+                        $('#table').DataTable().ajax.reload(null, false);
+                    } else {
+                        toastr.error('Something went wrong.');
+
+                    }
+                }
+
+            });
+        }
+
+        //Delete Data
+        function deleteUser(deleteid) {
+            var el = this;
+            $(this).prop("disabled", true);
+// add spinner to button
+            $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
+            var csrf_token = $("input[name=csrf]").val();
+            $.ajax({
+                url: '/admin/api',
+                type: 'GET', data: {
+                    id: deleteid,
+                    page_name: "delete",
+                    table_name: "users",
+                    csrf: csrf_token
+                }, success: function (data) {
+                    $('#table').DataTable().ajax.reload(null, false);
+                    $(el).closest("tr").fadeOut();
+                    toastr.clear();
+                    if (data == 1) {
+                        toastr.success('Successfully deleted.');
+                        $(el).closest("tr").fadeOut();
+                        $('#table').DataTable().ajax.reload(null, false);
+                    } else {
+                        toastr.error('Something went wrong.');
+
+                    }
+                }
+            });
+        }
+        $('body').on('click', '.edit', function () {
+            var id = $(this).data('id');
+
+            $('#editUploadForm').trigger("reset");
+
+            $.ajax({
+                url: "/admin/get_user",
+                type: "POST",
+                data: {
+                    edit: 1,
+                    id: id,
+                },
+                cache: false,
+                success: function (dataResult) {
+
+                    var dataResult = JSON.parse(dataResult);
+                    console.log(dataResult);
+                    $('#fname').val(dataResult[0].fname);
+                    $('#lname').val(dataResult[0].lname);
+                    $('#email').val(dataResult[0].email);
+                    $('#phone').val(dataResult[0].phone);
+                    $('input[name=id]').val(dataResult[0].id);
+
+
+                }
+            });
+        });
+
+
+        //Update  Data
+        function update_tool() {
+            var form_Data = new FormData(document.getElementById("editUploadForm"));
+
+            $.ajax({
+                url: "/admin/user_edit",
+                type: "POST",
+                data: form_Data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (dataResult) {
+                    console.log(dataResult);
+
+                    $("#btn-profile").removeAttr("disabled");
+                    if (dataResult == 1) {
+                        $('#table').DataTable().ajax.reload(null, false);
+                        $("#btn-profile").removeAttr("enabled");
+                        $('#editExampleModal').modal('hide');
+                        toastr.success('User Add Successfully.');
+                        document.getElementById("editUploadForm").reset();
+
+                    } else if (dataResult == 2) {
+                        toastr.error("Password doesn't Matched.");
+                    } else if (dataResult == 3) {
+                        toastr.error("Required fields are empty!");
+                    } else {
+                        toastr.error('Somthing Went Wrong.');
+                    }
+
+                }
+            });
+        }
+    </script>
+{% endblock %}

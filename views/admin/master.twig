@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" data-footer="true">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/x-icon" href="{{ env.APP_URL }}assets/img/favicon.webp"/>
+    <title>{{ seo.title }}</title>
+    <meta name="description" content="" />
+    {{ include('admin/includes/styles.twig') }}
+</head>
+<body class=" layout-boxed">
+    {{ include('admin/includes/navbar.twig') }}
+    <!--  BEGIN MAIN CONTAINER  -->
+    <div class="main-container " id="container">
+        <div class="overlay"></div>
+        <div class="search-overlay"></div>
+    {{ include('admin/includes/sidebar.twig') }}
+
+{% block content %} {% endblock %}
+
+{{ include('admin/includes/footer.twig') }}
+    <script>
+        setTimeout(function() {
+            $("#loader").css({"display":"none"});
+        }, 100);
+    </script>
