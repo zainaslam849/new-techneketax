@@ -5,14 +5,16 @@
         .nav.nav-pills {
             border: none;
             padding: 8px;
-            background: #fff5f5 !important;
+            background: #fff !important;
             border-radius: 8px;
         }
         .nav.nav-pills li.nav-item button.nav-link {
-            color: #ee4343 !important;
+            color: #1b1b28 !important;
         }
         .nav.nav-pills li.nav-item button.nav-link svg{
-            color: #ed141f !important;
+            color: #1b1b28 !important;
+        }.nav.nav-pills li.nav-item button.nav-link.active svg{
+            color: #ED141F !important;
         }
     </style>
     <link href="{{ env.APP_URL }}assets/dashboard/tabs.css" rel="stylesheet" type="text/css" />
@@ -37,8 +39,7 @@
         <!--begin::Post-->
         <div class="post d-flex flex-column-fluid" id="kt_post">
             <!--begin::Container-->
-            <div id="kt_content_container" class="container-xxl">
-                    <div class="middle-content container-xxl p-0">
+            <div id="kt_content_container" class="container-fluid">
                         <div id="call-ringing"></div>
                         <div class="row layout-top-spacing">
                             <div class="simple-pill">
@@ -250,7 +251,6 @@
                             </div>
                         </div>
 
-                    </div>
             </div>
             <!--end::Container-->
         </div>
