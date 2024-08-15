@@ -19,268 +19,242 @@
 
     <!--  BEGIN CONTENT AREA  -->
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Toolbar-->
         <div class="toolbar" id="kt_toolbar">
             <!--begin::Container-->
             <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
                 <!--begin::Page title-->
                 <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                     <!--begin::Title-->
-                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Dashboard
-                        <!--begin::Separator-->
-                        <span class="h-20px border-1 border-gray-200 border-start ms-3 mx-2 me-1"></span>
-                        <!--end::Separator-->
-                        <!--begin::Description-->
-                        <span class="text-muted fs-7 fw-bold mt-2">#XRS-45670</span>
-                        <!--end::Description--></h1>
-                    <!--end::Title-->
+                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Dashboard</h1>
+
                 </div>
-                <!--end::Page title-->
-                <!--begin::Actions-->
-                <div class="d-flex align-items-center gap-2 gap-lg-3">
-                    <!--begin::Filter menu-->
-                    <div class="m-0">
-                        <!--begin::Menu toggle-->
-                        <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                            <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
-                            <span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-												<path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="currentColor" />
-											</svg>
-										</span>
-                            <!--end::Svg Icon-->Filter</a>
-                        <!--end::Menu toggle-->
-                        <!--begin::Menu 1-->
-                        <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6244763d93048">
-                            <!--begin::Header-->
-                            <div class="px-7 py-5">
-                                <div class="fs-5 text-dark fw-bolder">Filter Options</div>
-                            </div>
-                            <!--end::Header-->
-                            <!--begin::Menu separator-->
-                            <div class="separator border-gray-200"></div>
-                            <!--end::Menu separator-->
-                            <!--begin::Form-->
-                            <div class="px-7 py-5">
-                                <!--begin::Input group-->
-                                <div class="mb-10">
-                                    <!--begin::Label-->
-                                    <label class="form-label fw-bold">Status:</label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <div>
-                                        <select class="form-select form-select-solid" data-kt-select2="true" data-placeholder="Select option" data-dropdown-parent="#kt_menu_6244763d93048" data-allow-clear="true">
-                                            <option></option>
-                                            <option value="1">Approved</option>
-                                            <option value="2">Pending</option>
-                                            <option value="2">In Process</option>
-                                            <option value="2">Rejected</option>
-                                        </select>
-                                    </div>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="mb-10">
-                                    <!--begin::Label-->
-                                    <label class="form-label fw-bold">Member Type:</label>
-                                    <!--end::Label-->
-                                    <!--begin::Options-->
-                                    <div class="d-flex">
-                                        <!--begin::Options-->
-                                        <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                                            <input class="form-check-input" type="checkbox" value="1" />
-                                            <span class="form-check-label">Author</span>
-                                        </label>
-                                        <!--end::Options-->
-                                        <!--begin::Options-->
-                                        <label class="form-check form-check-sm form-check-custom form-check-solid">
-                                            <input class="form-check-input" type="checkbox" value="2" checked="checked" />
-                                            <span class="form-check-label">Customer</span>
-                                        </label>
-                                        <!--end::Options-->
-                                    </div>
-                                    <!--end::Options-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="mb-10">
-                                    <!--begin::Label-->
-                                    <label class="form-label fw-bold">Notifications:</label>
-                                    <!--end::Label-->
-                                    <!--begin::Switch-->
-                                    <div class="form-check form-switch form-switch-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="" name="notifications" checked="checked" />
-                                        <label class="form-check-label">Enabled</label>
-                                    </div>
-                                    <!--end::Switch-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Actions-->
-                                <div class="d-flex justify-content-end">
-                                    <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2" data-kt-menu-dismiss="true">Reset</button>
-                                    <button type="submit" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">Apply</button>
-                                </div>
-                                <!--end::Actions-->
-                            </div>
-                            <!--end::Form-->
-                        </div>
-                        <!--end::Menu 1-->
-                    </div>
-                    <!--end::Filter menu-->
-                    <!--begin::Secondary button-->
-                    <!--end::Secondary button-->
-                    <!--begin::Primary button-->
-                    <a href="../../demo1/dist/.html" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">Create</a>
-                    <!--end::Primary button-->
-                </div>
-                <!--end::Actions-->
+
             </div>
             <!--end::Container-->
         </div>
-        <div class="middle-content container-xxl p-0">
-            <div id="call-ringing"></div>
+        <!--end::Toolbar-->
+        <!--begin::Post-->
+        <div class="post d-flex flex-column-fluid" id="kt_post">
+            <!--begin::Container-->
+            <div id="kt_content_container" class="container-xxl">
+                    <div class="middle-content container-xxl p-0">
+                        <div id="call-ringing"></div>
+                        <div class="row layout-top-spacing">
+                            <div class="simple-pill">
+                                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="pills-home-icon-tab" data-bs-toggle="pill" data-bs-target="#pills-home-icon" type="button" role="tab" aria-controls="pills-home-icon" aria-selected="true">
+                                            <svg viewBox="64 64 896 896" focusable="false" data-icon="unordered-list" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M912 192H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM104 228a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0z"></path></svg>
+                                            Client List
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="pills-profile-icon-tab" data-bs-toggle="pill" data-bs-target="#pills-profile-icon" type="button" role="tab" aria-controls="pills-profile-icon" aria-selected="false">
+                                            <svg viewBox="0 0 1024 1024" focusable="false" data-icon="inbox" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M885.2 446.3l-.2-.8-112.2-285.1c-5-16.1-19.9-27.2-36.8-27.2H281.2c-17 0-32.1 11.3-36.9 27.6L139.4 443l-.3.7-.2.8c-1.3 4.9-1.7 9.9-1 14.8-.1 1.6-.2 3.2-.2 4.8V830a60.9 60.9 0 0060.8 60.8h627.2c33.5 0 60.8-27.3 60.9-60.8V464.1c0-1.3 0-2.6-.1-3.7.4-4.9 0-9.6-1.3-14.1zm-295.8-43l-.3 15.7c-.8 44.9-31.8 75.1-77.1 75.1-22.1 0-41.1-7.1-54.8-20.6S436 441.2 435.6 419l-.3-15.7H229.5L309 210h399.2l81.7 193.3H589.4zm-375 76.8h157.3c24.3 57.1 76 90.8 140.4 90.8 33.7 0 65-9.4 90.3-27.2 22.2-15.6 39.5-37.4 50.7-63.6h156.5V814H214.4V480.1z"></path></svg>
+                                            Unassigned
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="pills-contact-icon-tab" data-bs-toggle="pill" data-bs-target="#pills-contact-icon" type="button" role="tab" aria-controls="pills-contact-icon" aria-selected="false">
+                                            <svg viewBox="64 64 896 896" focusable="false" data-icon="folder-open" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M928 444H820V330.4c0-17.7-14.3-32-32-32H473L355.7 186.2a8.15 8.15 0 00-5.5-2.2H96c-17.7 0-32 14.3-32 32v592c0 17.7 14.3 32 32 32h698c13 0 24.8-7.9 29.7-20l134-332c1.5-3.8 2.3-7.9 2.3-12 0-17.7-14.3-32-32-32zM136 256h188.5l119.6 114.4H748V444H238c-13 0-24.8 7.9-29.7 20L136 643.2V256zm635.3 512H159l103.3-256h612.4L771.3 768z"></path></svg>
+                                            In Progress
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="pills-disabled-icon-tab" data-bs-toggle="pill" data-bs-target="#pills-disabled-icon" type="button" role="tab" aria-controls="pills-disabled-icon" aria-selected="false" >
+                                            <svg viewBox="64 64 896 896" focusable="false" data-icon="check" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M912 190h-69.9c-9.8 0-19.1 4.5-25.1 12.2L404.7 724.5 207 474a32 32 0 00-25.1-12.2H112c-6.7 0-10.4 7.7-6.3 12.9l273.9 347c12.8 16.2 37.4 16.2 50.3 0l488.4-618.9c4.1-5.1.4-12.8-6.3-12.8z"></path></svg>
+                                            Completed
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="pills-tabContent">
+                                    {#                            Client List#}
 
-            <div class="row layout-top-spacing">
-                <div class="simple-pill">
+                                    <div class="tab-pane fade show active" id="pills-home-icon" role="tabpanel" aria-labelledby="pills-home-icon-tab" tabindex="0">
+                                        {#                              CLient Table#}
+                                        <div class="row layout-spacing">
+                                            <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                                                <div class="widget-content widget-content-area card">
+                                                    <div class="card-header border-0 pt-6">
+                                                        <!--begin::Card title-->
+                                                        <div class="card-title">
+                                                            <!--begin::Search-->
+                                                            <div class="d-flex align-items-center position-relative my-1">
+                                                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                                                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+														<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+													</svg>
+												</span>
+                                                                <!--end::Svg Icon-->
+                                                                <input type="text" data-kt-customer-table-filter="search" id="search" class="form-control form-control-solid w-250px ps-15" placeholder="Search " />
+                                                            </div>
+                                                            <!--end::Search-->
+                                                        </div>
 
-                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="pills-home-icon-tab" data-bs-toggle="pill" data-bs-target="#pills-home-icon" type="button" role="tab" aria-controls="pills-home-icon" aria-selected="true">
-                                <svg viewBox="64 64 896 896" focusable="false" data-icon="unordered-list" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M912 192H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM104 228a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0z"></path></svg>
-                                Client List
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="pills-profile-icon-tab" data-bs-toggle="pill" data-bs-target="#pills-profile-icon" type="button" role="tab" aria-controls="pills-profile-icon" aria-selected="false">
-                                <svg viewBox="0 0 1024 1024" focusable="false" data-icon="inbox" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M885.2 446.3l-.2-.8-112.2-285.1c-5-16.1-19.9-27.2-36.8-27.2H281.2c-17 0-32.1 11.3-36.9 27.6L139.4 443l-.3.7-.2.8c-1.3 4.9-1.7 9.9-1 14.8-.1 1.6-.2 3.2-.2 4.8V830a60.9 60.9 0 0060.8 60.8h627.2c33.5 0 60.8-27.3 60.9-60.8V464.1c0-1.3 0-2.6-.1-3.7.4-4.9 0-9.6-1.3-14.1zm-295.8-43l-.3 15.7c-.8 44.9-31.8 75.1-77.1 75.1-22.1 0-41.1-7.1-54.8-20.6S436 441.2 435.6 419l-.3-15.7H229.5L309 210h399.2l81.7 193.3H589.4zm-375 76.8h157.3c24.3 57.1 76 90.8 140.4 90.8 33.7 0 65-9.4 90.3-27.2 22.2-15.6 39.5-37.4 50.7-63.6h156.5V814H214.4V480.1z"></path></svg>
-                                Unassigned
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="pills-contact-icon-tab" data-bs-toggle="pill" data-bs-target="#pills-contact-icon" type="button" role="tab" aria-controls="pills-contact-icon" aria-selected="false">
-                                <svg viewBox="64 64 896 896" focusable="false" data-icon="folder-open" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M928 444H820V330.4c0-17.7-14.3-32-32-32H473L355.7 186.2a8.15 8.15 0 00-5.5-2.2H96c-17.7 0-32 14.3-32 32v592c0 17.7 14.3 32 32 32h698c13 0 24.8-7.9 29.7-20l134-332c1.5-3.8 2.3-7.9 2.3-12 0-17.7-14.3-32-32-32zM136 256h188.5l119.6 114.4H748V444H238c-13 0-24.8 7.9-29.7 20L136 643.2V256zm635.3 512H159l103.3-256h612.4L771.3 768z"></path></svg>
-                                In Progress
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="pills-disabled-icon-tab" data-bs-toggle="pill" data-bs-target="#pills-disabled-icon" type="button" role="tab" aria-controls="pills-disabled-icon" aria-selected="false" >
-                                <svg viewBox="64 64 896 896" focusable="false" data-icon="check" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M912 190h-69.9c-9.8 0-19.1 4.5-25.1 12.2L404.7 724.5 207 474a32 32 0 00-25.1-12.2H112c-6.7 0-10.4 7.7-6.3 12.9l273.9 347c12.8 16.2 37.4 16.2 50.3 0l488.4-618.9c4.1-5.1.4-12.8-6.3-12.8z"></path></svg>
-                                Completed
-                            </button>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="pills-tabContent">
-                        {#                            Client List#}
-                        <div class="tab-pane fade show active" id="pills-home-icon" role="tabpanel" aria-labelledby="pills-home-icon-tab" tabindex="0">
-                            {#                              CLient Table#}
-                            <div class="row layout-spacing">
-                                <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-                                    <div class="widget-content widget-content-area">
-                                        <div class="table-responsive">
-                                            <table id="table"  class="table dt-table-hover" style="width:100%">
-                                                <thead>
-                                                <tr>
-                                                    <th> Id </th>
-                                                    <th>Profile</th>
-                                                    <th>Mobile No.</th>
-                                                    <th >Status</th>
-                                                    <th >Action</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table id="table"  class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" style="width:100%">
+                                                            <thead>
+                                                            <tr class="fw-bolder text-muted">
+                                                                <th class="min-w-40px"> Id </th>
+                                                                <th class="min-w-125px">Profile</th>
+                                                                <th class="min-w-125px">Mobile No.</th>
+                                                                <th class="min-w-125px">Status</th>
+                                                                <th class="min-w-125px">Action</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="tab-pane fade" id="pills-profile-icon" role="tabpanel" aria-labelledby="pills-profile-icon-tab" tabindex="0">
+                                        {#                              CLient Table#}
+                                        <div class="row layout-spacing">
+                                            <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                                                <div class="widget-content widget-content-area card">
+                                                    <div class="card-header border-0 pt-6">
+                                                        <!--begin::Card title-->
+                                                        <div class="card-title">
+                                                            <!--begin::Search-->
+                                                            <div class="d-flex align-items-center position-relative my-1">
+                                                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                                                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+														<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+													</svg>
+												</span>
+                                                                <!--end::Svg Icon-->
+                                                                <input type="text" data-kt-customer-table-filter="search" id="searchUnassigned" class="form-control form-control-solid w-250px ps-15" placeholder="Search " />
+                                                            </div>
+                                                            <!--end::Search-->
+                                                        </div>
 
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table id="unassigned"  class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" style="width:100%">
+                                                            <thead>
+                                                            <tr class="fw-bolder text-muted">
+                                                                <th class="min-w-40px"> Id </th>
+                                                                <th class="min-w-125px">Profile</th>
+                                                                <th class="min-w-125px">Mobile No.</th>
+                                                                <th class="min-w-125px">Status</th>
+                                                                <th class="min-w-125px">Action</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        {#                                Client DropDown Table#}
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-contact-icon" role="tabpanel" aria-labelledby="pills-contact-icon-tab" tabindex="0">
+                                        <div class="row layout-spacing">
+                                            <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                                                <div class="widget-content widget-content-area card">
+                                                    <div class="card-header border-0 pt-6">
+                                                        <!--begin::Card title-->
+                                                        <div class="card-title">
+                                                            <!--begin::Search-->
+                                                            <div class="d-flex align-items-center position-relative my-1">
+                                                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                                                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+														<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+													</svg>
+												</span>
+                                                                <!--end::Svg Icon-->
+                                                                <input type="text" data-kt-customer-table-filter="search" id="searchInProgress" class="form-control form-control-solid w-250px ps-15" placeholder="Search " />
+                                                            </div>
+                                                            <!--end::Search-->
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table id="inProgress"  class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" style="width:100%">
+                                                            <thead>
+                                                            <tr class="fw-bolder text-muted">
+                                                                <th class="min-w-40px"> Id </th>
+                                                                <th class="min-w-125px">Profile</th>
+                                                                <th class="min-w-125px">Mobile No.</th>
+                                                                <th class="min-w-125px">Status</th>
+                                                                <th class="min-w-125px">Action</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-disabled-icon" role="tabpanel" aria-labelledby="pills-disabled-icon-tab" tabindex="0">
+                                        <div class="row layout-spacing">
+                                            <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                                                <div class="widget-content widget-content-area card">
+                                                    <div class="card-header border-0 pt-6">
+                                                        <!--begin::Card title-->
+                                                        <div class="card-title">
+                                                            <!--begin::Search-->
+                                                            <div class="d-flex align-items-center position-relative my-1">
+                                                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                                                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+														<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+													</svg>
+												</span>
+                                                                <!--end::Svg Icon-->
+                                                                <input type="text" data-kt-customer-table-filter="search" id="searchCompleted" class="form-control form-control-solid w-250px ps-15" placeholder="Search " />
+                                                            </div>
+                                                            <!--end::Search-->
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table id="completed"  class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" style="width:100%">
+                                                            <thead>
+                                                            <tr class="fw-bolder text-muted">
+                                                                <th class="min-w-40px"> Id </th>
+                                                                <th class="min-w-125px">Profile</th>
+                                                                <th class="min-w-125px">Mobile No.</th>
+                                                                <th class="min-w-125px">Status</th>
+                                                                <th class="min-w-125px">Action</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-
-                        <div class="tab-pane fade" id="pills-profile-icon" role="tabpanel" aria-labelledby="pills-profile-icon-tab" tabindex="0">
-                            {#                              CLient Table#}
-                            <div class="row layout-spacing">
-                                <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-                                    <div class="widget-content widget-content-area">
-                                        <div class="table-responsive">
-                                            <table id="unassigned"  class="table dt-table-hover" style="width:100%">
-                                                <thead>
-                                                <tr>
-                                                    <th> Id </th>
-                                                    <th>Profile</th>
-                                                    <th>Mobile No.</th>
-                                                    <th >Status</th>
-                                                    <th >Action</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            {#                                Client DropDown Table#}
-                        </div>
-
-                        <div class="tab-pane fade" id="pills-contact-icon" role="tabpanel" aria-labelledby="pills-contact-icon-tab" tabindex="0">
-                            <div class="row layout-spacing">
-                                <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-                                    <div class="widget-content widget-content-area">
-                                        <div class="table-responsive">
-                                            <table id="inProgress"  class="table dt-table-hover" style="width:100%">
-                                                <thead>
-                                                <tr>
-                                                    <th> Id </th>
-                                                    <th>Profile</th>
-                                                    <th>Mobile No.</th>
-                                                    <th >Status</th>
-                                                    <th >Action</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="tab-pane fade" id="pills-disabled-icon" role="tabpanel" aria-labelledby="pills-disabled-icon-tab" tabindex="0">
-                            <div class="row layout-spacing">
-                                <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-                                    <div class="widget-content widget-content-area">
-                                        <div class="table-responsive">
-                                            <table id="completed"  class="table dt-table-hover" style="width:100%">
-                                                <thead>
-                                                <tr>
-                                                    <th> Id </th>
-                                                    <th>Profile</th>
-                                                    <th>Mobile No.</th>
-                                                    <th >Status</th>
-                                                    <th >Action</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                </div>
             </div>
-
+            <!--end::Container-->
         </div>
-
+        <!--end::Post-->
     </div>
 
 
@@ -308,6 +282,9 @@
                     {mData: 'action'},
                 ]
             });
+            $('#search').on('keyup', function() {
+                $('#table').DataTable().search(this.value).draw();
+            });
         });
         $(document).ready(function () {
             var csrf_token = $("input[name=csrf]").val();
@@ -328,6 +305,9 @@
                     {mData: 'statusView'},
                     {mData: 'action'},
                 ]
+            });
+            $('#searchUnassigned').on('keyup', function() {
+                $('#unassigned').DataTable().search(this.value).draw();
             });
         });
         $(document).ready(function () {
@@ -350,6 +330,9 @@
                     {mData: 'action'},
                 ]
             });
+            $('#searchInProgress').on('keyup', function() {
+                $('#inProgress').DataTable().search(this.value).draw();
+            });
         });
         $(document).ready(function () {
             var csrf_token = $("input[name=csrf]").val();
@@ -370,6 +353,9 @@
                     {mData: 'statusView'},
                     {mData: 'action'},
                 ]
+            });
+            $('#searchCompleted').on('keyup', function() {
+                $('#completed').DataTable().search(this.value).draw();
             });
         });
         function send_invite() {
@@ -494,8 +480,6 @@
                 }
             });
         });
-
-
         //Update  Data
         function update_tool() {
             var form_Data = new FormData(document.getElementById("editUploadForm"));

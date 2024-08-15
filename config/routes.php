@@ -99,6 +99,9 @@ post('/user/get_client_invoice', 'controller/users/InvoiceController.php');
 get('/user/invoice/view/$invoice_id', 'controller/users/InvoiceController.php');
 // profile
 get('/user/profile', 'controller/users/ProfileController.php');
+get('/user/profile/settings', 'controller/users/ProfileController.php');
+get('/user/profile/security', 'controller/users/ProfileController.php');
+get('/user/profile/billing', 'controller/users/ProfileController.php');
 post('/user/profile', 'controller/users/ProfileController.php');
 post('/user/fetch_profile', 'controller/users/ProfileController.php');
 post('/user/company/profile', 'controller/users/ProfileController.php');

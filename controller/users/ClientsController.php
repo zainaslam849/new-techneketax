@@ -2,7 +2,7 @@
 require("config/env.php");
 if($route == '/user/clients'):
         $seo = array(
-            'title' => 'Invoices',
+            'title' => 'Clients List',
             'description' => 'CRM',
             'keywords' => 'Admin Panel'
         );
@@ -11,7 +11,7 @@ if($route == '/user/clients'):
 endif;
 if($route == '/user/members'):
     $seo = array(
-        'title' => 'Invoices',
+        'title' => 'Associates List',
         'description' => 'CRM',
         'keywords' => 'Admin Panel'
     );
