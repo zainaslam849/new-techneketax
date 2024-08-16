@@ -59,7 +59,6 @@ if($route == '/user/profile'):
         if (!empty($UserInfo[0]['profile_image']) && $UserInfo[0]['profile_image'] != "" && $UserInfo[0]['profile_image'] != "null"){
             $profile_image =  $UserInfo[0]['profile_image'];
         }else{
-
             $profile_image = 'avatar.png';
         }
         $CountriesInfo = $h->table('countries')->select()->fetchAll();
@@ -68,6 +67,45 @@ if($route == '/user/profile'):
         echo $twig->render('user/profile/profile.twig', ['seo' => $seo,'profile_image' => $profile_image,'userinfo' => $UserInfo,'countries' => $CountriesInfo,'billingAddresses' => $Billing_address,'paymentMethods' => $UserInfoUser_payment_method, 'csrf'=>set_csrf()]);
     }
 endif;
+
+if($route == '/user/firm-info'):
+    $seo = array(
+        'title' => 'Profile - Firm Info',
+        'description' => 'CRM',
+        'keywords' => 'Admin Panel'
+    );
+
+    $UserInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+
+    $userinfo = array(
+        'id' => $UserInfo[0]['id'],
+        'fname' => $UserInfo[0]['fname'],
+        'lname' => $UserInfo[0]['lname'],
+        'contact_name' => $UserInfo[0]['contact_name'], // Assuming you have these additional fields
+        'company_name' => $UserInfo[0]['company_name'],
+        'representative_name' => $UserInfo[0]['representative_name'],
+        'owner_of_organization' => $UserInfo[0]['owner_of_organization'],
+        'type_of_organization' => $UserInfo[0]['type_of_organization'],
+        'company_image' => $UserInfo[0]['company_image'],
+    );
+
+// Check if the company image exists, otherwise set a default avatar
+    if (!empty($userinfo['company_image']) && $userinfo['company_image'] != "" && $userinfo['company_image'] != "null") {
+        $profile_image = $userinfo['company_image'];
+    } else {
+         $profile_image = 'avatar.png';
+    }
+
+// Pass the data to the Twig template
+    echo $twig->render('user/profile/firm.twig', [
+        'seo' => $seo,
+        'profile_image' => $profile_image,
+        'userinfo' => $userinfo, // Pass the userinfo array
+        'csrf' => set_csrf()
+    ]);
+endif;
+
+
 if($route == '/user/profile/settings'):
         $seo = array(
             'title' => 'Profile Settings',
@@ -87,17 +125,26 @@ if($route == '/user/profile/security'):
         echo $twig->render('user/profile/security.twig', ['seo' => $seo,'csrf'=>set_csrf()]);
 endif;
 if($route == '/user/profile/billing'):
-        $seo = array(
-            'title' => 'Profile Billing',
-            'description' => 'CRM',
-            'keywords' => 'Admin Panel'
-        );
-    $UserInfo=$h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+    $seo = array(
+        'title' => 'Profile Billing',
+        'description' => 'CRM',
+        'keywords' => 'Admin Panel'
+    );
+
+    $UserInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
     $CountriesInfo = $h->table('countries')->select()->fetchAll();
-    $Billing_address=$h->table('billing_address')->select()->where('user_id', '=', $loginUserId)->fetchAll();
-    $UserInfoUser_payment_method=$h->table('user_payment_method')->select()->where('user_id', '=', $loginUserId)->fetchAll();
-        echo $twig->render('user/profile/billing.twig', ['seo' => $seo,'userinfo' => $UserInfo,'countries' => $CountriesInfo,'billingAddresses' => $Billing_address,'paymentMethods' => $UserInfoUser_payment_method,'csrf'=>set_csrf()]);
-endif;
+    $Billing_address = $h->table('billing_address')->select()->where('user_id', '=', $loginUserId)->fetchAll();
+    $UserInfoUser_payment_method = $h->table('user_payment_method')->select()->where('user_id', '=', $loginUserId)->fetchAll();
+
+    echo $twig->render('user/profile/billing.twig', [
+        'seo' => $seo,
+        'userinfo' => $UserInfo,
+        'countries' => $CountriesInfo,
+        'billingAddresses' => $Billing_address,
+        'paymentMethods' => $UserInfoUser_payment_method,
+        'csrf' => set_csrf()
+    ]);
+    endif;
 if ($route == '/user/fetch_profile'):
     if(isset($_POST['edit']) && !empty($_POST['edit'])){
         $id= $_POST['id'];
