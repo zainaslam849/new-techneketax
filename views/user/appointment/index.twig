@@ -22,6 +22,19 @@
         padding: .75rem 1rem;
     }
 </style>
+    {% if loginType != "firm" %}
+    <style>
+        .fc-addEventButton-button{
+            display: none !important;
+        }
+        .edit_appointment{
+            display: none !important;
+        }
+        .delete_appointment{
+            display: none !important;
+        }
+    </style>
+    {% endif %}
     <!--  BEGIN CONTENT AREA  -->
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <!--begin::Toolbar-->
@@ -31,7 +44,7 @@
             <!--begin::Page title-->
             <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                 <!--begin::Title-->
-                <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Dashboard</h1>
+                <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Appointments</h1>
 
             </div>
 
@@ -40,19 +53,17 @@
     </div>
     <div class="post d-flex flex-column-fluid" id="kt_post">
     <!--begin::Container-->
-    <div id="kt_content_container" class="container-xxl">
+    <div id="kt_content_container" class="container-fluid">
     <div id="content"  class="main-content">
         <div class="layout-px-spacing">
-            <div class="middle-content container-xxl p-0">
                 <div id="call-ringing"></div>
-
                 <div class="row layout-top-spacing layout-spacing" id="cancel-row">
                     <div class="col-xl-12 col-lg-12 col-md-12">
                         <!--begin::Card-->
                         <div class="card">
                             <!--begin::Card header-->
                             <div class="card-header">
-                                <h2 class="card-title fw-bolder">Calendar</h2>
+                                <h2 class="card-title fw-bolder">Appointments</h2>
                             </div>
                             <!--end::Card header-->
                             <!--begin::Card body-->
@@ -66,102 +77,13 @@
 
                     </div>
                 </div>
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Appointment</h5>
-                                <a role="button" class=" text-dark" data-bs-dismiss="modal" aria-label="Close">
-                                    <div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Hide Event" data-bs-dismiss="modal">
-                                            <span class="svg-icon svg-icon-1">
-														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-															<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
-															<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
-														</svg>
-													</span>
-                                    </div></a>
-                            </div>
-                            <div class="modal-body">
-                                <form method="post" id="addEventForm" enctype="multipart/form-data">
-                                    <input type="hidden" id="event-id" name="event_id">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="">
-                                                <label class="form-label">Enter Title</label>
-                                                <input type="text" class="form-control" id="event-title" name="title" placeholder="Enter Title">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="">
-                                                <label class="form-label">Date</label>
-                                                <input type="datetime-local" class="form-control" id="event-start-date" name="dateTime">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="">
-                                                <label class="form-label">Clients</label>
-                                                <select class="js-example-basic-multiple" aria-label="Clients" id="event-client-id" name="client_id[]" multiple>
-                                                    {% for client in clients %}
-                                                        <option value="{{ client.id }}">{{ client.fname }} {{ client.lname }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="d-flex mt-4">
-                                                <div class="n-chk">
-                                                    <div class="form-check form-check-primary form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="purpose" value="Work" id="rwork">
-                                                        <label class="form-check-label" for="rwork">Work</label>
-                                                    </div>
-                                                </div>
-                                                <div class="n-chk">
-                                                    <div class="form-check form-check-success form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="purpose" value="Personal" id="rPersonal">
-                                                        <label class="form-check-label" for="rPersonal">Personal</label>
-                                                    </div>
-                                                </div>
-                                                <div class="n-chk">
-                                                    <div class="form-check form-check-danger form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="purpose" value="Important" id="rImportant">
-                                                        <label class="form-check-label" for="rImportant">Important</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" id="delete" class="btn btn-primary btn-delete-event  " onclick="deleteAppointment()">Delete</button>
-                                <a href="#" id="start-meeting" type="button" class="btn btn-primary " style="font-weight: 600; padding: 10px 25px;">Start Meeting</a>
-                                <button type="button" id="btn-profile" onclick="add_event()" class="btn btn-primary btn-add-event ">Add Appointment</button>
-                                <button type="button" id="btn" class="btn btn-secondary btn-update-event" onclick="update_event()">Update Appointment</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal fade" id="kt_modal_view_event" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered mw-650px">
-                        <div class="modal-content">
-                            <div class="modal-header border-0 justify-content-end">
-                                <div class="btn btn-icon btn-sm btn-color-gray-400 btn-active-icon-primary me-2" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Edit Event" id="exampleModal1">
-                                            <span class="svg-icon svg-icon-2">
-														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-															<path opacity="0.3" d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z" fill="currentColor" />
-															<path d="M5.574 21.3L3.692 21.928C3.46591 22.0032 3.22334 22.0141 2.99144 21.9594C2.75954 21.9046 2.54744 21.7864 2.3789 21.6179C2.21036 21.4495 2.09202 21.2375 2.03711 21.0056C1.9822 20.7737 1.99289 20.5312 2.06799 20.3051L2.696 18.422L5.574 21.3ZM4.13499 14.105L9.891 19.861L19.245 10.507L13.489 4.75098L4.13499 14.105Z" fill="currentColor" />
-														</svg>
-													</span>
-                                </div>
-                                <div class="btn btn-icon btn-sm btn-color-gray-400 btn-active-icon-danger me-2" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Delete Event" id="kt_modal_view_event_delete">
-                                            <span class="svg-icon svg-icon-2">
-														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-															<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor" />
-															<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor" />
-															<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor" />
-														</svg>
-													</span>
-                                </div>
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Appointment</h5>
+                            <a role="button" class=" text-dark" data-bs-dismiss="modal" aria-label="Close">
                                 <div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Hide Event" data-bs-dismiss="modal">
                                             <span class="svg-icon svg-icon-1">
 														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -169,10 +91,103 @@
 															<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
 														</svg>
 													</span>
+                                </div></a>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" id="addEventForm" enctype="multipart/form-data">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="">
+                                            <label class="form-label">Enter Title</label>
+                                            <input type="text" class="form-control form-control-solid" id="event-title" name="title" placeholder="Enter Title">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="">
+                                            <label class="form-label">Date</label>
+                                            <input type="datetime-local" class="form-control form-control-solid" id="event-start-date" name="dateTime">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="">
+                                            <label class="form-label">Clients</label>
+                                            <select class="js-example-basic-multiple form-control form-control-solid" aria-label="Clients" id="event-client-id" name="client_id[]" multiple>
+                                                {% for client in clients %}
+                                                    <option value="{{ client.id }}">{{ client.fname }} {{ client.lname }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="d-flex mt-4">
+                                            <div class="n-chk">
+                                                <div class="form-check form-check-primary form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="purpose" value="Work" id="rwork">
+                                                    <label class="form-check-label" for="rwork">Work</label>
+                                                </div>
+                                            </div>
+                                            <div class="n-chk">
+                                                <div class="form-check form-check-success form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="purpose" value="Personal" id="rPersonal">
+                                                    <label class="form-check-label" for="rPersonal">Personal</label>
+                                                </div>
+                                            </div>
+                                            <div class="n-chk">
+                                                <div class="form-check form-check-danger form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="purpose" value="Important" id="rImportant">
+                                                    <label class="form-check-label" for="rImportant">Important</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="btn-profile" onclick="add_event()" class="btn btn-primary btn-add-event ">Add Appointment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="kt_modal_view_event" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered mw-650px">
+                    <div class="modal-content">
+                        <div class="modal-header border-0 justify-content-end">
+                            <button class="btn btn-icon btn-sm btn-color-gray-400 btn-active-icon-primary me-2 edit_appointment" title="Edit Appointment" id="editEventBtn">
+    <span class="svg-icon svg-icon-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path opacity="0.3" d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z" fill="currentColor" />
+            <path d="M5.574 21.3L3.692 21.928C3.46591 22.0032 3.22334 22.0141 2.99144 21.9594C2.75954 21.9046 2.54744 21.7864 2.3789 21.6179C2.21036 21.4495 2.09202 21.2375 2.03711 21.0056C1.9822 20.7737 1.99289 20.5312 2.06799 20.3051L2.696 18.422L5.574 21.3ZM4.13499 14.105L9.891 19.861L19.245 10.507L13.489 4.75098L4.13499 14.105Z" fill="currentColor" />
+        </svg>
+    </span>
+                            </button>
+                            <button type="button" id="delete" class="btn btn-icon btn-sm btn-color-gray-400 btn-active-icon-danger me-2 delete_appointment"  title="Delete Appointment" onclick="deleteAppointment()" >
+                                            <span class="svg-icon svg-icon-2">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+															<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor" />
+															<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor" />
+															<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor" />
+														</svg>
+													</span>
+                            </button>
+                            <a id="start-meeting" type="button" class="btn btn-icon btn-sm btn-color-gray-400 btn-active-icon-danger me-2"  title="Meeting"  >
+                                            <span class="svg-icon svg-icon-2">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-video"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+													</span>
+                            </a>
+
+                            <div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Hide Event" data-bs-dismiss="modal">
+                                            <span class="svg-icon svg-icon-1">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+															<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+															<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+														</svg>
+													</span>
                             </div>
-                            <div class="modal-body pt-0 pb-20 px-lg-17">
-                                <div class="d-flex">
+                        </div>
+                        <div class="modal-body pt-0 pb-20 px-lg-17">
+                            <div class="d-flex">
                                             <span class="svg-icon svg-icon-1 svg-icon-muted me-5">
 														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 															<path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor" />
@@ -180,41 +195,120 @@
 															<path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor" />
 														</svg>
 													</span>
-                                    <!--end::Svg Icon-->
-                                    <!--end::Icon-->
-                                    <div class="mb-9">
-                                        <!--begin::Event name-->
-                                        <div class="d-flex align-items-center mb-2">
-                                            <span class="fs-3 fw-bolder me-3" data-kt-calendar="event_name"></span>
-                                            <span class="badge badge-light-success" data-kt-calendar="all_day"></span>
-                                        </div>
-                                        <!--end::Event name-->
-                                        <!--begin::Event description-->
-                                        <div class="fs-6" data-kt-calendar="event_description"></div>
-                                        <!--end::Event description-->
+                                <!--end::Svg Icon-->
+                                <!--end::Icon-->
+                                <div class="mb-9">
+                                    <!--begin::Event name-->
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="fs-3 fw-bolder me-3" id="view_title" data-kt-calendar="event_name"></span>
+                                        <span class="badge badge-light-success" id="view_purpose" data-kt-calendar="all_day"></span>
                                     </div>
+                                    <!--end::Event name-->
+                                    <!--begin::Event description-->
+                                    <div class="fs-6" data-kt-calendar="event_description"></div>
+                                    <!--end::Event description-->
                                 </div>
-                                <!--end::Row-->
-                                <!--begin::Row-->
-                                <div class="d-flex align-items-center mb-2">
-                                    <!--begin::Icon-->
-                                    <!--begin::Svg Icon | path: icons/duotune/abstract/abs050.svg-->
-                                    <span class="svg-icon svg-icon-1 svg-icon-success me-5">
+                            </div>
+                            <!--end::Row-->
+                            <!--begin::Row-->
+                            <div class="d-flex align-items-center mb-2">
+                                <!--begin::Icon-->
+                                <!--begin::Svg Icon | path: icons/duotune/abstract/abs050.svg-->
+                                <span class="svg-icon svg-icon-1 svg-icon-success me-5">
 														<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
 															<circle fill="currentColor" cx="12" cy="12" r="8" />
 														</svg>
 													</span>
-                                    <!--end::Svg Icon-->
-                                    <!--end::Icon-->
-                                    <!--begin::Event start date/time-->
-                                    <div class="fs-6">
-                                        <span class="fw-bolder">Starts</span>
-                                        <span data-kt-calendar="event_start_date"></span>
-                                    </div>
-                                    <!--end::Event start date/time-->
+                                <!--end::Svg Icon-->
+                                <!--end::Icon-->
+                                <!--begin::Event start date/time-->
+                                <div class="fs-6">
+                                    <span class="fw-bolder">Date </span>
+                                    <span data-kt-calendar="event_start_date" id="view_date"></span>
                                 </div>
+                                <!--end::Event start date/time-->
                             </div>
-                            <!--end::Modal body-->
+                        </div>
+                        <!--end::Modal body-->
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="kt_modal_edit_event" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Appointment</h5>
+                            <a role="button" class=" text-dark" data-bs-dismiss="modal" aria-label="Close">
+                                <div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Hide Event" data-bs-dismiss="modal">
+                                            <span class="svg-icon svg-icon-1">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+															<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+															<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+														</svg>
+													</span>
+                                </div></a>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" id="addEventForm" enctype="multipart/form-data">
+                                <input type="hidden" id="event-id" name="event_id">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="">
+                                            <label class="form-label">Enter Title</label>
+                                            <input type="text" class="form-control form-control-solid" id="edit_title_edit" name="title" placeholder="Enter Title">
+                                            <input type="hidden" class="form-control form-control-solid" id="edit_id_edit" name="edit_id">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="">
+                                            <label class="form-label">Date</label>
+                                            <input type="datetime-local" class="form-control form-control-solid" id="edit_date" name="dateTime">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="">
+                                            <label class="form-label">Clients</label>
+                                            <select class="js-example-basic-multiple2 form-control form-control-solid" aria-label="Clients" id="event-client-id_edit" name="client_ids[]" multiple>
+                                                {% for client in clients %}
+                                                    <option value="{{ client.id }}">{{ client.fname }} {{ client.lname }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="d-flex mt-4">
+                                            <div class="n-chk">
+                                                <div class="form-check form-check-primary form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="edit_purpose" value="Work" id="Work">
+                                                    <label class="form-check-label" for="rwork">Work</label>
+                                                </div>
+                                            </div>
+                                            <div class="n-chk">
+                                                <div class="form-check form-check-success form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="edit_purpose" value="Personal" id="Personal">
+                                                    <label class="form-check-label" for="rPersonal">Personal</label>
+                                                </div>
+                                            </div>
+                                            <div class="n-chk">
+                                                <div class="form-check form-check-danger form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="edit_purpose" value="Important" id="Important">
+                                                    <label class="form-check-label" for="rImportant">Important</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer flex-center">
+                            <!--begin::Button-->
+                            <button type="reset" data-bs-dismiss="modal" class="btn btn-light me-3">Cancel</button>
+                            <!--end::Button-->
+                            <!--begin::Button-->
+                            <button type="button" id="btn" onclick="update_event()" class="btn btn-primary">
+                                <span class="indicator-label">Update</span>
+                            </button>
+                            <!--end::Button-->
                         </div>
                     </div>
                 </div>
@@ -232,6 +326,9 @@
         $(document).ready(function() {
             $('.js-example-basic-multiple').select2({
                 dropdownParent: $('#exampleModal')
+            });
+            $('.js-example-basic-multiple2').select2({
+                dropdownParent: $('#kt_modal_edit_event')
             });
         });
         function loadData() {
@@ -260,8 +357,7 @@
                     var getModalTitleEl = document.querySelector('#event-title');
                     var getModalStartDateEl = document.querySelector('#event-start-date');
                     var getModalAddBtnEl = document.querySelector('.btn-add-event');
-                    var getModalUpdateBtnEl = document.querySelector('.btn-update-event');
-                    var getDeleteBtnEl = document.querySelector('.btn-delete-event');
+                    var getDeleteBtnEl = document.querySelector('#delete');
                     var getStartMeetingLinkEl = document.querySelector('#start-meeting');
                     var calendarsEvents = {
                         Work: 'primary',
@@ -292,7 +388,10 @@
                                 extendedProps: {
                                     calendar: appointment.purpose,
                                     client_id: appointment.client_id,
-                                    jitsi_link: appointment.jitsi_link
+                                    jitsi_link: appointment.jitsi_link,
+                                    appointment_id: appointment.id,
+                                    appointment_purpose: appointment.purpose,
+                                    appointment_date: appointment.date
                                 }
                             };
                         });
@@ -304,9 +403,6 @@
                     // Calendar Select fn.
                     var calendarSelect = function (info) {
                         getModalAddBtnEl.style.display = 'block';
-                        getModalUpdateBtnEl.style.display = 'none';
-                        getDeleteBtnEl.style.display = 'none';
-                        getStartMeetingLinkEl.style.display = 'none';
                         myModal.show()
                         getModalStartDateEl.value = info.startStr;
                     }
@@ -319,40 +415,130 @@
                         var yyyy = currentDate.getFullYear();
                         var combineDate = `${yyyy}-${mm}-${dd}T00:00:00`;
                         getModalAddBtnEl.style.display = 'block';
-                        getModalUpdateBtnEl.style.display = 'none';
-                        getDeleteBtnEl.style.display = 'none';
-                        getStartMeetingLinkEl.style.display = 'none';
                         myModal.show();
                         getModalStartDateEl.value = combineDate;
                     }
 
-                    // Calendar eventClick fn.
+                 //   Calendar eventClick fn.
+                 //    var calendarEventClick = function (info) {
+                 //        var eventObj = info.event;
+                 //        if (eventObj.url) {
+                 //            window.open(eventObj.url);
+                 //            info.jsEvent.preventDefault();
+                 //        } else {
+                 //            var getModalEventId = eventObj._def.publicId;
+                 //            var getModalEventLevel = eventObj._def.extendedProps['calendar'];
+                 //            var getModalCheckedRadioBtnEl = document.querySelector(`input[value="${getModalEventLevel}"]`);
+                 //
+                 //            getModalTitleEl.value = eventObj.title;
+                 //            document.getElementById('event-id').value = getModalEventId;
+                 //            const dateString = eventObj.start;
+                 //            const date = new Date(dateString);
+                 //            const year = date.getFullYear();
+                 //            const month = String(date.getMonth() + 1).padStart(2, '0');
+                 //            const day = String(date.getDate()).padStart(2, '0');
+                 //            const hours = String(date.getHours()).padStart(2, '0');
+                 //            const minutes = String(date.getMinutes()).padStart(2, '0');
+                 //            const seconds = String(date.getSeconds()).padStart(2, '0');
+                 //
+                 //            const startDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+                 //            document.getElementById('event-start-date').value = startDate;
+                 //
+                 //            var formIdArray = eventObj.extendedProps.client_id.split(',');
+                 //            var selectElement = document.getElementById('event-client-id');
+                 //            for (var i = 0; i < selectElement.options.length; i++) {
+                 //                selectElement.options[i].selected = false;
+                 //            }
+                 //            formIdArray.forEach(function (id) {
+                 //                var option = selectElement.querySelector(`option[value="${id.trim()}"]`);
+                 //                if (option) {
+                 //                    option.selected = true;
+                 //                }
+                 //            });
+                 //
+                 //            // Trigger change event manually
+                 //            var event = new Event('change');
+                 //            selectElement.dispatchEvent(event);
+                 //
+                 //            if (getModalCheckedRadioBtnEl) {
+                 //                getModalCheckedRadioBtnEl.checked = true;
+                 //            }
+                 //
+                 //            getModalUpdateBtnEl.setAttribute('data-fc-event-public-id', getModalEventId);
+                 //            getModalAddBtnEl.style.display = 'none';
+                 //            getModalUpdateBtnEl.style.display = 'block';
+                 //            getDeleteBtnEl.style.display = 'block';
+                 //            getStartMeetingLinkEl.style.display = 'block';
+                 //
+                 //            // Set the delete function to use the correct ID
+                 //            getDeleteBtnEl.setAttribute('onclick', `deleteAppointment(${getModalEventId})`);
+                 //
+                 //            // Set the Jitsi link
+                 //            var jitsiLink = eventObj.extendedProps.jitsi_link;
+                 //            getStartMeetingLinkEl.setAttribute('href','/meet/'+jitsiLink);
+                 //
+                 //            myModal.show();
+                 //        }
+                 //    };
+
                     var calendarEventClick = function (info) {
+                        // Extract event object from the clicked event
                         var eventObj = info.event;
-                        if (eventObj.url) {
-                            window.open(eventObj.url);
-                            info.jsEvent.preventDefault();
-                        } else {
-                            var getModalEventId = eventObj._def.publicId;
-                            var getModalEventLevel = eventObj._def.extendedProps['calendar'];
-                            var getModalCheckedRadioBtnEl = document.querySelector(`input[value="${getModalEventLevel}"]`);
 
-                            getModalTitleEl.value = eventObj.title;
-                            document.getElementById('event-id').value = getModalEventId;
-                            const dateString = eventObj.start;
-                            const date = new Date(dateString);
-                            const year = date.getFullYear();
-                            const month = String(date.getMonth() + 1).padStart(2, '0');
-                            const day = String(date.getDate()).padStart(2, '0');
-                            const hours = String(date.getHours()).padStart(2, '0');
-                            const minutes = String(date.getMinutes()).padStart(2, '0');
-                            const seconds = String(date.getSeconds()).padStart(2, '0');
+                        // Get the event ID
+                        var getModalEventId = eventObj.extendedProps.appointment_id;
 
-                            const startDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-                            document.getElementById('event-start-date').value = startDate;
+                        var getModalEventLevel = eventObj._def.extendedProps['calendar'];
 
+                        var getModalCheckedRadioBtnEl = document.querySelector(`input[value="${getModalEventLevel}"]`);
+                        if (getModalCheckedRadioBtnEl) {
+                            getModalCheckedRadioBtnEl.checked = true;
+                        }
+
+                        $('#view_title').html(eventObj.title);
+                        $('#view_purpose').html(eventObj.extendedProps.appointment_purpose);
+
+                        var Date = moment(eventObj.extendedProps.appointment_date).format("Do MMM, YYYY - h:mm a");
+                        $('#view_date').html(Date);
+
+                        getDeleteBtnEl.setAttribute('onclick', `deleteAppointment(${getModalEventId})`);
+
+                        var jitsiLink = eventObj.extendedProps.jitsi_link;
+                        if (jitsiLink) {
+                            getStartMeetingLinkEl.setAttribute('href', '/meet/' + jitsiLink);
+                        }
+
+                        // Show the view modal
+                        var myNewModal = new bootstrap.Modal(document.getElementById('kt_modal_view_event'));
+                        myNewModal.show();
+
+                        // Add event listener to the "Edit Event" button to open the edit modal
+                        var editEventBtn = document.getElementById('editEventBtn');
+                        editEventBtn.addEventListener('click', function () {
+                            // Hide the view modal
+                            myNewModal.hide();
+
+                            // Show the edit modal
+                            var editModal = new bootstrap.Modal(document.getElementById('kt_modal_edit_event'));
+                            editModal.show();
+
+                            // Populate the edit modal with event data
+
+                            document.getElementById('edit_id_edit').value = eventObj.extendedProps.appointment_id;
+
+                            document.getElementById('edit_title_edit').value = eventObj.title;
+                            // document.getElementById('edit_purpose').value = eventObj.extendedProps.appointment_purpose;
+
+                            document.getElementById('edit_date').value = moment(eventObj.extendedProps.appointment_date).format("YYYY-MM-DDTHH:mm");
+                            var getModalEventLevel = eventObj.extendedProps.calendar;
+                            console.log(getModalEventLevel);
+                            var getModalCheckedRadioBtnEl = document.querySelector(`#${getModalEventLevel}`);
+
+                            if (getModalCheckedRadioBtnEl) {
+                                getModalCheckedRadioBtnEl.checked = true;
+                            }
                             var formIdArray = eventObj.extendedProps.client_id.split(',');
-                            var selectElement = document.getElementById('event-client-id');
+                            var selectElement = document.getElementById('event-client-id_edit');
                             for (var i = 0; i < selectElement.options.length; i++) {
                                 selectElement.options[i].selected = false;
                             }
@@ -362,31 +548,13 @@
                                     option.selected = true;
                                 }
                             });
-
-                            // Trigger change event manually
                             var event = new Event('change');
                             selectElement.dispatchEvent(event);
 
-                            if (getModalCheckedRadioBtnEl) {
-                                getModalCheckedRadioBtnEl.checked = true;
-                            }
-
-                            getModalUpdateBtnEl.setAttribute('data-fc-event-public-id', getModalEventId);
-                            getModalAddBtnEl.style.display = 'none';
-                            getModalUpdateBtnEl.style.display = 'block';
-                            getDeleteBtnEl.style.display = 'block';
-                            getStartMeetingLinkEl.style.display = 'block';
-
-                            // Set the delete function to use the correct ID
-                            getDeleteBtnEl.setAttribute('onclick', `deleteAppointment(${getModalEventId})`);
-
-                            // Set the Jitsi link
-                            var jitsiLink = eventObj.extendedProps.jitsi_link;
-                            getStartMeetingLinkEl.setAttribute('href','/meet/'+jitsiLink);
-
-                            myModal.show();
-                        }
+                        });
                     };
+
+
                     // Activate Calender
                     var calendar = new FullCalendar.Calendar(calendarEl, {
                         selectable: true,
@@ -453,6 +621,8 @@
             loadData();
         });
         function add_event() {
+            document.getElementById("btn-profile").innerHTML = "Loading";
+            document.getElementById('btn-profile').disabled = true;
             var form_Data = new FormData(document.getElementById("addEventForm"));
             $.ajax({
                 url: "/user/add/appointments",
@@ -463,29 +633,32 @@
                 processData: false,
                 success: function (dataResult) {
                     console.log(dataResult);
-                    $("#btn-add-event").removeAttr("disabled");
+                    document.getElementById('btn-profile').disabled = false;
+                    document.getElementById("btn-profile").innerHTML = "Add Appointment";
                     if (dataResult == 1) {
-                        $("#btn-add-event").removeAttr("enabled");
                         $('#exampleModal').modal('hide');
-                        toastr.success('User Add Successfully.');
+                        toastr.success('Appointment Add Successfully.');
                         loadData();
                         document.getElementById("addEventForm").reset();
                     } else if (dataResult == 2) {
                         toastr.error("Required fields are empty!");
+                    }else if (dataResult == 3) {
+                        toastr.error("You Can't Add An Appointment");
                     } else {
-                        toastr.error('Somthing Went Wrong.');
+                        toastr.error('Something Went Wrong.');
                     }
 
                 }
             });
         }
         function update_event() {
-            var id = $("#event-id").val();
-            var title = $("#event-title").val();
-            var dateTime = $("#event-start-date").val();
-            var client_id = $("#event-client-id").val();
+
+            var id = $("#edit_id_edit").val();
+            var title = $("#edit_title_edit").val();
+            var dateTime = $("#edit_date").val();
+            var client_id = $("#event-client-id_edit").val();
             var csrf_token = $("input[name=csrf]").val();
-            var purpose = $("input[name=purpose]:checked").val();
+            var purpose = $("input[name=edit_purpose]:checked").val();
 
             if (title != "" && dateTime != "" && client_id != ""&& purpose != "") {
 
@@ -509,13 +682,15 @@
                         if(response== 1){
                             $("#btn").removeAttr("disabled");
                             toastr.success('Update Successfully.');
-                            $('#exampleModal').modal('hide');
+                            $('#kt_modal_edit_event').modal('hide');
                             loadData();
-                            document.getElementById("btn").innerHTML = "Update Event";
+                            document.getElementById("btn").innerHTML = "Update Appointment";
                         } else if (dataResult == 2) {
                             toastr.error("Required fields are empty!");
-                        } else{
-                            toastr.error('Somthing Went Wrong.');
+                        } else if (dataResult == 3) {
+                            toastr.error("You Can't Update An Appointment");
+                        }else{
+                            toastr.error('Something Went Wrong.');
                             $("#btn").removeAttr("disabled");
                         }
                     }
@@ -541,7 +716,7 @@
                     if (data == 1) {
                         toastr.success('Successfully deleted.');
                         loadData();
-                        $('#exampleModal').modal('hide');
+                        $('#kt_modal_view_event').modal('hide');
                     } else {
                         toastr.error('Something went wrong.');
 

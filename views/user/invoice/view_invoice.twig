@@ -1,16 +1,31 @@
 {% extends 'user/master.twig' %}
 {% block content %}
     <!--  BEGIN CONTENT AREA  -->
-    <div id="content" class="main-content">
-        <div class="layout-px-spacing">
+    <!--  BEGIN CONTENT AREA  -->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Toolbar-->
+        <div class="toolbar" id="kt_toolbar">
+            <!--begin::Container-->
+            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                    <!--begin::Title-->
+                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">View Invoice</h1>
 
-            <div class="middle-content container-xxl p-0">
+                </div>
+
+            </div>
+            <!--end::Container-->
+        </div>
+        <div class="post d-flex flex-column-fluid" id="kt_post">
+            <!--begin::Container-->
+            <div id="kt_content_container" class="container-fluid">
                 <div id="call-ringing"></div>
 
                 <div class="row invoice layout-top-spacing layout-spacing">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 
-                        <div class="doc-container">
+                        <div class="doc-container card p-12">
 
                             <div class="row">
 
@@ -46,7 +61,7 @@
                                                                 </div>
 
                                                                 <div class="col-sm-6 text-sm-end">
-                                                                    <p class="inv-list-number mt-sm-3 pb-sm-2 mt-4"><span class="inv-title">Invoice : </span> <span class="inv-number">{{ invoiceInfo[0].invoice_number }}</span></p>
+                                                                    <p class="fw-bolder fs-3 text-gray-800 mb-8"><span class="inv-title">Invoice : </span> <span class="inv-number">{{ invoiceInfo[0].invoice_number }}</span></p>
                                                                     <p class="inv-created-date mt-sm-5 mt-3"><span class="inv-title">Invoice Date : </span> <span class="inv-date">{{ invoiceInfo[0].invoice_date }}</span></p>
                                                                     <p class="inv-due-date"><span class="inv-title">Due Date : </span> <span class="inv-date">{{ invoiceInfo[0].due_date }}</span></p>
                                                                 </div>
@@ -59,7 +74,7 @@
                                                             <div class="row">
 
                                                                 <div class="col-xl-8 col-lg-7 col-md-6 col-sm-4 align-self-center">
-                                                                    <p class="inv-to">Invoice To</p>
+                                                                    <h6 class="inv-to">Invoice To</h6>
                                                                 </div>
 
                                                                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 align-self-center order-sm-0 order-1 text-sm-end mt-sm-0 mt-5">
@@ -83,12 +98,11 @@
                                                             </div>
 
                                                         </div>
-
                                                         <div class="inv--product-table-section">
                                                             <div class="table-responsive">
                                                                 <table class="table">
                                                                     <thead class="">
-                                                                    <tr>
+                                                                    <tr class="border-bottom fs-6 fw-bolder text-muted">
                                                                         <th scope="col">S.No</th>
                                                                         <th scope="col">Items</th>
                                                                         <th class="text-end" scope="col">Qty</th>
@@ -110,7 +124,7 @@
 {#                                                                                {% continue %} #}
 {#                                                                            {% endif %}#}
                                                                             {% set SrNo = i + 1 %}
-                                                                            <tr>
+                                                                            <tr class="fw-bolder text-gray-700 fs-5 ">
                                                                                 <td>{{ SrNo }}</td>
                                                                                 <td>{{ item_des[i]|e }}</td>
                                                                                 <td class="text-end">{{ quantity[i]|e }}</td>
@@ -123,7 +137,7 @@
                                                                 </table>
                                                             </div>
                                                         </div>
-
+                                                        <div class="separator separator-dashed my-10"></div>
                                                         <div class="inv--total-amounts">
 
                                                             <div class="row mt-4">
@@ -133,22 +147,22 @@
                                                                     <div class="text-sm-end">
                                                                         <div class="row">
                                                                             <div class="col-sm-8 col-7">
-                                                                                <p class="">Sub Total :</p>
+                                                                                <p class="fw-bold pe-10 text-gray-600 fs-7">Sub Total :</p>
                                                                             </div>
                                                                             <div class="col-sm-4 col-5">
-                                                                                <p class="">${{ invoiceInfo[0].subtotal }}</p>
+                                                                                <p class="text-end fw-bolder fs-6 text-gray-800">${{ invoiceInfo[0].subtotal }}</p>
                                                                             </div>
                                                                             <div class="col-sm-8 col-7">
-                                                                                <p class=" discount-rate">Discount {% if invoiceInfo[0].discount_type == "Percent"  %}{{ invoiceInfo[0].discount_amount }}%    {% endif %}:</p>
+                                                                                <p class="fw-bold pe-10 text-gray-600 fs-7 discount-rate">Discount {% if invoiceInfo[0].discount_type == "Percent"  %}{{ invoiceInfo[0].discount_amount }}%    {% endif %}:</p>
                                                                             </div>
                                                                             <div class="col-sm-4 col-5">
-                                                                                <p class="">${{ invoiceInfo[0].discount_amount_total }}</p>
+                                                                                <p class="text-end fw-bolder fs-6 text-gray-800">${{ invoiceInfo[0].discount_amount_total }}</p>
                                                                             </div>
                                                                             <div class="col-sm-8 col-7 grand-total-title mt-3">
-                                                                                <h4 style="color: #515365;">Grand Total : </h4>
+                                                                                <p class="fw-bold pe-10 text-gray-600 fs-7">Grand Total : </p>
                                                                             </div>
                                                                             <div class="col-sm-4 col-5 grand-total-amount mt-3">
-                                                                                <h4 style="color: #515365;">${{ invoiceInfo[0].final_total }}</h4>
+                                                                                <h4 class="text-end fw-bolder fs-6 text-gray-800">${{ invoiceInfo[0].final_total }}</h4>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -181,20 +195,27 @@
 
                                 <div class="col-xl-3">
 
-                                    <div class="invoice-actions-btn">
+                                    <div class="d-print-none border border-dashed border-gray-300 card-rounded  p-9 bg-lighten">
 
                                         <div class="invoice-action-btn">
 
                                             <div class="row">
-                                                <div class="col-xl-12 col-md-3 col-sm-6">
-                                                    <a href="javascript:void(0);" class="btn btn-secondary btn-print  action-print">Print</a>
-                                                </div>
-                                                <div class="col-xl-12 col-md-3 col-sm-6">
-                                                    <button type="button" class="btn btn-success btn-download w-100" style="margin-bottom: 20px;" id="download">Download</button>
-                                                </div>
-                                                <div class="col-xl-12 col-md-3 col-sm-6">
-                                                    <a href="/user/invoice/update/{{ invoiceInfo[0].id }}" class="btn btn-dark btn-edit">Update</a>
-                                                </div>
+                                                {% if loginType == "firm" %}
+                                                    <div class="col-md-6">
+                                                        <a href="javascript:void(0);" class="btn btn-secondary btn-print w-100 action-print" style="margin-bottom: 20px;">Print</a>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <a href="/user/invoice/update/{{ invoiceInfo[0].id }}" class="btn btn-success btn-download w-100" id="btn"  style="margin-bottom: 20px;">Update</a>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="col-md-12">
+                                                        <a href="javascript:void(0);" class="btn btn-secondary btn-print w-100 action-print" style="margin-bottom: 20px;">Print</a>
+                                                    </div>
+                                                {% endif %}
+                                                    <div class=" col-md-12">
+                                                        <button type="button" class="btn btn-primary btn-download w-100" style="margin-bottom: 20px;" id="download">Download</button>
+                                                    </div>
+
                                             </div>
 
                                         </div>
@@ -213,15 +234,7 @@
             </div>
 
         </div>
-        <!--  BEGIN FOOTER  -->
-        <div class="footer-wrapper">
-            <div class="footer-wrapper">
-                <div class="footer-section f-section-1">
-                    <p class="">Copyright © <span class="dynamic-year">2024</span> <a target="_blank" href="https://zotecsoft.com/">ZotecSoft</a>, All rights reserved.</p>
-                </div>
-            </div>
-        </div>
-        <!--  END FOOTER  -->
+
     </div>
     <!--  END CONTENT AREA  -->
 
