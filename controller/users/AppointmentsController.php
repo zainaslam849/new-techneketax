@@ -8,22 +8,81 @@ $seo = array(
     'description' => 'CRM',
     'keywords' => 'Admin Panel'
 );
-    $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
-    $appointments = $h->table('appointment')
-        ->select()
-        ->where('firm_id', '=', $loginUserId)
-        ->fetchAll();
+
+
+    if($loginUserType == 'firm'){
+        $usersInfo = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
+        $appointments = $h->table('appointment')
+            ->select()
+            ->where('firm_id', '=', $loginUserId)
+            ->fetchAll();
+    }else{
+        $users = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+        $firm_id = $users[0]['firm_id'];
+        $usersInfo = $h->table('users')->select()->where('firm_id', '=', $firm_id)->fetchAll();
+        $firm_appointments = $h->table('appointment')
+            ->select()
+            ->where('firm_id', '=', $firm_id)
+            ->fetchAll();
+
+        $appointments = [];
+
+        if (!empty($firm_appointments)) {
+            foreach ($firm_appointments as $firm_appointment) {
+                $client_ids = $firm_appointment['client_id'];
+
+                // Explode the comma-separated string into an array
+                $clientIdsArray = explode(',', $client_ids);
+
+                // Check if $loginUserId exists in the array
+                if (in_array($loginUserId, $clientIdsArray)) {
+                    // If match found, add to matched appointments array
+                    $appointments[] = $firm_appointment;
+                }
+            }
+        }
+
+    }
     $TodayDate =date("Y-m-d H:i:s");
-    echo $twig->render('user/appointment/index.twig', ['seo' => $seo,'clients' => $users,'todayDate' => $TodayDate,'appointments' => $appointments]);
+    echo $twig->render('user/appointment/index.twig', ['seo' => $seo,'clients' => $usersInfo,'todayDate' => $TodayDate,'appointments' => $appointments]);
 endif;
 
 
 
 if ($route == '/user/get_appointment'):
+if($loginUserType == 'firm'){
     $appointments = $h->table('appointment')
         ->select()
         ->where('firm_id', '=', $loginUserId)
         ->fetchAll();
+}else{
+    $users = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+    $firm_id = $users[0]['firm_id'];
+
+    $firm_appointments = $h->table('appointment')
+        ->select()
+        ->where('firm_id', '=', $firm_id)
+        ->fetchAll();
+
+    $appointments = [];
+
+    if (!empty($firm_appointments)) {
+        foreach ($firm_appointments as $firm_appointment) {
+            $client_ids = $firm_appointment['client_id'];
+
+            // Explode the comma-separated string into an array
+            $clientIdsArray = explode(',', $client_ids);
+
+            // Check if $loginUserId exists in the array
+            if (in_array($loginUserId, $clientIdsArray)) {
+                // If match found, add to matched appointments array
+                $appointments[] = $firm_appointment;
+            }
+        }
+    }
+
+}
+
     echo json_encode($appointments);
     exit();
 endif;
@@ -43,26 +102,31 @@ if($route == '/user/add/appointments'):
             exit();
         }
         try {
-            $insert = $h->insert('appointment')->values([
-                'firm_id' => $loginUserId,
-                'title' => $title,
-                'date' => $dateTime,
-                'client_id' => $client_id,
-                'purpose' => $purpose,
-                'jitsi_link'=> $jitsi_link
-            ])->run();
-            $client_ids =  explode(',', $client_id);
-            if (!empty($client_ids)){
-            foreach ($client_ids as $client_id) {
-                $ClientInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
-                $date = new DateTime($dateTime);
-                $formattedDate = $date->format('l, d F Y, h:i a');
-                include "views/email-template/add_appointment.php";
-                mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], $loginUserName . 'Set an appointment at '. $formattedDate .' at - ' . $env['SITE_NAME'], $message, $mail);
+            if($loginUserType == 'firm') {
+                $insert = $h->insert('appointment')->values([
+                    'firm_id' => $loginUserId,
+                    'title' => $title,
+                    'date' => $dateTime,
+                    'client_id' => $client_id,
+                    'purpose' => $purpose,
+                    'jitsi_link' => $jitsi_link
+                ])->run();
+                $client_ids = explode(',', $client_id);
+                if (!empty($client_ids)) {
+                    foreach ($client_ids as $client_id) {
+                        $ClientInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
+                        $date = new DateTime($dateTime);
+                        $formattedDate = $date->format('l, d F Y, h:i a');
+                        include "views/email-template/add_appointment.php";
+                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], $loginUserName . 'Set an appointment at ' . $formattedDate . ' at - ' . $env['SITE_NAME'], $message, $mail);
+                    }
+                }
+                echo "1";
+                exit();
+            }else{
+                echo "3";
+                exit();
             }
-            }
-            echo "1";
-            exit();
         } catch (PDOException $e) {
             echo "0";
             exit();
@@ -82,20 +146,25 @@ if($route == '/user/update/appointments'):
         @$client_id = implode(', ', $_POST['client_id']);
         @$purpose = $_POST['purpose'];
         try {
-            $update = $h->update('appointment')->values(['title' => $title, 'date' => $dateTime, 'client_id' => $client_id, 'purpose' => $purpose])->where('id','=',$id)->run();
-            $AppointmentInfo = $h->table('appointment')->select()->where('id', '=', $id)->fetchAll();
-            $client_ids =  explode(',', $client_id);
-            if (!empty($client_ids)){
-                foreach ($client_ids as $client_id) {
-                    $ClientInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
-                    $date = new DateTime($dateTime);
-                    $formattedDate = $date->format('l, d F Y, h:i a');
-                    include "views/email-template/update_appointment.php";
-                    mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], $loginUserName . 'Make changes in appointment at - ' . $env['SITE_NAME'], $message, $mail);
+            if($loginUserType == 'firm') {
+                $update = $h->update('appointment')->values(['title' => $title, 'date' => $dateTime, 'client_id' => $client_id, 'purpose' => $purpose])->where('id', '=', $id)->run();
+                $AppointmentInfo = $h->table('appointment')->select()->where('id', '=', $id)->fetchAll();
+                $client_ids = explode(',', $client_id);
+                if (!empty($client_ids)) {
+                    foreach ($client_ids as $client_id) {
+                        $ClientInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
+                        $date = new DateTime($dateTime);
+                        $formattedDate = $date->format('l, d F Y, h:i a');
+                        include "views/email-template/update_appointment.php";
+                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], $loginUserName . 'Make changes in appointment at - ' . $env['SITE_NAME'], $message, $mail);
+                    }
                 }
+                echo "1";
+                exit();
+            }else{
+                echo "3";
+                exit();
             }
-            echo "1";
-            exit();
         } catch (PDOException $e) {
             echo "0";
             exit();

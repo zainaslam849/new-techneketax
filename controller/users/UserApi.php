@@ -564,7 +564,11 @@ if($_GET['page_name']=="view_members"){
 }
 if($_GET['page_name']=="view_invoices"){
     $srNo = 0;
-    $invoices = $h->table('invoice')->select()->where('firm_id', '=', $loginUserId)->orderBy('id', 'desc')->fetchAll();
+    if($loginUserType == 'firm'){
+        $invoices = $h->table('invoice')->select()->where('firm_id', '=', $loginUserId)->orderBy('id', 'desc')->fetchAll();
+    }else {
+        $invoices = $h->table('invoice')->select()->where('client_id', '=', $loginUserId)->orderBy('id', 'desc')->fetchAll();
+    }
     if (!empty($invoices)) {
         foreach ($invoices as $invoice) {
             // Determine user status
@@ -575,9 +579,14 @@ if($_GET['page_name']=="view_invoices"){
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Unpaid</span>";
             }
-            $action = array('action' =>'<a href="/user/invoice/update/'.$invoice["id"].'" class="badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-pen-to-square"></i></a>
+            if ($loginUserType == 'firm'){
+                $action = array('action' =>'<a href="/user/invoice/update/'.$invoice["id"].'" class="badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-pen-to-square"></i></a>
            <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$invoice["id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>
               ');
+            }else{
+                $action = array('action' =>'---');
+            }
+
             $clientInfo = $h->table('users')->select()->where('id', '=', $invoice['client_id'])->fetchAll();
 if ($clientInfo[0]["profile_image"] != '' && $clientInfo[0]["profile_image"] != 'null'){
 $profile_image = $clientInfo[0]["profile_image"];
@@ -588,7 +597,7 @@ $profile_image = $clientInfo[0]["profile_image"];
                 "userView" => '  <div class="d-flex">
                                                     <div class="usr-img-frame me-2 rounded-circle">
                                                     
-                                                        <img alt="avatar" class="img-fluid rounded-circle" src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'">
+                                                        <img alt="avatar" class="img-fluid rounded-circle" style="height: 40px;" src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'">
                                                     </div>
                                                     <p class="align-self-center mb-0 user-name">'. $clientInfo[0]["fname"].' '.$clientInfo[0]["lname"].'</p>
                                                 </div>'

@@ -57,10 +57,15 @@
 <script src="{{ env.APP_URL }}assets/dash/assets/js/custom/utilities/modals/upgrade-plan.js"></script>
 <script src="{{ env.APP_URL }}assets/dash/assets/js/custom/utilities/modals/create-app.js"></script>
 <script src="{{ env.APP_URL }}assets/dash/assets/js/custom/utilities/modals/users-search.js"></script>
-{#<script src="{{ env.APP_URL }}assets/dashboard/src/assets/js/apps/invoice-edit.js"></script>#}
+
 {#<script src="{{ env.APP_URL }}assets/dashboard/src/assets/js/users/account-settings.js"></script>#}
 
-
+{% if route == '/user/invoice/add' or route == '/user/invoice/update/$id' %}
+    <script src="{{ env.APP_URL }}assets/dashboard/src/assets/js/apps/invoice-edit.js"></script>
+{% endif %}
+{% if route == '/user/invoice/view/$invoice_id' or route == '/invoice/view/$invoice_id' %}
+    <script src="{{ env.APP_URL }}assets/dashboard/src/assets/js/apps/invoice-preview.js"></script>
+{% endif %}
 {#profile cdns#}
 
 <script>

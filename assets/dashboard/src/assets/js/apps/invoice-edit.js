@@ -62,18 +62,24 @@ document.querySelector('.additem').addEventListener('click', function() {
     let getTableElement = document.querySelector('.item-table');
     let currentIndex = getTableElement.rows.length;
 
-    let $html = '<tr>'+
+    let $html = '<tr class="border-bottom border-bottom-dashed">'+
         '<td class="delete-item-row">'+
         '<ul class="table-controls">'+
-        '<li><a href="javascript:void(0);" class="delete-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></a></li>'+
+        '<li><a href="javascript:void(0);" class="delete-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"> <span class="svg-icon svg-icon-3">\n' +
+        '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">\n' +
+        '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor"></path>\n' +
+        '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor"></path>\n' +
+        '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor"></path>\n' +
+        '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</svg>\n' +
+        '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</span></a></li>'+
         '</ul>'+
         '</td>'+
-        '<td class="description"><input type="text" class="form-control  form-control-sm" name="item_des[]" placeholder="Item Description"> <textarea class="form-control" placeholder="Additional Details" name="additional_details[]"></textarea></td>'+
-        '<td class="rate">'+
-        '<input type="text" class="form-control  form-control-sm price" placeholder="Price" name="price[]">'+
+        '<td class="pe-7"><input type="text" class="form-control form-control-solid" name="item_des[]" placeholder="Item Description"> <textarea class="form-control form-control-solid" placeholder="Additional Details" name="additional_details[]"></textarea></td>'+
+        '<td class="ps-0">'+
+        '<input type="number" class="form-control form-control-solid price" placeholder="Price" name="price[]">'+
         ' </td>'+
-        '<td class="text-right qty"><input type="text" class="form-control  form-control-sm quantity" placeholder="Quantity" name="quantity[]"></td>'+
-        '<td class="text-right amount"><span class="editable-amount"><span class="currency">$</span> <span class="amount">0.00</span></td><input type="hidden" name="amount_item[]" class="amount_item">'+
+        '<td class="text-right qty"><input type="number" class="form-control form-control-solid quantity" placeholder="Quantity" name="quantity[]"></td>'+
+        '<td class="pt-8 text-end text-nowrap"><span class="editable-amount"><span class="currency">$</span> <span class="amount">0.00</span></td><input type="hidden" name="amount_item[]" class="amount_item">'+
         '</tr>';
 
     document.querySelector(".item-table tbody").insertAdjacentHTML('beforeend', $html);

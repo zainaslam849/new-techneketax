@@ -74,7 +74,13 @@ if($route == '/user/invoice/add'):
             $subtotal = $_POST['subtotal'];
             $discount_type = $_POST['discount_type'];
             $discount_amount = $_POST['discount_amount'];
-            $discount_amount_total = $_POST['discount_amount_total'];
+            if ($_POST['discount_amount_total'] != 'undefined'){
+                $discount_amount_total = $_POST['discount_amount_total'];
+            }else{
+                $discount_amount_total = 0;
+            }
+
+
             $final_total = $_POST['final_total'];
             $invoice_detail_notes = $_POST['invoice_detail_notes'];
             $currency = $_POST['currency'];
@@ -251,7 +257,11 @@ if (!empty($_POST['firm_name'])){
     $subtotal = $_POST['subtotal'];
     $discount_type = $_POST['discount_type'];
     $discount_amount = $_POST['discount_amount'];
-    $discount_amount_total = $_POST['discount_amount_total'];
+    if ($_POST['discount_amount_total'] != 'undefined'){
+        $discount_amount_total = $_POST['discount_amount_total'];
+    }else{
+        $discount_amount_total = 0;
+    }
     $final_total = $_POST['final_total'];
     $invoice_detail_notes = $_POST['invoice_detail_notes'];
     $currency = $_POST['currency'];
