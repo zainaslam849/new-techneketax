@@ -578,10 +578,13 @@
                             response = $.parseJSON(response);
                             document.getElementById("btn").innerHTML = "Register";
                             document.getElementById("btn").disabled = false;
-
+                            console.log(response);
                             if (response == "1") {
                                 notie.alert({type: 'success', text: 'Registered Successfully', time: 2})
-                                location.href='/login'
+                                setTimeout(function(){
+                                    location.href='/login'
+                                }, 2000);
+
                             } else if(response == "2") {
                                 notie.alert({type: 'error', text: 'Email Already Exist. Login to continue.', time: 2})
                             } else if(response == "3") {
@@ -616,7 +619,9 @@
                             response = $.parseJSON(response);
                             if (response['statusCode'] == "200") {
                                 notie.alert({type: 'success', text: response['message'], time: 2})
-                                location.href='/login'
+                                setTimeout(function(){
+                                    location.href='/login'
+                                }, 2000);
                             } else if (response['statusCode'] == "202") {
                                 notie.alert({type: 'error', text: response['message'], time: 2})
 
@@ -628,11 +633,16 @@
                 }
 
             }else {
+                document.getElementById("btn").innerHTML = "Register";
+                document.getElementById("btn").disabled = false;
                 notie.alert({type: 'error', text: "Password Not Matched", time: 2})
             }
         }else{
+            document.getElementById("btn").innerHTML = "Register";
+            document.getElementById("btn").disabled = false;
             notie.alert({type: 'error', text: "Missing Required Input", time: 2})
         }
+
         return false;
     }
 </script>

@@ -51,10 +51,11 @@
                     </a>
                     <!--end::Logo-->
                     <!--begin::Title-->
-                    <h1 class="fw-bolder fs-2qx pb-5 pb-md-10" style="color: #fff;">Two-factor authentication</h1>
+                    <h1 class="fw-bolder fs-2qx pb-5 pb-md-10" style="color: #fff;">Secure Your Account</h1>
                     <!--end::Title-->
                     <!--begin::Description-->
-                    <p class="fw-bold fs-2" style="color: #fff;">Our CRM website streamlines your business processes, including managing taxes effortlessly.</p>
+                    <p class="fw-bold fs-2" style="color: #fff;">Two-Factor Authentication (2FA) adds an extra layer of security to your account. By requiring a verification code sent to your email or phone, we ensure that only you can access your sensitive information. Protect your account and keep your data safe!
+                    </p>
                     <!--end::Description-->
                 </div>
                 <!--end::Content-->
@@ -104,18 +105,18 @@
                                 <input type="hidden" id="email" value="{{ loginemail }}">
                                 <input type="hidden" id="password" value="{{ loginpassword }}">
                                 <div class="text-center mb-10">
-                                    <h1 class="text-dark mb-3">Two-factor authentication</h1>
-                                    <div class="text-gray-400 fw-bold fs-4">Please check your email or spam folder. Enter your authentication code to log in.</div>
+                                    <h1 class="text-dark mb-3">Enter Your Verification Code</h1>
+                                    <div class="text-gray-400 fw-bold fs-4">To complete your login, please enter the 2FA code you received via email or SMS. This code is essential for verifying your identity and securing your account. If you didn’t receive the code, click the link to  <a href="#">Resend</a> it..</div>
                                 </div>
                                 <div class="fv-row mb-10">
-                                    <label for="twofa" class="form-label fs-6 fw-bolder text-dark">Two-factor authentication Code</label>
+{#                                    <label for="twofa" class="form-label fs-6 fw-bolder text-dark">Two-factor authentication Code</label>#}
                                     <input class="form-control form-control-lg form-control-solid" type="text" id="twofa" name="twofa" autocomplete="off" />
                                 </div>
 
                                 <div class="text-center">
                                     <!--begin::Submit button-->
                                     <button type="button" class="btn btn-lg btn-primary w-100 mb-5" id="btn" onclick="do_2fa()">
-                                        <span class="indicator-label">Enter your Authentication Code</span>
+                                        <span class="indicator-label">Enter your Verification Code</span>
                                     </button>
 
                                     <!--end::Google link-->

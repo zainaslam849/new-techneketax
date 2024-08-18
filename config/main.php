@@ -773,7 +773,6 @@ function Login($email, $password,$table_name){
 }
 
 function userRegister($first_name, $last_name, $email,$phone, $password, $account_type, $table_name){
-
     global $h;
     global $env,$message,$mail;
     if(isset($email) && !empty($email) && isset($password) && !empty($password) && isset($first_name) && !empty($first_name) && isset($last_name) && !empty($last_name) && isset($phone) && !empty($phone)){

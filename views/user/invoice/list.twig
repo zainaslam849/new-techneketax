@@ -200,25 +200,21 @@
                 cache: false,
                 processData: false,
                 success: function (data) {
-                    console.log(data);
+                    data=JSON.parse(data);
+
                     // Re-enable the button
                     $("#btn").prop("disabled", false);
                     document.getElementById("btn").innerHTML = "Pay Invoice";
-                    if (data == '1') {
+                    if (data['statusCode'] == '200') {
                         $('#table').DataTable().ajax.reload(null, false);
                         $('#kt_modal_1').modal('hide');
                         document.getElementById("uploadForm").reset();
-                        $('#result').html('<div class="alert alert-success">Invoice payment processed successfully</div>');
+                        $('#result').html('<div class="alert alert-success">'+data['message']+'</div>');
                         // window.location.href = "/contact-form";
-                    } else if (data == '2') {
-                        $('#result').html('<div class="alert alert-danger">Please fill all the filed</div>');
-
                     } else {
                         document.getElementById("uploadForm").reset();
-                        $('#result').html('<div class="alert alert-danger">Something went wrong!</div>');
+                        $('#card-errors').html('<div class="alert alert-danger">'+data['message']+'</div>');
                     }
-                    $("select[name=user]").val('').trigger('change');
-                    $("#managerz").val(null).trigger("change");
                 },
                 error: function() {
                     // Re-enable the button in case of an error

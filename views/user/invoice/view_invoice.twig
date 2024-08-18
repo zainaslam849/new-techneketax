@@ -201,10 +201,10 @@
 
                                             <div class="row">
                                                 {% if loginType == "firm" %}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-12">
                                                         <a href="javascript:void(0);" class="btn btn-secondary btn-print w-100 action-print" style="margin-bottom: 20px;">Print</a>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-12">
                                                         {% if invoiceInfo[0].status == "unpaid" %}
                                                         <a href="/user/invoice/update/{{ invoiceInfo[0].id }}" class="btn btn-success btn-download w-100" id="btn"  style="margin-bottom: 20px;">Update</a>
                                                         {% else %}
@@ -378,23 +378,18 @@
                 cache: false,
                 processData: false,
                 success: function (data) {
+                    data=JSON.parse(data);
                     console.log(data);
-                    // Re-enable the button
                     $("#btn").prop("disabled", false);
                     document.getElementById("btn").innerHTML = "Pay Invoice";
                     if (data == '1') {
                        location.reload();
-                        $('#result').html('<div class="alert alert-success">Invoice payment processed successfully</div>');
+                        $('#result').html('<div class="alert alert-success">'+data['message']+'</div>');
                         // window.location.href = "/contact-form";
-                    } else if (data == '2') {
-                        $('#result').html('<div class="alert alert-danger">Please fill all the filed</div>');
-
                     } else {
                         document.getElementById("uploadForm").reset();
-                        $('#result').html('<div class="alert alert-danger">Something went wrong!</div>');
+                        $('#result').html('<div class="alert alert-danger">'+data['message']+'</div>');
                     }
-                    $("select[name=user]").val('').trigger('change');
-                    $("#managerz").val(null).trigger("change");
                 },
                 error: function() {
                     // Re-enable the button in case of an error

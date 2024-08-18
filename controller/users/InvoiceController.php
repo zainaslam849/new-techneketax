@@ -382,12 +382,15 @@ if($route == '/stripe/pay-invoice'):
                 $insert = $h->insert('transactions')->values([ 'transaction_id' => $balance_transaction,'invoice_id' => $invoiceID,'client_id' => $loginUserId,'price' => $invoiceInfo[0]['final_total'],'pay_with'=>'stripe'])->run();
 //                include "views/email-template/invoice_paid.php";
 //                mailSender($env['SENDER_EMAIL'],$email,'Congratulation  - '.$env['SITE_NAME'],$message,$mail);
-                echo "1";
-                exit();
+                http_response_code(200);
+                echo json_encode(array("statusCode" => 200, "message"=>"Invoice payment processed successfully"));
             } else {
-                echo "0";
-                exit();
+                http_response_code(202);
+                echo json_encode(array("statusCode" => 202, "message"=>"Something Went Wrong!"));
             }
+        }else{
+            http_response_code(202);
+            echo json_encode(array("statusCode" => 202, "message"=>"Something Went Wrong!"));
         }
     }catch (\Stripe\Exception\CardException $e) {
         http_response_code(202);
