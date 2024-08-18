@@ -91,7 +91,8 @@ if($route == '/user/firm-info'):
             'keywords' => 'Admin Panel'
         );
         $UserInfo=$h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
-        echo $twig->render('user/profile/firm.twig', ['seo' => $seo,'userinfo' => $UserInfo,'csrf'=>set_csrf()]);
+        $CountriesInfo = $h->table('countries')->select()->fetchAll();
+        echo $twig->render('user/profile/firm.twig', ['seo' => $seo,'countries' => $CountriesInfo,'userinfo' => $UserInfo,'csrf'=>set_csrf()]);
     }
 endif;
 if($route == '/user/profile/security'):
@@ -101,6 +102,7 @@ if($route == '/user/profile/security'):
             'keywords' => 'Admin Panel'
         );
     $UserInfo=$h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+
         echo $twig->render('user/profile/security.twig', ['seo' => $seo,'userinfo' => $UserInfo,'csrf'=>set_csrf()]);
 endif;
 if($route == '/user/profile/billing'):
