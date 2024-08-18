@@ -221,7 +221,7 @@ if($_GET['page_name']=="view_clients"){
             // Determine user status
             if ($user['status'] == "active") {
                 $statusView = "<span class='badge badge-light-success'>Active</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
             } else if ($user['status'] == "block") {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
                 $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
@@ -285,7 +285,7 @@ if($_GET['page_name']=="view_clients_unassigned"){
                     // Determine user status
                     if ($user['status'] == "active") {
                         $statusView = "<span class='badge badge-light-success'>Active</span>";
-                        $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn-sm btn btn-light-success text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
+                        $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
                     } else if ($user['status'] == "block") {
                         $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
                         $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
@@ -357,7 +357,7 @@ if($_GET['page_name']=="view_clients_inProgress"){
             // Determine user status
                 if ($user['status'] == "active") {
                     $statusView = "<span class='badge badge-light-success'>Active</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn-sm btn btn-light-success text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
                 } else if ($user['status'] == "block") {
                     $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
                     $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
@@ -368,8 +368,8 @@ if($_GET['page_name']=="view_clients_inProgress"){
 
                 // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
                 $action = array('action' =>  $userStatus.'
-                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit badge badge-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
-                   <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
            
                       ');
 
@@ -430,7 +430,7 @@ if($_GET['page_name']=="view_clients_completed"){
             // Determine user status
                 if ($user['status'] == "active") {
                     $statusView = "<span class='badge badge-light-success'>Active</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn-sm btn btn-light-success text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
                 } else if ($user['status'] == "block") {
                     $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
                     $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
@@ -441,8 +441,8 @@ if($_GET['page_name']=="view_clients_completed"){
 
                 // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
                 $action = array('action' =>  $userStatus.'
-                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit badge badge-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
-                   <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
            
                       ');
 
@@ -499,7 +499,7 @@ if($_GET['page_name']=="view_members"){
             // Determine user status
             if ($user['status'] == "active") {
                 $statusView = "<span class='badge badge-light-success'>Active</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn-sm btn btn-light-success text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
             } else if ($user['status'] == "block") {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
                 $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
@@ -568,8 +568,8 @@ if($_GET['page_name']=="view_invoices"){
                 $statusView = "<span class='badge badge-light-danger'>Unpaid</span>";
             }
             if ($loginUserType == 'firm'){
-                $action = array('action' =>'<a href="/user/invoice/update/'.$invoice["id"].'" class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i class="fa-solid fa-pen-to-square"></i></a>
-           <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$invoice["id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>
+                $action = array('action' =>'<a href="/user/invoice/update/'.$invoice["id"].'" class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px" class="fa-solid fa-pen-to-square"></i></a>
+           <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$invoice["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
               ');
             }else{
                 if ($invoice['status'] == "unpaid") {
@@ -679,7 +679,7 @@ if($_GET['page_name']=="view_document_hub"){
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Not Uploaded Yet</span>";
             }
-            $action = array('action' =>'<a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$document_hub["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>');
+            $action = array('action' =>'<a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$document_hub["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>');
             if (!empty($document_hub['client_des']) && $document_hub['client_des'] != ''){
                 $words = explode(' ', $document_hub['client_des']);
                 $des = implode(' ', array_slice($words, 0, 10));
@@ -743,7 +743,7 @@ if($_GET['page_name']=="view_firm_documents"){
                 $Des = array('Des' =>'---');
             }
 
-            $action = array('action' =>'<a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$firm_upload_file["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a><a href="'.$env['APP_URL'].$firm_upload_file["file"].'" download="'.$env['APP_URL'].$firm_upload_file["file"].'" class="badge badge-light-info text-start me-2"><i style="font-size: 16px;" class="fa-solid fa-download"></i></a>');
+            $action = array('action' =>'<a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$firm_upload_file["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a><a href="'.$env['APP_URL'].$firm_upload_file["file"].'" download="'.$env['APP_URL'].$firm_upload_file["file"].'" class="btn-sm btn btn-light-info text-start me-2"><i style="font-size: 16px;" class="fa-solid fa-download"></i></a>');
             $FileName = array('FileName' =>'<div class="d-inline-flex"><svg style="color: red;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg><p style="margin-top: 3px;
     margin-left: 11px;">'.$firm_upload_file["file_name"].'<p></div>');
             $srNo++;
@@ -776,19 +776,19 @@ if($_GET['page_name']=="view_document_hub_client"){
             // Determine user status
             if (!empty($document_hub['document_id'])){
                 $document_ids = htmlspecialchars($document_hub['document_id'], ENT_QUOTES, 'UTF-8');
-                $downloadFiles = '<a type="button" class="edit btn btn-info  me-4"  onclick="download_files(\'' . $document_ids . '\')" >Download File</a>';
+                $downloadFiles = '<a type="button" class="edit btn-sm btn btn-secondary  me-4"  onclick="download_files(\'' . $document_ids . '\')" >Download File</a>';
             }else{
                 $downloadFiles = '';
             }
             if ($document_hub['status'] == "yes") {
                 $statusView = "<span class='badge badge-light-success'>Uploaded</span>";
-                $action = array('action' =>$downloadFiles.'Your File Has Been Uploaded');
+                $action = array('action' =>$downloadFiles.'');
             } else if ($document_hub['status'] == "no") {
                 $statusView = "<span class='badge badge-light-danger'>Not Uploaded Yet</span>";
-                $action = array('action' =>$downloadFiles.'<a type="button" class="edit btn btn-primary  me-4" data-id="'. $document_hub['id'].'" role="button" data-bs-toggle="modal" data-bs-target="#editExampleModal" >Upload File</a>');
+                $action = array('action' =>$downloadFiles.'<a type="button" class="edit btn btn-sm btn-primary  me-4" data-id="'. $document_hub['id'].'" role="button" data-bs-toggle="modal" data-bs-target="#editExampleModal" >Upload File</a>');
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Not Uploaded Yet</span>";
-                $action = array('action' =>$downloadFiles.'<a type="button" class="edit btn btn-primary  me-4" data-id="'. $document_hub['id'].'" role="button" data-bs-toggle="modal" data-bs-target="#editExampleModal" >Upload File</a>');
+                $action = array('action' =>$downloadFiles.'<a type="button" class="edit btn btn-sm btn-primary  me-4" data-id="'. $document_hub['id'].'" role="button" data-bs-toggle="modal" data-bs-target="#editExampleModal" >Upload File</a>');
             }
             if (!empty($document_hub['firm_des']) && $document_hub['firm_des'] != ''){
                 $words = explode(' ', $document_hub['firm_des']);
