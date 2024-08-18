@@ -1405,10 +1405,8 @@
     </div>
     <!--end::Content-->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <!-- PerfectScrollbar CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/perfect-scrollbar@1.5.3/css/perfect-scrollbar.min.css">
-    <!-- PerfectScrollbar JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/perfect-scrollbar@1.5.3/dist/perfect-scrollbar.min.js"></script>
+
     <script>
         function getMessages(userId) {
             $.ajax({
@@ -1426,45 +1424,30 @@
                         if (messageDate !== currentDate) {
                             currentDate = messageDate;
                             const dateElement = `
-                        <div class="conversation-start">
-                            <span>${currentDate}</span>
-                        </div>`;
+                            <div class="conversation-start">
+                                <span>${currentDate}</span>
+                            </div>`;
                             chatContainer.append(dateElement);
                         }
-                        const messageClass = message.sender === 'me' ? 'bubble me' : 'bubble you';
+                        const messageClass = message.sender_id === '{{ loginId }}' ? 'bubble me' : 'bubble you';
                         const messageElement = `
-                    <div class="${messageClass}">
-                        ${message.message}
-<!--<div> <small>12:20pm <i style="font-size: 13px;" class="fa fa-trash ml-3 text-danger"></i></small></div>-->
-                    </div>
-
-                    `;
+                        <div class="${messageClass}">
+                            ${message.message}
+                        </div>`;
                         chatContainer.append(messageElement);
                     });
                     chatContainer.scrollTop(chatContainer[0].scrollHeight);
                 },
-                error: function(xhr, status, error) {
+                error: function(xhr) {
                     console.error();
-                    notie.alert({ type: 'warning', text: 'Error fetching messages: '+xhr.responseText })
-
+                    notie.alert({ type: 'warning', text: 'Error fetching messages: ' + xhr.responseText });
                 }
             });
-        }
-        function formatTimestamp(timestamp) {
-            const date = new Date(timestamp);
-            const options = {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true
-            };
-            return date.toLocaleTimeString(undefined, options);
         }
 
         const ws = new WebSocket('ws://localhost:8005');
         ws.onopen = function() {
             console.log('WebSocket connection established');
-            // notie.alert({ type: 'success', text: 'You are now Online.' })
         };
         ws.onmessage = function(event) {
             const message = JSON.parse(event.data);
@@ -1482,17 +1465,7 @@
             }
         };
 
-        ws.onclose = function() {
-            console.log('WebSocket connection closed');
-            // notie.alert({ type: 'warning', text: 'You are now offline.', time:2})
-
-        };
-
-        ws.onerror = function(error) {
-            console.error('WebSocket error:', error);
-        };
         $('.user-list-box .person').on('click', function() {
-
             const userId = $(this).attr('data-chat');
             $('#activeUserID').val(userId);
             getMessages(userId);
@@ -1503,43 +1476,17 @@
                 const personName = $(this).find('.user-name').text();
                 const personImage = $(this).find('img').attr('src');
 
-                $(this).parents('.chat-system').find('.chat-box .chat-not-selected').hide();
-                $(this).parents('.chat-system').find('.chat-box .chat-box-inner').show();
-
-                if (window.innerWidth <= 767) {
-                    $('.chat-box .current-chat-user-name .name').html(personName.split(' ')[0]);
-                } else if (window.innerWidth > 767) {
-                    $('.chat-box .current-chat-user-name .name').html(personName);
-                }
-                $('.chat-box .current-chat-user-name img').attr('src', personImage);
+                // Update UI for active chat
                 $('.chat').removeClass('active-chat');
-                $('.user-list-box .person').removeClass('active');
-                $('.chat-box .chat-box-inner').css('height', '100%');
-                $('.chat-box .overlay-phone-call').css('display', 'block');
-                $('.chat-box .overlay-video-call').css('display', 'block');
                 $(this).addClass('active');
                 $('.chat[data-chat="' + findChat + '"]').addClass('active-chat');
 
-                if ($(this).parents('.user-list-box').hasClass('user-list-box-show')) {
-                    $(this).parents('.user-list-box').removeClass('user-list-box-show');
-                }
-                $('.chat-meta-user').addClass('chat-active');
-                $('.chat-box').css('height', 'calc(100vh - 158px)');
-                $('.chat-footer').addClass('chat-active');
-
-                new PerfectScrollbar('.chat-conversation-box', {
-                    suppressScrollX: true
-                });
-
+                // Scroll to bottom of chat
                 const getScrollContainer = document.querySelector('.chat-conversation-box');
                 getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
             }
         });
 
-        // Initialize PerfectScrollbar for user list and chat conversation box
-        new PerfectScrollbar('.people', {
-            suppressScrollX: true
-        });
         $('.mail-write-box').on('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
@@ -1547,7 +1494,7 @@
                 const chatMessageValue = chatInput.val();
                 const activeChat = $('.chat.active-chat');
                 const receiverId = activeChat.attr('data-chat');
-                const senderId ='{{ loginId }}'; //$('.chat-meta-user').data('user-id'); // Example, adjust as needed
+                const senderId = '{{ loginId }}'; // Replace with dynamic user ID
 
                 if (chatMessageValue === '') {
                     return;
@@ -1559,38 +1506,15 @@
                     message: chatMessageValue
                 };
 
-                console.log('Sending message:', messageData);
                 ws.send(JSON.stringify(messageData));
                 const $messageHtml = $('<div class="bubble me">' + chatMessageValue + '</div>');
                 activeChat.append($messageHtml);
                 const getScrollContainer = document.querySelector('.chat-conversation-box');
                 getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
-
                 chatInput.val('');
             }
         });
-        $('.hamburger, .chat-system .chat-box .chat-not-selected p').on('click', function() {
-            $(this).parents('.chat-system').find('.user-list-box').toggleClass('user-list-box-show');
-        });
-        $('.search > input').on('keyup', function() {
-            const rex = new RegExp($(this).val(), 'i');
-            $('.people .person').hide();
-            $('.people .person').filter(function() {
-                return rex.test($(this).text());
-            }).show();
-        });
-
-        $(document).ready(function() {
-            $('#audio-call').click(function() {
-                var activeUserID = $('#activeUserID').val();
-                window.location.href = '/call/ring/' + activeUserID;
-            });
-            $('#video-call').click(function() {
-                var activeUserID = $('#activeUserID').val();
-                window.location.href = '/video-call/ring/' + activeUserID;
-            });
-        });
-
     </script>
+
 
 {% endblock %}
