@@ -54,6 +54,7 @@ get('/user/api', 'controller/users/UserApi.php');
 get('/user/dashboard', 'controller/users/DashboardController.php');
 get('/user/appointments', 'controller/users/AppointmentsController.php');
 get('/user/get_appointment', 'controller/users/AppointmentsController.php');
+get('/user/get_users', 'controller/users/AppointmentsController.php');
 post('/user/add/appointments', 'controller/users/AppointmentsController.php');
 post('/user/update/appointments', 'controller/users/AppointmentsController.php');
 
