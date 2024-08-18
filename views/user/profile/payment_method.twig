@@ -12,7 +12,7 @@
                 <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
                      data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                      class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Account Billing </h1>
+                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Payment Method</h1>
                 </div>
             </div>
         </div>
@@ -124,18 +124,18 @@
                                     Info</a>
                             </li>
                             {% if loginType == 'firm' %}
-                            <li class="nav-item mt-2">
-                                <a class="nav-link text-active-primary ms-0 me-10 py-5 " href="/user/firm-info">Firm Info</a>
-                            </li>
+                                <li class="nav-item mt-2">
+                                    <a class="nav-link text-active-primary ms-0 me-10 py-5 " href="/user/firm-info">Firm Info</a>
+                                </li>
                             {% endif %}
                             <li class="nav-item mt-2">
                                 <a class="nav-link text-active-primary ms-0 me-10 py-5 " href="/user/profile/security">Security</a>
                             </li>
                             <li class="nav-item mt-2">
-                                <a class="nav-link text-active-primary ms-0 me-10 py-5 active" href="/user/profile/billing">Billing</a>
+                                <a class="nav-link text-active-primary ms-0 me-10 py-5 " href="/user/profile/billing">Billing</a>
                             </li>
                             <li class="nav-item mt-2">
-                                <a class="nav-link text-active-primary ms-0 me-10 py-5" href="/user/profile/paymentMethod">Payment Method</a>
+                                <a class="nav-link text-active-primary ms-0 me-10 py-5 active" href="/user/profile/paymentMethod">Payment Method</a>
                             </li>
                         </ul>
                     </div>
@@ -150,41 +150,42 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="row gx-9 gy-6" id="reloadAddress">
-                            {% for address in billingAddresses %}
+                        <div class="row gx-9 gy-6" id="reloadpayment">
+                            {% for paymentMethod in paymentMethods %}
                                 <div class="col-xl-6">
-                                    <input type="radio" class="btn-check d-none billingAddress" name="billingAddress" value="{{ address.id }}" id="billingAddress{{ address.id }}"  {% if address.status == "primary" %}checked{% endif %}/>
-                                    <label class="notice d-flex bg-white rounded border-secondary border border-dashed flex-stack h-xl-100 mb-10 p-6" for="billingAddress{{ address.id }}">
+                                    <input type="radio" class="btn-check d-none paymentMethod" name="paymentMethod" value="{{ paymentMethod.id }}" id="paymentMethod{{ paymentMethod.id }}"  {% if paymentMethod.status == "primary" %}checked{% endif %}/>
+                                    <label class="notice d-flex bg-white rounded border-secondary border border-dashed flex-stack h-xl-100 mb-10 p-6" for="paymentMethod{{ paymentMethod.id }}">
                                         <div class="d-flex flex-column py-2">
-                                            <div class="d-flex align-items-center fs-5 fw-bolder mb-5">{{ address.billing_name }} {% if address.status == "primary" %}<span class="badge badge-primary bg-primary" style="margin-left: 10px;">Primary</span> {% endif %}
+                                            <div class="d-flex align-items-center fs-5 fw-bolder mb-5">{{ paymentMethod.card_brand }} {% if paymentMethod.status == "primary" %}<span class="badge badge-primary bg-primary" style="margin-left: 10px;">Primary</span> {% endif %}
 
                                             </div>
                                             <div class="fs-6 fw-bold text-gray-600">
-                                                {{ address.billing_address }}<br>
-                                                {{ address.billing_city }} {{ address.billing_zip }}<br>
-                                                {{ countries | filter(country => country.id == address.billing_country)[0].country_name }}
+                                                {{ paymentMethod.holder_name }}
+                                                <br>
+                                                {{ paymentMethod.card_number }}
+
                                             </div>
                                         </div>
                                         <div class="d-flex align-items-center py-2">
 
-                                            <button type="button" class="btn btn-sm btn-primary  me-3" onclick="deleteaddress('{{ address.id }}')">Delete</button>
-                                            <button data-id="{{ address.id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user" class="edit_billing btn btn-sm btn-secondary" >Edit</button>
+                                            <button type="button" class="btn btn-sm btn-primary  me-3" onclick="deletepayment('{{ paymentMethod.id }}')">Delete</button>
+                                            <button data-id="{{ paymentMethod.id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user" class="edit_payment btn btn-sm btn-secondary" >Edit</button>
                                         </div>
                                     </label>
                                 </div>
                             {% endfor %}
 
                             <div class="col-xl-12">
-                                <button class="btn btn-sm btn-primary me-3 float-end" onclick="billing_address_make_it_primary()"  id="btn-payment" >Make Primary</button>
+                                <button class="btn btn-sm btn-primary me-3 float-end" onclick="Payment_method_make_it_primary()"  id="btn-payment"  >Make Primary</button>
                             </div>
-                                <div class="col-xl-6">
+                            <div class="col-xl-6">
                                 <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed flex-stack h-xl-100 mb-10 p-6">
                                     <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">
                                         <div class="mb-3 mb-md-0 fw-bold">
-                                            <h4 class="text-gray-900 fw-bolder">Add New Address</h4>
-                                            <div class="fs-6 text-gray-700 pe-7">You can add a new billing address here.</div>
+                                            <h4 class="text-gray-900 fw-bolder">Add New Payment Method</h4>
+                                            <div class="fs-6 text-gray-700 pe-7">You can add a new Payment Method here.</div>
                                         </div>
-                                        <a href="#" class="btn btn-primary px-6 align-self-center text-nowrap" data-bs-toggle="modal" data-bs-target="#kt_modal_add_userww">New Address</a>
+                                        <a href="#" class="btn btn-primary px-6 align-self-center text-nowrap" data-bs-toggle="modal" data-bs-target="#kt_modal_add_userww">New Payment Method</a>
                                     </div>
                                 </div>
                             </div>
@@ -199,7 +200,7 @@
         <div class="modal-dialog modal-dialog-centered mw-650px">
             <div class="modal-content">
                 <div class="modal-header" id="kt_modal_edit_billing_address_header">
-                    <h2 class="fw-bolder"> Billing Address</h2>
+                    <h2 class="fw-bolder">Add Payment Method</h2>
                     <button  class="btn btn-icon btn-sm btn-active-icon-primary" type="button" data-bs-dismiss="modal" aria-label="btn-close">
                     <span class="svg-icon svg-icon-1">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -210,48 +211,51 @@
                     </button>
                 </div>
                 <div class="modal-body scroll-y mx-5 mx-xl-5 my-7">
-                    <form id="BillingForm" class="form fv-plugins-bootstrap5 fv-plugins-framework" method="post" enctype="multipart/form-data">
-                        <input type="hidden" class="form-control " name="user_id" id="user_id" value="{{ loginId }}">
+                    <form id="PaymentMethodForm" class="form fv-plugins-bootstrap5 fv-plugins-framework" method="post" enctype="multipart/form-data">
+                        <input type="hidden" class="form-control " name="user_id" value="{{ loginId }}">
                         <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_edit_billing_address_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_edit_billing_address_header" data-kt-scroll-wrappers="#kt_modal_edit_billing_address_scroll" data-kt-scroll-offset="300px" style="max-height: 570px;">
 
                             <div class="fv-row mb-7 fv-plugins-icon-container">
-                                <label class="form-label">Name</label>
-                                <input type="text" name="billing_name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Name" >
-                                <div class="fv-plugins-message-container invalid-feedback"></div>
-                            </div>
-
-                            <div class="fv-row mb-7 fv-plugins-icon-container">
-                                <label class="form-label">Email</label>
-                                <input type="email" name="billing_email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Email" >
-                                <div class="fv-plugins-message-container invalid-feedback"></div>
-                            </div>
-
-                            <div class="fv-row mb-7 fv-plugins-icon-container">
-                                <label class="form-label">Address</label>
-                                <input type="text" name="billing_address" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Address" >
-                                <div class="fv-plugins-message-container invalid-feedback"></div>
-                            </div>
-
-                            <div class="fv-row mb-7 fv-plugins-icon-container">
-                                <label class="form-label">City</label>
-                                <input type="text" name="billing_city" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="City">
-                                <div class="fv-plugins-message-container invalid-feedback"></div>
-                            </div>
-
-                            <div class="fv-row mb-7 fv-plugins-icon-container">
-                                <label class="form-label">Country</label>
-                                <select class="form-select" name="billing_country" id="billing_country">
-                                    <option selected>Choose Country</option>
-                                    {% for country in countries %}
-                                        <option value="{{ country.code }}">{{ country.name }}</option>
-                                    {% endfor %}
+                                <label class="form-label">Card Brand</label>
+                                <select class="form-select form-select-solid mb-3 mb-lg-0" name="card_brand">
+                                    <option value="Mastercard" >
+                                        Mastercard
+                                    </option>
+                                    <option value="American Express">
+                                        American Express
+                                    </option>
+                                    <option value="Visa">
+                                        Visa
+                                    </option>
+                                    <option value="Discover">
+                                        Discover
+                                    </option>
                                 </select>
                                 <div class="fv-plugins-message-container invalid-feedback"></div>
                             </div>
 
                             <div class="fv-row mb-7 fv-plugins-icon-container">
-                                <label class="form-label">ZIP Code</label>
-                                <input type="text" name="billing_zip" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="ZIP Code" >
+                                <label class="form-label">Card Number</label>
+                                <input type="text" name="card_number" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Card Number" >
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                            </div>
+
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">Holder Name</label>
+                                <input type="text" name="holder_name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Holder Name" >
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                            </div>
+
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">CVV/CVV2</label>
+                                <input type="text" name="cvv" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="CVV/CVV2">
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                            </div>
+
+
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">Card Expiry</label>
+                                <input type="text" name="card_expiry" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Card Expiry" >
                                 <div class="fv-plugins-message-container invalid-feedback"></div>
                             </div>
 
@@ -261,7 +265,7 @@
                             <button type="button" data-bs-dismiss="modal" class="btn btn-light me-3 swal2-confirm" >
                                 Close
                             </button>
-                            <button type="button" onclick="add_billing_address()" id="btn-billing" class="btn btn-primary" data-kt-users-modal-action="submit">
+                            <button type="button" onclick="add_payment_method()"  id="btn-payment" class="btn btn-primary" data-kt-users-modal-action="submit">
                                 <span class="indicator-label">Add</span>
                             </button>
                         </div>
@@ -275,7 +279,7 @@
         <div class="modal-dialog modal-dialog-centered mw-650px">
             <div class="modal-content bg-white">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editBillingModalLabel">Edit Billing Address</h5>
+                    <h5 class="modal-title" id="editBillingModalLabel">Edit Payment Method</h5>
                     <button  class="btn btn-icon btn-sm btn-active-icon-primary" type="button" data-bs-dismiss="modal" aria-label="btn-close">
                     <span class="svg-icon svg-icon-1">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -286,51 +290,66 @@
                     </button>
                 </div>
                 <div class="modal-body scroll-y mx-5 mx-xl-5 my-7">
-                <form  method="post" id="editBillingForm" enctype="multipart/form-data">
-                    <input type="hidden" class="form-control " name="id" id="id">
-                    <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_edit_billing_address_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_edit_billing_address_header" data-kt-scroll-wrappers="#kt_modal_edit_billing_address_scroll" data-kt-scroll-offset="300px" style="max-height: 570px;">
-                        <div class="fv-row mb-7 fv-plugins-icon-container">
-                                    <label class="form-label">Name</label>
-                                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Name" id="billing_name" name="billing_name">
+                    <form id="editPaymentMethodForm" class="form fv-plugins-bootstrap5 fv-plugins-framework" method="post" enctype="multipart/form-data">
+                        <input type="hidden" class="form-control " name="id" id="id" >
+                        <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_edit_billing_address_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_edit_billing_address_header" data-kt-scroll-wrappers="#kt_modal_edit_billing_address_scroll" data-kt-scroll-offset="300px" style="max-height: 570px;">
 
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">Card Brand</label>
+                                <select class="form-select form-select-solid mb-3 mb-lg-0" name="card_brand" id="card_brand">
+                                    <option value="Mastercard" >
+                                        Mastercard
+                                    </option>
+                                    <option value="American Express">
+                                        American Express
+                                    </option>
+                                    <option value="Visa">
+                                        Visa
+                                    </option>
+                                    <option value="Discover">
+                                        Discover
+                                    </option>
+                                </select>
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
                             </div>
-                        <div class="fv-row mb-7 fv-plugins-icon-container">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Email" name="billing_email" id="billing_email">
 
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">Card Number</label>
+                                <input type="text" name="card_number" id="card_number" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Card Number" >
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
                             </div>
-                        <div class="fv-row mb-7 fv-plugins-icon-container">
-                                    <label class="form-label">Address</label>
-                                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Address" name="billing_address" id="billing_address">
-                            </div>
-                        <div class="fv-row mb-7 fv-plugins-icon-container">
-                                    <label class="form-label">City</label>
-                                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="City" name="billing_city" id="billing_city">
-                                </div>
-                        <div class="fv-row mb-7 fv-plugins-icon-container">
-                                    <label class="form-label">Country</label>
-                                    <select class="form-select form-select-solid mb-3 mb-lg-0" name="billing_country" id="billing_country">
-                                        <option selected="">Choose Country</option>
-                                        {% for country in countries %}
-                                            <option value="{{ country.code }}">{{ country.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                        <div class="fv-row mb-7 fv-plugins-icon-container">
-                                    <label class="form-label">ZIP Code</label>
-                                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="ZIP Code" name="billing_zip" id="billing_zip">
-                                </div>
-                    </div>
 
-                <div class="text-center pt-15">
-                    <button type="button" data-bs-dismiss="modal" class="btn btn-light me-3 swal2-confirm" >
-                        Close
-                    </button>
-                    <button type="button" onclick="update_billing_address()" id="edit-btn-billing" class="btn btn-primary" data-kt-users-modal-action="submit">
-                        <span class="indicator-label">Update</span>
-                    </button>
-                </div>
-                </form>
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">Holder Name</label>
+                                <input type="text" name="holder_name" id="holder_name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Holder Name" >
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                            </div>
+
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">CVV/CVV2</label>
+                                <input type="text" name="cvv" id="cvv" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="CVV/CVV2">
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                            </div>
+
+
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">Card Expiry</label>
+                                <input type="text" name="card_expiry" id="card_expiry" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Card Expiry" >
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="text-center pt-15">
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-light me-3 swal2-confirm" >
+                                Close
+                            </button>
+                            <button type="button" onclick="update_payment_method()"  id="edit-btn-payment" class="btn btn-primary" data-kt-users-modal-action="submit">
+                                <span class="indicator-label">Update</span>
+                            </button>
+                        </div>
+
+                    </form>
                 </div>
             </div>
         </div>
@@ -396,11 +415,11 @@
             });
         }
 
-        function add_billing_address() {
-            document.getElementById('btn-billing').disabled = true;
-            var formData = new FormData(document.getElementById("BillingForm"));
+        function add_payment_method() {
+            document.getElementById('btn-payment').disabled = true;
+            var formData =  new FormData(document.getElementById("PaymentMethodForm"));
             $.ajax({
-                url: "/user/add_billing_address",
+                url: "/user/add_payment_method",
                 type: "POST",
                 data: formData,
                 contentType: false,
@@ -408,31 +427,31 @@
                 processData: false,
                 success: function (dataResult) {
                     console.log(dataResult);
-                    if (dataResult == 1) {
-                        document.getElementById('btn-billing').disabled = false;
+                    if(dataResult== 1){
+                        document.getElementById('btn-payment').disabled = false;
                         toastr.success('Add Successfully.');
-                        document.getElementById("BillingForm").reset();
+                        document.getElementById("PaymentMethodForm").reset();
                         $('#kt_modal_add_userww').modal('hide');
-                        $('#reloadAddress').load(window.location.href + ' #reloadAddress');
+                        $('#reloadpayment').load(window.location.href + ' #reloadpayment');
                         fetch_profile()
-                    } else if (dataResult == 2) {
+                    }
+                    else if(dataResult==2){
                         toastr.error("Please Fill all the required Fields");
-                        document.getElementById('btn-billing').disabled = false;
-                    } else {
+                        document.getElementById('btn-payment').disabled = false;
+                    }else{
                         toastr.error('Something Went Wrong.');
-                        document.getElementById('btn-billing').disabled = false;
+                        document.getElementById('btn-payment').disabled = false;
                     }
 
                 }
             });
 
         }
-
-        function update_billing_address() {
-            document.getElementById('edit-btn-billing').disabled = true;
-            var formData = new FormData(document.getElementById("editBillingForm"));
+        function update_payment_method() {
+            document.getElementById('edit-btn-payment').disabled = true;
+            var formData =  new FormData(document.getElementById("editPaymentMethodForm"));
             $.ajax({
-                url: "/user/update_billing_address",
+                url: "/user/update_payment_method",
                 type: "POST",
                 data: formData,
                 contentType: false,
@@ -440,26 +459,27 @@
                 processData: false,
                 success: function (dataResult) {
                     console.log(dataResult);
-                    if (dataResult == 1) {
-                        document.getElementById('edit-btn-billing').disabled = false;
+                    if(dataResult== 1){
+                        document.getElementById('edit-btn-payment').disabled = false;
                         toastr.success('Updated Successfully.');
-                        document.getElementById("editBillingForm").reset();
+                        document.getElementById("editPaymentMethodForm").reset();
                         $('#kt_modal_add_user').modal('hide');
-                        $('#reloadAddress').load(window.location.href + ' #reloadAddress');
+                        $('#reloadpayment').load(window.location.href + ' #reloadpayment');
                         fetch_profile()
-                    } else if (dataResult == 2) {
+                    }
+                    else if(dataResult==2){
                         toastr.error("Please Fill all the required Fields");
-                        document.getElementById('edit-btn-billing').disabled = false;
-                    } else {
+                        document.getElementById('edit-btn-payment').disabled = false;
+                    }else{
                         toastr.error('Something Went Wrong.');
-                        document.getElementById('edit-btn-billing').disabled = false;
+                        document.getElementById('edit-btn-payment').disabled = false;
                     }
 
                 }
             });
 
         }
-        function deleteaddress(deleteid) {
+        function deletepayment(deleteid) {
             var el = this;
             $(this).prop("disabled", true);
             // add spinner to button
@@ -471,7 +491,7 @@
                 data: {
                     id: deleteid,
                     page_name: "deleteFromProfile",
-                    table_name: "billing_address",
+                    table_name: "user_payment_method",
                     csrf: csrf_token
                 }, success: function (data) {
                     fetch_profile()
@@ -479,7 +499,7 @@
                     toastr.clear();
                     if (data == 1) {
                         toastr.success('Successfully deleted.');
-                        $('#reloadAddress').load(window.location.href + ' #reloadAddress');
+                        $('#reloadpayment').load(window.location.href + ' #reloadpayment');
                     } else {
                         toastr.error("Something Went Wrong.");
                     }
@@ -487,8 +507,8 @@
             });
         }
 
-        function billing_address_make_it_primary() {
-            var checkedValue = document.querySelector('.billingAddress:checked').value;
+        function Payment_method_make_it_primary() {
+            var checkedValue = document.querySelector('.paymentMethod:checked').value;
             $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
             var csrf_token = $("input[name=csrf]").val();
             $.ajax({
@@ -496,14 +516,14 @@
                 type: 'GET', data: {
                     id: checkedValue,
                     page_name: "profileStatusUpdate",
-                    table_name: "billing_address",
-                    status_table: "status",
+                    table_name:"user_payment_method",
+                    status_table:"status",
                     csrf: csrf_token
                 }, success: function (data) {
                     if (data == 1) {
                         fetch_profile()
-                        toastr.success('You Make This Address Primary');
-                        $('#reloadAddress').load(window.location.href + ' #reloadAddress');
+                        toastr.success('You Make This Payment Method Primary');
+                        $('#reloadpayment').load(window.location.href + ' #reloadpayment');
                     } else {
                         toastr.error('Something went wrong.');
 
@@ -512,11 +532,13 @@
 
             });
         }
-        $('body').on('click', '.edit_billing', function () {
+        $('body').on('click', '.edit_payment', function () {
             var id = $(this).data('id');
-            $('#editBillingForm').trigger("reset");
+
+            $('#editPaymentMethodForm').trigger("reset");
+
             $.ajax({
-                url: "/user/get_billing_address",
+                url: "/user/get_payment_method",
                 type: "POST",
                 data: {
                     edit: 1,
@@ -527,12 +549,11 @@
                     fetch_profile()
                     var dataResult = JSON.parse(dataResult);
                     console.log(dataResult);
-                    $('#billing_name').val(dataResult[0].billing_name);
-                    $('#billing_email').val(dataResult[0].billing_email);
-                    $('#billing_address').val(dataResult[0].billing_address);
-                    $('#billing_city').val(dataResult[0].billing_city);
-                    $('#billing_country').val(dataResult[0].billing_country);
-                    $('#billing_zip').val(dataResult[0].billing_zip);
+                    $('#card_brand').val(dataResult[0].card_brand);
+                    $('#card_number').val(dataResult[0].card_number);
+                    $('#holder_name').val(dataResult[0].holder_name);
+                    $('#cvv').val(dataResult[0].cvv);
+                    $('#card_expiry').val(dataResult[0].card_expiry);
                     $('input[name=id]').val(dataResult[0].id);
                 }
             });

@@ -44,76 +44,55 @@ if($route == '/user/profile'):
             'keywords' => 'Admin Panel'
         );
         $UserInfo=$h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
-        $userinfo = array(
-            'id' => $UserInfo[0]['id'],
-            'fname' => $UserInfo[0]['fname'],
-            'lname' => $UserInfo[0]['lname'],
-            'linkedin' => $UserInfo[0]['linkedin'],
-            'tweet' => $UserInfo[0]['tweet'],
-            'facebook' => $UserInfo[0]['facebook'],
-            'github' => $UserInfo[0]['github'],
-            'email' => $UserInfo[0]['email'],
-            'phone' => $UserInfo[0]['phone'],
-            'twofa_status' => $UserInfo[0]['twofa_status']
-        );
-        if (!empty($UserInfo[0]['profile_image']) && $UserInfo[0]['profile_image'] != "" && $UserInfo[0]['profile_image'] != "null"){
-            $profile_image =  $UserInfo[0]['profile_image'];
-        }else{
-            $profile_image = 'avatar.png';
-        }
-        $CountriesInfo = $h->table('countries')->select()->fetchAll();
-        $Billing_address=$h->table('billing_address')->select()->where('user_id', '=', $loginUserId)->fetchAll();
-        $UserInfoUser_payment_method=$h->table('user_payment_method')->select()->where('user_id', '=', $loginUserId)->fetchAll();
-        echo $twig->render('user/profile/profile.twig', ['seo' => $seo,'profile_image' => $profile_image,'userinfo' => $UserInfo,'countries' => $CountriesInfo,'billingAddresses' => $Billing_address,'paymentMethods' => $UserInfoUser_payment_method, 'csrf'=>set_csrf()]);
+
+        echo $twig->render('user/profile/profile.twig', ['seo' => $seo,'userinfo' => $UserInfo,'csrf'=>set_csrf()]);
+
     }
 endif;
-
 if($route == '/user/firm-info'):
-    $seo = array(
-        'title' => 'Profile - Firm Info',
-        'description' => 'CRM',
-        'keywords' => 'Admin Panel'
-    );
-
-    $UserInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
-
-    $userinfo = array(
-        'id' => $UserInfo[0]['id'],
-        'fname' => $UserInfo[0]['fname'],
-        'lname' => $UserInfo[0]['lname'],
-        'contact_name' => $UserInfo[0]['contact_name'], // Assuming you have these additional fields
-        'company_name' => $UserInfo[0]['company_name'],
-        'representative_name' => $UserInfo[0]['representative_name'],
-        'owner_of_organization' => $UserInfo[0]['owner_of_organization'],
-        'type_of_organization' => $UserInfo[0]['type_of_organization'],
-        'company_image' => $UserInfo[0]['company_image'],
-    );
-
-// Check if the company image exists, otherwise set a default avatar
-    if (!empty($userinfo['company_image']) && $userinfo['company_image'] != "" && $userinfo['company_image'] != "null") {
-        $profile_image = $userinfo['company_image'];
-    } else {
-         $profile_image = 'avatar.png';
-    }
-
-// Pass the data to the Twig template
-    echo $twig->render('user/profile/firm.twig', [
-        'seo' => $seo,
-        'profile_image' => $profile_image,
-        'userinfo' => $userinfo, // Pass the userinfo array
-        'csrf' => set_csrf()
-    ]);
-endif;
-
-
-if($route == '/user/profile/settings'):
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!empty($_POST['contact_name'])) {
+            $UserInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+            if (!empty($_POST['contact_name']) && !empty($_POST['company_name']) && !empty($_POST['representative_name']) && !empty($_POST['owner_of_organization']) && !empty($_POST['type_of_organization'])) {
+                $id = $_POST['id_company'];
+                $contact_name = $_POST['contact_name'];
+                $company_name = $_POST['company_name'];
+                $representative_name = $_POST['representative_name'];
+                $owner_of_organization = $_POST['owner_of_organization'];
+                $type_of_organization = $_POST['type_of_organization'];
+            } else {
+                echo "2";
+                exit();
+            }
+            $company_image = upload('filepond1', 'uploads/profile/');
+            if ($company_image == 'null' || $company_image == '') {
+                $company_image = $UserInfo[0]['company_image'];
+            }
+            try {
+                $update = $h->update('users')->values([
+                    'company_image' => $company_image,
+                    'contact_name' => $contact_name,
+                    'company_name' => $company_name,
+                    'representative_name' => $representative_name,
+                    'owner_of_organization' => $owner_of_organization,
+                    'type_of_organization' => $type_of_organization,
+                ])->where('id', '=', $id)->run();
+                echo "1";
+                exit();
+            } catch (PDOException $e) {
+                echo "0";
+                exit();
+            }
+        }
+    }else{
         $seo = array(
-            'title' => 'Profile Settings',
+            'title' => 'Profile',
             'description' => 'CRM',
             'keywords' => 'Admin Panel'
         );
-
-        echo $twig->render('user/profile/settings.twig', ['seo' => $seo,'csrf'=>set_csrf()]);
+        $UserInfo=$h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+        echo $twig->render('user/profile/firm.twig', ['seo' => $seo,'userinfo' => $UserInfo,'csrf'=>set_csrf()]);
+    }
 endif;
 if($route == '/user/profile/security'):
         $seo = array(
@@ -121,8 +100,8 @@ if($route == '/user/profile/security'):
             'description' => 'CRM',
             'keywords' => 'Admin Panel'
         );
-
-        echo $twig->render('user/profile/security.twig', ['seo' => $seo,'csrf'=>set_csrf()]);
+    $UserInfo=$h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+        echo $twig->render('user/profile/security.twig', ['seo' => $seo,'userinfo' => $UserInfo,'csrf'=>set_csrf()]);
 endif;
 if($route == '/user/profile/billing'):
     $seo = array(
@@ -145,54 +124,84 @@ if($route == '/user/profile/billing'):
         'csrf' => set_csrf()
     ]);
     endif;
+if($route == '/user/profile/paymentMethod'):
+    $seo = array(
+        'title' => 'Profile',
+        'description' => 'CRM',
+        'keywords' => 'Admin Panel'
+    );
+
+    $UserInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+    $CountriesInfo = $h->table('countries')->select()->fetchAll();
+    $UserInfoUser_payment_method = $h->table('user_payment_method')->select()->where('user_id', '=', $loginUserId)->fetchAll();
+
+    echo $twig->render('user/profile/payment_method.twig', [
+        'seo' => $seo,
+        'userinfo' => $UserInfo,
+        'countries' => $CountriesInfo,
+        'paymentMethods' => $UserInfoUser_payment_method,
+        'csrf' => set_csrf()
+    ]);
+endif;
 if ($route == '/user/fetch_profile'):
     if(isset($_POST['edit']) && !empty($_POST['edit'])){
         $id= $_POST['id'];
+        //fetch user
         $users = $h->table('users')->select()->where('id', '=', $id)->fetchAll();
-        echo json_encode($users);
+      $currentDate =  date('Y-m-d H:i:s');
+        //Appointment
+        if($loginUserType == 'firm'){
+            $appointments_count = $h->table('appointment')
+                ->select()
+                ->where('firm_id', '=', $id)->where('date', '>', $currentDate)
+                ->count();
+        }else{
+
+            $users = $h->table('users')->select()->where('id', '=', $id)->fetchAll();
+            $firm_id = $users[0]['firm_id'];
+
+            $firm_appointments = $h->table('appointment')
+                ->select()
+                ->where('firm_id', '=', $firm_id)->where('date', '>', $currentDate)
+                ->fetchAll();
+
+            $appointments_count = 0;
+
+            if (!empty($firm_appointments)) {
+                foreach ($firm_appointments as $firm_appointment) {
+                    $client_ids = $firm_appointment['client_id'];
+
+                    // Explode the comma-separated string into an array
+                    $clientIdsArray = explode(',', $client_ids);
+
+                    // Check if $loginUserId exists in the array
+                    if (in_array($id, $clientIdsArray)) {
+                        $appointments_count++;
+                    }
+                }
+            }
+
+        }
+//invoice unpaid
+        if($loginUserType == 'firm'){
+            $invoiceUnpaid = $h->table('invoice')->select()->where('firm_id', '=', $id)->where('status', '=', 'unpaid')->count();
+            $invoicePaid = $h->table('invoice')->select()->where('firm_id', '=', $id)->where('status', '=', 'paid')->count();
+        }else{
+            $invoiceUnpaid = $h->table('invoice')->select()->where('client_id', '=', $id)->where('status', '=', 'unpaid')->count();
+            $invoicePaid = $h->table('invoice')->select()->where('client_id', '=', $id)->where('status', '=', 'paid')->count();
+        }
+
+        echo json_encode(array("users"=>$users ,"appointment"=>$appointments_count,"invoiceUnpaid"=>$invoiceUnpaid,"invoicePaid"=>$invoicePaid));
         exit();
     }
 endif;
 if($route == '/user/company/profile'):
-    if (!empty($_POST['contact_name'])){
-        $UserInfo=$h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
-        if (!empty($_POST['contact_name']) && !empty($_POST['company_name'])&& !empty($_POST['representative_name'])&& !empty($_POST['owner_of_organization'])&& !empty($_POST['type_of_organization'])) {
-            $id = $_POST['id_company'];
-            $contact_name = $_POST['contact_name'];
-            $company_name = $_POST['company_name'];
-            $representative_name = $_POST['representative_name'];
-            $owner_of_organization = $_POST['owner_of_organization'];
-            $type_of_organization = $_POST['type_of_organization'];
-        }else{
-            echo "2";
-            exit();
-        }
-        $company_image = upload('filepond1','uploads/profile/');
-        if ($company_image == 'null' || $company_image == ''){
-            $company_image = $UserInfo[0]['company_image'];
-        }
-        try {
-            $update = $h->update('users')->values([
-                'company_image' => $company_image,
-                'contact_name' => $contact_name,
-                'company_name' => $company_name,
-                'representative_name' => $representative_name,
-                'owner_of_organization' => $owner_of_organization,
-                'type_of_organization' => $type_of_organization,
-            ])->where('id','=',$id)->run();
-            echo "1";
-            exit();
-        } catch (PDOException $e) {
-            echo "0";
-            exit();
-        }
-    }
+
 endif;
 if($route == '/user/bank/profile'):
     if (!empty($_POST['account_number'])){
-
         if (!empty($_POST['account_number']) && !empty($_POST['bank_name'])&& !empty($_POST['swift_code'])&& !empty($_POST['bank_country'])) {
-            $id = $_POST['id_company_bank'];
+            $id = $_POST['id_company'];
             $account_number = $_POST['account_number'];
             $bank_name = $_POST['bank_name'];
             $swift_code = $_POST['swift_code'];

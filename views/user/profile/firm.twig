@@ -16,8 +16,7 @@
                     <div class="card-body pt-9 pb-0">
                         <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
                             <div class="me-7 mb-4">
-                                <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
-                                    <img src="{{ profile_image != 'avatar.png' ? (env.APP_URL ~ 'uploads/profile/' ~ profile_image) : (env.APP_URL ~ 'assets/dash/assets/media/svg/avatars/blank.svg') }}" alt="image"/>
+                                <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative bg-light-danger" id="view_doc">
                                     <div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-white h-20px w-20px"></div>
                                 </div>
                             </div>
@@ -26,7 +25,7 @@
                                     <div class="d-flex flex-column">
                                         <div class="d-flex align-items-center mb-2">
                                             <a href="#"
-                                               class="text-gray-900 text-hover-primary fs-2 fw-bolder me-1">{{ userinfo.fname }} {{ userinfo.lname }}</a>
+                                               class="text-gray-900 text-hover-primary fs-2 fw-bolder me-1" id="fullNameFirst"></a>
                                             <a href="#">
                                                 <span class="svg-icon svg-icon-1 svg-icon-primary">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
@@ -39,37 +38,20 @@
                                                     </svg>
                                                 </span>
                                             </a>
-                                            <a href="#"
+                                            <a href="/user/plans"
                                                class="btn btn-sm btn-light-success fw-bolder ms-2 fs-8 py-1 px-3"
                                                data-bs-toggle="modal" data-bs-target="#kt_modal_upgrade_plan">Upgrade to
                                                 Pro</a>
                                         </div>
                                     </div>
-                                    <div class="d-flex my-4">
-                                        <div class="me-0">
-                                            <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"
-                                                    data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                                <i class="bi bi-three-dots fs-3"></i>
-                                            </button>
-                                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-bold w-200px py-3"
-                                                 data-kt-menu="true">
-                                                <div class="menu-item px-3">
-                                                    <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">
-                                                        Payments
-                                                    </div>
-                                                </div>
-                                                <div class="menu-item px-3 my-1">
-                                                    <a href="#" class="menu-link px-3">Settings</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
                                 <div class="d-flex flex-wrap flex-stack">
                                     <div class="d-flex flex-column flex-grow-1 pe-8">
                                         <div class="d-flex flex-wrap">
                                             <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
-                                                <div class="d-flex align-items-center">
+                                                <a href="/user/appointments">
+                                                    <div class="d-flex align-items-center">
                                                     <span class="svg-icon svg-icon-3 svg-icon-success me-2">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                              viewBox="0 0 24 24" fill="none">
@@ -80,14 +62,15 @@
                                                                   fill="currentColor"/>
                                                         </svg>
                                                     </span>
-                                                    <div class="fs-2 fw-bolder" data-kt-countup="true"
-                                                         data-kt-countup-value="4500" data-kt-countup-prefix="$">0
+                                                        <div class="fs-2 fw-bolder text-dark" data-kt-countup="true"  data-kt-countup-prefix="" id="appointmentCount">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="fw-bold fs-6 text-gray-400">Earnings</div>
+                                                    <div class="fw-bold fs-6 text-gray-400">Appointments</div>
+                                                </a>
                                             </div>
                                             <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
-                                                <div class="d-flex align-items-center">
+                                                <a href="/user/invoices">
+                                                    <div class="d-flex align-items-center">
                                                     <span class="svg-icon svg-icon-3 svg-icon-danger me-2">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                              viewBox="0 0 24 24" fill="none">
@@ -98,14 +81,15 @@
                                                                   fill="currentColor"/>
                                                         </svg>
                                                     </span>
-                                                    <div class="fs-2 fw-bolder" data-kt-countup="true"
-                                                         data-kt-countup-value="75">0
+                                                        <div class="fs-2 fw-bolder text-dark" data-kt-countup="true" id="invoiceUnpaidCount">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="fw-bold fs-6 text-gray-400">Projects</div>
+                                                    <div class="fw-bold fs-6 text-gray-400">Un Paid invoices</div>
+                                                </a>
                                             </div>
                                             <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
-                                                <div class="d-flex align-items-center">
+                                                <a href="/user/invoices">
+                                                    <div class="d-flex align-items-center">
                                                     <span class="svg-icon svg-icon-3 svg-icon-success me-2">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                              viewBox="0 0 24 24" fill="none">
@@ -116,24 +100,15 @@
                                                                   fill="currentColor"/>
                                                         </svg>
                                                     </span>
-                                                    <div class="fs-2 fw-bolder" data-kt-countup="true"
-                                                         data-kt-countup-value="60" data-kt-countup-prefix="%">0
+                                                        <div class="fs-2 fw-bolder text-dark" data-kt-countup="true" id="invoicePaid">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="fw-bold fs-6 text-gray-400">Success Rate</div>
+                                                    <div class="fw-bold fs-6 text-gray-400">Paid Invoices</div>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
-                                        <div class="d-flex justify-content-between w-100 mt-auto mb-2">
-                                            <span class="fw-bold fs-6 text-gray-400">Profile Completion</span>
-                                            <span class="fw-bolder fs-6">50%</span>
-                                        </div>
-                                        <div class="h-5px mx-3 w-100 bg-light mb-3">
-                                            <div class="bg-success rounded h-5px" role="progressbar" style="width: 50%;"
-                                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -142,20 +117,19 @@
                                 <a class="nav-link text-active-primary ms-0 me-10 py-5 " href="/user/profile">Basic
                                     Info</a>
                             </li>
+                            {% if loginType == 'firm' %}
+                                <li class="nav-item mt-2">
+                                    <a class="nav-link text-active-primary ms-0 me-10 py-5 " href="/user/firm-info">Firm Info</a>
+                                </li>
+                            {% endif %}
                             <li class="nav-item mt-2">
-                                <a class="nav-link text-active-primary ms-0 me-10 py-5 active" href="#">Firm Info</a>
-                            </li>
-                            <li class="nav-item mt-2">
-                                <a class="nav-link text-active-primary ms-0 me-10 py-5" href="#">Security</a>
+                                <a class="nav-link text-active-primary ms-0 me-10 py-5 " href="/user/profile/security">Security</a>
                             </li>
                             <li class="nav-item mt-2">
                                 <a class="nav-link text-active-primary ms-0 me-10 py-5" href="/user/profile/billing">Billing</a>
                             </li>
                             <li class="nav-item mt-2">
-                                <a class="nav-link text-active-primary ms-0 me-10 py-5" href="#">Statements</a>
-                            </li>
-                            <li class="nav-item mt-2">
-                                <a class="nav-link text-active-primary ms-0 me-10 py-5" href="#">Referrals</a>
+                                <a class="nav-link text-active-primary ms-0 me-10 py-5" href="/user/profile/paymentMethod">Payment Method</a>
                             </li>
                         </ul>
                     </div>
@@ -179,7 +153,7 @@
                         <div class="row mb-7">
                             <label class="col-lg-4 fw-bold text-muted">Contact Name</label>
                             <div class="col-lg-8">
-                                <span class="fw-bolder fs-6 text-gray-800">{{ userinfo.contact_name }}</span>
+                                <span class="fw-bolder fs-6 text-gray-800" id="contact_name"></span>
                             </div>
                         </div>
 
@@ -187,7 +161,7 @@
                         <div class="row mb-7">
                             <label class="col-lg-4 fw-bold text-muted">Company Name</label>
                             <div class="col-lg-8">
-                                <span class="fw-bolder fs-6 text-gray-800">{{ userinfo.company_name }}</span>
+                                <span class="fw-bolder fs-6 text-gray-800" id="company_name"></span>
                             </div>
                         </div>
 
@@ -195,7 +169,7 @@
                         <div class="row mb-7">
                             <label class="col-lg-4 fw-bold text-muted">Representative Name</label>
                             <div class="col-lg-8">
-                                <span class="fw-bolder fs-6 text-gray-800">{{ userinfo.representative_name }}</span>
+                                <span class="fw-bolder fs-6 text-gray-800" id="representative_name"></span>
                             </div>
                         </div>
 
@@ -203,7 +177,7 @@
                         <div class="row mb-7">
                             <label class="col-lg-4 fw-bold text-muted">Owner of the Organization</label>
                             <div class="col-lg-8">
-                                <span class="fw-bolder fs-6 text-gray-800">{{ userinfo.owner_of_organization }}</span>
+                                <span class="fw-bolder fs-6 text-gray-800" id="owner_of_organization"></span>
                             </div>
                         </div>
 
@@ -211,7 +185,56 @@
                         <div class="row mb-7">
                             <label class="col-lg-4 fw-bold text-muted">Type of Organization</label>
                             <div class="col-lg-8">
-                                <span class="fw-bolder fs-6 text-gray-800">{{ userinfo.type_of_organization }}</span>
+                                <span class="fw-bolder fs-6 text-gray-800" id="type_of_organization"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+                    <div class="card-header cursor-pointer">
+                        <div class="card-title m-0">
+                            <h3 class="fw-bolder m-0">Bank Details</h3>
+                        </div>
+                        <button type="button" class="btn btn-primary align-self-center" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_bank_details">
+                            Edit Bank Details
+                        </button>
+                    </div>
+                    <div class="card-body p-9">
+
+                        <!-- Display Company Image -->
+
+
+                        <!-- Display Contact Name -->
+                        <div class="row mb-7">
+                            <label class="col-lg-4 fw-bold text-muted">Account Number</label>
+                            <div class="col-lg-8">
+                                <span class="fw-bolder fs-6 text-gray-800" id="account_number"></span>
+                            </div>
+                        </div>
+
+                        <!-- Display Company Name -->
+                        <div class="row mb-7">
+                            <label class="col-lg-4 fw-bold text-muted">Bank Name</label>
+                            <div class="col-lg-8">
+                                <span class="fw-bolder fs-6 text-gray-800" id="bank_name"></span>
+                            </div>
+                        </div>
+
+                        <!-- Display Representative Name -->
+                        <div class="row mb-7">
+                            <label class="col-lg-4 fw-bold text-muted">Swift Code</label>
+                            <div class="col-lg-8">
+                                <span class="fw-bolder fs-6 text-gray-800" id="swift_code"></span>
+                            </div>
+                        </div>
+
+                        <!-- Display Owner of the Organization -->
+                        <div class="row mb-7">
+                            <label class="col-lg-4 fw-bold text-muted">Bank Country</label>
+                            <div class="col-lg-8">
+                                <span class="fw-bolder fs-6 text-gray-800" id="bank_country"></span>
                             </div>
                         </div>
 
@@ -228,8 +251,7 @@
             <div class="modal-content">
                 <div class="modal-header" id="kt_modal_add_user_header">
                     <h2 class="fw-bolder">Edit Firm Info</h2>
-                    <div class="btn btn-icon btn-sm btn-active-icon-primary " onclick="closeModal('kt_modal_add_user')"
-                         data-kt-users-modal-action="close">
+                    <div class="btn btn-icon btn-sm btn-active-icon-primary " data-bs-dismiss="modal" aria-label="btn-close">
                         <span class="svg-icon svg-icon-1">
 																	<svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                                          height="24" viewBox="0 0 24 24" fill="none">
@@ -259,8 +281,7 @@
 
                                 <label class="d-block fw-bold fs-6 mb-5">Avatar</label>
                                 <div class="image-input image-input-outline image-input-empty"
-                                     data-kt-image-input="true"
-                                     style="background-image: url('{{ profile_image != 'avatar.png' ? (env.APP_URL ~ 'uploads/profile/' ~ profile_image) : (env.APP_URL ~ 'assets/dash/assets/media/svg/avatars/blank.svg') }}')">
+                                     data-kt-image-input="true" >
                                     <div class="image-input-wrapper w-125px h-125px"
                                          style="background-image: none"></div>
                                     <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
@@ -288,47 +309,137 @@
                             <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="required fw-bold fs-6 mb-2">Contact Name</label>
                                 <input type="text" name="contact_name" class="form-control form-control-solid mb-3 mb-lg-0"
-                                       placeholder="Contact Name" value="{{ userinfo.contact_name }}">
+                                       placeholder="Contact Name" id="contact_name_model">
                                 <div class="fv-plugins-message-container invalid-feedback"></div>
                             </div>
-                            <input type="hidden" id="id_company" name="id_company" value="{{ userinfo.id }}">
+                            <input type="hidden" id="id_company" name="id_company" value="{{ userinfo[0].id }}">
                             <input type="hidden" name="csrf" value="{{ csrf }}">
 
                             <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="required fw-bold fs-6 mb-2">Company Name</label>
                                 <input type="text" name="company_name" class="form-control form-control-solid mb-3 mb-lg-0"
-                                       placeholder="Company Name" value="{{ userinfo.company_name }}">
+                                       placeholder="Company Name" id="company_name_model">
                                 <div class="fv-plugins-message-container invalid-feedback"></div>
                             </div>
 
                             <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="required fw-bold fs-6 mb-2">Representative Name</label>
                                 <input type="text" name="representative_name" class="form-control form-control-solid mb-3 mb-lg-0"
-                                       placeholder="Representative name" value="{{ userinfo.representative_name }}">
+                                       placeholder="Representative name" id="representative_name_model">
                                 <div class="fv-plugins-message-container invalid-feedback"></div>
                             </div>
 
                             <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="required fw-bold fs-6 mb-2">Owner of the Organization</label>
                                 <input type="text" name="owner_of_organization" class="form-control form-control-solid mb-3 mb-lg-0"
-                                       placeholder="Owner of the Organization" value="{{ userinfo.owner_of_organization }}">
+                                       placeholder="Owner of the Organization" id="owner_of_organization_model">
                                 <div class="fv-plugins-message-container invalid-feedback"></div>
                             </div>
 
                             <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="required fw-bold fs-6 mb-2">Type of Organization</label>
                                 <input type="text" name="type_of_organization" class="form-control form-control-solid mb-3 mb-lg-0"
-                                       placeholder="Type of Organization" value="{{ userinfo.type_of_organization }}">
+                                       placeholder="Type of Organization" id="type_of_organization_model">
                                 <div class="fv-plugins-message-container invalid-feedback"></div>
                             </div>
 
                         </div>
 
                         <div class="text-center pt-15">
-                            <button type="reset" onclick="closeModal('kt_modal_add_user')" class="btn btn-light me-3 swal2-confirm" data-kt-users-modal-action="cancel">
+                            <button type="button"  data-bs-dismiss="modal" class="btn btn-light me-3 swal2-confirm" >
                                 Discard
                             </button>
                             <button type="button" onclick="do_company_profile()" id="btn" class="btn btn-primary" data-kt-users-modal-action="submit">
+                                <span class="indicator-label">Submit</span>
+                                <span class="indicator-progress">Please wait...
+                <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                            </button>
+                        </div>
+                        <div></div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal fade " id="kt_modal_bank_details" tabindex="-1" style="display: none; " aria-modal="true"
+         role="dialog">
+
+        <div class="modal-dialog modal-dialog-centered mw-650px">
+            <div class="modal-content">
+                <div class="modal-header" id="kt_modal_add_user_header">
+                    <h2 class="fw-bolder">Edit Firm Info</h2>
+                    <div class="btn btn-icon btn-sm btn-active-icon-primary " data-bs-dismiss="modal" aria-label="btn-close">
+                        <span class="svg-icon svg-icon-1">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                         height="24" viewBox="0 0 24 24" fill="none">
+																		<rect opacity="0.5" x="6" y="17.3137" width="16"
+                                                                              height="2" rx="1"
+                                                                              transform="rotate(-45 6 17.3137)"
+                                                                              fill="currentColor"></rect>
+																		<rect x="7.41422" y="6" width="16" height="2"
+                                                                              rx="1" transform="rotate(45 7.41422 6)"
+                                                                              fill="currentColor"></rect>
+																	</svg>
+																</span>
+
+                    </div>
+                </div>
+                <div class="modal-body scroll-y mx-5 mx-xl-5 my-7">
+
+                    <form id="bank_details" class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#">
+
+                        <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll"
+                             data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                             data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header"
+                             data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px"
+                             style="max-height: 570px;">
+
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="required fw-bold fs-6 mb-2" for="account_number">Account Number</label>
+                                <input type="text" name="account_number" class="form-control form-control-solid mb-3 mb-lg-0"
+                                       placeholder="Account Number" id="account_number_model">
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                            </div>
+                            <input type="hidden" id="id_company" name="id_company" value="{{ userinfo[0].id }}">
+                            <input type="hidden" name="csrf" value="{{ csrf }}">
+
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="required fw-bold fs-6 mb-2">Bank Name</label>
+                                <input type="text" name="bank_name" class="form-control form-control-solid mb-3 mb-lg-0"
+                                       placeholder="Bank Name" id="bank_name_model">
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                            </div>
+
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="required fw-bold fs-6 mb-2">SWIFT Code</label>
+                                <input type="text" name="swift_code" class="form-control form-control-solid mb-3 mb-lg-0"
+                                       placeholder="SWIFT Code" id="swift_code_model">
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                            </div>
+
+
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="required fw-bold fs-6 mb-2">Choose Country</label>
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                                <select class="form-select form-select-solid mb-3 mb-lg-0" name="bank_country" id="bank_country_model">
+                                    <option selected="">Choose Country</option>
+                                    {% for country in countries %}
+                                        <option value="{{ country.code }}" {% if userinfo[0].bank_country == country.code %} selected{% endif %}>{{ country.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="text-center pt-15">
+                            <button type="button"  class="btn btn-light me-3 swal2-confirm" data-bs-dismiss="modal">
+                                Discard
+                            </button>
+                            <button type="button"  id="btn" onclick="do_bank_details()" class="btn btn-primary" data-kt-users-modal-action="submit">
                                 <span class="indicator-label">Submit</span>
                                 <span class="indicator-progress">Please wait...
                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
@@ -350,17 +461,12 @@
         function closeModal(id,) {
             $('#' + id).modal('hide');
         }
-
-
-        var company_image = {{ userinfo.company_image|json_encode|raw }};
-        var profile_image = {{ userinfo.profile_image|json_encode|raw }};
-
         function do_company_profile() {
             document.getElementById('btn').disabled = true;
             var formData = new FormData(document.getElementById("company_information"));
 
             $.ajax({
-                url: "/user/company/profile",
+                url: "/user/firm-info",
                 type: "POST",
                 data: formData,
                 contentType: false,
@@ -372,8 +478,8 @@
                         document.getElementById('btn').disabled = false;
                         toastr.success('Updated Successfully.');
                         document.getElementById("company_information").reset();
+                        $('#kt_modal_add_user').modal('hide');
                         fetch_profile()
-                        location.reload();
                     } else if (dataResult == 2) {
                         toastr.error("Please Fill all the required Fields");
                         document.getElementById('btn').disabled = false;
@@ -384,7 +490,6 @@
                 }
             });
         }
-
         function do_bank_details() {
             document.getElementById('btn').disabled = true;
             var formData = new FormData(document.getElementById("bank_details"));
@@ -401,35 +506,8 @@
                     if (dataResult == 1) {
                         document.getElementById('btn').disabled = false;
                         toastr.success('Updated Successfully.');
-                        fetch_profile()
-                    } else if (dataResult == 2) {
-                        toastr.error("Please Fill all the required Fields");
-                        document.getElementById('btn').disabled = false;
-                    } else {
-                        toastr.error('Something Went Wrong.');
-                        document.getElementById('btn').disabled = false;
-                    }
-                }
-            });
-        }
-
-        function do_profile() {
-            document.getElementById('btn').disabled = true;
-            var formData = new FormData(document.getElementById("general_information"));
-            $.ajax({
-                url: "/user/profile",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function (dataResult) {
-                    console.log(dataResult);
-                    if (dataResult == 1) {
-                        document.getElementById('btn').disabled = false;
-                        toastr.success('Updated Successfully.');
-                        document.getElementById("general_information").reset();
-                        location.reload();
+                        document.getElementById("bank_details").reset();
+                        $('#kt_modal_bank_details').modal('hide');
                         fetch_profile()
                     } else if (dataResult == 2) {
                         toastr.error("Please Fill all the required Fields");
@@ -445,8 +523,6 @@
         $(document).ready(function () {
             fetch_profile()
         });
-        var profile_image;
-
         function fetch_profile() {
             var id = {{ loginId }};
             $('#general_information').trigger("reset");
@@ -461,382 +537,55 @@
                 success: function (dataResult) {
                     var dataResult = JSON.parse(dataResult);
                     console.log(dataResult);
-                    $('#fname').val(dataResult.fname);
-                    $('#lname').val(dataResult.lname);
-                    $('#phone').val(dataResult.phone);
-                    $('#email').val(dataResult.email);
-                }
-            });
-        }
+                    $('#fullNameFirst').html(dataResult['users'][0].fname+' '+dataResult['users'][0].lname);
+                    $('#contact_name').html(dataResult['users'][0].contact_name);
+                    $('#company_name').html(dataResult['users'][0].company_name);
+                    $('#representative_name').html(dataResult['users'][0].representative_name);
+                    $('#owner_of_organization').html(dataResult['users'][0].owner_of_organization);
+                    $('#type_of_organization').html(dataResult['users'][0].type_of_organization);
+                    $('#account_number').html(dataResult['users'][0].account_number);
+                    $('#bank_name').html(dataResult['users'][0].bank_name);
+                    $('#swift_code').html(dataResult['users'][0].swift_code);
+                    $('#bank_country').html(dataResult['users'][0].bank_country);
 
-        fetch_profile();
-        $('body').on('click', '.edit_billing', function () {
-            var id = $(this).data('id');
-            $('#editBillingForm').trigger("reset");
-            $.ajax({
-                url: "/user/get_billing_address",
-                type: "POST",
-                data: {
-                    edit: 1,
-                    id: id,
-                },
-                cache: false,
-                success: function (dataResult) {
-                    fetch_profile()
-                    var dataResult = JSON.parse(dataResult);
-                    console.log(dataResult);
-                    $('#billing_name').val(dataResult.billing_name);
-                    $('#billing_email').val(dataResult.billing_email);
-                    $('#billing_address').val(dataResult.billing_address);
-                    $('#billing_city').val(dataResult.billing_city);
-                    $('#billing_country').val(dataResult.billing_country);
-                    $('#billing_zip').val(dataResult.billing_zip);
-                    $('input[name=id]').val(dataResult.id);
-                }
-            });
-        });
-        $('body').on('click', '.edit_payment', function () {
-            var id = $(this).data('id');
+                    $('#contact_name_model').val(dataResult['users'][0].contact_name);
+                    $('#company_name_model').val(dataResult['users'][0].company_name);
+                    $('#representative_name_model').val(dataResult['users'][0].representative_name);
+                    $('#owner_of_organization_model').val(dataResult['users'][0].owner_of_organization);
+                    $('#type_of_organization_model').val(dataResult['users'][0].type_of_organization);
+                    $('#account_number_model').val(dataResult['users'][0].account_number);
+                    $('#bank_name_model').val(dataResult['users'][0].bank_name);
+                    $('#swift_code_model').val(dataResult['users'][0].swift_code);
+                    var profileImage = dataResult['users'][0].company_image;
+                    var imageUrl = profileImage !== 'avatar.png'
+                        ? "{{ env.APP_URL }}uploads/profile/" + profileImage
+                        : "{{ env.APP_URL }}assets/dash/assets/media/svg/avatars/blank.svg";
 
-            $('#editPaymentMethodForm').trigger("reset");
-
-            $.ajax({
-                url: "/user/get_payment_method",
-                type: "POST",
-                data: {
-                    edit: 1,
-                    id: id,
-                },
-                cache: false,
-                success: function (dataResult) {
-                    fetch_profile()
-                    var dataResult = JSON.parse(dataResult);
-                    console.log(dataResult);
-                    $('#card_brand').val(dataResult.card_brand);
-                    $('#card_number').val(dataResult.card_number);
-                    $('#holder_name').val(dataResult.holder_name);
-                    $('#cvv').val(dataResult.cvv);
-                    $('#card_expiry').val(dataResult.card_expiry);
-                    $('input[name=id]').val(dataResult.id);
-                }
-            });
-        });
-
-        function add_billing_address() {
-            document.getElementById('btn-billing').disabled = true;
-            var formData = new FormData(document.getElementById("BillingForm"));
-            $.ajax({
-                url: "/user/add_billing_address",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function (dataResult) {
-                    console.log(dataResult);
-                    if (dataResult == 1) {
-                        document.getElementById('btn-billing').disabled = false;
-                        toastr.success('Add Successfully.');
-                        document.getElementById("BillingForm").reset();
-                        $('#reloadAddress').load(window.location.href + ' #reloadAddress');
-                        fetch_profile()
-                    } else if (dataResult == 2) {
-                        toastr.error("Please Fill all the required Fields");
-                        document.getElementById('btn-billing').disabled = false;
-                    } else {
-                        toastr.error('Something Went Wrong.');
-                        document.getElementById('btn-billing').disabled = false;
+                    // Set the background image dynamically
+                    $('.image-input').css('background-image', 'url(' + imageUrl + ')');
+                    $("#view_doc").html('');
+                    if(dataResult['users'][0].company_image != 'null' && dataResult['users'][0].company_image != '' && dataResult['users'][0].company_image != null) {
+                        $("#view_doc").append('<img src="{{ env.APP_URL }}uploads/profile/'+dataResult['users'][0].company_image+'" >');
+                    }else{
+                        $("#view_doc").append('<img src="{{ env.APP_URL }}uploads/profile/avatar.png" >');
                     }
-
-                }
-            });
-
-        }
-
-        function update_billing_address() {
-            document.getElementById('edit-btn-billing').disabled = true;
-            var formData = new FormData(document.getElementById("editBillingForm"));
-            $.ajax({
-                url: "/user/update_billing_address",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function (dataResult) {
-                    console.log(dataResult);
-                    if (dataResult == 1) {
-                        document.getElementById('edit-btn-billing').disabled = false;
-                        toastr.success('Updated Successfully.');
-                        document.getElementById("editBillingForm").reset();
-                        $('#editBillingModal').modal('hide');
-                        $('#reloadAddress').load(window.location.href + ' #reloadAddress');
-                        fetch_profile()
-                    } else if (dataResult == 2) {
-                        toastr.error("Please Fill all the required Fields");
-                        document.getElementById('edit-btn-billing').disabled = false;
-                    } else {
-                        toastr.error('Something Went Wrong.');
-                        document.getElementById('edit-btn-billing').disabled = false;
+                    if(dataResult['appointment'] != ''){
+                        $('#appointmentCount').html(dataResult['appointment']);
+                    }else{
+                        $('#appointmentCount').html(0);
                     }
-
-                }
-            });
-
-        }
-
-        function add_payment_method() {
-            document.getElementById('btn-payment').disabled = true;
-            var formData = new FormData(document.getElementById("PaymentMethodForm"));
-            $.ajax({
-                url: "/user/add_payment_method",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function (dataResult) {
-                    console.log(dataResult);
-                    if (dataResult == 1) {
-                        document.getElementById('btn-payment').disabled = false;
-                        toastr.success('Add Successfully.');
-                        document.getElementById("PaymentMethodForm").reset();
-                        $('#reloadpayment').load(window.location.href + ' #reloadpayment');
-                        fetch_profile()
-                    } else if (dataResult == 2) {
-                        toastr.error("Please Fill all the required Fields");
-                        document.getElementById('btn-payment').disabled = false;
-                    } else {
-                        toastr.error('Something Went Wrong.');
-                        document.getElementById('btn-payment').disabled = false;
+                    if(dataResult['invoiceUnpaid'] != '') {
+                        $('#invoiceUnpaidCount').html(dataResult['invoiceUnpaid']);
+                    }else{
+                        $('#invoiceUnpaidCount').html(0);
                     }
-
-                }
-            });
-
-        }
-
-        function update_payment_method() {
-            document.getElementById('edit-btn-payment').disabled = true;
-            var formData = new FormData(document.getElementById("editPaymentMethodForm"));
-            $.ajax({
-                url: "/user/update_payment_method",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function (dataResult) {
-                    console.log(dataResult);
-                    if (dataResult == 1) {
-                        document.getElementById('edit-btn-payment').disabled = false;
-                        toastr.success('Updated Successfully.');
-                        document.getElementById("editPaymentMethodForm").reset();
-                        $('#editPaymentMethodModal').modal('hide');
-                        $('#reloadpayment').load(window.location.href + ' #reloadpayment');
-                        fetch_profile()
-                    } else if (dataResult == 2) {
-                        toastr.error("Please Fill all the required Fields");
-                        document.getElementById('edit-btn-payment').disabled = false;
-                    } else {
-                        toastr.error('Something Went Wrong.');
-                        document.getElementById('edit-btn-payment').disabled = false;
+                    if(dataResult['invoicePaid'] != '') {
+                        $('#invoicePaid').html(dataResult['invoicePaid']);
+                    }else{
+                        $('#invoicePaid').html(0);
                     }
-
+                    $("#bank_country_model").val(dataResult[0].bank_country).trigger();
                 }
-            });
-
-        }
-
-        function deleteaddress(deleteid) {
-            var el = this;
-            $(this).prop("disabled", true);
-            // add spinner to button
-            $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
-            var csrf_token = $("input[name=csrf]").val();
-            $.ajax({
-                url: '/user/api',
-                type: 'GET',
-                data: {
-                    id: deleteid,
-                    page_name: "deleteFromProfile",
-                    table_name: "billing_address",
-                    csrf: csrf_token
-                }, success: function (data) {
-                    fetch_profile()
-                    console.log(data);
-                    toastr.clear();
-                    if (data == 1) {
-                        toastr.success('Successfully deleted.');
-                        $('#reloadAddress').load(window.location.href + ' #reloadAddress');
-                    } else {
-                        toastr.error("Something Went Wrong.");
-                    }
-                }
-            });
-        }
-
-        function deletepayment(deleteid) {
-            var el = this;
-            $(this).prop("disabled", true);
-            // add spinner to button
-            $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
-            var csrf_token = $("input[name=csrf]").val();
-            $.ajax({
-                url: '/user/api',
-                type: 'GET',
-                data: {
-                    id: deleteid,
-                    page_name: "deleteFromProfile",
-                    table_name: "user_payment_method",
-                    csrf: csrf_token
-                }, success: function (data) {
-                    fetch_profile()
-                    console.log(data);
-                    toastr.clear();
-                    if (data == 1) {
-                        toastr.success('Successfully deleted.');
-                        $('#reloadpayment').load(window.location.href + ' #reloadpayment');
-                    } else {
-                        toastr.error("Something Went Wrong.");
-                    }
-                }
-            });
-        }
-
-        function billing_address_make_it_primary() {
-            var checkedValue = document.querySelector('.billingAddress:checked').value;
-            $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
-            var csrf_token = $("input[name=csrf]").val();
-            $.ajax({
-                url: '/user/api',
-                type: 'GET', data: {
-                    id: checkedValue,
-                    page_name: "profileStatusUpdate",
-                    table_name: "billing_address",
-                    status_table: "status",
-                    csrf: csrf_token
-                }, success: function (data) {
-                    if (data == 1) {
-                        fetch_profile()
-                        toastr.success('You Make This Address Primary');
-                        $('#reloadAddress').load(window.location.href + ' #reloadAddress');
-                    } else {
-                        toastr.error('Something went wrong.');
-
-                    }
-                }
-
-            });
-        }
-
-        function Payment_method_make_it_primary() {
-            var checkedValue = document.querySelector('.paymentMethod:checked').value;
-            $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
-            var csrf_token = $("input[name=csrf]").val();
-            $.ajax({
-                url: '/user/api',
-                type: 'GET', data: {
-                    id: checkedValue,
-                    page_name: "profileStatusUpdate",
-                    table_name: "user_payment_method",
-                    status_table: "status",
-                    csrf: csrf_token
-                }, success: function (data) {
-                    if (data == 1) {
-                        fetch_profile()
-                        toastr.success('You Make This Payment Method Primary');
-                        $('#reloadpayment').load(window.location.href + ' #reloadpayment');
-                    } else {
-                        toastr.error('Something went wrong.');
-
-                    }
-                }
-
-            });
-        }
-
-        function change_password() {
-            var id = $("#idForPassword").val();
-            var current_password = $("#current_password").val();
-            var new_password = $("#new_password").val();
-            var confirm_password = $("#confirm_password").val();
-            var csrf_token = $("input[name=csrf]").val();
-
-            if (current_password != "" && new_password != "" && confirm_password != "") {
-                if (new_password == confirm_password) {
-                    document.getElementById("btn-password").innerHTML = "Loading";
-                    $("#btn-password").attr("disabled");
-                    $.ajax
-                    ({
-                        type: 'post',
-                        url: '/user/profile/password_change',
-                        data: {
-                            do_profile: "do_profile",
-                            id: id,
-                            current_password: current_password,
-                            new_password: new_password,
-                            confirm_password: confirm_password,
-                            csrf: csrf_token,
-                        },
-                        success: function (response) {
-                            response = $.parseJSON(response);
-                            if (response == 1) {
-                                $("#btn-password").removeAttr("disabled");
-                                toastr.success('Update Successfully.');
-                                document.getElementById("btn-password").innerHTML = "Change Password";
-                            } else if (response == 2) {
-                                toastr.error("Incorrect Current Password");
-                                $("#btn-password").removeAttr("disabled");
-                            } else {
-                                toastr.error('Somthing Went Wrong.');
-                                $("#btn-password").removeAttr("disabled");
-                            }
-                        }
-                    });
-                } else {
-                    document.getElementById("btn-password").innerHTML = "Change Password";
-                    document.getElementById("btn-password").disabled = false;
-                    toastr.error("Password Doesn't Match ");
-                }
-            } else {
-                document.getElementById("btn-password").innerHTML = "Change Password";
-                document.getElementById("btn-password").disabled = false;
-                toastr.error("Missing Required Input");
-
-            }
-            return false;
-        }
-
-        function twofaStatus(userID, status) {
-
-            if (status == 0) {
-                var currStatus = "off";
-            } else {
-                var currStatus = "on";
-            }
-            var el = this;
-            $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
-            var csrf_token = $("input[name=csrf]").val();
-            $.ajax({
-                url: '/user/api',
-                type: 'GET', data: {
-                    id: userID,
-                    status: currStatus,
-                    page_name: "userStatusUpdate",
-                    table_name: "users",
-                    status_table: "twofa_status",
-                    csrf: csrf_token
-                }, success: function (data) {
-                    fetch_profile()
-                    if (data == 1) {
-                        toastr.success('2FA Updated.');
-                    } else {
-                        toastr.error('Something went wrong.');
-
-                    }
-                }
-
             });
         }
     </script>

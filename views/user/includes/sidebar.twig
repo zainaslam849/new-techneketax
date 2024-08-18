@@ -3,16 +3,16 @@
     <div class="aside-logo flex-column-auto" id="kt_aside_logo">
         <!--begin::Logo-->
         <a href="/">
-{#            {% if whitelabel == "no" %}#}
-{#                <img src="{{ env.APP_URL }}uploads/settings/{{ logo }}" alt="avatar" class="h-40px logo">#}
-{#            {% else %}#}
-{#                {% if userCompanyImage != "null" and userCompanyImage != "" %}#}
-{#                    <img src="{{ env.APP_URL }}uploads/profile/{{ userCompanyImage }}" alt="avatar" class="h-40px logo">#}
-{#                {% else %}#}
-{#                    <img src="{{ env.APP_URL }}uploads/settings/{{ logo }}" alt="avatar" class="h-40px logo" >#}
-{#                {% endif %}#}
-{#            {% endif %}#}
-            <img src="{{ env.APP_URL }}assets/techneketax_white.webp" alt="avatar" class="h-50px logo">
+            {% if whitelabel == "no" %}
+                <img src="{{ env.APP_URL }}uploads/settings/{{ logo }}" alt="avatar" class="h-50px logo">
+            {% else %}
+                {% if userCompanyImage != "null" and userCompanyImage != "" %}
+                    <img src="{{ env.APP_URL }}uploads/profile/{{ userCompanyImage }}" alt="avatar" class="h-50px logo">
+                {% else %}
+                    <img src="{{ env.APP_URL }}uploads/settings/{{ logo }}" alt="avatar" class="h-50px logo" >
+                {% endif %}
+            {% endif %}
+
         </a>
         <!--end::Logo-->
         <!--begin::Aside toggler-->

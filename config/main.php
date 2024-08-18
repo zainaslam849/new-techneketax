@@ -772,15 +772,17 @@ function Login($email, $password,$table_name){
     }
 }
 
-function userRegister($first_name, $last_name, $email,$phone, $password, $table_name){
+function userRegister($first_name, $last_name, $email,$phone, $password, $account_type, $table_name){
+
     global $h;
     global $env,$message,$mail;
     if(isset($email) && !empty($email) && isset($password) && !empty($password) && isset($first_name) && !empty($first_name) && isset($last_name) && !empty($last_name) && isset($phone) && !empty($phone)){
-        if( ! is_csrf_valid()){
-            http_response_code(202);
-            return json_encode(array("statusCode" => 202, "message"=>"Invalid CSRF Token. Please <a href='javascript:refresh_page()' onclick='refresh_page();return false;'> Refresh Page.</a>"));
-            exit();
-        }
+//        if( ! is_csrf_valid()){
+//            http_response_code(202);
+//            return json_encode(array("statusCode" => 202, "message"=>"Invalid CSRF Token. Please <a href='javascript:refresh_page()' onclick='refresh_page();return false;'> Refresh Page.</a>"));
+//            exit();
+//        }
+
         if (isset($password) && !empty($password)) {
             $uppercase = preg_match('@[A-Z]@', $password);
             $lowercase = preg_match('@[a-z]@', $password);
@@ -798,19 +800,19 @@ function userRegister($first_name, $last_name, $email,$phone, $password, $table_
             return json_encode(array("statusCode" => 202, "message"=>"Password is Required."));
             exit();
         }
+
         $userAvailable = $h->table($table_name)->select()->where('email', '=', $email);
-//        $userAvailable = $CONN->query("SELECT COUNT(*) FROM $table_name WHERE `email`= '$email'")->fetchColumn();
+
         if($userAvailable->count() < 1){
             try{
-                $h->table($table_name)->insertOne([
+                $insert = $h->insert($table_name)->values([
                     'fname'=> $first_name,
                     'lname'=> $last_name,
                     'email' => $email,
                     'phone'=> $phone,
+                    'account_type'=> $account_type,
                     'password'=> $hashed_password,
-                ]);
-//                $sql = "INSERT INTO $table_name (email, password, fullname) VALUES (?,?,?,?)";
-//                $CONN->prepare($sql)->execute([$email, $hashed_password, $fullname, $country]);
+                ])->run();
                     include "views/email-template/WelcomeRegister.php";
     mailSender($env['SENDER_EMAIL'],$email,'Welcome at - '.$env['SITE_NAME'],$message,$mail);
                 return json_encode(array("statusCode" => 200, "message"=>"Successfully Registered."));

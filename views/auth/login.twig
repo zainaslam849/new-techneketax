@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--begin::Head-->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <title>{{ seo.title }}</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 94,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue &amp; Laravel versions. Grab your copy now and get life-time updates for free." />
+    <meta name="keywords" content="Metronic, bootstrap, bootstrap 5, Angular, VueJs, React, Laravel, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Metronic - Bootstrap 5 HTML, VueJS, React, Angular &amp; Laravel Admin Dashboard Theme" />
+    <meta property="og:url" content="https://keenthemes.com/metronic" />
+    <meta property="og:site_name" content="Keenthemes | Metronic" />
+    <link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
     <link rel="icon" type="image/x-icon" href="{{ env.APP_URL }}assets/img/favicon.webp"/>
-    <link href="{{ env.APP_URL }}assets/dashboard/layouts/css/light/loader.css" rel="stylesheet" type="text/css" />
-    <link href="{{ env.APP_URL }}assets/dashboard/layouts/css/dark/loader.css" rel="stylesheet" type="text/css" />
-    <script src="{{ env.APP_URL }}assets/dashboard/layouts/loader.js"></script>
-    <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
-    <link href="{{ env.APP_URL }}assets/dashboard/src/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-
-    <link href="{{ env.APP_URL }}assets/dashboard/layouts/css/light/plugins.css" rel="stylesheet" type="text/css" />
-    <link href="{{ env.APP_URL }}assets/dashboard/src/assets/css/light/authentication/auth-cover.css" rel="stylesheet" type="text/css" />
-
-    <link href="{{ env.APP_URL }}assets/dashboard/layouts/css/dark/plugins.css" rel="stylesheet" type="text/css" />
-    <link href="{{ env.APP_URL }}assets/dashboard/src/assets/css/dark/authentication/auth-cover.css" rel="stylesheet" type="text/css" />
-    <!-- END GLOBAL MANDATORY STYLES -->
-    <link href="{{ env.APP_URL }}assets/dashboard/custom.css" rel="stylesheet" type="text/css" />
-
-
+    <!--begin::Fonts-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <!--end::Fonts-->
+    <!--begin::Global Stylesheets Bundle(used by all pages)-->
+    <link href="{{ env.APP_URL }}assets/dash/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="{{ env.APP_URL }}assets/dash/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+    <!--end::Global Stylesheets Bundle-->
+    <style>
+        .notie-background-error{
+            background-color: #ED141F;
+        }
+        .notie-background-success{
+            background-color: #50cd89;
+        }
+    </style>
 </head>
-<<<<<<< Updated upstream
+
 <body class="form">
 
 
@@ -47,7 +55,7 @@
                         <p class="text-white px-2">Our CRM website streamlines your business processes, including managing taxes effortlessly.</p>
                     </div>
 
-=======
+
 <!--end::Head-->
 <!--begin::Body-->
 <body id="kt_body" class="bg-body">
@@ -73,71 +81,129 @@
                     <!--begin::Description-->
                     <p class="fw-bold" style="color: #fff;">At Techneke Tax, we’re thrilled to have you back! Our innovative tax software is designed to simplify your tax processes and maximize your efficiency. Log in to access your account and take advantage of the cutting-edge tools tailored for tax professionals like you.</p>
                     <!--end::Description-->
->>>>>>> Stashed changes
+
+<!--end::Head-->
+<!--begin::Body-->
+<body id="kt_body" class="bg-body">
+<!--begin::Main-->
+<!--begin::Root-->
+<div class="d-flex flex-column flex-root">
+    <!--begin::Authentication - Sign-in -->
+    <div class="d-flex flex-column flex-lg-row flex-column-fluid">
+        <!--begin::Aside-->
+        <div class="d-flex flex-column flex-lg-row-auto w-xl-600px positon-xl-relative" style="background-color: #000">
+            <!--begin::Wrapper-->
+            <div class="d-flex flex-column position-xl-fixed top-0 bottom-0 w-xl-600px scroll-y">
+                <!--begin::Content-->
+                <div class="d-flex flex-column text-center mt-20 p-10 pt-lg-20">
+                    <!--begin::Logo-->
+                    <a href="/" class="py-9 mb-5">
+                        <img alt="Logo" src="{{ env.APP_URL }}assets/techneketax.png" class="h-60px" />
+                    </a>
+                    <!--end::Logo-->
+                    <!--begin::Title-->
+                    <h1 class="fw-bolder fs-2qx pb-5 pb-md-10" style="color: #fff;">Welcome to Techneke Tax</h1>
+                    <!--end::Title-->
+                    <!--begin::Description-->
+                    <p class="fw-bold fs-2" style="color: #fff;">Discover Amazing Techneke Tax
+                        <br />with great build tools</p>
+                    <!--end::Description-->
                 </div>
+                <!--end::Content-->
+                <!--begin::Illustration-->
+                <div class="d-flex flex-row-auto bgi-no-repeat bgi-position-x-center bgi-size-contain justify-content-center bgi-position-y-bottom min-h-100px min-h-lg-350px" >
+                    <div class="d-flex align-items-center">
+                        <!--begin::Symbol-->
+                        <a href="#" class="symbol symbol-circle symbol-45px w-45px bg-light me-3">
+                            <img alt="Logo" src="{{ env.APP_URL }}assets/dash/assets/media/icons/linkedin.svg" class="p-4">
+                        </a>
+                        <!--end::Symbol-->
 
-            </div>
+                        <!--begin::Symbol-->
+                        <a href="#" class="symbol symbol-circle symbol-45px w-45px bg-light me-3">
+                            <img alt="Logo" src="{{ env.APP_URL }}assets/dash/assets/media/icons/twitter.svg" class="p-4">
+                        </a>
+                        <!--end::Symbol-->
+                        <!--begin::Symbol-->
+                        <a href="#" class="symbol symbol-circle symbol-45px w-45px bg-light me-3">
+                            <img alt="Logo" src="{{ env.APP_URL }}assets/dash/assets/media/icons/facebook.svg" class="p-4">
+                        </a>
+                        <!--end::Symbol-->
 
-            <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-8 col-12 d-flex flex-column align-self-center ms-lg-auto me-lg-0 mx-auto">
-                <div class="card">
-
-                    <div class="card-body">
-                        <div class="row text-center spinner">
-                            <div class="col">
-                                <span class="loader text-center"></span>
-                            </div>
-                        </div>
-                       <div class="form-data" style="display: none;">
-                           <div class="row">
-                               <div class="col-12 text-center">
-                                   <img src="{{ env.APP_URL }}assets/img/logo.webp" class="mt-2 mb-4" width="60%" alt="">
-                               </div>
-                           </div>
-                           <div class="row">
-                               <div class="col-md-12 mb-3">
-
-                                   <h2>Sign In</h2>
-                                   <p>Enter your email and password to login</p>
-                         <div id="ErrorMessage"></div>
-                               </div>
-                               <div class="col-md-12">
-                                   <div class="mb-3">
-                                       <label class="form-label">Email</label>
-                                       <input type="email" class="form-control" placeholder="type your email" id="email">
-                                   </div>
-                               </div>
-                               <div class="col-12">
-                                   <div class="mb-4">
-                                       <label class="form-label">Password</label>
-                                       <input type="password" class="form-control" placeholder="Password" id="password">
-                                   </div>
-                               </div>
-                               <div class="col-12">
-                                   <div class="mb-3">
-                                       <p class="mb-0"> <a href="/forget-password" class="text-dark">Forget Password?</a></p>
-
-                                   </div>
-                               </div>
-
-                               <div class="col-12">
-                                   <div class="mb-4">
-                                       <button type="button" class="btn btn-primary w-100" id="btn" onclick="do_login()">Login</button>
-                                   </div>
-                               </div>
-                               <div class="col-12">
-                                   <div class="text-center">
-                                       <p class="mb-0">Don't have an account ? <a href="/register" class="text-dark">Sign Up</a></p>
-                                   </div>
-                               </div>
-
-                           </div>
-                       </div>
-
+                        <!--begin::Symbol-->
+                        <a href="#" class="symbol symbol-circle symbol-45px w-45px bg-light me-3">
+                            <img alt="Logo" src="{{ env.APP_URL }}assets/dash/assets/media/icons/github.svg" class="p-4">
+                        </a>
+                        <!--end::Symbol-->
                     </div>
+
+                </div>
+                <!--end::Illustration-->
+            </div>
+            <!--end::Wrapper-->
+        </div>
+        <!--end::Aside-->
+        <!--begin::Body-->
+        <div class="d-flex flex-column flex-lg-row-fluid py-10">
+            <!--begin::Content-->
+            <div class="d-flex flex-center flex-column flex-column-fluid">
+                <!--begin::Wrapper-->
+                <div class="w-lg-500px p-10 p-lg-15 mx-auto">
+                    <!--begin::Form-->
+                    <form class="form w-100"  id="kt_sign_in_form" action="#">
+                        <!--begin::Heading-->
+                        <div class="text-center mb-10">
+                            <!--begin::Title-->
+                            <h1 class="text-dark mb-3">Sign In to Techneke Tax</h1>
+                            <!--end::Title-->
+                            <!--begin::Link-->
+                            <div class="text-gray-400 fw-bold fs-4">New Here?
+                                <a href="/register" class="link-primary fw-bolder">Create an Account</a></div>
+                            <!--end::Link-->
+                        </div>
+                        <!--begin::Heading-->
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-10">
+                            <!--begin::Label-->
+                            <label class="form-label fs-6 fw-bolder text-dark">Email</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input class="form-control form-control-lg form-control-solid" type="text" id="email" name="email" autocomplete="off" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-10">
+                            <!--begin::Wrapper-->
+                            <div class="d-flex flex-stack mb-2">
+                                <!--begin::Label-->
+                                <label class="form-label fw-bolder text-dark fs-6 mb-0">Password</label>
+                                <!--end::Label-->
+                                <!--begin::Link-->
+                                <a href="/forget-password" class="link-primary fs-6 fw-bolder">Forgot Password ?</a>
+                                <!--end::Link-->
+                            </div>
+                            <!--end::Wrapper-->
+                            <!--begin::Input-->
+                            <input class="form-control form-control-lg form-control-solid" type="password" name="password" autocomplete="off" id="password" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Actions-->
+                        <div class="text-center">
+                            <!--begin::Submit button-->
+                            <button type="button" id="btn" class="btn btn-lg btn-primary w-100 mb-5" onclick="do_login()">
+                                <span class="indicator-label">Login</span>
+                            </button>
+
+                            <!--end::Google link-->
+                        </div>
+                        <!--end::Actions-->
+                    </form>
+
                 </div>
             </div>
-<<<<<<< Updated upstream
-=======
+
             <!--end::Wrapper-->
         </div>
         <!--end::Aside-->
@@ -194,18 +260,26 @@
                             <button type="button" id="btn" class="btn btn-lg btn-primary w-100 mb-5" onclick="do_login()">
                                 <span class="indicator-label">Login</span>
                             </button>
->>>>>>> Stashed changes
 
         </div>
-
     </div>
-
 </div>
+<!--end::Root-->
+<!--end::Main-->
+<!--begin::Javascript-->
+<script>var hostUrl = "assets/";</script>
+<!--begin::Global Javascript Bundle(used by all pages)-->
+<script src="{{ env.APP_URL }}assets/dash/assets/plugins/global/plugins.bundle.js"></script>
+<script src="{{ env.APP_URL }}assets/dash/assets/js/scripts.bundle.js"></script>
+<!--end::Page Custom Javascript-->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
 <script src="{{ env.APP_URL }}assets/dashboard/src/bootstrap/js/bootstrap.bundle.min.js"></script>
+
 <!-- END GLOBAL MANDATORY SCRIPTS -->
+<script src="https://unpkg.com/notie"></script>
+
 <script>
     $(document).ready(function() {
         document.getElementById("cover-spin").classList.add('hide');
@@ -256,13 +330,13 @@
                     }else if(response['statusCode']=="202"){
                         document.getElementById("btn").innerHTML = "Log In";
                         document.getElementById("btn").disabled = false;
-                        $('#ErrorMessage').html("<div class='alert alert-danger mt-4'>"+response['message']+"</div>");
+                        notie.alert({type: 'error', text: response['message'], time: 2});
                     }
                     else{
                         document.getElementById("btn").innerHTML = "Log In";
                         document.getElementById("btn").disabled = false;
                         $("#loading_spinner").css({"display":"none"});
-                        $('#ErrorMessage').html("<div class='alert alert-danger mt-4'>"+response['message']+"</div>");
+                        notie.alert({type: 'error', text: response['message'], time: 2});
                     }
                 }
             });
@@ -271,7 +345,7 @@
         {
             document.getElementById("btn").innerHTML = "Log In";
             // document.getElementById("btn").disabled = true;
-            $('#ErrorMessage').html("<div class='alert alert-danger mt-4'>Missing Required Input</div>");
+            notie.alert({type: 'error', text: 'Missing Required Input', time: 2});
         }
         return false;
     }
