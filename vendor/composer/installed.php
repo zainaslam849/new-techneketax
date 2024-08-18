@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
-        'reference' => '6b9b62154f469931b380c661e6c371164c6c7573',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'reference' => null,
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => '6b9b62154f469931b380c661e6c371164c6c7573',
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'reference' => null,
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -388,6 +388,15 @@
             'reference' => 'd87660bcccd0bf4e6647fe3caebc539b8afae090',
             'type' => 'library',
             'install_path' => __DIR__ . '/../spiral/tokenizer',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'stripe/stripe-php' => array(
+            'pretty_version' => 'v15.7.0',
+            'version' => '15.7.0.0',
+            'reference' => '3e8161c1d7d1e9fb79751a693cd6123550f6ce21',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../stripe/stripe-php',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
