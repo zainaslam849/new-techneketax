@@ -43,6 +43,15 @@
         }
     </style>
 </head>
+
+<body class="form">
+<!-- BEGIN LOADER -->
+<div id="load_screen">
+    <div class="loader">
+        <div class="loader-content">
+            <div class="spinner-grow align-self-center"></div>
+        </div>
+
 <!--end::Head-->
 <!--begin::Body-->
 <body id="kt_body" class="bg-body">
@@ -77,8 +86,480 @@
                             <!--end::Icon-->
                             <!--begin::Label-->
                             <div class="stepper-label">
+
+                                <h3 class="stepper-title">Select Your Business</h3>
+                                <p>Choose your business structure from our options and set the foundation for your success.</p>
+                            </div>
+                            <!--end::Label-->
+                        </div>
+                        {% endif %}
+                        <div class="stepper-item" data-kt-stepper-element="nav">
+                            <!--begin::Line-->
+                            <div class="stepper-line w-40px"></div>
+                            <!--end::Line-->
+                            <!--begin::Icon-->
+                            <div class="stepper-icon w-40px h-40px">
+                                <i class="stepper-check fas fa-check"></i>
+                                <span class="stepper-number">{% if firm_id != "" and invite != "" %}1{% else %}2{% endif %}</span>
+                            </div>
+                            <!--end::Icon-->
+                            <!--begin::Label-->
+                            <div class="stepper-label">
+                                <h3 class="stepper-title">Personal Details</h3>
+                                <p>Enter your personal information to help us tailor our services just for you.</p>
+                            </div>
+                            <!--end::Label-->
+                        </div>
+                    </div>
+                    <!--end::Nav-->
+                </div>
+                <!--end::Header-->
+                <!--begin::Illustration-->
+                <div class="d-flex flex-row-auto bgi-no-repeat bgi-position-x-center bgi-size-contain justify-content-center bgi-position-y-bottom min-h-100px min-h-lg-300px" >
+                    <div class="d-flex align-items-center">
+                        <!--begin::Symbol-->
+                        <a href="#" class="symbol symbol-circle symbol-45px w-45px bg-light me-3">
+                            <img alt="Logo" src="{{ env.APP_URL }}assets/dash/assets/media/icons/linkedin.svg" class="p-4">
+                        </a>
+                        <!--end::Symbol-->
+
+                        <!--begin::Symbol-->
+                        <a href="#" class="symbol symbol-circle symbol-45px w-45px bg-light me-3">
+                            <img alt="Logo" src="{{ env.APP_URL }}assets/dash/assets/media/icons/twitter.svg" class="p-4">
+                        </a>
+                        <!--end::Symbol-->
+                        <!--begin::Symbol-->
+                        <a href="#" class="symbol symbol-circle symbol-45px w-45px bg-light me-3">
+                            <img alt="Logo" src="{{ env.APP_URL }}assets/dash/assets/media/icons/facebook.svg" class="p-4">
+                        </a>
+                        <!--end::Symbol-->
+
+                        <!--begin::Symbol-->
+                        <a href="#" class="symbol symbol-circle symbol-45px w-45px bg-light me-3">
+                            <img alt="Logo" src="{{ env.APP_URL }}assets/dash/assets/media/icons/github.svg" class="p-4">
+                        </a>
+                        <!--end::Symbol-->
+                    </div>
+                </div>                <!--end::Illustration-->
+            </div>
+            <!--end::Wrapper-->
+        </div>
+        <!--begin::Aside-->
+        <!--begin::Body-->
+        <div class="d-flex flex-column flex-lg-row-fluid py-10">
+            <!--begin::Content-->
+            <div class="d-flex flex-center flex-column flex-column-fluid">
+                <!--begin::Wrapper-->
+                <div class="w-lg-800px p-10 p-lg-15 mx-auto">
+                    <!--begin::Form-->
+                    <form class="my-auto pb-5" novalidate="novalidate" id="kt_create_account_form">
+                        {% if firm_id == "" and invite == "" %}
+                        <div class="current" data-kt-stepper-element="content">
+                            <!--begin::Wrapper-->
+                            <div class="w-100">
+                                <!--begin::Heading-->
+                                <div class="pb-10 pb-lg-15">
+                                    <!--begin::Title-->
+                                    <h2 class="fw-bolder d-flex align-items-center text-dark">Select Your Business Structure
+                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Billing is issued based on your selected account type"></i></h2>
+                                    <!--end::Title-->
+                                    <!--begin::Notice-->
+                                    <div class="text-muted fw-bold fs-6">Please select your business structure from the options below. Your choice will help us tailor our services to meet your specific needs and ensure compliance with tax regulations. </div>
+                                    <!--end::Notice-->
+                                </div>
+                                <!--end::Heading-->
+                                <!--begin::Input group-->
+                                <div class="fv-row">
+                                    <!--begin::Row-->
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Sole Proprietorship" checked="checked" id="sole_proprietorship" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="sole_proprietorship">
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold text-center">
+															<span class="text-dark fw-bolder d-block  mb-2">Sole Proprietorship</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Partnership" id="partnership" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="partnership">
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold text-start">
+															<span class="text-dark fw-bolder d-block  mb-2">Partnership</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                 {#  row  #}
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="General Partnership"  id="general_partnership" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="general_partnership">
+
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold">
+															<span class="text-dark fw-bolder d-block  mb-2">General Partnership</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Limited Partnership (LP)" id="limited_partnership" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="limited_partnership">
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold">
+															<span class="text-dark fw-bolder d-block mb-2">Limited Partnership (LP)</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        {#  row  #}
+
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="C Corporation (C Corp)" id="c_corporation" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="c_corporation">
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold">
+															<span class="text-dark fw-bolder d-block mb-2">C Corporation (C Corp)</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        {#  row  #}
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="S Corporation (S Corp)" id="s_corporation" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="s_corporation">
+
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold">
+															<span class="text-dark fw-bolder d-block mb-2">S Corporation (S Corp)</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Cooperative (Co-op)" id="cooperative" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="cooperative">
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold ">
+															<span class="text-dark fw-bolder d-block mb-2">Cooperative (Co-op)</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        {#  row  #}
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Nonprofit Organization" id="nonprofit_organization" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="nonprofit_organization">
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold ">
+															<span class="text-dark fw-bolder d-block mb-2">Nonprofit Organization</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Trust" id="trust" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="trust">
+
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold ">
+															<span class="text-dark fw-bolder d-block  mb-2">Trust</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        {#  row  #}
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Joint Venture" id="joint_venture" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="joint_venture">
+
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold ">
+															<span class="text-dark fw-bolder d-block  mb-2">Joint Venture</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        {#  row  #}
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Estate" id="estate" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="estate">
+
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold ">
+															<span class="text-dark fw-bolder d-block mb-2">Estate</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+
+                                        {#  row  #}
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Franchise" id="franchise" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="franchise">
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold">
+															<span class="text-dark fw-bolder d-block  mb-2">Franchise</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Holding Company" id="holding_company" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="holding_company">
+
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold">
+															<span class="text-dark fw-bolder d-block mb-2">Holding Company</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        {#  row  #}
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Mutual Fund" id="mutual_fund" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="mutual_fund">
+
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold ">
+															<span class="text-dark fw-bolder d-block  mb-2">Mutual Fund</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Government-Owned Corporation" id="government_owned_corporation" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="government_owned_corporation">
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold">
+															<span class="text-dark fw-bolder d-block mb-2">Government-Owned Corporation</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Limited Liability Partnership (LLP)"  id="limited_liability_partnership" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="limited_liability_partnership">
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold ">
+															<span class="text-dark fw-bolder d-block mb-2">Limited Liability Partnership (LLP)</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="Real Estate Investment Trust (REIT)" id="real_estate_investment_trust" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="real_estate_investment_trust">
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold">
+															<span class="text-dark fw-bolder d-block mb-2">Real Estate Investment Trust (REIT)</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                        {#  row  #}
+                                        <div class="col-lg-4">
+                                            <!--begin::Option-->
+                                            <input type="radio" class="btn-check" name="account_type" value="International Business Company (IBC)"  id="international_business_company" />
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex justify-content-center mb-10" for="international_business_company">
+
+                                                <!--begin::Info-->
+                                                <span class="d-block fw-bold">
+															<span class="text-dark fw-bolder d-block mb-2">International Business Company (IBC)</span>
+														</span>
+                                                <!--end::Info-->
+                                            </label>
+                                            <!--end::Option-->
+                                        </div>
+                                    </div>
+                                    <!--end::Row-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--end::Wrapper-->
+                        </div>
+                        {% endif %}
+                        <div class="{% if firm_id != "" and invite != "" %}current{% endif %}" data-kt-stepper-element="content">
+                            <!--begin::Wrapper-->
+                            <div class="w-100">
+                                <!--begin::Heading-->
+                                <div class="pb-10 pb-lg-12">
+                                    <!--begin::Title-->
+                                    <h2 class="fw-bolder text-dark">Personal Details</h2>
+                                    <p>To create your account, please provide your personal details below. This information helps us customize your experience and ensure secure access to your account.</p>
+                                </div>
+                                <!--end::Heading-->
+                                <!--begin::Input group-->
+                                <div class="row mb-10">
+                                    <div class="col-lg-6">
+                                        <label class="form-label required" for="fname">First Name</label>
+                                        <input type="text" name="fname" class="form-control form-control-lg form-control-solid" placeholder="First Name" id="fname" />
+                                        <input type="hidden" id="firm_id" value="{{ firm_id }}">
+                                        <input type="hidden" id="invite" value="{{ invite }}">
+                                        <input type="hidden" name="csrf" value="{{ csrf }}">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label class="form-label required" for="lname">Last Name</label>
+                                        <input type="text" name="lname" class="form-control form-control-lg form-control-solid" placeholder="Last Name" id="lname" />
+                                    </div>
+                                </div>
+
+                                <div class="fv-row mb-10">
+                                    <label class="form-label required" for="email">Email</label>
+                                    <input type="email" name="email" class="form-control form-control-lg form-control-solid" placeholder="Email Address" id="email" />
+                                </div>
+                                <div class="fv-row mb-10">
+                                    <label class="form-label required" for="phone">Phone No</label>
+                                    <input type="tel" name="phone" class="form-control form-control-lg form-control-solid" id="phone" />
+                                </div>
+                                <div class="row mb-10">
+                                    <div class="col-lg-6">
+                                        <label class="form-label required" for="password">Password</label>
+                                        <input type="password" name="password" class="form-control form-control-lg form-control-solid" id="password" />
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label class="form-label required" for="cpassword">Confirm Password</label>
+                                        <input type="password" name="cpassword" class="form-control form-control-lg form-control-solid" id="cpassword" />
+                                    </div>
+                                </div>
+
+                                {% if firm_id != "" and invite != "" %}
+                                <div class="fv-row mb-10">
+                                    <button type="button" class="btn btn-lg btn-primary float-end" id="btn" onclick="do_register()" >
+                                        Register
+                                    </button>
+                            </div>
+                                {% endif %}
+                            </div>
+                            <!--end::Wrapper-->
+                        </div>
+                        {% if firm_id == "" and invite == "" %}
+                        <div class="d-flex flex-stack pt-15">
+                            <div class="mr-2">
+                                <button type="button" class="btn btn-lg btn-light-primary me-3" data-kt-stepper-action="previous">
+                                    <span class="svg-icon svg-icon-4 me-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+												<rect opacity="0.5" x="6" y="11" width="13" height="2" rx="1" fill="currentColor" />
+												<path d="M8.56569 11.4343L12.75 7.25C13.1642 6.83579 13.1642 6.16421 12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75L5.70711 11.2929C5.31658 11.6834 5.31658 12.3166 5.70711 12.7071L11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25C13.1642 17.8358 13.1642 17.1642 12.75 16.75L8.56569 12.5657C8.25327 12.2533 8.25327 11.7467 8.56569 11.4343Z" fill="currentColor" />
+											</svg>
+										</span>Previous</button>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-lg btn-primary" id="btn" onclick="do_register()" data-kt-stepper-action="submit">
+                                    Register
+                                </button>
+                                <button type="button" class="btn btn-lg btn-primary" data-kt-stepper-action="next">Continue
+                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+                                    <span class="svg-icon svg-icon-4 ms-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+												<rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="currentColor" />
+												<path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="currentColor" />
+											</svg>
+										</span>
+                                    <!--end::Svg Icon--></button>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <!--end::Actions-->
+                    </form>
+                    <!--end::Form-->
+                </div>
+                <!--end::Wrapper-->
+            </div>
+            <!--end::Content-->
+            <!--begin::Footer-->
+            <div class="d-flex flex-center flex-wrap fs-6 p-5 pb-0">
+                <!--begin::Links-->
+                <div class="d-flex flex-center fw-bold fs-6">
+                    <a href="https://keenthemes.com" class="text-muted text-hover-primary px-2" target="_blank">About</a>
+                    <a href="https://devs.keenthemes.com" class="text-muted text-hover-primary px-2" target="_blank">Support</a>
+                    <a href="https://1.envato.market/EA4JP" class="text-muted text-hover-primary px-2" target="_blank">Purchase</a>
+                </div>
+                <!--end::Links-->
+            </div>
+            <!--end::Footer-->
+        </div>
+        <!--end::Body-->
+
+    </div>
+</div>
+<!--  END LOADER -->
+<style>
+    .iti  {
+        width: 100% !important;
+    }
+</style>
+<div class="auth-container d-flex">
+
+    <div class="container mx-auto align-self-center">
+
+        <div class="row">
+
+            <div class="col-6 d-lg-flex d-none h-100 my-auto top-0 start-0 text-center justify-content-center flex-column">
+                <div class="auth-cover-bg-image" style="background-image: url('{{ env.APP_URL }}assets/img/login-bk.jpg'); background-size: cover; background-repeat: no-repeat; background-position: right;"></div>
+                {#                <div class="auth-overlay"></div>#}
+
+                <div class="auth-cover">
+
+                    <div class="position-relative">
+
+                        {#                        <img src="{{ env.APP_URL }}assets/dashboard/src/assets/img/auth-cover.svg" alt="auth-img">#}
+
+                        <h2 class="mt-5 text-white font-weight-bolder px-2">Welcome to Techneke Tax</h2>
+                        <p class="text-danger px-2">Professional Tax Software{{ usertype }}</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-8 col-12 d-flex flex-column align-self-center ms-lg-auto me-lg-0 mx-auto">
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="row text-center spinner">
+                            <div class="col">
+                                <span class="loader text-center"></span>
+
                                 <h3 class="stepper-title">Account Type</h3>
                                 <div class="stepper-desc fw-bold">Setup Your Account Details</div>
+
                             </div>
                             <!--end::Label-->
                         </div>

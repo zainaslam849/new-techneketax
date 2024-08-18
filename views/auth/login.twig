@@ -31,6 +31,57 @@
         }
     </style>
 </head>
+
+<body class="form">
+
+
+<div class="auth-container d-flex">
+
+    <div class="container mx-auto align-self-center">
+
+        <div class="row">
+
+            <div class="col-6 d-lg-flex d-none h-100 my-auto top-0 start-0 text-center justify-content-center flex-column">
+                <div class="auth-cover-bg-image" style="background-image: url('{{ env.APP_URL }}assets/img/login-bk.jpg'); background-size: cover; background-repeat: no-repeat; background-position: right;"></div>
+{#                <div class="auth-overlay"></div>#}
+
+                <div class="auth-cover">
+
+                    <div class="position-relative">
+
+{#                        <img src="{{ env.APP_URL }}assets/dashboard/src/assets/img/auth-cover.svg" alt="auth-img">#}
+
+                        <h2 class="mt-5 text-white font-weight-bolder px-2">Welcome to Our CRM Login</h2>
+                        <p class="text-white px-2">Our CRM website streamlines your business processes, including managing taxes effortlessly.</p>
+                    </div>
+
+
+<!--end::Head-->
+<!--begin::Body-->
+<body id="kt_body" class="bg-body">
+<!--begin::Main-->
+<!--begin::Root-->
+<div class="d-flex flex-column flex-root">
+    <!--begin::Authentication - Sign-in -->
+    <div class="d-flex flex-column flex-lg-row flex-column-fluid">
+        <!--begin::Aside-->
+        <div class="d-flex flex-column flex-lg-row-auto w-xl-600px positon-xl-relative" style="background-color: #000">
+            <!--begin::Wrapper-->
+            <div class="d-flex flex-column position-xl-fixed top-0 bottom-0 w-xl-600px scroll-y">
+                <!--begin::Content-->
+                <div class="d-flex flex-column text-center mt-20 p-10 pt-lg-20">
+                    <!--begin::Logo-->
+                    <a href="/" class="py-9 mb-5">
+                        <img alt="Logo" src="{{ env.APP_URL }}assets/techneketax.png" class="h-60px" />
+                    </a>
+                    <!--end::Logo-->
+                    <!--begin::Title-->
+                    <h1 class="fw-bolder fs-2qx pb-5 pb-md-10" style="color: #fff;">Welcome Back!</h1>
+                    <!--end::Title-->
+                    <!--begin::Description-->
+                    <p class="fw-bold" style="color: #fff;">At Techneke Tax, we’re thrilled to have you back! Our innovative tax software is designed to simplify your tax processes and maximize your efficiency. Log in to access your account and take advantage of the cutting-edge tools tailored for tax professionals like you.</p>
+                    <!--end::Description-->
+
 <!--end::Head-->
 <!--begin::Body-->
 <body id="kt_body" class="bg-body">
@@ -85,6 +136,7 @@
                         </a>
                         <!--end::Symbol-->
                     </div>
+
                 </div>
                 <!--end::Illustration-->
             </div>
@@ -151,6 +203,64 @@
 
                 </div>
             </div>
+
+            <!--end::Wrapper-->
+        </div>
+        <!--end::Aside-->
+        <!--begin::Body-->
+        <div class="d-flex flex-column flex-lg-row-fluid py-10">
+            <!--begin::Content-->
+            <div class="d-flex flex-center flex-column flex-column-fluid">
+                <!--begin::Wrapper-->
+                <div class="w-lg-500px p-10 p-lg-15 mx-auto">
+                    <!--begin::Form-->
+                    <form class="form w-100"  id="kt_sign_in_form" action="#">
+                        <!--begin::Heading-->
+                        <div class="text-center mb-10">
+                            <!--begin::Title-->
+                            <h1 class="text-dark mb-3">Sign In to Your Account</h1>
+                            <p>Enter your email and password to access your Techneke Tax account.</p>
+                            <!--end::Title-->
+                            <!--begin::Link-->
+                            <div class="text-gray-400 fw-bold fs-4">New Here?
+                                <a href="/register" class="link-primary fw-bolder">Create an Account</a></div>
+                            <!--end::Link-->
+                        </div>
+                        <!--begin::Heading-->
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-10">
+                            <!--begin::Label-->
+                            <label class="form-label fs-6 fw-bolder text-dark">Email</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input class="form-control form-control-lg form-control-solid" type="text" id="email" name="email" autocomplete="off" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-10">
+                            <!--begin::Wrapper-->
+                            <div class="d-flex flex-stack mb-2">
+                                <!--begin::Label-->
+                                <label class="form-label fw-bolder text-dark fs-6 mb-0">Password</label>
+                                <!--end::Label-->
+                                <!--begin::Link-->
+                                <a href="/forget-password" class="link-primary fs-6 fw-bolder">Forgot Password ?</a>
+                                <!--end::Link-->
+                            </div>
+                            <!--end::Wrapper-->
+                            <!--begin::Input-->
+                            <input class="form-control form-control-lg form-control-solid" type="password" name="password" autocomplete="off" id="password" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Actions-->
+                        <div class="text-center">
+                            <!--begin::Submit button-->
+                            <button type="button" id="btn" class="btn btn-lg btn-primary w-100 mb-5" onclick="do_login()">
+                                <span class="indicator-label">Login</span>
+                            </button>
+
         </div>
     </div>
 </div>
