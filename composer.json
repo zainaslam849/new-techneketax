@@ -10,7 +10,8 @@
         "nesbot/carbon": "^3.7",
         "guzzlehttp/guzzle": "^7.9",
         "edsdk/flmngr-server-php": "^1.6",
-        "stripe/stripe-php": "^15.7"
+        "stripe/stripe-php": "^15.7",
+        "twilio/sdk": "^8.2"
     },
     "autoload": {
         "psr-4": {

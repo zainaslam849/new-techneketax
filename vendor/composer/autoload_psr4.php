@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Yiisoft\\FriendlyException\\' => array($vendorDir . '/yiisoft/friendly-exception/src'),
+    'Twilio\\' => array($vendorDir . '/twilio/sdk/src/Twilio'),
     'Twig\\' => array($vendorDir . '/twig/twig/src'),
     'Symfony\\Polyfill\\Php83\\' => array($vendorDir . '/symfony/polyfill-php83'),
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),

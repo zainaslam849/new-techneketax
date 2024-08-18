@@ -9,7 +9,9 @@ use PHRETS\Session;
 use PHRETS\Models\Search\Results;
 use Intervention\Image\ImageManagerStatic as Image;
 use Tracy\Debugger;
-use GuzzleHttp\Client;
+//use GuzzleHttp\Client;
+use Twilio\Rest\Client;
+
 //Debugger::enable();
 session_start();
 
@@ -1241,5 +1243,25 @@ function uploadTemplateFile($file, $uploadDir) {
     } else {
         return null; // Return null if upload fails
     }
+}
+
+function sendSMS($clientNumber, $message){
+    global $twilio_number;
+    global $account_sid;
+    global $auth_token;
+
+
+    $sid = $account_sid;
+    $token = $auth_token;
+    $twilio = new Client($sid, $token);
+
+    $message = $twilio->messages
+        ->create($clientNumber, // to
+            array(
+                "from" => $twilio_number,
+                "body" => $message
+            )
+        );
+    return $message;
 }
 ?>

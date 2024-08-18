@@ -34,6 +34,7 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
         ),
         'T' => 
         array (
+            'Twilio\\' => 7,
             'Twig\\' => 5,
         ),
         'S' => 
@@ -114,6 +115,10 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
         'Yiisoft\\FriendlyException\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/friendly-exception/src',
+        ),
+        'Twilio\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/twilio/sdk/src/Twilio',
         ),
         'Twig\\' => 
         array (
