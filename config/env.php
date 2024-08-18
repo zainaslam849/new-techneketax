@@ -107,18 +107,18 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
     $userInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
     $loginUserName=$userInfo[0]['fname'] .' '.$userInfo[0]['lname'];
     $twig->addGlobal('loginId', $loginUserId);
-    $twig->addGlobal('loginType', $loginUserType);
-    $twig->addGlobal('loginName', $loginUserName);
-    $twig->addGlobal('userEmail', $userInfo[0]['email']);
-    $twig->addGlobal('userPhone', $userInfo[0]['phone']);
-    $twig->addGlobal('userProfileImage', $userInfo[0]['profile_image']);
+    $twig->addGlobal('loginType', @$loginUserType);
+    $twig->addGlobal('loginName', @$loginUserName);
+    $twig->addGlobal('userEmail', @$userInfo[0]['email']);
+    $twig->addGlobal('userPhone', @$userInfo[0]['phone']);
+    $twig->addGlobal('userProfileImage', @$userInfo[0]['profile_image']);
     if ($loginUserType == "firm"){
-        $twig->addGlobal('userCompanyImage', $userInfo[0]['company_image']);
-        $twig->addGlobal('whitelabel', $userInfo[0]['white_labeling']);
+        $twig->addGlobal('userCompanyImage', @$userInfo[0]['company_image']);
+        $twig->addGlobal('whitelabel', @$userInfo[0]['white_labeling']);
     }else{
-        $userInfo = $h->table('users')->select()->where('id', '=', $userInfo[0]['firm_id'])->fetchAll();
-        $twig->addGlobal('userCompanyImage', $userInfo[0]['company_image']);
-        $twig->addGlobal('whitelabel', $userInfo[0]['white_labeling']);
+        $userInfo = $h->table('users')->select()->where('id', '=', @$userInfo[0]['firm_id'])->fetchAll();
+        $twig->addGlobal('userCompanyImage', @$userInfo[0]['company_image']);
+        $twig->addGlobal('whitelabel', @$userInfo[0]['white_labeling']);
     }
 
     $twig->addGlobal('Stripe_public_key', 'pk_test_51OgnsKB8z2Dlcg3z0Qz8mYPgaXouytYsnflrzr3hgWNNu91PY8ApCB2A6ZTbR49TZ59ag5KuLfIVIlBo2aCqgoZ900owqKbZDQ');
