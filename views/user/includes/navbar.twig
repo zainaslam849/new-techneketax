@@ -36,214 +36,38 @@
                 <!--begin::Menu wrapper-->
                 <div class="header-menu align-items-stretch" data-kt-drawer="true" data-kt-drawer-name="header-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_header_menu_mobile_toggle" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav'}">
                     <!--begin::Menu-->
-                    <div class="menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch" id="#kt_header_menu" data-kt-menu="true">
+                    {% if loginType == "firm" or loginType == "member" %}
+                    <div class="menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch" id="#kt_header_menu"  data-kt-menu="true">
                         <div class="menu-item">
-                            <a class="menu-link py-3 {% if route == '/user/dashboard' %}active{% endif %}" href="/user/dashboard">
+                            <a class="menu-link py-3">
 										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
 											<span class="svg-icon svg-icon-2">
-									 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+<span class="svg-icon svg-icon-muted svg-icon-1x"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<rect opacity="0.5" x="11" y="18" width="12" height="2" rx="1" transform="rotate(-90 11 18)" fill="currentColor"/>
+<rect x="6" y="11" width="12" height="2" rx="1" fill="currentColor"/>
+</svg></span>
 
 											</span>
-                                            <!--end::Svg Icon-->
 										</span>
-                                <span class="menu-title">Dashboard</span>
+                                <span class="menu-title">Invite Clients</span>
                             </a>
                         </div>
                         <div class="menu-item">
                             <a class="menu-link {% if route == '/user/appointments' %}active{% endif %}" href="/user/appointments">
-										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
+<span class="menu-icon">
 											<span class="svg-icon svg-icon-2">
-										 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+<span class="svg-icon svg-icon-muted svg-icon-1x"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<rect opacity="0.5" x="11" y="18" width="12" height="2" rx="1" transform="rotate(-90 11 18)" fill="currentColor"/>
+<rect x="6" y="11" width="12" height="2" rx="1" fill="currentColor"/>
+</svg></span>
+
 											</span>
-                                            <!--end::Svg Icon-->
 										</span>
-                                <span class="menu-title">Appointments</span>
+                                <span class="menu-title">Invite Associates</span>
                             </a>
                         </div>
-                        <div data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" class="menu-item {% if route == '/user/clients' or route == '/user/members'  %} here show {% endif %} menu-lg-down-accordion me-lg-1">
-									<span class="menu-link">
-										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
-											<span class="svg-icon svg-icon-2">
-										 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-											</span>
-                                            <!--end::Svg Icon-->
-										</span>
-										<span class="menu-title">Users</span>
-										<span class="menu-arrow d-lg-none"></span>
-									</span>
-                            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
-                                <div class="menu-item">
-                                    <a class="menu-link {% if route == '/user/clients' %}active{% endif %}" href="/user/clients">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-                                        <span class="menu-title">Clients List</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item">
-                                    <a class="menu-link {% if route == '/user/members' %}active{% endif %}" href="/user/members">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-                                        <span class="menu-title">Associates</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="menu-item">
-                            <a class="menu-link {% if route == '/user/chat' %}active{% endif %}" href="/user/chat">
-										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
-											<span class="svg-icon svg-icon-2">
-											                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-
-											</span>
-                                            <!--end::Svg Icon-->
-										</span>
-                                <span class="menu-title">Messaging</span>
-                            </a>
-                        </div>
-                        {% if loginType == 'firm' %}
-                            <div class="menu-item">
-                                <a class="menu-link {% if route == '/user/document' %}active{% endif %}" href="/user/document">
-										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
-											<span class="svg-icon svg-icon-2">
-												                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-
-											</span>
-                                            <!--end::Svg Icon-->
-										</span>
-                                    <span class="menu-title">Document Hub</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a class="menu-link {% if route == '/user/upload/document/all' %}active{% endif %}" href="/user/upload/document/all">
-										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
-											<span class="svg-icon svg-icon-2">
-											                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-
-											</span>
-                                            <!--end::Svg Icon-->
-										</span>
-                                    <span class="menu-title">Uploaded Documents</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a class="menu-link {% if route == '/user/template/all' %}active{% endif %}" href="/user/template/all">
-										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
-											<span class="svg-icon svg-icon-2">
-											                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-
-											</span>
-                                            <!--end::Svg Icon-->
-										</span>
-                                    <span class="menu-title">Interviews</span>
-                                </a>
-                            </div>
-                        {% endif %}
-                        {% if loginType == 'client' %}
-                            <div class="menu-item">
-                                <a class="menu-link {% if route == '/client/template/request' %}active{% endif %}" href="/client/template/request">
-										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
-											<span class="svg-icon svg-icon-2">
-										 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-
-											</span>
-                                            <!--end::Svg Icon-->
-										</span>
-                                    <span class="menu-title">Interviews</span>
-                                </a>
-                            </div>
-                        {% endif %}
-                        <div data-kt-menu-trigger="click"  data-kt-menu-placement="bottom-start"  class="menu-item {% if route == '/user/invoices' or route == '/user/invoice/add'  %} here show {% endif %}  menu-lg-down-accordion me-lg-1">
-									<span class="menu-link">
-										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
-											<span class="svg-icon svg-icon-2">
-										 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-
-											</span>
-                                            <!--end::Svg Icon-->
-										</span>
-										<span class="menu-title">Invoice</span>
-									<span class="menu-arrow d-lg-none"></span>
-									</span>
-                            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
-                                <div class="menu-item">
-                                    <a class="menu-link {% if route == '/user/invoices' %}active{% endif %}" href="/user/invoices">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-                                        <span class="menu-title">List</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item">
-                                    <a class="menu-link {% if route == '/user/invoice/add' %}active{% endif %}" href="/user/invoice/add">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-                                        <span class="menu-title">Add</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        {% if loginType == 'client' %}
-                            <div class="menu-item">
-                                <a class="menu-link {% if route == '/client/document' %}active{% endif %}" href="/client/document">
-										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
-											<span class="svg-icon svg-icon-2">
-											                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-
-											</span>
-                                            <!--end::Svg Icon-->
-										</span>
-                                    <span class="menu-title">Document Hub</span>
-                                </a>
-                            </div>
-                        {% endif %}
-                        <div data-kt-menu-trigger="click"  data-kt-menu-placement="bottom-start"  class="menu-item {% if route == '/user/plans' or route == '/user/profile'  %} here show {% endif %}  menu-lg-down-accordion me-lg-1">
-									<span class="menu-link">
-										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
-											<span class="svg-icon svg-icon-2">
-											  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-
-											</span>
-                                            <!--end::Svg Icon-->
-										</span>
-										<span class="menu-title">Settings</span>
-										<span class="menu-arrow d-lg-none"></span>
-									</span>
-                            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
-                                <div class="menu-item">
-                                    <a class="menu-link {% if route == '/user/plans' %}active{% endif %}" href="/user/plans">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-                                        <span class="menu-title">Plans</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item">
-                                    <a class="menu-link {% if route == '/user/profile' %}active{% endif %}" href="/user/profile">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-                                        <span class="menu-title">Profile</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-
                     </div>
+                    {% endif %}
                     <!--end::Menu-->
                 </div>
                 <!--end::Menu wrapper-->
@@ -252,7 +76,7 @@
             <!--begin::Toolbar wrapper-->
             <div class="d-flex align-items-stretch flex-shrink-0">
 
-                <div class="d-flex align-items-center ms-1 ms-lg-3">
+                <div class="d-flex align-items-center ms-1 ms-lg-3" style="display: none !important;">
                     <!--begin::Drawer toggle-->
                     <div class="btn btn-icon btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px" id="kt_activities_toggle">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen032.svg-->
@@ -270,7 +94,7 @@
                 </div>
                 <!--end::Activities-->
                 <!--begin::Notifications-->
-                <div class="d-flex align-items-center ms-1 ms-lg-3">
+                <div class="d-flex align-items-center ms-1 ms-lg-3" style="display: none !important;">
                     <!--begin::Menu- wrapper-->
                     <div class="btn btn-icon btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen022.svg-->
@@ -287,7 +111,7 @@
                     <!--begin::Menu-->
                     <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px" data-kt-menu="true">
                         <!--begin::Heading-->
-                        <div class="d-flex flex-column bgi-no-repeat rounded-top" style="background-image:url('assets/media/misc/pattern-1.jpg')">
+                        <div class="d-flex flex-column bgi-no-repeat rounded-top" style="background-image:url('{{ env.APP_URL }}assets/dash/assets/media/misc/pattern-1.jpg');">
                             <!--begin::Title-->
                             <h3 class="text-white fw-bold px-9 mt-10 mb-6">Notifications
                                 <span class="fs-8 opacity-75 ps-3">24 reports</span></h3>
@@ -811,10 +635,11 @@
                 </div>
                 <!--end::Notifications-->
                 <!--begin::Chat-->
-                <div class="d-flex align-items-center ms-1 ms-lg-3">
+                <div class="d-flex align-items-center ms-1 ms-lg-3" title="Chat">
                     <!--begin::Menu wrapper-->
-                    <div class="btn btn-icon btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px position-relative" id="kt_drawer_chat_toggle">
+                    <div class="btn btn-icon btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px position-relative" >
                         <!--begin::Svg Icon | path: icons/duotune/communication/com012.svg-->
+                        <a href="/user/chat" title="Chat">
                         <span class="svg-icon svg-icon-1">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 													<path opacity="0.3" d="M20 3H4C2.89543 3 2 3.89543 2 5V16C2 17.1046 2.89543 18 4 18H4.5C5.05228 18 5.5 18.4477 5.5 19V21.5052C5.5 22.1441 6.21212 22.5253 6.74376 22.1708L11.4885 19.0077C12.4741 18.3506 13.6321 18 14.8167 18H20C21.1046 18 22 17.1046 22 16V5C22 3.89543 21.1046 3 20 3Z" fill="currentColor" />
@@ -822,6 +647,7 @@
 													<rect x="6" y="7" width="12" height="2" rx="1" fill="currentColor" />
 												</svg>
 											</span>
+                        </a>
                         <!--end::Svg Icon-->
                         <span class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink"></span>
                     </div>
@@ -846,20 +672,17 @@
                     <!--begin::Menu-->
                     <div class="menu menu-sub menu-sub-dropdown menu-column w-250px w-lg-325px" data-kt-menu="true">
                         <!--begin::Heading-->
-                        <div class="d-flex flex-column flex-center bgi-no-repeat rounded-top px-9 py-10" style="background-image:url('assets/media/misc/pattern-1.jpg')">
+                        <div class="d-flex flex-column flex-center bgi-no-repeat rounded-top px-9 py-10" style="background-image:url('{{ env.APP_URL }}assets/dash/assets/media/misc/pattern-1.jpg')">
                             <!--begin::Title-->
                             <h3 class="text-white fw-bold mb-3">Quick Links</h3>
                             <!--end::Title-->
-                            <!--begin::Status-->
-                            <span class="badge bg-primary py-2 px-3">25 pending tasks</span>
-                            <!--end::Status-->
                         </div>
                         <!--end::Heading-->
                         <!--begin:Nav-->
                         <div class="row g-0">
                             <!--begin:Item-->
                             <div class="col-6">
-                                <a href="../../demo1/dist/apps/projects/budget.html" class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-end border-bottom">
+                                <a href="/user/appointments" class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-end border-bottom">
                                     <!--begin::Svg Icon | path: icons/duotune/finance/fin009.svg-->
                                     <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
 															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -868,14 +691,13 @@
 															</svg>
 														</span>
                                     <!--end::Svg Icon-->
-                                    <span class="fs-5 fw-bold text-gray-800 mb-0">Accounting</span>
-                                    <span class="fs-7 text-gray-400">eCommerce</span>
+                                    <span class="fs-5 fw-bold text-gray-800 mb-0">Appointments</span>
                                 </a>
                             </div>
                             <!--end:Item-->
                             <!--begin:Item-->
                             <div class="col-6">
-                                <a href="../../demo1/dist/apps/projects/settings.html" class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-bottom">
+                                <a href="/user/invoices" class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-bottom">
                                     <!--begin::Svg Icon | path: icons/duotune/communication/com010.svg-->
                                     <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
 															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -884,14 +706,15 @@
 															</svg>
 														</span>
                                     <!--end::Svg Icon-->
-                                    <span class="fs-5 fw-bold text-gray-800 mb-0">Administration</span>
-                                    <span class="fs-7 text-gray-400">Console</span>
+                                    <span class="fs-5 fw-bold text-gray-800 mb-0">Invoices</span>
                                 </a>
                             </div>
                             <!--end:Item-->
+
+                            {% if loginType == "firm" or loginType == "member" %}
                             <!--begin:Item-->
                             <div class="col-6">
-                                <a href="../../demo1/dist/apps/projects/list.html" class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-end">
+                                <a href="/user/clients" class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-end">
                                     <!--begin::Svg Icon | path: icons/duotune/abstract/abs042.svg-->
                                     <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
 															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -900,14 +723,60 @@
 															</svg>
 														</span>
                                     <!--end::Svg Icon-->
-                                    <span class="fs-5 fw-bold text-gray-800 mb-0">Projects</span>
-                                    <span class="fs-7 text-gray-400">Pending Tasks</span>
+                                    <span class="fs-5 fw-bold text-gray-800 mb-0">Clients</span>
                                 </a>
                             </div>
                             <!--end:Item-->
                             <!--begin:Item-->
+                                <div class="col-6">
+                                    <a href="/user/members" class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-end">
+                                        <!--begin::Svg Icon | path: icons/duotune/abstract/abs042.svg-->
+                                        <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
+															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																<path d="M18 21.6C16.6 20.4 9.1 20.3 6.3 21.2C5.7 21.4 5.1 21.2 4.7 20.8L2 18C4.2 15.8 10.8 15.1 15.8 15.8C16.2 18.3 17 20.5 18 21.6ZM18.8 2.8C18.4 2.4 17.8 2.20001 17.2 2.40001C14.4 3.30001 6.9 3.2 5.5 2C6.8 3.3 7.4 5.5 7.7 7.7C9 7.9 10.3 8 11.7 8C15.8 8 19.8 7.2 21.5 5.5L18.8 2.8Z" fill="currentColor" />
+																<path opacity="0.3" d="M21.2 17.3C21.4 17.9 21.2 18.5 20.8 18.9L18 21.6C15.8 19.4 15.1 12.8 15.8 7.8C18.3 7.4 20.4 6.70001 21.5 5.60001C20.4 7.00001 20.2 14.5 21.2 17.3ZM8 11.7C8 9 7.7 4.2 5.5 2L2.8 4.8C2.4 5.2 2.2 5.80001 2.4 6.40001C2.7 7.40001 3.00001 9.2 3.10001 11.7C3.10001 15.5 2.40001 17.6 2.10001 18C3.20001 16.9 5.3 16.2 7.8 15.8C8 14.2 8 12.7 8 11.7Z" fill="currentColor" />
+															</svg>
+														</span>
+                                        <!--end::Svg Icon-->
+                                        <span class="fs-5 fw-bold text-gray-800 mb-0">Associates</span>
+                                    </a>
+                                </div>
+                                <!--end:Item-->
+                                <!--begin:Item-->
+                                <div class="col-6">
+                                    <a href="/user/document" class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-end">
+                                        <!--begin::Svg Icon | path: icons/duotune/abstract/abs042.svg-->
+                                        <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
+															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																<path d="M18 21.6C16.6 20.4 9.1 20.3 6.3 21.2C5.7 21.4 5.1 21.2 4.7 20.8L2 18C4.2 15.8 10.8 15.1 15.8 15.8C16.2 18.3 17 20.5 18 21.6ZM18.8 2.8C18.4 2.4 17.8 2.20001 17.2 2.40001C14.4 3.30001 6.9 3.2 5.5 2C6.8 3.3 7.4 5.5 7.7 7.7C9 7.9 10.3 8 11.7 8C15.8 8 19.8 7.2 21.5 5.5L18.8 2.8Z" fill="currentColor" />
+																<path opacity="0.3" d="M21.2 17.3C21.4 17.9 21.2 18.5 20.8 18.9L18 21.6C15.8 19.4 15.1 12.8 15.8 7.8C18.3 7.4 20.4 6.70001 21.5 5.60001C20.4 7.00001 20.2 14.5 21.2 17.3ZM8 11.7C8 9 7.7 4.2 5.5 2L2.8 4.8C2.4 5.2 2.2 5.80001 2.4 6.40001C2.7 7.40001 3.00001 9.2 3.10001 11.7C3.10001 15.5 2.40001 17.6 2.10001 18C3.20001 16.9 5.3 16.2 7.8 15.8C8 14.2 8 12.7 8 11.7Z" fill="currentColor" />
+															</svg>
+														</span>
+                                        <!--end::Svg Icon-->
+                                        <span class="fs-5 fw-bold text-gray-800 mb-0">Document Hub</span>
+                                    </a>
+                                </div>
+                                <!--end:Item-->
+                                <!--begin:Item-->
+                                <div class="col-6">
+                                    <a href="/user/profile" class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-end">
+                                        <!--begin::Svg Icon | path: icons/duotune/abstract/abs042.svg-->
+                                        <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
+															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																<path d="M18 21.6C16.6 20.4 9.1 20.3 6.3 21.2C5.7 21.4 5.1 21.2 4.7 20.8L2 18C4.2 15.8 10.8 15.1 15.8 15.8C16.2 18.3 17 20.5 18 21.6ZM18.8 2.8C18.4 2.4 17.8 2.20001 17.2 2.40001C14.4 3.30001 6.9 3.2 5.5 2C6.8 3.3 7.4 5.5 7.7 7.7C9 7.9 10.3 8 11.7 8C15.8 8 19.8 7.2 21.5 5.5L18.8 2.8Z" fill="currentColor" />
+																<path opacity="0.3" d="M21.2 17.3C21.4 17.9 21.2 18.5 20.8 18.9L18 21.6C15.8 19.4 15.1 12.8 15.8 7.8C18.3 7.4 20.4 6.70001 21.5 5.60001C20.4 7.00001 20.2 14.5 21.2 17.3ZM8 11.7C8 9 7.7 4.2 5.5 2L2.8 4.8C2.4 5.2 2.2 5.80001 2.4 6.40001C2.7 7.40001 3.00001 9.2 3.10001 11.7C3.10001 15.5 2.40001 17.6 2.10001 18C3.20001 16.9 5.3 16.2 7.8 15.8C8 14.2 8 12.7 8 11.7Z" fill="currentColor" />
+															</svg>
+														</span>
+                                        <!--end::Svg Icon-->
+                                        <span class="fs-5 fw-bold text-gray-800 mb-0">Setting</span>
+                                    </a>
+                                </div>
+                                <!--end:Item-->
+                            {% endif %}
+                            {% if loginType == "client" %}
+                            <!--begin:Item-->
                             <div class="col-6">
-                                <a href="../../demo1/dist/apps/projects/users.html" class="d-flex flex-column flex-center h-100 p-6 bg-hover-light">
+                                <a href="/client/document" class="d-flex flex-column flex-center h-100 p-6 bg-hover-light">
                                     <!--begin::Svg Icon | path: icons/duotune/finance/fin006.svg-->
                                     <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
 															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -916,27 +785,27 @@
 															</svg>
 														</span>
                                     <!--end::Svg Icon-->
-                                    <span class="fs-5 fw-bold text-gray-800 mb-0">Customers</span>
-                                    <span class="fs-7 text-gray-400">Latest cases</span>
+                                    <span class="fs-5 fw-bold text-gray-800 mb-0">Document Hub</span>
                                 </a>
                             </div>
+                                <div class="col-6">
+                                    <a href="/user/profile" class="d-flex flex-column flex-center h-100 p-6 bg-hover-light">
+                                        <!--begin::Svg Icon | path: icons/duotune/finance/fin006.svg-->
+                                        <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
+															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																<path opacity="0.3" d="M20 15H4C2.9 15 2 14.1 2 13V7C2 6.4 2.4 6 3 6H21C21.6 6 22 6.4 22 7V13C22 14.1 21.1 15 20 15ZM13 12H11C10.5 12 10 12.4 10 13V16C10 16.5 10.4 17 11 17H13C13.6 17 14 16.6 14 16V13C14 12.4 13.6 12 13 12Z" fill="currentColor" />
+																<path d="M14 6V5H10V6H8V5C8 3.9 8.9 3 10 3H14C15.1 3 16 3.9 16 5V6H14ZM20 15H14V16C14 16.6 13.5 17 13 17H11C10.5 17 10 16.6 10 16V15H4C3.6 15 3.3 14.9 3 14.7V18C3 19.1 3.9 20 5 20H19C20.1 20 21 19.1 21 18V14.7C20.7 14.9 20.4 15 20 15Z" fill="currentColor" />
+															</svg>
+														</span>
+                                        <!--end::Svg Icon-->
+                                        <span class="fs-5 fw-bold text-gray-800 mb-0">Setting</span>
+                                    </a>
+                                </div>
+                            {% endif %}
                             <!--end:Item-->
                         </div>
                         <!--end:Nav-->
-                        <!--begin::View more-->
-                        <div class="py-2 text-center border-top">
-                            <a href="../../demo1/dist/pages/user-profile/activity.html" class="btn btn-color-gray-600 btn-active-color-primary">View All
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
-                                <span class="svg-icon svg-icon-5">
-													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-														<rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="currentColor" />
-														<path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="currentColor" />
-													</svg>
-												</span>
-                                <!--end::Svg Icon--></a>
-                        </div>
-                        <!--end::View more-->
-                    </div>
+                         </div>
                     <!--end::Menu-->
                     <!--end::Menu wrapper-->
                 </div>
@@ -993,18 +862,18 @@
                 </div>
                 <!--end::User menu-->
                 <!--begin::Header menu toggle-->
-                <div class="d-flex align-items-center d-lg-none ms-2 me-n3" title="Show header menu">
-                    <div class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px" id="kt_header_menu_mobile_toggle">
-                        <!--begin::Svg Icon | path: icons/duotune/text/txt001.svg-->
-                        <span class="svg-icon svg-icon-1">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-													<path d="M13 11H3C2.4 11 2 10.6 2 10V9C2 8.4 2.4 8 3 8H13C13.6 8 14 8.4 14 9V10C14 10.6 13.6 11 13 11ZM22 5V4C22 3.4 21.6 3 21 3H3C2.4 3 2 3.4 2 4V5C2 5.6 2.4 6 3 6H21C21.6 6 22 5.6 22 5Z" fill="currentColor" />
-													<path opacity="0.3" d="M21 16H3C2.4 16 2 15.6 2 15V14C2 13.4 2.4 13 3 13H21C21.6 13 22 13.4 22 14V15C22 15.6 21.6 16 21 16ZM14 20V19C14 18.4 13.6 18 13 18H3C2.4 18 2 18.4 2 19V20C2 20.6 2.4 21 3 21H13C13.6 21 14 20.6 14 20Z" fill="currentColor" />
-												</svg>
-											</span>
-                        <!--end::Svg Icon-->
-                    </div>
-                </div>
+{#                <div class="d-flex align-items-center d-lg-none ms-2 me-n3" title="Show header menu">#}
+{#                    <div class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px" id="kt_header_menu_mobile_toggle">#}
+{#                        <!--begin::Svg Icon | path: icons/duotune/text/txt001.svg-->#}
+{#                        <span class="svg-icon svg-icon-1">#}
+{#												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">#}
+{#													<path d="M13 11H3C2.4 11 2 10.6 2 10V9C2 8.4 2.4 8 3 8H13C13.6 8 14 8.4 14 9V10C14 10.6 13.6 11 13 11ZM22 5V4C22 3.4 21.6 3 21 3H3C2.4 3 2 3.4 2 4V5C2 5.6 2.4 6 3 6H21C21.6 6 22 5.6 22 5Z" fill="currentColor" />#}
+{#													<path opacity="0.3" d="M21 16H3C2.4 16 2 15.6 2 15V14C2 13.4 2.4 13 3 13H21C21.6 13 22 13.4 22 14V15C22 15.6 21.6 16 21 16ZM14 20V19C14 18.4 13.6 18 13 18H3C2.4 18 2 18.4 2 19V20C2 20.6 2.4 21 3 21H13C13.6 21 14 20.6 14 20Z" fill="currentColor" />#}
+{#												</svg>#}
+{#											</span>#}
+{#                        <!--end::Svg Icon-->#}
+{#                    </div>#}
+{#                </div>#}
                 <!--end::Header menu toggle-->
             </div>
             <!--end::Toolbar wrapper-->
