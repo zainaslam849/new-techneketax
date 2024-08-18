@@ -84,6 +84,11 @@ if($route == '/user/invoice/add'):
             $final_total = $_POST['final_total'];
             $invoice_detail_notes = $_POST['invoice_detail_notes'];
             $currency = $_POST['currency'];
+            if($final_total > '0'){
+                $invoiceStatus='unpaid';
+            }else{
+                $invoiceStatus='paid';
+            }
             // Firm Bank details
             if (!empty($_POST['account_number']) && !empty($_POST['bank_name']) && !empty($_POST['swift_code']) && !empty($_POST['billing_country'])) {
                 $account_number = $_POST['account_number'];
@@ -107,7 +112,7 @@ if($route == '/user/invoice/add'):
                     // products details
                     'account_number' => $account_number, 'bank_name' => $bank_name, 'swift_code' => $swift_code, 'billing_country' => $billing_country,
                     // amount details
-                    'subtotal' => $subtotal, 'discount_type' => $discount_type, 'discount_amount' => $discount_amount, 'discount_amount_total' => $discount_amount_total, 'final_total' => $final_total, 'invoice_detail_notes' => $invoice_detail_notes, 'currency' => $currency,
+                    'subtotal' => $subtotal, 'discount_type' => $discount_type, 'discount_amount' => $discount_amount, 'discount_amount_total' => $discount_amount_total, 'final_total' => $final_total, 'invoice_detail_notes' => $invoice_detail_notes, 'currency' => $currency,'status' => $invoiceStatus,
                 ])->run();
                 $send_email = $_POST['send_email'];
                 $send_message = $_POST['send_message'];
@@ -265,6 +270,11 @@ if (!empty($_POST['firm_name'])){
     $final_total = $_POST['final_total'];
     $invoice_detail_notes = $_POST['invoice_detail_notes'];
     $currency = $_POST['currency'];
+    if($final_total >'0'){
+        $invoiceStatus='unpaid';
+    }else{
+        $invoiceStatus='paid';
+    }
     // Firm Bank details
     if (!empty($_POST['account_number']) && !empty($_POST['bank_name']) && !empty($_POST['swift_code']) && !empty($_POST['billing_country'])) {
     $account_number = $_POST['account_number'];
@@ -289,7 +299,7 @@ if (!empty($_POST['firm_name'])){
             // products details
             'account_number' => $account_number, 'bank_name' => $bank_name, 'swift_code' => $swift_code,'billing_country' => $billing_country,
             // amount details
-            'subtotal' => $subtotal, 'discount_type' => $discount_type, 'discount_amount' => $discount_amount, 'discount_amount_total' => $discount_amount_total,'final_total' => $final_total,'invoice_detail_notes' => $invoice_detail_notes,'currency' => $currency,
+            'subtotal' => $subtotal, 'discount_type' => $discount_type, 'discount_amount' => $discount_amount, 'discount_amount_total' => $discount_amount_total,'final_total' => $final_total,'invoice_detail_notes' => $invoice_detail_notes,'currency' => $currency,'status' => $invoiceStatus
         ])->where('id','=',$id)->run();
         $send_email = $_POST['send_email'];
         $send_message = $_POST['send_message'];
@@ -345,4 +355,45 @@ if($route == '/invoice/view/$invoice_id'):
         'amount_item' => $invoiceInfo[0]['amount_item']
     ];
     echo $twig->render('user/invoice/view_invoice_email.twig', ['seo' => $seo,'invoiceInfo' => $invoiceInfo,'firmInfo' => $firmInfo,'clientInfo' => $clientInfo, 'ProductDetails' => $ProductDetails]);
+endif;
+
+if($route == '/stripe/pay-invoice'):
+    require 'vendor/autoload.php';
+    $invoiceID = $_POST['invoiceID'];
+    $invoiceInfo = $h->table('invoice')->select()->where('id', '=', $invoiceID)->fetchAll();
+    $token = $_POST['stripeToken'];
+    $finalCent= $invoiceInfo[0]['final_total'] * 100;
+    try {
+        $stripe = new \Stripe\StripeClient($Stripe_secret_key);
+        $charge = $stripe->charges->create([
+            'amount' => $finalCent,
+            'currency' => 'usd',
+            'description' => "Invoice #" . rand(99999, 999999999),
+            'source' => $token,
+        ]);
+        $id = $charge['id'];
+        $amount = $charge['amount'];
+        $balance_transaction = $charge['balance_transaction'];
+        $currency = $charge['currency'];
+        $status = $charge['status'];
+        if($status == 'succeeded'){
+            $insert = $h->update('invoice')->values([ 'transaction_id' => $balance_transaction,'status' => 'paid'])->where('id','=',$invoiceID)->run();
+            if ($insert) {
+                $insert = $h->insert('transactions')->values([ 'transaction_id' => $balance_transaction,'invoice_id' => $invoiceID,'client_id' => $loginUserId,'price' => $invoiceInfo[0]['final_total'],'pay_with'=>'stripe'])->run();
+//                include "views/email-template/invoice_paid.php";
+//                mailSender($env['SENDER_EMAIL'],$email,'Congratulation  - '.$env['SITE_NAME'],$message,$mail);
+                echo "1";
+                exit();
+            } else {
+                echo "0";
+                exit();
+            }
+        }
+    }catch (\Stripe\Exception\CardException $e) {
+        http_response_code(202);
+        echo json_encode(array("statusCode" => 202, "message"=>$e->getMessage()));
+    } catch (Exception $e) {
+        http_response_code(202);
+        echo json_encode(array("statusCode" => 202, "message"=>$e->getMessage()));
+    }
 endif;

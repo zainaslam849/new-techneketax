@@ -584,7 +584,13 @@ if($_GET['page_name']=="view_invoices"){
            <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$invoice["id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>
               ');
             }else{
-                $action = array('action' =>'---');
+                if ($invoice['status'] == "unpaid") {
+                    $action = array('action' => ' <a href="javascript:;" class="btn btn-danger btn-sm text-start me-2 " data-bs-toggle="modal" data-bs-target="#kt_modal_1" onclick="getDataForStripe(' . $invoice["id"] . ')" >Pay Invoice</a>
+              ');
+                }else{
+                    $action = array('action' => ' <a href="javascript:;" class="btn btn-info btn-sm text-start me-2 " >Paid</a>
+              ');
+                }
             }
 
             $clientInfo = $h->table('users')->select()->where('id', '=', $invoice['client_id'])->fetchAll();
@@ -594,18 +600,59 @@ $profile_image = $clientInfo[0]["profile_image"];
     $profile_image = "avatar.png";
 }
             $userView = array(
-                "userView" => '  <div class="d-flex">
-                                                    <div class="usr-img-frame me-2 rounded-circle">
-                                                    
-                                                        <img alt="avatar" class="img-fluid rounded-circle" style="height: 40px;" src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'">
-                                                    </div>
-                                                    <p class="align-self-center mb-0 user-name">'. $clientInfo[0]["fname"].' '.$clientInfo[0]["lname"].'</p>
-                                                </div>'
+                "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">'. $clientInfo[0]["fname"].' '.$clientInfo[0]["lname"].'</a>
+															<span>'.$invoice["client_email"].'</span>
+														</div></div>'
             );
             $status = array("statusView" => $statusView);
+
             $date = new DateTime($invoice["due_date"]);
             $newDate = $date->format('d M');
-            $DueDate = array("DueDate" => '<span class="inv-date"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> '.$newDate.' </span>');
+            $currentDate = new DateTime();
+
+// Check if the current date is greater than the due date
+            if ($currentDate > $date) {
+                // If the due date is in the past, display it in red
+                if($invoice["status"] == 'paid'){
+                    $color='green';
+                }else{
+                    $color='red';
+                }
+                $DueDate = array(
+                    "DueDate" => '<span class="inv-date" style="color:'.$color.'"  >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg> ' . $newDate . ' 
+        </span>'
+                );
+            } else {
+                if($invoice["status"] == 'paid'){
+                    $color='green';
+                }else{
+                    $color='black';
+                }
+                // If the due date is not in the past, display it in the default color
+                $DueDate = array(
+                    "DueDate" => '<span class="inv-date" style="color:'.$color.'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg> ' . $newDate . ' 
+        </span>'
+                );
+            }
             $ClientEmail = array("ClientEmail" => '<span class="inv-email"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> '.$invoice["client_email"].'</span>');
             $FinalTotal = array("FinalTotal" => "$".$invoice["final_total"]);
             $srNo++;

@@ -22,6 +22,7 @@ post('/join/$firm_id/$invite', 'controller/auth/AuthController.php');
 get('/forget-password', 'controller/auth/AuthController.php');
 post('/forget-password', 'controller/auth/AuthController.php');
 get('/invoice/view/$invoice_id', 'controller/users/InvoiceController.php');
+post('/stripe/pay-invoice', 'controller/users/InvoiceController.php');
 // Jitsi Related Routes
 get('/meet/$room_id', 'controller/users/MeetingController.php');
 

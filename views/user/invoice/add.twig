@@ -157,7 +157,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="invoice-detail-terms">
+                                            <div class="invoice-detail-terms mt-2">
                                                 <div class="row justify-content-between">
                                                     <div class="col-md-3">
                                                         <div class="form-group mb-4">
@@ -214,7 +214,7 @@
                                                             <td class="ps-0">
                                                                 <input type="number" class="form-control form-control-solid price" placeholder="Price" name="price[]">
                                                             </td>
-                                                            <td class="text-right qty"><input type="number" class="form-control form-control-solid quantity" placeholder="Quantity" name="quantity[]"></td>
+                                                            <td class="text-right qty"><input type="number" value="1" class="form-control form-control-solid quantity" placeholder="Quantity" name="quantity[]"></td>
                                                             <td class="pt-8 text-end text-nowrap"><span class="editable-amount"><span class="currency">$</span> <span class="amount">0.00</span></span></td>
                                                             <input type="hidden" name="amount_item[]" class="amount_item">
                                                         </tr>
@@ -261,7 +261,7 @@
                                                         <div class="totals-row">
                                                             <div class="row">
 
-                                                                <div class="col-6"><h3>Subtotal</h3></div>
+                                                                <div class="col-6"><h5>Subtotal</h5></div>
 
                                                                 <div class="col-6 text-end">
                                                                     <div class="subtotal-amount">
@@ -273,7 +273,7 @@
                                                             </div>
                                                             <div class="row">
 
-                                                                <div class="col-6"><h3>Discount</h3></div>
+                                                                <div class="col-6"><h5>Discount</h5></div>
 
                                                                 <div class="col-6 text-end">
                                                                     <div class="total-amount">
@@ -284,7 +284,7 @@
                                                             </div>
                                                             <div class="separator separator-dashed my-10"></div>
                                                             <div class="row">
-                                                                <div class="col-6"><h3>Total</h3></div>
+                                                                <div class="col-6"><h5>Total</h5></div>
                                                                 <div class="col-6 text-end">
                                                                     <div class="balance-due-amount">
                                                                         <span class="currency">$</span><span id="finalTotal">0</span>
@@ -330,7 +330,7 @@
                                             <h5>Discount</h5>
                                             <div class="invoice-action-discount-fields">
                                                 <div class="row">
-                                                    <div class="col-6">
+                                                    <div class="col-12">
                                                         <div class="form-group mb-0">
                                                             <label for="discount">Type</label>
                                                             <select class="form-select form-select-solid" name="discount_type" id="discount" onchange="applyDiscount()">
@@ -340,7 +340,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-6 discount-amount">
+                                                    <div class="col-12 discount-amount">
                                                         <div class="form-group mb-0">
                                                             <label for="rated1">Amount</label>
                                                             <input type="number" class="form-control form-control-solid input-rate" id="rated1" name="discount_amount" placeholder="Rate" min="0" value="0" oninput="applyDiscount()">

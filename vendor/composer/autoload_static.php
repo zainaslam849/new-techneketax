@@ -48,6 +48,7 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
             'Symfony\\Component\\HttpFoundation\\' => 33,
             'Symfony\\Component\\Finder\\' => 25,
             'Symfony\\Component\\Clock\\' => 24,
+            'Stripe\\' => 7,
             'Spiral\\Tokenizer\\' => 17,
             'Spiral\\Pagination\\' => 18,
             'Spiral\\Logger\\' => 14,
@@ -157,6 +158,10 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
         'Symfony\\Component\\Clock\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/clock',
+        ),
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
         ),
         'Spiral\\Tokenizer\\' => 
         array (
