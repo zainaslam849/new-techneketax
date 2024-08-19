@@ -653,7 +653,7 @@ function random_strings($length_of_string)
     return substr(str_shuffle($str_result), 0, $length_of_string);
 }
 function TwoFA($email, $password, $table_name){
-    global $h,$sql,$settings,$message,$env,$mail;
+    global $h,$sql,$settings,$message,$env,$mail,$loginUserId;
     if(isset($email) && !empty($email) && isset($password) && !empty($password)){
 //        if( ! is_csrf_v_script()){
 //            http_response_code(202);
@@ -674,6 +674,14 @@ function TwoFA($email, $password, $table_name){
                     $_SESSION['loginemail'] = $email;
                     $_SESSION['loginpassword'] = $password;
                     //FORGET EMAIL
+                        $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                        @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                        @$company_phone =  @$AdminInfo[0]['phone'];
+                        @$company_email =  @$AdminInfo[0]['email'];
+                        @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+
+
+
                     include "./views/email-template/login2fa.php";
                     mailSender($env['SENDER_EMAIL'],$email,'2FA For Login - '.$env['SITE_NAME'],$message,$mail);
                     http_response_code(200);
@@ -776,7 +784,7 @@ function Login($email, $password,$table_name){
 
 function userRegister($first_name, $last_name, $email,$phone, $password, $account_type, $table_name){
     global $h;
-    global $env,$message,$mail;
+    global $env,$message,$mail,$loginUserId;
     if(isset($email) && !empty($email) && isset($password) && !empty($password) && isset($first_name) && !empty($first_name) && isset($last_name) && !empty($last_name) && isset($phone) && !empty($phone)){
 //        if( ! is_csrf_valid()){
 //            http_response_code(202);
@@ -814,6 +822,13 @@ function userRegister($first_name, $last_name, $email,$phone, $password, $accoun
                     'account_type'=> $account_type,
                     'password'=> $hashed_password,
                 ])->run();
+                    $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                    @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                    @$company_phone =  @$AdminInfo[0]['phone'];
+                    @$company_email =  @$AdminInfo[0]['email'];
+                    @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+
+
                     include "views/email-template/WelcomeRegister.php";
     mailSender($env['SENDER_EMAIL'],$email,'Welcome at - '.$env['SITE_NAME'],$message,$mail);
                 return json_encode(array("statusCode" => 200, "message"=>"Successfully Registered."));
@@ -935,7 +950,11 @@ function forgetPasswordEmail($email, $table_name){
     ])->where('email', '=', $email)->run();
 
     //FORGET EMAIL
-
+    $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+    @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+    @$company_phone =  @$AdminInfo[0]['phone'];
+    @$company_email =  @$AdminInfo[0]['email'];
+    @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
     include "views/email-template/forget-password.php";
 
     mailSender($env['SENDER_EMAIL'],$email,'Forget Password - '.$env['SITE_NAME'],$message,$mail);

@@ -234,7 +234,7 @@
                         $('#table').DataTable().ajax.reload(null, false);
                         $("#btn-profile").removeAttr("enabled");
                         $('#editExampleModal').modal('hide');
-                        toastr.success(' Add Successfully.');
+                        toastr.success('Document Request Sent.');
                         document.getElementById("DocumentForm").reset();
                     } else if (dataResult == 3) {
                         toastr.error("Required fields are empty!");

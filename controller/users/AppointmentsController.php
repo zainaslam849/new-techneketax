@@ -194,8 +194,29 @@ if($route == '/user/add/appointments'):
                         $ClientInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
                         $date = new DateTime($dateTime);
                         $formattedDate = $date->format('l, d F Y, h:i a');
+                        if (!empty($loginUserId)){
+                            $companyInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+                            if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
+                                @$company_name =  @$companyInfo[0]['company_name'];
+                                @$company_phone =  @$companyInfo[0]['phone'];
+                                @$company_email =  @$companyInfo[0]['email'];
+                                @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
+                            }else{
+                                $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                                @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                                @$company_phone =  @$AdminInfo[0]['phone'];
+                                @$company_email =  @$AdminInfo[0]['email'];
+                                @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                            }
+                        }else{
+                            $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                            @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                            @$company_phone =  @$AdminInfo[0]['phone'];
+                            @$company_email =  @$AdminInfo[0]['email'];
+                            @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                        }
                         include "views/email-template/add_appointment.php";
-                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], $loginUserName . 'Set an appointment at ' . $formattedDate . ' at - ' . $env['SITE_NAME'], $message, $mail);
+                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], $company_name . 'Set an appointment at ' . $formattedDate . ' at - ' . $env['SITE_NAME'], $message, $mail);
                     }
                 }
                 echo "1";
@@ -232,8 +253,29 @@ if($route == '/user/update/appointments'):
                         $ClientInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
                         $date = new DateTime($dateTime);
                         $formattedDate = $date->format('l, d F Y, h:i a');
+                        if (!empty($loginUserId)){
+                            $companyInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+                            if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
+                                @$company_name =  @$companyInfo[0]['company_name'];
+                                @$company_phone =  @$companyInfo[0]['phone'];
+                                @$company_email =  @$companyInfo[0]['email'];
+                                @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
+                            }else{
+                                $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                                @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                                @$company_phone =  @$AdminInfo[0]['phone'];
+                                @$company_email =  @$AdminInfo[0]['email'];
+                                @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                            }
+                        }else{
+                            $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                            @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                            @$company_phone =  @$AdminInfo[0]['phone'];
+                            @$company_email =  @$AdminInfo[0]['email'];
+                            @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                        }
                         include "views/email-template/update_appointment.php";
-                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], $loginUserName . 'Make changes in appointment at - ' . $env['SITE_NAME'], $message, $mail);
+                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], $company_name . 'Make changes in appointment at - ' . $env['SITE_NAME'], $message, $mail);
                     }
                 }
                 echo "1";

@@ -110,9 +110,29 @@ if($route == '/user/request_for_document'):
             $insert = $h->insert('document_hub')->values([ 'firm_id' => $loginUserId,'client_id' => $client_id,'firm_des' => $firm_des,'document_id' => $document_id])->run();
             $usersInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
             $email = $usersInfo[0]['email'];
-
-            //include "views/email-template/firmRequestDocument.php";
-            //mailSender($env['SENDER_EMAIL'],$email,'Request For Document - '.$env['SITE_NAME'],$message,$mail);
+            if (!empty($loginUserId)){
+                $companyInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+                if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
+                    @$company_name =  @$companyInfo[0]['company_name'];
+                    @$company_phone =  @$companyInfo[0]['phone'];
+                    @$company_email =  @$companyInfo[0]['email'];
+                    @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
+                }else{
+                    $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                    @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                    @$company_phone =  @$AdminInfo[0]['phone'];
+                    @$company_email =  @$AdminInfo[0]['email'];
+                    @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                }
+            }else{
+                $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                @$company_phone =  @$AdminInfo[0]['phone'];
+                @$company_email =  @$AdminInfo[0]['email'];
+                @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+            }
+            include "views/email-template/firmRequestDocument.php";
+            mailSender($env['SENDER_EMAIL'],$email,'Request For Document - '.$env['SITE_NAME'],$message,$mail);
             echo "1";
             exit();
         } catch (PDOException $e) {
