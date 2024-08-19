@@ -779,7 +779,7 @@ if($_GET['page_name']=="view_document_hub_client"){
             if (!empty($document_hub['firm_des']) && $document_hub['firm_des'] != ''){
                 $words = explode(' ', $document_hub['firm_des']);
                 $des = implode(' ', array_slice($words, 0, 40));
-                $firmDes = '<p><span class="text-muted fw-bold fs-6">' . $des . '....</span><a href="#" class="see-more text-danger" data-description="' . htmlspecialchars($document_hub['firm_des'], ENT_QUOTES, 'UTF-8') . '">Read More</a></p>';
+                $firmDes = '<p><a role="button" onclick="userStatus('.$document_hub['id'].')"  class=" text-muted"><span class="text-muted fw-bold fs-6">' . $des . '....</span>Read More</a></p>';
 
             }else{
                 $firmDes = array('firmDes' =>'---');
