@@ -253,5 +253,14 @@
                 $('#commentModal').modal('show');
             });
         });
+        function downloadFile(fileUrl) {
+            const randomName = Math.random().toString(36).substring(2, 15) + '_' + fileUrl.split('/').pop();
+            const link = document.createElement('a');
+            link.href = fileUrl;
+            link.download = randomName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     </script>
 {% endblock %}

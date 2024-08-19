@@ -39,7 +39,7 @@
                     {% if loginType == "firm" or loginType == "member" %}
                     <div class="menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch" id="#kt_header_menu"  data-kt-menu="true">
                         <div class="menu-item">
-                            <a class="menu-link py-3">
+                            <a href="#" class="menu-link py-3" data-bs-toggle="modal" data-bs-target="#inputFormModal">
 										<span class="menu-icon">
 											<span class="svg-icon svg-icon-2">
 <span class="svg-icon svg-icon-muted svg-icon-1x"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -53,7 +53,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link {% if route == '/user/appointments' %}active{% endif %}" href="/user/appointments">
+                            <a href="#" class="menu-link" data-bs-toggle="modal" data-bs-target="#inputFormModalAssociates">
 <span class="menu-icon">
 											<span class="svg-icon svg-icon-2">
 <span class="svg-icon svg-icon-muted svg-icon-1x"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

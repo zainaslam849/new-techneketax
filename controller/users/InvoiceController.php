@@ -379,7 +379,7 @@ if($route == '/stripe/pay-invoice'):
         if($status == 'succeeded'){
             $insert = $h->update('invoice')->values([ 'transaction_id' => $balance_transaction,'status' => 'paid'])->where('id','=',$invoiceID)->run();
             if ($insert) {
-                $insert = $h->insert('transactions')->values([ 'transaction_id' => $balance_transaction,'invoice_id' => $invoiceID,'client_id' => $loginUserId,'price' => $invoiceInfo[0]['final_total'],'pay_with'=>'stripe'])->run();
+                $insert = $h->insert('transactions')->values([ 'transaction_id' => $balance_transaction,'invoice_id' => $invoiceID,'client_id' => $invoiceInfo[0]['client_id'],'price' => $invoiceInfo[0]['final_total'],'pay_with'=>'stripe'])->run();
 //                include "views/email-template/invoice_paid.php";
 //                mailSender($env['SENDER_EMAIL'],$email,'Congratulation  - '.$env['SITE_NAME'],$message,$mail);
                 http_response_code(200);
