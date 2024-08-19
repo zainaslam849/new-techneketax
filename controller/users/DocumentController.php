@@ -20,6 +20,17 @@ if($route == '/client/document'):
     $document_hub = $h->table('document_hub')->select()->where('client_id', '=', $loginUserId)->fetchAll();
     echo $twig->render('user/document_hub/client_index.twig', ['seo' => $seo,'client' => $document_hub]);
 endif;
+if($route == '/client/dochubdetails/$id'):
+    $seo = array(
+        'title' => 'Document Hub',
+        'description' => 'CRM',
+        'keywords' => 'Admin Panel'
+    );
+    $document_hub = $h->table('document_hub')->select()->where('id', '=', $id)->fetchAll();
+$firm_id = $document_hub[0]['firm_id'];
+    $firmDetails = $h->table('users')->select()->where('id', '=', $firm_id)->fetchAll();
+    echo $twig->render('user/document_hub/client_index_detail.twig', ['seo' => $seo,'documentHub' => $document_hub,'firmDetail' => $firmDetails]);
+endif;
 if($route == '/client/document/add'):
     if (!empty($_POST['firm_id'])) {
         $firm_id = $_POST['firm_id'];

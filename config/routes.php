@@ -71,6 +71,8 @@ if(@$_SESSION['users']['type'] == 'client'):
     post('/client/document/add', 'controller/users/DocumentController.php');
     get('/client/template/request', 'controller/users/TemplatesController.php');
     post('/client/download/document', 'controller/users/DocumentController.php');
+    get('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
+    post('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
 endif;
     post('/user/request_for_document', 'controller/users/DocumentController.php');
     get('/user/upload/document/all', 'controller/users/DocumentController.php');

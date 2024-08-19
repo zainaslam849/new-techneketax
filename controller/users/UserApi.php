@@ -773,51 +773,73 @@ if($_GET['page_name']=="view_document_hub_client"){
     $document_hubs = $h->table('document_hub')->select()->where('client_id', '=', $loginUserId)->orderBy('id', 'desc')->fetchAll();
     if (!empty($document_hubs)) {
         foreach ($document_hubs as $document_hub) {
-            // Determine user status
-            if (!empty($document_hub['document_id'])){
-                $document_ids = htmlspecialchars($document_hub['document_id'], ENT_QUOTES, 'UTF-8');
-                $downloadFiles = '<a type="button" class="edit btn-sm btn btn-secondary  me-4"  onclick="download_files(\'' . $document_ids . '\')" >Download File</a>';
-            }else{
-                $downloadFiles = '';
-            }
-            if ($document_hub['status'] == "yes") {
-                $statusView = "<span class='badge badge-light-success'>Uploaded</span>";
-                $action = array('action' =>$downloadFiles.'');
-            } else if ($document_hub['status'] == "no") {
-                $statusView = "<span class='badge badge-light-danger'>Not Uploaded Yet</span>";
-                $action = array('action' =>$downloadFiles.'<a type="button" class="edit btn btn-sm btn-primary  me-4" data-id="'. $document_hub['id'].'" role="button" data-bs-toggle="modal" data-bs-target="#editExampleModal" >Upload File</a>');
-            } else {
-                $statusView = "<span class='badge badge-light-danger'>Not Uploaded Yet</span>";
-                $action = array('action' =>$downloadFiles.'<a type="button" class="edit btn btn-sm btn-primary  me-4" data-id="'. $document_hub['id'].'" role="button" data-bs-toggle="modal" data-bs-target="#editExampleModal" >Upload File</a>');
-            }
             if (!empty($document_hub['firm_des']) && $document_hub['firm_des'] != ''){
                 $words = explode(' ', $document_hub['firm_des']);
-                $des = implode(' ', array_slice($words, 0, 10));
-                $firmDes = array('firmDes' =>'<p>' . $des . '... <a href="#" class="see-more text-danger" data-description="' . htmlspecialchars($document_hub['firm_des'], ENT_QUOTES, 'UTF-8') . '">Read More</a></p>');
+                $des = implode(' ', array_slice($words, 0, 40));
+                $firmDes = '<p><span class="text-muted fw-bold fs-6">' . $des . '....</span><a href="#" class="see-more text-danger" data-description="' . htmlspecialchars($document_hub['firm_des'], ENT_QUOTES, 'UTF-8') . '">Read More</a></p>';
 
             }else{
                 $firmDes = array('firmDes' =>'---');
             }
-            $status = array("statusView" => $statusView);
-            if (!empty($document_hub['firm_id'])){
-                $usersInfo = $h->table('users')->select()->where('id', '=', $document_hub['firm_id'])->fetchAll();
-                $userView = array(
-                    "userView" => '<div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">' . $usersInfo[0]['fname'] .' '.  $usersInfo[0]['lname'] . '</span>
-        <small class="emp_post text-truncate">'.  $usersInfo[0]['email'] . '</small>
-    </div>
-</div>' );
-            }else{
-                $userView = array(
-                    "userView" => '---'
-                );
-            }
+            $UserFirmDetails = $h->table('users')->select()->where('id', '=', $document_hub['firm_id'])->orderBy('id', 'desc')->fetchAll();
+            if($document_hub['status'] == 'yes'){
 
+                $StatusView = '<span class="badge badge-light-success my-1">Uploaded</span>';
+            }else{
+                $StatusView = '<span class="badge badge-light-danger my-1">Not Uploaded</span>';
+            }
+            if($document_hub['see_doc'] == '0'){
+                $SeeDoc = '<span class="svg-icon svg-icon-2x me-5 ms-n1 mt-2 svg-icon-warning">
+                                                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM16 13.5L12.5 13V10C12.5 9.4 12.6 9.5 12 9.5C11.4 9.5 11.5 9.4 11.5 10L11 13L8 13.5C7.4 13.5 7 13.4 7 14C7 14.6 7.4 14.5 8 14.5H11V18C11 18.6 11.4 19 12 19C12.6 19 12.5 18.6 12.5 18V14.5L16 14C16.6 14 17 14.6 17 14C17 13.4 16.6 13.5 16 13.5Z" fill="currentColor"></path>
+																	<rect x="11" y="19" width="10" height="2" rx="1" transform="rotate(-90 11 19)" fill="currentColor"></rect>
+																	<rect x="7" y="13" width="10" height="2" rx="1" fill="currentColor"></rect>
+																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
+																</svg></span>';
+            }else{
+                if($document_hub['status'] == 'yes'){
+                    $SeeDoc = '<span class="svg-icon svg-icon-2x me-5 ms-n1 mt-2 svg-icon-success">
+																<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM11.7 17.7L16 14C16.4 13.6 16.4 12.9 16 12.5C15.6 12.1 15.4 12.6 15 13L11 16L9 15C8.6 14.6 8.4 14.1 8 14.5C7.6 14.9 8.1 15.6 8.5 16L10.3 17.7C10.5 17.9 10.8 18 11 18C11.2 18 11.5 17.9 11.7 17.7Z" fill="currentColor" />
+																	<path d="M10.4343 15.4343L9.25 14.25C8.83579 13.8358 8.16421 13.8358 7.75 14.25C7.33579 14.6642 7.33579 15.3358 7.75 15.75L10.2929 18.2929C10.6834 18.6834 11.3166 18.6834 11.7071 18.2929L16.25 13.75C16.6642 13.3358 16.6642 12.6642 16.25 12.25C15.8358 11.8358 15.1642 11.8358 14.75 12.25L11.5657 15.4343C11.2533 15.7467 10.7467 15.7467 10.4343 15.4343Z" fill="currentColor" />
+																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor" />
+																</svg>
+															</span>';
+                }else{
+                    $SeeDoc = '<span class="svg-icon svg-icon-2x me-5 ms-n1 mt-2 svg-icon-danger">
+                                                                   <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM16 13.5L12.5 13V10C12.5 9.4 12.6 9.5 12 9.5C11.4 9.5 11.5 9.4 11.5 10L11 13L8 13.5C7.4 13.5 7 13.4 7 14C7 14.6 7.4 14.5 8 14.5H11V18C11 18.6 11.4 19 12 19C12.6 19 12.5 18.6 12.5 18V14.5L16 14C16.6 14 17 14.6 17 14C17 13.4 16.6 13.5 16 13.5Z" fill="currentColor"></path>
+																	<rect x="11" y="19" width="10" height="2" rx="1" transform="rotate(-90 11 19)" fill="currentColor"></rect>
+																	<rect x="7" y="13" width="10" height="2" rx="1" fill="currentColor"></rect>
+																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
+																</svg></span>';
+                }
+
+            }
+            $viewDoc = '
+           <div class="d-flex mb-10">
+                                      '.$SeeDoc.'
+                                        <div class="d-flex flex-column">
+                                            <!--begin::Content-->
+                                            <div class="d-flex align-items-center mb-2">
+                                                <!--begin::Title-->
+                                                <a role="button" onclick="userStatus('.$document_hub['id'].')" class="text-dark text-hover-primary fs-4 me-3 fw-bold"><span style="color: #ED141F;">'.$UserFirmDetails[0]['fname'].' '.$UserFirmDetails[0]['lname'].'</span> Request For document.</a>
+                                             '.$StatusView.'
+                                            </div>
+                                            <!--end::Content-->
+                                            <!--begin::Text-->
+                                            '.$firmDes.'
+                                         
+                                            <!--end::Text-->
+                                        </div>
+                                        <!--end::Section-->
+                                    </div>
+         ';
+            $ViewDocs =   array("viewDocs" => "$viewDoc");
 
             $srNo++;
             $ids = array("ids" => "$srNo");
-            $check_arr[] = array_merge($ids, $document_hub,$userView, $status, $action,$firmDes);
+            $check_arr[] = array_merge($ids, $document_hub,$ViewDocs);
         }
 
         $result = array(
@@ -838,7 +860,26 @@ if($_GET['page_name']=="view_document_hub_client"){
     }
 
 }
+if($_GET['page_name']=="DocStatusUpdate") {
+    if(isset($_GET['id'])) {
+        $id=$_GET['id'];
+        $status=$_GET['status'];
+        $table_name=$_GET['table_name'];
+        $status_table=$_GET['status_table'];
 
+        try {
+            $statusUpdate = $h->table($table_name)
+                ->update([$status_table=>$status])
+                ->where('id','=',$id)
+                ->run();
+            echo json_encode(array("statusCode" => "1", "id"=>$id));
+            exit;
+        }catch (PDOException $e) {
+            echo 0;
+            exit;
+        }
+    }
+}
 if($_GET['page_name']=="userStatusUpdate") {
 //    if (!is_csrf_v_script()) {
 //        exit();
@@ -862,6 +903,7 @@ if($_GET['page_name']=="userStatusUpdate") {
         }
     }
 }
+
 if($_GET['page_name']=="profileStatusUpdate") {
 //    if (!is_csrf_v_script()) {
 //        exit();
