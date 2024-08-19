@@ -76,6 +76,8 @@ endif;
 
 
 get('/user/chat', 'controller/users/ChatController.php');
+get('/user/chat/$user_id', 'controller/users/ChatController.php');
+
 get('/chat/users', 'controller/users/ChatController.php');
 get('/chat/messages/$userId', 'controller/users/ChatController.php');
 get('/call/ring/$userId', 'controller/users/ChatController.php');
