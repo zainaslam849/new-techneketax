@@ -12,7 +12,7 @@ if($route == '/user/chat'){
 //sers($loginUserId));
     if($loginUserType == 'firm'){
         $usersList = $h->table('users')
-            ->select('id','fname','lname', 'email', 'type')
+            ->select('id','fname','lname', 'email', 'type','profile_image')
             ->where('firm_id', '=', $loginUserId)
             ->fetchAll();
     }else if($loginUserType == 'client'){
@@ -21,28 +21,63 @@ if($route == '/user/chat'){
             ->where('id', '=', $loginUserId)
             ->fetchAll();
         $usersList = $h->table('users')
-            ->select('id','fname','lname', 'email', 'type')
+            ->select('id','fname','lname', 'email', 'type', 'profile_image')
             ->where('id', '=', $userFirmId[0]['firm_id'])
             ->fetchAll();
     }
 
     echo $twig->render('user/chat/chat.twig', ['seo' => $seo, 'chatUsers'=>$usersList]);
 }
+if($route === '/user/chat/$user_id'){
+
+//print_r(getChatU
+//sers($loginUserId));
+    if($loginUserType == 'firm'){
+        $usersList = $h->table('users')
+            ->select('id','fname','lname', 'email', 'type', 'profile_image')
+            ->where('firm_id', '=', $loginUserId)
+            ->fetchAll();
+    }else if($loginUserType == 'client'){
+        $userFirmId = $h->table('users')
+            ->select('firm_id')
+            ->where('id', '=', $loginUserId)
+            ->fetchAll();
+        $usersList = $h->table('users')
+            ->select('id','fname','lname', 'email', 'type', 'profile_image')
+            ->where('id', '=', $userFirmId[0]['firm_id'])
+            ->fetchAll();
+    }
+
+    $chatWithUserInfo = $h->table('users')
+        ->select('id','fname','lname', 'email', 'type','profile_image')
+        ->where('id', '=', $user_id)
+        ->fetchAll();
+    $chatWithUserInfo= $chatWithUserInfo[0];
+    $seo = array(
+        'title' => 'Chat with '.$chatWithUserInfo['fname'],
+        'description' => 'CRM',
+        'keywords' => 'Admin Panel'
+    );
+    echo $twig->render('user/chat/user_chat.twig', ['seo' => $seo, 'chatUsers'=>$usersList, 'chatWithUserInfo'=>$chatWithUserInfo, 'user_id'=>$user_id]);
+}
+
+
+
 
 
 if($route == '/chat/users'){
    echo getChatUsers($loginUserId);
 }
-if($route == '/chat/messages/$userId'){
-    function getUserChat($sender_id, $reciever_id) {
-        global $h;
+if ($route == '/chat/messages/$userId') {
+    function getUserChat($sender_id, $receiver_id) {
+        global $h; // Assuming $h is your database handler
         // Fetch chat messages for the user
         $usersList = $h->table('chat')
             ->select()
             ->where('sender_id', '=', $sender_id)
-            ->where('reciever_id', '=', $reciever_id)
-            ->orWhere('sender_id', '=', $reciever_id) // Also fetch messages where receiver is $reciever_id and sender is $sender_id
-            ->orWhere('reciever_id', '=', $sender_id)
+            ->where('receiver_id', '=', $receiver_id)
+            ->orWhere('sender_id', '=', $receiver_id) // Also fetch messages where receiver is $receiver_id and sender is $sender_id
+            ->orWhere('receiver_id', '=', $sender_id)
             ->orderBy('created_at', 'ASC') // Order messages by timestamp
             ->fetchAll();
 
@@ -52,7 +87,7 @@ if($route == '/chat/messages/$userId'){
             $messages[] = [
                 'sender' => $senderClass,
                 'message' => htmlspecialchars($message['message']),
-                'timestamp' => Carbon::parse($message['created_at'])->toIso8601String()
+                'timestamp' => $message['created_at'] // Use raw timestamp for JavaScript formatting
             ];
         }
 
@@ -61,11 +96,11 @@ if($route == '/chat/messages/$userId'){
             'messages' => $messages
         ]);
     }
+
     header('Content-Type: application/json');
-    echo getUserChat($loginUserId,$userId);
-
-
+    echo getUserChat($loginUserId, $userId);
 }
+
 
 if($route == '/call/ring/$userId'){
 

@@ -1,6 +1,6 @@
 {% extends 'user/master.twig' %}
 {% block content %}
-    <input type="text" id="activeUserID" hidden>
+    <input type="text" id="chatWithUserID" value="{{ user_id }}" hidden>
     <!--begin::Content-->
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
         <!--begin::Toolbar-->
@@ -12,8 +12,6 @@
                     <!--begin::Title-->
                     <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Chat</h1>
                     <!--end::Title-->
-
-
                 </div>
                 <!--end::Page title-->
                 <!--begin::Actions-->
@@ -65,47 +63,22 @@
                             <div class="card-body pt-5" id="kt_chat_contacts_body">
                                 <!--begin::List-->
                                 <div class="scroll-y me-n5 pe-5 h-200px h-lg-auto" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_contacts_header" data-kt-scroll-wrappers="#kt_content, #kt_chat_contacts_body" data-kt-scroll-offset="5px">
+
+
+                                    {% for user in chatUsers %}
                                     <!--begin::User-->
                                     <div class="d-flex flex-stack py-4">
                                         <!--begin::Details-->
                                         <div class="d-flex align-items-center">
                                             <!--begin::Avatar-->
                                             <div class="symbol symbol-45px symbol-circle">
-                                                <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">M</span>
+                                                <img alt="Pic" src="{{ env.APP_URL }}uploads/profile/{{ user.profile_image }}" />
                                             </div>
                                             <!--end::Avatar-->
                                             <!--begin::Details-->
                                             <div class="ms-5">
-                                                <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Melody Macy</a>
-                                                <div class="fw-bold text-muted">melody@altbox.com</div>
-                                            </div>
-                                            <!--end::Details-->
-                                        </div>
-                                        <!--end::Details-->
-                                        <!--begin::Lat seen-->
-                                        <div class="d-flex flex-column align-items-end ms-2">
-                                            <span class="text-muted fs-7 mb-1">1 week</span>
-                                            <span class="badge badge-sm badge-circle badge-light-success">2</span>
-                                        </div>
-                                        <!--end::Lat seen-->
-                                    </div>
-                                    <!--end::User-->
-                                    <!--begin::Separator-->
-                                    <div class="separator separator-dashed d-none"></div>
-                                    <!--end::Separator-->
-                                    <!--begin::User-->
-                                    <div class="d-flex flex-stack py-4">
-                                        <!--begin::Details-->
-                                        <div class="d-flex align-items-center">
-                                            <!--begin::Avatar-->
-                                            <div class="symbol symbol-45px symbol-circle">
-                                                <img alt="Pic" src="{{ env.APP_URL }}assets/dash/assets/media/avatars/300-1.jpg" />
-                                            </div>
-                                            <!--end::Avatar-->
-                                            <!--begin::Details-->
-                                            <div class="ms-5">
-                                                <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Max Smith</a>
-                                                <div class="fw-bold text-muted">max@kt.com</div>
+                                                <a href="/user/chat/{{ user.id }}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{ user.fname }} {{ user.lname }}</a>
+                                                <div class="fw-bold text-muted">{{ user.email }}</div>
                                             </div>
                                             <!--end::Details-->
                                         </div>
@@ -120,61 +93,7 @@
                                     <!--begin::Separator-->
                                     <div class="separator separator-dashed d-none"></div>
                                     <!--end::Separator-->
-                                    <!--begin::User-->
-                                    <div class="d-flex flex-stack py-4">
-                                        <!--begin::Details-->
-                                        <div class="d-flex align-items-center">
-                                            <!--begin::Avatar-->
-                                            <div class="symbol symbol-45px symbol-circle">
-                                                <img alt="Pic" src="{{ env.APP_URL }}assets/dash/assets/media/avatars/300-5.jpg" />
-                                                <div class="symbol-badge bg-success start-100 top-100 border-4 h-15px w-15px ms-n2 mt-n2"></div>
-                                            </div>
-                                            <!--end::Avatar-->
-                                            <!--begin::Details-->
-                                            <div class="ms-5">
-                                                <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Sean Bean</a>
-                                                <div class="fw-bold text-muted">sean@dellito.com</div>
-                                            </div>
-                                            <!--end::Details-->
-                                        </div>
-                                        <!--end::Details-->
-                                        <!--begin::Lat seen-->
-                                        <div class="d-flex flex-column align-items-end ms-2">
-                                            <span class="text-muted fs-7 mb-1">5 hrs</span>
-                                        </div>
-                                        <!--end::Lat seen-->
-                                    </div>
-                                    <!--end::User-->
-                                    <!--begin::Separator-->
-                                    <div class="separator separator-dashed d-none"></div>
-                                    <!--end::Separator-->
-                                    <!--begin::User-->
-                                    <div class="d-flex flex-stack py-4">
-                                        <!--begin::Details-->
-                                        <div class="d-flex align-items-center">
-                                            <!--begin::Avatar-->
-                                            <div class="symbol symbol-45px symbol-circle">
-                                                <img alt="Pic" src="{{ env.APP_URL }}assets/dash/assets/media/avatars/300-25.jpg" />
-                                            </div>
-                                            <!--end::Avatar-->
-                                            <!--begin::Details-->
-                                            <div class="ms-5">
-                                                <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Brian Cox</a>
-                                                <div class="fw-bold text-muted">brian@exchange.com</div>
-                                            </div>
-                                            <!--end::Details-->
-                                        </div>
-                                        <!--end::Details-->
-                                        <!--begin::Lat seen-->
-                                        <div class="d-flex flex-column align-items-end ms-2">
-                                            <span class="text-muted fs-7 mb-1">1 day</span>
-                                        </div>
-                                        <!--end::Lat seen-->
-                                    </div>
-                                    <!--end::User-->
-                                    <!--begin::Separator-->
-                                    <div class="separator separator-dashed d-none"></div>
-                                    <!--end::Separator-->
+                                    {% endfor %}
 
                                 </div>
                                 <!--end::List-->
