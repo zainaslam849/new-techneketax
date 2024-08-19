@@ -51,8 +51,8 @@
 
                                         <div class="col-xl-9">
 
-                                            <div class="invoice-container">
-                                                <div class="invoice-inbox" id="printableArea">
+                                            <div class="invoice-container" id="printableArea">
+                                                <div class="invoice-inbox" >
 
                                                     <div id="ct" class="">
 
@@ -84,6 +84,7 @@
                                                                             <p class="fw-bolder fs-3 text-gray-800 mb-8"><span class="inv-title">Invoice : </span> <span class="inv-number">{{ invoiceInfo[0].invoice_number }}</span></p>
                                                                             <p class="inv-created-date mt-sm-5 mt-3"><span class="inv-title">Invoice Date : </span> <span class="inv-date">{{ invoiceInfo[0].invoice_date }}</span></p>
                                                                             <p class="inv-due-date"><span class="inv-title">Due Date : </span> <span class="inv-date">{{ invoiceInfo[0].due_date }}</span></p>
+                                                                            <p class="inv-due-date"> <span class="inv-title">Status: </span> <span class="inv-date badge {% if invoiceInfo[0].status == 'paid' %} badge-success {% else %} badge-danger {% endif %}"> {{ invoiceInfo[0].status | capitalize }} </span> </p>
                                                                         </div>
                                                                     </div>
 
@@ -225,7 +226,15 @@
                                                             <a href="javascript:void(0);" class="btn btn-secondary btn-print w-100 action-print" style="margin-bottom: 20px;">Print</a>
                                                         </div>
                                                         <div class=" col-md-12">
-                                                            <button type="button" class="btn btn-primary btn-download w-100"  id="download">Download</button>
+                                                            <button type="button" class="btn btn-primary btn-download w-100" style="margin-bottom: 20px;"  id="download">Download</button>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            {% if invoiceInfo[0].status == "unpaid" %}
+                                                                <button type="button" class="btn btn-info w-100"  data-bs-toggle="modal" data-bs-target="#kt_modal_1" style="margin-bottom: 20px;" id="download">Pay Invoice</button>
+                                                            {% else %}
+                                                                <a href="#" disabled="disabled" class="btn btn-info btn-download w-100" id="btn"  style="margin-bottom: 20px;">Paid</a>
+
+                                                            {% endif %}
                                                         </div>
 
                                                     </div>
@@ -250,21 +259,175 @@
             </div>
 
 </div>
+<style>
+    /* Set styles for the container holding the Card Element */
+    #uploadForm #card-element {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Set styles for the Card Element container */
+    #uploadForm .StripeElement {
+        background-color: white !important;
+        padding: 10px !important;
+        border-radius: 5px !important;
+    }
+
+    /* Set styles for the Card Element inputs */
+    #uploadForm .StripeElement input {
+        border: none !important;
+        outline: none !important;
+    }
+
+    /* Style the placeholder text */
+    #uploadForm .StripeElement ::placeholder {
+        color: #aab7c4 !important;
+    }
+
+    /* Style the inputs when they are focused */
+    #uploadForm .StripeElement :focus {
+        box-shadow: 0 0 5px rgba(81, 203, 238, 1) !important;
+    }
+
+    /* Additional style for the CardField input wrapper */
+    .CardField-input-wrapper {
+        background-color: #f7f7f7 !important;
+        padding: 10px !important;
+        border: 1px solid #ccc !important;
+        border-radius: 5px !important;
+    }
+
+    /* Ensure the card element fits within the modal */
+    #uploadForm .StripeElement {
+        width: 100%;
+    }
+</style>
+<div class="modal fade" tabindex="-1" id="kt_modal_1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pay with Debit/Credit Card</h5>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+                <!--end::Close-->
+            </div>
+            <form method="post" id="uploadForm">
+                <div class="modal-body">
+
+                    <div id="card-element"></div>
+                    <br>
+                    <input type="hidden" name="invoiceID" id="invoiceID" value="{{ invoiceInfo[0].id }}">
+                    <div id="card-errors" role="alert"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="btn">Pay Invoice</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- END MAIN CONTAINER -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ env.APP_URL }}assets/dash/assets/plugins/global/plugins.bundle.js"></script>
 <script src="{{ env.APP_URL }}assets/dash/assets/js/scripts.bundle.js"></script>
 <script src="{{ env.APP_URL }}assets/dashboard/src/assets/js/apps/invoice-preview.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('{{ Stripe_public_key }}');
+    var elements = stripe.elements();
+    var style = {
+        base: {
+            fontSize: '16px',
+            color: '#32325d',
+            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            fontSmoothing: 'antialiased',
+            '::placeholder': {
+                color: '#7e7e7e',
+            },
+        },
+        invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a',
+        },
+    };
+    var cardElement = elements.create('card', { style: style });
+    cardElement.mount('#card-element');
+
+    var form = document.getElementById('uploadForm');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        document.getElementById('btn').disabled = true;
+        document.getElementById("btn").innerHTML = "Loading...";
+
+        stripe.createToken(cardElement).then(function(result) {
+            if (result.error) {
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+                document.getElementById('btn').disabled = false;
+                document.getElementById("btn").innerHTML = "Pay Invoice";
+            } else {
+                stripe_tool(result.token.id);
+
+            }
+        });
+    });
+    function stripe_tool(stripeToken) {
+        $("#btn").prop("disabled", true);
+        var formData = new FormData(document.getElementById("uploadForm"));
+        formData.append('stripeToken', stripeToken);
+        $.ajax({
+            url: "/stripe/pay-invoice",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (data) {
+                data=JSON.parse(data);
+                console.log(data);
+                $("#btn").prop("disabled", false);
+                document.getElementById("btn").innerHTML = "Pay Invoice";
+                if (data['statusCode'] == '200') {
+                    location.reload();
+                    $('#result').html('<div class="alert alert-success">'+data['message']+'</div>');
+                    // window.location.href = "/contact-form";
+                } else {
+                    document.getElementById("uploadForm").reset();
+                    $('#card-errors').html('<div class="alert alert-danger">'+data['message']+'</div>');
+                }
+            },
+            error: function() {
+                // Re-enable the button in case of an error
+                $("#btn").prop("disabled", false);
+            }
+        });
+    }
+</script>
 <script>
     window.onload = function () {
         document.getElementById("download")
             .addEventListener("click", () => {
-                const invoice = this.document.getElementById("printableArea");
-                let x = "Invoice";
+                const printableArea = document.getElementById("printableArea");
+                let baseFilename = "Invoice";
+
+                // Generate a random number
+                let randomNum = Math.floor(Math.random() * 1000000); // Random number up to 1,000,000
+                let filename = `${baseFilename}_${randomNum}.pdf`; // Create filename with random number
 
                 var opt = {
-                    margin: 0,
-                    filename: x + '.pdf',
+                    margin: 0.5, // Set margin to 0.5 inch or any desired value
+                    filename: filename,
                     image: {
                         type: 'jpeg',
                         quality: 0.98
@@ -279,8 +442,9 @@
                         orientation: 'landscape', // Change orientation to 'landscape' for wider width
                     }
                 };
+
                 html2pdf().from(printableArea).set(opt).save();
-            })
+            });
     }
 </script>
 <script>
