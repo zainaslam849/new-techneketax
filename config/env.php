@@ -11,7 +11,7 @@ $env=array(
     "SITE_NAME"=>"CRM",
     "DESCRIPTION"=>"description",
     "KEYWORDS"=>"keywords",
-    "APP_URL"=> "https://techneketaxnew.local/",
+    "APP_URL"=> "https://techneketax.local/",
     "ADMIN_EMAIL"=> "info@crm.com",
     "SENDER_EMAIL"=> "info@crm.com",
     "TIME_ZONE"=> "Asia/Karachi",
@@ -124,5 +124,9 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
     $twig->addGlobal('Stripe_public_key', 'pk_test_51OgnsKB8z2Dlcg3z0Qz8mYPgaXouytYsnflrzr3hgWNNu91PY8ApCB2A6ZTbR49TZ59ag5KuLfIVIlBo2aCqgoZ900owqKbZDQ');
     $Stripe_secret_key='sk_test_51OgnsKB8z2Dlcg3z6ZQl607w3HUhJ3SQu7FupPI2XWwTaBBLdVZpYA7fpzDQBd8n9jpa9DsBUUuYnKoT9CKRcwV700c0vbYFoi';
 endif;
+//TWILIO SMS API
+$twilio_number= '+17609040397';
+$account_sid= 'ACd5c325433100e2baf794a9c92caeeb55';
+$auth_token='aa8115bbf571ff82e60ae6ef26bdf4fe';
 
 
