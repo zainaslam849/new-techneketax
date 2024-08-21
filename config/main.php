@@ -1305,7 +1305,7 @@ function sendSMS($clientNumber, $message){
     } catch (Exception $e) {
         // Log the error or handle it as needed
         error_log("Error sending SMS: " . $e->getMessage());
-        return false;
-            }
+        return false;
+        }
 }
 ?>
