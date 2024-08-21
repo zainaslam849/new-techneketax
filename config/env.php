@@ -18,9 +18,9 @@ $env=array(
 
     //PRODUCTION DATABASE CREDENTIALS
     "DATABASE_HOST"=>"localhost",
-    "DATABASE_NAME"=>"chai_chaisbekmls",
-    "DATABASE_USERNAME"=>"chai_chaisbekmls",
-    "DATABASE_PASSWORD"=>"ruhC-uIhw2iciEl#",
+    "DATABASE_NAME"=>"dev_tecgneketax",
+    "DATABASE_USERNAME"=>"dev_tecgneketax",
+    "DATABASE_PASSWORD"=>"7L36?3mue",
 
 
     //LOCAL DATABASE CREDENTIALS
@@ -30,11 +30,11 @@ $env=array(
     "LC_DATABASE_PASSWORD"=>"root",
 
     //SMTP CREDENTIALS
-    "SMTP_HOST"=>"smtp.mailtrap.io",
-    "SMTP_USERNAME"=>"9fe09591ec711e",
-    "SMTP_PASSWORD"=>"3204f9705346b4",
+    "SMTP_HOST"=>"smtp.mailgun.org",
+    "SMTP_USERNAME"=>"no-reply@mg.techneketax.com",
+    "SMTP_PASSWORD"=>"64fe7fa24fa4ce87d40483bd9eae2d3b-a26b1841-7a394aef",
     "SMTP_ENC"=>"tls",
-    "SMTP_PORT"=>"2525",
+    "SMTP_PORT"=>"587",
 );
 $assets_url="https://crm-cu.local";
 
