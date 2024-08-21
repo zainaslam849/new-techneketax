@@ -24,8 +24,7 @@ if($route == '/admin'):
     }else{
 
         if (!empty($_SESSION['users'])){
-
-            if ($_SESSION['users']['type'] == 'user'){
+            if ($_SESSION['users']['type'] == 'firm' || $_SESSION['users']['type'] == 'client'|| $_SESSION['users']['type'] == 'member'){
                 header("Location: /user/dashboard");
             }elseif ($_SESSION['users']['type'] == 'admin'){
                 header("Location: /admin/dashboard");
@@ -64,14 +63,12 @@ if($route == '/login'):
     }else{
 
         if (!empty($_SESSION['users'])){
-
-            if ($_SESSION['users']['type'] == 'user'){
+            if ($_SESSION['users']['type'] == 'firm' || $_SESSION['users']['type'] == 'client'|| $_SESSION['users']['type'] == 'member'){
                 header("Location: /user/dashboard");
             }elseif ($_SESSION['users']['type'] == 'admin'){
                 header("Location: /admin/dashboard");
             }
         }
-
         $seo = array(
             'title' => 'Login | Techneketax',
             'description' => 'Enter your username or email address to log in.',
@@ -81,6 +78,7 @@ if($route == '/login'):
     }
 endif;
 if($route == '/2fa/login'):
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //LOGIN
         if(isset($_POST['email']) && isset($_POST['password'])&& isset($_POST['twofa'])):
@@ -142,6 +140,13 @@ if(@$_SESSION['reset'] != ''):
     endif;
 endif;
 if($route == '/register'):
+    if (!empty($_SESSION['users'])){
+        if ($_SESSION['users']['type'] == 'firm' || $_SESSION['users']['type'] == 'client'|| $_SESSION['users']['type'] == 'member'){
+            header("Location: /user/dashboard");
+        }elseif ($_SESSION['users']['type'] == 'admin'){
+            header("Location: /admin/dashboard");
+        }
+    }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         //LOGIN

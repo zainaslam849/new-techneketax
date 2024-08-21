@@ -176,9 +176,9 @@ post('/admin/get_plan', 'controller/admin/PlanController.php');
 post('/admin/plan_edit', 'controller/admin/PlanController.php');
 
 get('/admin/profile', 'controller/admin/ProfileController.php');
+post('/admin/fetch_profile', 'controller/admin/ProfileController.php');
 post('/admin/profile', 'controller/admin/ProfileController.php');
-    get('/admin/security', 'controller/admin/ProfileController.php');
-    post('/admin/security', 'controller/admin/ProfileController.php');
+    get('/admin/profile/security', 'controller/admin/ProfileController.php');
     post('/admin/profile/password_change', 'controller/admin/ProfileController.php');
 
 

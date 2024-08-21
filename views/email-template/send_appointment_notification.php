@@ -191,8 +191,34 @@ $message='<!DOCTYPE html>
                                             <tr>
                                                 <td class="p-50 mpx-15" bgcolor="#000" style="border-radius: 0 0 10px 10px; padding: 50px;">
                                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                        <tbody><tr>
+                                                        <tbody>
+                                                                  <tr>
+                                                            <td align="center" class="pb-20" style="padding-bottom: 20px;">
 
+                                                                <!-- Socials -->
+                                                                <table border="0" cellspacing="0" cellpadding="0">
+                                                                    <tbody><tr>
+                                                                        <td class="img" width="34" style="font-size:0pt; line-height:0pt; text-align:left;">
+                                                                            <a href="'.@$company_facebook.'" target="_blank"><img src="'.$env['APP_URL'].'assets/img/facebook.svg" width="34" height="34" border="0" alt=""></a>
+                                                                        </td>
+                                                                        <td class="img" width="15" style="font-size:0pt; line-height:0pt; text-align:left;"></td>
+                                                                        <td class="img" width="34" style="font-size:0pt; line-height:0pt; text-align:left;">
+                                                                            <a href="'.@$company_tweet.'" target="_blank"><img src="'.$env['APP_URL'].'assets/img/twitter.svg" width="34" height="34" border="0" alt=""></a>
+                                                                        </td>
+
+                                                                        <td class="img" width="15" style="font-size:0pt; line-height:0pt; text-align:left;"></td>
+                                                                        <td class="img" width="34" style="font-size:0pt; line-height:0pt; text-align:left;">
+                                                                            <a href="'.@$company_linkedin.'" target="_blank"><img src="'.$env['APP_URL'].'assets/img/linkedin.svg" width="34" height="34" border="0" alt=""></a>
+                                                                        </td>
+
+                                                                        <td class="img" width="15" style="font-size:0pt; line-height:0pt; text-align:left;"></td>
+                                                                        <td class="img" width="34" style="font-size:0pt; line-height:0pt; text-align:left;">
+                                                                            <a href="'.@$company_github.'" target="_blank"><img src="'.$env['APP_URL'].'assets/img/github.svg" width="34" height="34" border="0" alt=""></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody></table>
+                                                                <!-- END Socials -->
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="text-14 lh-24 a-center c-white l-white pb-20" style="font-size:14px; font-family:PT Sans, Arial, sans-serif; min-width:auto !important; line-height: 24px; text-align:center; color:#fff; padding-bottom: 20px;">
@@ -201,8 +227,7 @@ $message='<!DOCTYPE html>
                                                                 <a href="tel:'.@$company_phone.'" target="_blank" class="link c-white" style="text-decoration:none; color:#ffffff;"><span class="link c-white" style="text-decoration:none; color:#fff;">'.@$company_phone.'</span></a>
                                                                 <br>
                                                                 <a href="mailto:'.@$company_email.'" target="_blank" class="link c-white" style="text-decoration:none; color:#ffffff;"><span class="link c-white" style="text-decoration:none; color:#fff;">'.@$company_email.'</span></a>
-                                                                <br>
-                                                                <p style="color: #fff"> You are receiving this email because '. $company_name .' set an appointment<a href="#" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://paywithmoon.com&amp;source=gmail&amp;ust=1666436123784000&amp;usg=AOvVaw1gmBJ5oK0QGzrUsrMq9kkE" style="color:#ffffff !important;">'.$env['SiTE_NAME'].'</a>  If this wasn"t you, you can safely ignore this email.</p>
+                                                          
                                                             </td>
                                                         </tr>
                                                         </tbody></table>

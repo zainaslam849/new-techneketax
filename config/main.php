@@ -679,14 +679,18 @@ function TwoFA($email, $password, $table_name){
                         @$company_phone =  @$AdminInfo[0]['phone'];
                         @$company_email =  @$AdminInfo[0]['email'];
                     @$company_address =  @$AdminInfo[0]['address'];
+                    @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                    @$company_tweet =  @$AdminInfo[0]['tweet'];
+                    @$company_facebook =  @$AdminInfo[0]['facebook'];
+                    @$company_github =  @$AdminInfo[0]['github'];
                         @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
                     $UserInfo = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
-                    sendSMS($UserInfo[0]['phone'],'Two-factor Authentication For Your Account At- '.$company_name.'\n   Hello,You are receiving this SMS because a Two-Factor Authentication request was made for your account.\n'.@$verify_code.'');
+                    sendSMS($UserInfo[0]['phone'],'Your Two-Factor Authentication (2FA) Verification Code\n   Hello,'.$UserInfo[0]['fname'].' '.$UserInfo[0]['lname'].'\n To enhance the security of your account, we require a verification code as part of our two-factor authentication process. Please use the code below to complete your login: \n'.@$verify_code.'');
 
                     include "./views/email-template/login2fa.php";
-                    mailSender($env['SENDER_EMAIL'],$email,'2FA For Login - '.$env['SITE_NAME'],$message,$mail);
+                    mailSender($env['SENDER_EMAIL'],$email,'Your Two-Factor Authentication (2FA) Verification Code - '.$env['SITE_NAME'],$message,$mail);
                     http_response_code(200);
-                    return json_encode(array("statusCode" => 200, "message"=>"2Fa For Login email has been send to your inbox." , "path"=>"/2fa/login"));
+                    return json_encode(array("statusCode" => 200, "message"=>"Two-factor Authentication For Login email has been send to your inbox." , "path"=>"/2fa/login"));
                 }else{
                     http_response_code(202);
                     return json_encode(array("statusCode" => 202, "message"=>"Sorry! you are blocked!"));
@@ -828,11 +832,15 @@ function userRegister($first_name, $last_name, $email,$phone, $password, $accoun
                     @$company_phone =  @$AdminInfo[0]['phone'];
                     @$company_email =  @$AdminInfo[0]['email'];
                     @$company_address =  @$AdminInfo[0]['address'];
+                @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                @$company_tweet =  @$AdminInfo[0]['tweet'];
+                @$company_facebook =  @$AdminInfo[0]['facebook'];
+                @$company_github =  @$AdminInfo[0]['github'];
                     @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
-
+                $UserInfo = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
 
                     include "views/email-template/WelcomeRegister.php";
-    mailSender($env['SENDER_EMAIL'],$email,'Welcome at - '.$env['SITE_NAME'],$message,$mail);
+    mailSender($env['SENDER_EMAIL'],$email,'Welcome to '.$company_name.' - We are Excited to Have You',$message,$mail);
                 return json_encode(array("statusCode" => 200, "message"=>"Successfully Registered."));
 
             }catch(PDOException $e) {
@@ -957,13 +965,19 @@ function forgetPasswordEmail($email, $table_name){
     @$company_phone =  @$AdminInfo[0]['phone'];
     @$company_email =  @$AdminInfo[0]['email'];
     @$company_address =  @$AdminInfo[0]['address'];
+    @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+    @$company_tweet =  @$AdminInfo[0]['tweet'];
+    @$company_facebook =  @$AdminInfo[0]['facebook'];
+    @$company_github =  @$AdminInfo[0]['github'];
+
+
     @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
     $UserInfo = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
-    sendSMS($UserInfo[0]['phone'],'Reset Your Password At- '.$company_name.'\n  Hello,You are receiving this SMS because a password reset request was made for your account.\n'.@$verify_code.'');
+    sendSMS($UserInfo[0]['phone'],'Password Reset Request - Your Verification Code- '.$company_name.'\n Hello,'.$UserInfo[0]['fname'].' '.$UserInfo[0]['lname'].'\n\n We received a request to reset the password for your account. To proceed, please use the verification code provided below:\n'.@$verify_code.'');
 
     include "views/email-template/forget-password.php";
 
-    mailSender($env['SENDER_EMAIL'],$email,'Forget Password - '.$env['SITE_NAME'],$message,$mail);
+    mailSender($env['SENDER_EMAIL'],$email,'Password Reset Request - Your Verification Code - '.$env['SITE_NAME'],$message,$mail);
 
 
 }

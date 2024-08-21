@@ -131,28 +131,42 @@ $message='<!DOCTYPE html>
                                                                                             </tr>
                                                                                             <tr>
                                                                                                 <td class="title-36 a-center pb-15" style="font-size:36px; line-height:40px; color:#282828 !important; font-family:PT Sans, Arial, sans-serif; min-width:auto !important; text-align:center; padding-bottom: 15px;">
-                                                                                                    <strong>'.$company_name.' Send You an invoice</strong>
+                                                                                                    <strong>Invoice Sent - '.$invoice_number.'</strong>
                                                                                                 </td>
                                                                                             </tr>
                                                                                             <tr>
                                                                                                 <td class="text-16 lh-26 a-center pb-25" style="font-size:16px; color:#6e6e6e !important; font-family:PT Sans, Arial, sans-serif; min-width:auto !important; line-height: 26px; text-align:center; padding-bottom: 25px;">
-                                                                                                    '.$send_message.'
+                                                                                                  We have sent you an invoice through your dashboard. Here are the details:  
                                                                                                     <br>
-
-                                                                                                    <br>
-                                                                                                </td>
-                                                                                            </tr>
-                                                                                     
-                                                                                            <tr>
-                                                                                                <td class="text-16 lh-26 a-center pb-25" style="font-size:16px; color:#6e6e6e !important; font-family:PT Sans, Arial, sans-serif; min-width:auto !important; line-height: 26px; text-align:center; padding-bottom: 25px;">
-                                                                                                    <br>
-                                                                                                    If you did not request this verification, please ignore this email.
+                                                                                               Invoice Number: '.$invoice_number.'.<br>
+                                                                               
+                                                                                              Amount: $'.$final_total.'.<br>
+                                                                                                  Due Date: '.$due_date.'.<br>
+                                                                                                 Description: '.$send_message.'.<br>
+                                                                                                 You can view the details using the link below:
                                                                                                     <br>
                                                                                                     Thank you,
                                                                                                     <br>
-                                                                                                    '.$company_name.' Team
+                                                                                                    '.$company_name.' Team     
+                                                                                                    
                                                                                                 </td>
                                                                                             </tr>
+                                                                                            <tr>
+                                                                                                <td align="center">
+                                                                                                    <!-- Button -->
+                                                                                                    <table border="0" cellspacing="0" cellpadding="0" style="min-width: 200px;">
+                                                                                                        <tbody><tr>
+                                                                                                            <td class="btn-16 c-white l-white" style="background-color:#ED141F ; font-size:16px; line-height:20px; mso-padding-alt:15px 35px; font-family:PT Sans, Arial, sans-serif; text-align:center; font-weight:bold; text-transform:uppercase; border-radius:25px; min-width:auto !important; color:#ffffff;">
+                                                                                                                <a href="'.$env['APP_URL'].'invoice/view/'.$insert.'" target="_blank" class="link c-white" style="display: block; padding: 15px 35px; text-decoration:none; color:#ffffff;">
+                                                                                                                    <span class="link c-white" style="text-decoration:none; color:#ffffff;">VIEW INVOICE</span>
+                                                                                                                </a>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        </tbody></table>
+                                                                                                    <!-- END Button -->
+                                                                                                </td>
+                                                                                            </tr>
+
                                                                                         </table>
                                                                                     </td>
                                                                                 </tr>
@@ -174,18 +188,43 @@ $message='<!DOCTYPE html>
                                             <tr>
                                                 <td class="p-50 mpx-15" bgcolor="#000" style="border-radius: 0 0 10px 10px; padding: 50px;">
                                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                        <tbody><tr>
+                                                        <tbody>
+                                                                   <tr>
+                                                            <td align="center" class="pb-20" style="padding-bottom: 20px;">
 
+                                                                <!-- Socials -->
+                                                                <table border="0" cellspacing="0" cellpadding="0">
+                                                                    <tbody><tr>
+                                                                        <td class="img" width="34" style="font-size:0pt; line-height:0pt; text-align:left;">
+                                                                            <a href="'.@$company_facebook.'" target="_blank"><img src="'.$env['APP_URL'].'assets/img/facebook.svg" width="34" height="34" border="0" alt=""></a>
+                                                                        </td>
+                                                                        <td class="img" width="15" style="font-size:0pt; line-height:0pt; text-align:left;"></td>
+                                                                        <td class="img" width="34" style="font-size:0pt; line-height:0pt; text-align:left;">
+                                                                            <a href="'.@$company_tweet.'" target="_blank"><img src="'.$env['APP_URL'].'assets/img/twitter.svg" width="34" height="34" border="0" alt=""></a>
+                                                                        </td>
+
+                                                                        <td class="img" width="15" style="font-size:0pt; line-height:0pt; text-align:left;"></td>
+                                                                        <td class="img" width="34" style="font-size:0pt; line-height:0pt; text-align:left;">
+                                                                            <a href="'.@$company_linkedin.'" target="_blank"><img src="'.$env['APP_URL'].'assets/img/linkedin.svg" width="34" height="34" border="0" alt=""></a>
+                                                                        </td>
+
+                                                                        <td class="img" width="15" style="font-size:0pt; line-height:0pt; text-align:left;"></td>
+                                                                        <td class="img" width="34" style="font-size:0pt; line-height:0pt; text-align:left;">
+                                                                            <a href="'.@$company_github.'" target="_blank"><img src="'.$env['APP_URL'].'assets/img/github.svg" width="34" height="34" border="0" alt=""></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody></table>
+                                                                <!-- END Socials -->
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="text-14 lh-24 a-center c-white l-white pb-20" style="font-size:14px; font-family:PT Sans, Arial, sans-serif; min-width:auto !important; line-height: 24px; text-align:center; color:#fff; padding-bottom: 20px;">
-                                                                 '.@$company_address.'
-                                                               <br>
+                                                                '.@$company_address.'
+                                                                <br>
                                                                 <a href="tel:'.@$company_phone.'" target="_blank" class="link c-white" style="text-decoration:none; color:#ffffff;"><span class="link c-white" style="text-decoration:none; color:#fff;">'.@$company_phone.'</span></a>
                                                                 <br>
                                                                 <a href="mailto:'.@$company_email.'" target="_blank" class="link c-white" style="text-decoration:none; color:#ffffff;"><span class="link c-white" style="text-decoration:none; color:#fff;">'.@$company_email.'</span></a>
-                                                                <br>
-                                                                <p style="color: #fff">You are receiving this email because '. $company_name .' send you a invoice <a href="#" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://paywithmoon.com&amp;source=gmail&amp;ust=1666436123784000&amp;usg=AOvVaw1gmBJ5oK0QGzrUsrMq9kkE" style="color:#ffffff !important;">'.$env['SiTE_NAME'].'</a>  If this wasn"t you, you can safely ignore this email.</p>
+                                                               
                                                             </td>
                                                         </tr>
                                                         </tbody></table>

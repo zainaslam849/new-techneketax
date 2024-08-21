@@ -47,7 +47,7 @@
             <!--end::Container-->
         </div>
         <div class="post d-flex flex-column-fluid" id="kt_post">
-            <div id="kt_content_container" class="container-xxl">
+            <div id="kt_content_container" class="container-fluid">
                 <div class="card mb-5 mb-xl-10">
                     <div class="card-body pt-9 pb-0">
                         <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
@@ -181,6 +181,7 @@
 
                     <div class="card-body">
                         <div class="row gx-9 gy-6" id="reloadAddress">
+                            {% if billingAddresses  %}
                             {% for address in billingAddresses %}
                                 <div class="col-xl-6">
                                     <input type="radio" class="btn-check d-none billingAddress" name="billingAddress" value="{{ address.id }}" id="billingAddress{{ address.id }}"  {% if address.status == "primary" %}checked{% endif %}/>
@@ -203,10 +204,16 @@
                                     </label>
                                 </div>
                             {% endfor %}
-
                             <div class="col-xl-12">
                                 <button class="btn btn-sm btn-primary me-3 float-end" onclick="billing_address_make_it_primary()"  id="btn-payment" >Make Primary</button>
                             </div>
+                            {% else %}
+                            <div class="col-xl-12 text-center">
+                             <h4>No Records Available</h4>
+                            </div>
+                            {% endif %}
+
+
                                 <div class="col-xl-6">
                                 <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed flex-stack h-xl-100 mb-10 p-6">
                                     <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">

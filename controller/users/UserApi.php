@@ -239,17 +239,23 @@ if($_GET['page_name']=="view_clients"){
 
 
             $status = array("statusView" => $statusView);
-
+            if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                $profile_image = $user["profile_image"];
+            }else{
+                $profile_image = "avatar.png";
+            }
             $userView = array(
-                "userView" => '
-                          <div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">' . $user['fname'] .' '.  $user['lname'] . '</span>
-        <small class="emp_post text-truncate">'.  $user['email'] . '</small>
-    </div>
-</div>'
+                "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
             );
-
             $srNo++;
             $ids = array("ids" => "$srNo");
             $check_arr[] = array_merge($ids, $user,$userView, $status, $action);
@@ -303,15 +309,23 @@ if($_GET['page_name']=="view_clients_unassigned"){
 
                 $status = array("statusView" => $statusView);
 
-                        $userView = array(
-                            "userView" => '
-                                      <div class="d-flex justify-content-start align-items-center user-name">
-                <div class="d-flex flex-column">
-                    <span class="emp_name text-truncate text-heading fw-medium">' . $user['fname'] .' '.  $user['lname'] . '</span>
-                    <small class="emp_post text-truncate">'.  $user['email'] . '</small>
-                </div>
-            </div>'
-                        );
+                    if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                        $profile_image = $user["profile_image"];
+                    }else{
+                        $profile_image = "avatar.png";
+                    }
+                    $userView = array(
+                        "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
+                    );
 
                 $srNo++;
                 $ids = array("ids" => "$srNo");
@@ -375,16 +389,23 @@ if($_GET['page_name']=="view_clients_inProgress"){
 
 
             $status = array("statusView" => $statusView);
-
-            $userView = array(
-                "userView" => '
-                          <div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">' . $user['fname'] .' '.  $user['lname'] . '</span>
-        <small class="emp_post text-truncate">'.  $user['email'] . '</small>
-    </div>
-</div>'
-            );
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                    $profile_image = $user["profile_image"];
+                }else{
+                    $profile_image = "avatar.png";
+                }
+                $userView = array(
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
+                );
 
             $srNo++;
             $ids = array("ids" => "$srNo");
@@ -449,15 +470,23 @@ if($_GET['page_name']=="view_clients_completed"){
 
             $status = array("statusView" => $statusView);
 
-            $userView = array(
-                "userView" => '
-                          <div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">' . $user['fname'] .' '.  $user['lname'] . '</span>
-        <small class="emp_post text-truncate">'.  $user['email'] . '</small>
-    </div>
-</div>'
-            );
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                    $profile_image = $user["profile_image"];
+                }else{
+                    $profile_image = "avatar.png";
+                }
+                $userView = array(
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
+                );
 
             $srNo++;
             $ids = array("ids" => "$srNo");
@@ -517,14 +546,22 @@ if($_GET['page_name']=="view_members"){
 
             $status = array("statusView" => $statusView);
 
+            if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                $profile_image = $user["profile_image"];
+            }else{
+                $profile_image = "avatar.png";
+            }
             $userView = array(
-                "userView" => '
-                          <div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">' . $user['fname'] .' '.  $user['lname'] . '</span>
-        <small class="emp_post text-truncate">'.  $user['email'] . '</small>
-    </div>
-</div>'
+                "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
             );
 
             $srNo++;

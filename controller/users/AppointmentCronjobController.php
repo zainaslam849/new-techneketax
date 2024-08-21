@@ -18,6 +18,10 @@ foreach ($appointments as $appointment) {
             @$company_phone =  @$companyInfoFirm[0]['phone'];
             @$company_email =  @$companyInfoFirm[0]['email'];
             @$company_address =  @$companyInfoFirm[0]['address'];
+            @$company_linkedin =  @$companyInfo[0]['linkedin'];
+            @$company_tweet =  @$companyInfo[0]['tweet'];
+            @$company_facebook =  @$companyInfo[0]['facebook'];
+            @$company_github =  @$companyInfo[0]['github'];
             @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfoFirm[0]['company_image'];
         }else{
             $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
@@ -25,6 +29,10 @@ foreach ($appointments as $appointment) {
             @$company_phone =  @$AdminInfo[0]['phone'];
             @$company_email =  @$AdminInfo[0]['email'];
             @$company_address =  @$AdminInfo[0]['address'];
+            @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+            @$company_tweet =  @$AdminInfo[0]['tweet'];
+            @$company_facebook =  @$AdminInfo[0]['facebook'];
+            @$company_github =  @$AdminInfo[0]['github'];
             @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
         }
 
@@ -42,6 +50,10 @@ foreach ($appointments as $appointment) {
                 @$company_phone =  @$companyInfo[0]['phone'];
                 @$company_email =  @$companyInfo[0]['email'];
                 @$company_address =  @$companyInfo[0]['address'];
+                @$company_linkedin =  @$companyInfo[0]['linkedin'];
+                @$company_tweet =  @$companyInfo[0]['tweet'];
+                @$company_facebook =  @$companyInfo[0]['facebook'];
+                @$company_github =  @$companyInfo[0]['github'];
                 @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
             }else{
                 $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
@@ -49,6 +61,10 @@ foreach ($appointments as $appointment) {
                 @$company_phone =  @$AdminInfo[0]['phone'];
                 @$company_email =  @$AdminInfo[0]['email'];
                 @$company_address =  @$AdminInfo[0]['address'];
+                @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                @$company_tweet =  @$AdminInfo[0]['tweet'];
+                @$company_facebook =  @$AdminInfo[0]['facebook'];
+                @$company_github =  @$AdminInfo[0]['github'];
                 @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
             }
         }else{
@@ -57,6 +73,10 @@ foreach ($appointments as $appointment) {
             @$company_phone =  @$AdminInfo[0]['phone'];
             @$company_email =  @$AdminInfo[0]['email'];
             @$company_address =  @$AdminInfo[0]['address'];
+            @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+            @$company_tweet =  @$AdminInfo[0]['tweet'];
+            @$company_facebook =  @$AdminInfo[0]['facebook'];
+            @$company_github =  @$AdminInfo[0]['github'];
             @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
         }
         sendSMS($companyInfo[0]['phone'],'An Hour left in meeting with '.$company_name.'\n\n Title : '.$appointment['title'].' \n Date & Time : '.$formattedDate.' \n Purpose of this appointment is '.$appointment['purpose'].'.');

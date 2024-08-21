@@ -43,29 +43,40 @@ if($route == '/admin/api/category'){
             // Determine user status
             if ($user['status'] == "active") {
                 $statusView = "<span class='badge badge-light-success'>Active</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='badge badge-light-success text-start me-2 action-edit' ><i class='fa-solid fa-unlock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
             } else if ($user['status'] == "block") {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
             }
-            // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
-            $action = array('action' =>  $userStatus.'<a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-pen-to-square"></i></a>
-            <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>');
 
+            // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+            $action = array('action' =>  $userStatus.'
+                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           
+                      ');
 
             $status = array("statusView" => $statusView);
 
+            if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                $profile_image = $user["profile_image"];
+            }else{
+                $profile_image = "avatar.png";
+            }
             $userView = array(
-                "userView" => '
-                          <div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">' . $user['fname'] .' '.  $user['lname'] . '</span>
-        <small class="emp_post text-truncate">'.  $user['email'] . '</small>
-    </div>
-</div>'
+                "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
             );
 
             $srNo++;
@@ -107,39 +118,58 @@ if($_GET['page_name']=="view_members")
                 // Determine user status
                 if ($user['status'] == "active") {
                     $statusView = "<span class='badge badge-light-success'>Active</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='badge badge-light-success text-start me-2 action-edit' ><i class='fa-solid fa-unlock'></i></a>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
                 } else if ($user['status'] == "block") {
                     $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
                 } else {
                     $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
                 }
 
-
                 // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
-                $action = array('action' =>  $userStatus.'<a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-pen-to-square"></i></a>
-            <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>');
+                $action = array('action' =>  $userStatus.'
+                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           
+                      ');
 
                 $FirmInfo = $h->table('users')->select()->where('id', '=', $user['firm_id'])->orderBy('id', 'desc')->fetchAll();
+                if ($FirmInfo[0]["profile_image"] != '' && $FirmInfo[0]["profile_image"] != 'null'){
+                    $profile_image = $FirmInfo[0]["profile_image"];
+                }else{
+                    $profile_image = "avatar.png";
+                }
                 $firmView = array(
-                    "firmView" => '<div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">'.$FirmInfo[0]['fname'].' '.$FirmInfo[0]['lname'].'</span>
-        <small class="emp_post text-truncate">'.$FirmInfo[0]['email'].'</small>
-    </div>
-</div>'
+                    "firmView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $FirmInfo[0]['fname'] .' '.  $FirmInfo[0]['lname'] . '</a>
+															<span>'.  $FirmInfo[0]['email'] . '</span>
+														</div></div>'
                 );
                 $status = array("statusView" => $statusView);
 
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                    $profile_image = $user["profile_image"];
+                }else{
+                    $profile_image = "avatar.png";
+                }
                 $userView = array(
-                    "userView" => '
-                          <div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">' . $user['fname'] .' '.  $user['lname'] . '</span>
-        <small class="emp_post text-truncate">'.  $user['email'] . '</small>
-    </div>
-</div>'
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
                 );
 
 
@@ -180,41 +210,58 @@ if($_GET['page_name']=="view_clients") {
 
         if (!empty($users)) {
             foreach ($users as $user) {
-                // Determine user status
                 if ($user['status'] == "active") {
                     $statusView = "<span class='badge badge-light-success'>Active</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='badge badge-light-success text-start me-2 action-edit' ><i class='fa-solid fa-unlock'></i></a>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
                 } else if ($user['status'] == "block") {
                     $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
                 } else {
                     $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
                 }
+
                 // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
-                $action = array('action' =>  $userStatus.'<a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-pen-to-square"></i></a>
-            <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>');
-
-
+                $action = array('action' =>  $userStatus.'
+                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           
+                      ');
                 $status = array("statusView" => $statusView);
                 $FirmInfo = $h->table('users')->select()->where('id', '=', $user['firm_id'])->orderBy('id', 'desc')->fetchAll();
+                if ($FirmInfo[0]["profile_image"] != '' && $FirmInfo[0]["profile_image"] != 'null'){
+                    $profile_image = $FirmInfo[0]["profile_image"];
+                }else{
+                    $profile_image = "avatar.png";
+                }
                 $firmView = array(
-                    "firmView" => '<div class="d-flex justify-content-start align-items-center user-name">
-  
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">'.$FirmInfo[0]['fname'].' '.$FirmInfo[0]['lname'].'</span>
-        <small class="emp_post text-truncate">'.$FirmInfo[0]['email'].'</small>
-    </div>
-</div>'
+                    "firmView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $FirmInfo[0]['fname'] .' '.  $FirmInfo[0]['lname'] . '</a>
+															<span>'.  $FirmInfo[0]['email'] . '</span>
+														</div></div>'
                 );
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                    $profile_image = $user["profile_image"];
+                }else{
+                    $profile_image = "avatar.png";
+                }
                 $userView = array(
-                    "userView" => '
-                          <div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">' . $user['fname'] .' '.  $user['lname'] . '</span>
-        <small class="emp_post text-truncate">'.  $user['email'] . '</small>
-    </div>
-</div>'
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
                 );
 
                 $srNo++;

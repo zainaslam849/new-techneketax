@@ -117,6 +117,10 @@ if($route == '/user/request_for_document'):
                     @$company_phone =  @$companyInfo[0]['phone'];
                     @$company_email =  @$companyInfo[0]['email'];
                     @$company_address =  @$companyInfo[0]['address'];
+                    @$company_linkedin =  @$companyInfo[0]['linkedin'];
+                    @$company_tweet =  @$companyInfo[0]['tweet'];
+                    @$company_facebook =  @$companyInfo[0]['facebook'];
+                    @$company_github =  @$companyInfo[0]['github'];
                     @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
                 }else{
                     $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
@@ -124,6 +128,10 @@ if($route == '/user/request_for_document'):
                     @$company_phone =  @$AdminInfo[0]['phone'];
                     @$company_email =  @$AdminInfo[0]['email'];
                     @$company_address =  @$AdminInfo[0]['address'];
+                    @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                    @$company_tweet =  @$AdminInfo[0]['tweet'];
+                    @$company_facebook =  @$AdminInfo[0]['facebook'];
+                    @$company_github =  @$AdminInfo[0]['github'];
                     @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
                 }
             }else{
@@ -132,9 +140,13 @@ if($route == '/user/request_for_document'):
                 @$company_phone =  @$AdminInfo[0]['phone'];
                 @$company_email =  @$AdminInfo[0]['email'];
                 @$company_address =  @$AdminInfo[0]['address'];
+                @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                @$company_tweet =  @$AdminInfo[0]['tweet'];
+                @$company_facebook =  @$AdminInfo[0]['facebook'];
+                @$company_github =  @$AdminInfo[0]['github'];
                 @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
             }
-            sendSMS($companyInfo[0]['phone'],''.@$company_name.' request for document\n\n '.$firm_des.' \n');
+            sendSMS($companyInfo[0]['phone'],''.@$company_name.' Request for document\n\n '.$firm_des.' \n');
 
             include "views/email-template/firmRequestDocument.php";
             mailSender($env['SENDER_EMAIL'],$email,'Request For Document - '.$env['SITE_NAME'],$message,$mail);

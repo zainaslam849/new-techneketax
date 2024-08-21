@@ -38,6 +38,10 @@ if($route == '/user/send_invite'):
                         @$company_phone =  @$companyInfo[0]['phone'];
                         @$company_email =  @$companyInfo[0]['email'];
                         @$company_address =  @$companyInfo[0]['address'];
+                        @$company_linkedin =  @$companyInfo[0]['linkedin'];
+                        @$company_tweet =  @$companyInfo[0]['tweet'];
+                        @$company_facebook =  @$companyInfo[0]['facebook'];
+                        @$company_github =  @$companyInfo[0]['github'];
                         @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
                     }else{
                         $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
@@ -45,6 +49,10 @@ if($route == '/user/send_invite'):
                         @$company_phone =  @$AdminInfo[0]['phone'];
                         @$company_email =  @$AdminInfo[0]['email'];
                         @$company_address =  @$AdminInfo[0]['address'];
+                        @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                        @$company_tweet =  @$AdminInfo[0]['tweet'];
+                        @$company_facebook =  @$AdminInfo[0]['facebook'];
+                        @$company_github =  @$AdminInfo[0]['github'];
                         @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
                     }
                 }else{
@@ -53,11 +61,15 @@ if($route == '/user/send_invite'):
                     @$company_phone =  @$AdminInfo[0]['phone'];
                     @$company_email =  @$AdminInfo[0]['email'];
                     @$company_address =  @$AdminInfo[0]['address'];
+                    @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                    @$company_tweet =  @$AdminInfo[0]['tweet'];
+                    @$company_facebook =  @$AdminInfo[0]['facebook'];
+                    @$company_github =  @$AdminInfo[0]['github'];
                     @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
 
                 }
                 include "views/email-template/invite.php";
-                mailSender($env['SENDER_EMAIL'], $email, 'Invitation From ' . $users[0]['fname'] . ' ' . $users[0]['lname'] . ' at - ' . $env['SITE_NAME'], $message, $mail);
+                mailSender($env['SENDER_EMAIL'], $email, 'Invitation to Join '.@$company_name.' - '.$companyInfo[0]['fname'].' '.$companyInfo[0]['lname'], $message, $mail);
                 echo "1";
                 exit();
             }else{

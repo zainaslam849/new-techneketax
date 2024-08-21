@@ -9,7 +9,6 @@ $seo = array(
 
 echo $twig->render('user/invoice/list.twig', ['seo' => $seo]);
 endif;
-
 if($route == '/user/invoice/add'):
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_POST['firm_name'])) {
@@ -123,6 +122,10 @@ if($route == '/user/invoice/add'):
                             @$company_phone =  @$companyInfo[0]['phone'];
                             @$company_email =  @$companyInfo[0]['email'];
                             @$company_address =  @$companyInfo[0]['address'];
+                            @$company_linkedin =  @$companyInfo[0]['linkedin'];
+                            @$company_tweet =  @$companyInfo[0]['tweet'];
+                            @$company_facebook =  @$companyInfo[0]['facebook'];
+                            @$company_github =  @$companyInfo[0]['github'];
                             @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
                         }else{
                             $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
@@ -130,13 +133,17 @@ if($route == '/user/invoice/add'):
                             @$company_phone =  @$AdminInfo[0]['phone'];
                             @$company_email =  @$AdminInfo[0]['email'];
                             @$company_address =  @$AdminInfo[0]['address'];
+                            @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                            @$company_tweet =  @$AdminInfo[0]['tweet'];
+                            @$company_facebook =  @$AdminInfo[0]['facebook'];
+                            @$company_github =  @$AdminInfo[0]['github'];
                             @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
                         }
 
-                    sendSMS($companyInfo[0]['phone'],''.@$company_name.' Send You an invoice \n\n  '.$send_message.'');
+                    sendSMS($companyInfo[0]['phone'],'Invoice Sent - '.$invoice_number.' \n\n  '.$send_message.'');
 
                     include "views/email-template/invoice.php";
-                    mailSender($firm_email, $send_email, @$company_name . ' send you An Invoice at - ' . $env['SITE_NAME'], $message, $mail);
+                    mailSender($firm_email, $send_email, 'Invoice Sent - '.$invoice_number, $message, $mail);
                 }
                 echo json_encode(array("statusCode" => "1", "id" => "$insert"));
                 exit();
@@ -164,17 +171,20 @@ if($route == '/user/invoice/add'):
             $company_name = $CompanyInfos[0]['company_name'];
             $company_email = $CompanyInfos[0]['email'];
             $company_phone = $CompanyInfos[0]['phone'];
+            $company_address = $firmInfo[0]['billing_address'];
             $profile_image = $CompanyInfos[0]['profile_image'];
         }else{
             $company_name = $AdminInfos[0]['company_name'];
             $company_email = $AdminInfos[0]['email'];
             $company_phone = $AdminInfos[0]['phone'];
+            $company_address = $AdminInfos[0]['address'];
             $profile_image = $AdminInfos[0]['profile_image'];
         }
         $CompanyInfo = array(
             'company_name' => $company_name,
             'email' => $company_email,
             'phone' => $company_phone,
+            'address' => $company_address,
             'profile_image' => $profile_image
         );
         echo $twig->render('user/invoice/add.twig', ['seo' => $seo,'firmInfo' => $firmInfo,'CompanyInfo' => $CompanyInfo,'firmPaymentInfo' => $firmPaymentInfo,'firmBillingInfo' => $firmBillingInfo,'clients' => $users,'invoiceNumber' => $invoiceNumber,'countries' => $CountriesInfo]);

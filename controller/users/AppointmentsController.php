@@ -201,6 +201,10 @@ if($route == '/user/add/appointments'):
                                 @$company_phone =  @$companyInfo[0]['phone'];
                                 @$company_email =  @$companyInfo[0]['email'];
                                 @$company_address =  @$companyInfo[0]['address'];
+                                @$company_linkedin =  @$companyInfo[0]['linkedin'];
+                                @$company_tweet =  @$companyInfo[0]['tweet'];
+                                @$company_facebook =  @$companyInfo[0]['facebook'];
+                                @$company_github =  @$companyInfo[0]['github'];
                                 @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
                             }else{
                                 $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
@@ -208,6 +212,10 @@ if($route == '/user/add/appointments'):
                                 @$company_phone =  @$AdminInfo[0]['phone'];
                                 @$company_email =  @$AdminInfo[0]['email'];
                                 @$company_address =  @$AdminInfo[0]['address'];
+                                @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                                @$company_tweet =  @$AdminInfo[0]['tweet'];
+                                @$company_facebook =  @$AdminInfo[0]['facebook'];
+                                @$company_github =  @$AdminInfo[0]['github'];
                                 @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
                             }
                         }else{
@@ -216,11 +224,15 @@ if($route == '/user/add/appointments'):
                             @$company_phone =  @$AdminInfo[0]['phone'];
                             @$company_email =  @$AdminInfo[0]['email'];
                             @$company_address =  @$AdminInfo[0]['address'];
+                            @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                            @$company_tweet =  @$AdminInfo[0]['tweet'];
+                            @$company_facebook =  @$AdminInfo[0]['facebook'];
+                            @$company_github =  @$AdminInfo[0]['github'];
                             @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
                         }
-                        sendSMS($ClientInfo[0]['phone'],''.@$company_name.' Set an appointment at '. $formattedDate .'\n\n Title : '.$title.' \n Date & Time : '.$formattedDate.' \n Purpose of this appointment is '.$purpose.'.');
+                        sendSMS($ClientInfo[0]['phone'],'Your Appointment Has Been Scheduled - ' .$title.'\n\n Title : '.$title.' \n Date & Time : '.$formattedDate.' \n Purpose of this appointment is '.$purpose.'.');
                         include "views/email-template/add_appointment.php";
-                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], @$company_name . 'Set an appointment at ' . $formattedDate . ' at - ' . $env['SITE_NAME'], $message, $mail);
+                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], 'Your Appointment Has Been Scheduled - ' .$title, $message, $mail);
                     }
                 }
                 echo "1";
@@ -264,6 +276,10 @@ if($route == '/user/update/appointments'):
                                 @$company_phone =  @$companyInfo[0]['phone'];
                                 @$company_email =  @$companyInfo[0]['email'];
                                 @$company_address =  @$companyInfo[0]['address'];
+                                @$company_linkedin =  @$companyInfo[0]['linkedin'];
+                                @$company_tweet =  @$companyInfo[0]['tweet'];
+                                @$company_facebook =  @$companyInfo[0]['facebook'];
+                                @$company_github =  @$companyInfo[0]['github'];
                                 @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
                             }else{
                                 $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
@@ -271,6 +287,10 @@ if($route == '/user/update/appointments'):
                                 @$company_phone =  @$AdminInfo[0]['phone'];
                                 @$company_email =  @$AdminInfo[0]['email'];
                                 @$company_address =  @$AdminInfo[0]['address'];
+                                @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                                @$company_tweet =  @$AdminInfo[0]['tweet'];
+                                @$company_facebook =  @$AdminInfo[0]['facebook'];
+                                @$company_github =  @$AdminInfo[0]['github'];
                                 @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
                             }
                         }else{
@@ -279,11 +299,15 @@ if($route == '/user/update/appointments'):
                             @$company_phone =  @$AdminInfo[0]['phone'];
                             @$company_email =  @$AdminInfo[0]['email'];
                             @$company_address =  @$AdminInfo[0]['address'];
+                            @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                            @$company_tweet =  @$AdminInfo[0]['tweet'];
+                            @$company_facebook =  @$AdminInfo[0]['facebook'];
+                            @$company_github =  @$AdminInfo[0]['github'];
                             @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
                         }
-                        sendSMS($ClientInfo[0]['phone'],''.@$company_name.' Make changes in appointment\n\n Title : '.$title.' \n Date & Time : '.$formattedDate.' \n Purpose of this appointment is '.$purpose.'.');
+                        sendSMS($ClientInfo[0]['phone'],'Your Appointment Has Been Rescheduled - '.$title.'\n\n Title : '.$title.' \n Date & Time : '.$formattedDate.' \n Purpose of this appointment is '.$purpose.'.');
                         include "views/email-template/update_appointment.php";
-                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], $company_name . 'Make changes in appointment at - ' . $env['SITE_NAME'], $message, $mail);
+                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], 'Your Appointment Has Been Rescheduled - '.$title, $message, $mail);
                     }
                 }
                 echo "1";
