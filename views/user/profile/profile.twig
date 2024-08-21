@@ -199,6 +199,15 @@
                                    class="fw-bold fs-6 text-gray-800 text-hover-primary" id="email"></a>
                             </div>
                         </div>
+                        <div class="row mb-7">
+                            <label class="col-lg-4 fw-bold text-muted">Address
+                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
+                                   title="Enter Complete Address"></i></label>
+                            <div class="col-lg-8">
+                                <a href="#"
+                                   class="fw-bold fs-6 text-gray-800 text-hover-primary" id="address"></a>
+                            </div>
+                        </div>
 
                         <div class="row mb-7">
                             <label class="col-lg-4 fw-bold text-muted">Linked in</label>
@@ -331,6 +340,14 @@
 
                                 <div class="fv-plugins-message-container invalid-feedback"></div>
                             </div>
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="required fw-bold fs-6 mb-2">Address</label>
+                                <input type="text" name="address"
+                                       class="form-control form-control-solid mb-3 mb-lg-0"
+                                       placeholder="Address" id="address_model">
+
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                            </div>
 
                             <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="required fw-bold fs-6 mb-2">Linkedin </label>
@@ -443,6 +460,7 @@
                     $('#fullName').html(dataResult['users'][0].fname+' '+dataResult['users'][0].lname);
                     $('#phone').html(dataResult['users'][0].phone);
                     $('#email').html(dataResult['users'][0].email);
+                    $('#address').html(dataResult['users'][0].address);
                     $('#linkedin').html(dataResult['users'][0].linkedin);
                     $('#tweet').html(dataResult['users'][0].tweet);
                     $('#facebook').html(dataResult['users'][0].facebook);
@@ -452,6 +470,7 @@
                     $('#lname_model').val(dataResult['users'][0].lname);
                     $('#phone_model').val(dataResult['users'][0].phone);
                     $('#email_model').val(dataResult['users'][0].email);
+                    $('#address_model').val(dataResult['users'][0].address);
                     $('#linkedin_model').val(dataResult['users'][0].linkedin);
                     $('#tweet_model').val(dataResult['users'][0].tweet);
                     $('#facebook_model').val(dataResult['users'][0].facebook);

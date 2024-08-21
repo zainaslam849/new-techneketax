@@ -116,12 +116,14 @@ if($route == '/user/request_for_document'):
                     @$company_name =  @$companyInfo[0]['company_name'];
                     @$company_phone =  @$companyInfo[0]['phone'];
                     @$company_email =  @$companyInfo[0]['email'];
+                    @$company_address =  @$companyInfo[0]['address'];
                     @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
                 }else{
                     $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
                     @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
                     @$company_phone =  @$AdminInfo[0]['phone'];
                     @$company_email =  @$AdminInfo[0]['email'];
+                    @$company_address =  @$AdminInfo[0]['address'];
                     @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
                 }
             }else{
@@ -129,8 +131,11 @@ if($route == '/user/request_for_document'):
                 @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
                 @$company_phone =  @$AdminInfo[0]['phone'];
                 @$company_email =  @$AdminInfo[0]['email'];
+                @$company_address =  @$AdminInfo[0]['address'];
                 @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
             }
+            sendSMS($companyInfo[0]['phone'],''.@$company_name.' request for document\n\n '.$firm_des.' \n');
+
             include "views/email-template/firmRequestDocument.php";
             mailSender($env['SENDER_EMAIL'],$email,'Request For Document - '.$env['SITE_NAME'],$message,$mail);
             echo "1";

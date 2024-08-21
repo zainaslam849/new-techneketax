@@ -179,6 +179,8 @@ $message='<!DOCTYPE html>
                                                         </tr>
                                                         <tr>
                                                             <td class="text-14 lh-24 a-center c-white l-white pb-20" style="font-size:14px; font-family:PT Sans, Arial, sans-serif; min-width:auto !important; line-height: 24px; text-align:center; color:#fff; padding-bottom: 20px;">
+                                                                 '.@$company_address.'
+                                                               <br>
                                                                 <a href="tel:'.@$company_phone.'" target="_blank" class="link c-white" style="text-decoration:none; color:#ffffff;"><span class="link c-white" style="text-decoration:none; color:#fff;">'.@$company_phone.'</span></a>
                                                                 <br>
                                                                 <a href="mailto:'.@$company_email.'" target="_blank" class="link c-white" style="text-decoration:none; color:#ffffff;"><span class="link c-white" style="text-decoration:none; color:#fff;">'.@$company_email.'</span></a>

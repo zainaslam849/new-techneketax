@@ -117,29 +117,26 @@ if($route == '/user/invoice/add'):
                 $send_email = $_POST['send_email'];
                 $send_message = $_POST['send_message'];
                 if (!empty($send_email) && !empty($send_message)) {
-                    if (!empty($loginUserId)){
                         $companyInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
                         if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
                             @$company_name =  @$companyInfo[0]['company_name'];
                             @$company_phone =  @$companyInfo[0]['phone'];
                             @$company_email =  @$companyInfo[0]['email'];
+                            @$company_address =  @$companyInfo[0]['address'];
                             @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
                         }else{
                             $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
                             @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
                             @$company_phone =  @$AdminInfo[0]['phone'];
                             @$company_email =  @$AdminInfo[0]['email'];
+                            @$company_address =  @$AdminInfo[0]['address'];
                             @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
                         }
-                    }else{
-                        $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
-                        @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
-                        @$company_phone =  @$AdminInfo[0]['phone'];
-                        @$company_email =  @$AdminInfo[0]['email'];
-                        @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
-                    }
+
+                    sendSMS($companyInfo[0]['phone'],''.@$company_name.' Send You an invoice \n\n  '.$send_message.'');
+
                     include "views/email-template/invoice.php";
-                    mailSender($firm_email, $send_email, $company_name . ' send you An Invoice at - ' . $env['SITE_NAME'], $message, $mail);
+                    mailSender($firm_email, $send_email, @$company_name . ' send you An Invoice at - ' . $env['SITE_NAME'], $message, $mail);
                 }
                 echo json_encode(array("statusCode" => "1", "id" => "$insert"));
                 exit();

@@ -678,9 +678,10 @@ function TwoFA($email, $password, $table_name){
                         @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
                         @$company_phone =  @$AdminInfo[0]['phone'];
                         @$company_email =  @$AdminInfo[0]['email'];
+                    @$company_address =  @$AdminInfo[0]['address'];
                         @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
-
-
+                    $UserInfo = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
+                    sendSMS($UserInfo[0]['phone'],'Two-factor Authentication For Your Account At- '.$company_name.'\n   Hello,You are receiving this SMS because a Two-Factor Authentication request was made for your account.\n'.@$verify_code.'');
 
                     include "./views/email-template/login2fa.php";
                     mailSender($env['SENDER_EMAIL'],$email,'2FA For Login - '.$env['SITE_NAME'],$message,$mail);
@@ -826,6 +827,7 @@ function userRegister($first_name, $last_name, $email,$phone, $password, $accoun
                     @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
                     @$company_phone =  @$AdminInfo[0]['phone'];
                     @$company_email =  @$AdminInfo[0]['email'];
+                    @$company_address =  @$AdminInfo[0]['address'];
                     @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
 
 
@@ -954,7 +956,11 @@ function forgetPasswordEmail($email, $table_name){
     @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
     @$company_phone =  @$AdminInfo[0]['phone'];
     @$company_email =  @$AdminInfo[0]['email'];
+    @$company_address =  @$AdminInfo[0]['address'];
     @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+    $UserInfo = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
+    sendSMS($UserInfo[0]['phone'],'Reset Your Password At- '.$company_name.'\n  Hello,You are receiving this SMS because a password reset request was made for your account.\n'.@$verify_code.'');
+
     include "views/email-template/forget-password.php";
 
     mailSender($env['SENDER_EMAIL'],$email,'Forget Password - '.$env['SITE_NAME'],$message,$mail);

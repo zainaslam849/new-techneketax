@@ -1,6 +1,9 @@
 <?php
 require("config/env.php");
-// $val=sendSMS('+18777804236','Hello Zotec Soft ha!');
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
+// $val=sendSMS('+18777804236','Hello Zotec Soft ha!');
 //var_dump($val);
 //die();
 if ($loginUserType == "firm") {
@@ -18,7 +21,7 @@ if ($loginUserType == "firm") {
     );
     $users = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
     $firm_id = $users[0]['firm_id'];
-    $firm_users = $h->table('users')->select()->where('firm_id', '=', $firm_id)->fetchAll();
+    $firm_users = $h->table('users')->select()->where('id', '=', $firm_id)->fetchAll();
     $firm_appointments = $h->table('appointment')
         ->select()
         ->where('firm_id', '=', $firm_id)
@@ -40,11 +43,16 @@ if ($loginUserType == "firm") {
             }
         }
     }
-
+    $InvoicePaidCount = $h->table('invoice')->select()->where('client_id', '=', $loginUserId)->where('status', '=', 'paid')->count();
+    $InvoiceUnpaidCount = $h->table('invoice')->select()->where('client_id', '=', $loginUserId)->where('status', '=', 'unpaid')->count();
+    $document_hubUnseenCount = $h->table('document_hub')->select()->where('client_id', '=', $loginUserId)->where('see_doc', '=', '0')->count();
     echo $twig->render('user/client_dashboard.twig', [
         'seo' => $seo,
         'appointments' => $appointments,
         'users' => $firm_users,
         'appointments_count' => $appointments_count,
+        'InvoicePaidCount' => $InvoicePaidCount,
+        'InvoiceUnpaidCount' => $InvoiceUnpaidCount,
+        'document_hubUnseenCount' => $document_hubUnseenCount,
     ]);
 }

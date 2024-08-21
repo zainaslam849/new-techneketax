@@ -7,10 +7,12 @@ if($route == '/user/profile'):
             if (!empty($_POST['fname']) && !empty($_POST['lname'])) {
                 $fname = $_POST['fname'];
                 $lname = $_POST['lname'];
+
             }else{
                 echo "2";
                 exit();
             }
+            $address = $_POST['address'];
             $linkedin = $_POST['linkedin'];
             $tweet = $_POST['tweet'];
             $facebook = $_POST['facebook'];
@@ -25,6 +27,7 @@ if($route == '/user/profile'):
                     'profile_image' => $profile_image,
                     'fname' => $fname,
                     'lname' => $lname,
+                    'address' => $address,
                     'linkedin' => $linkedin,
                     'tweet' => $tweet,
                     'facebook' => $facebook,

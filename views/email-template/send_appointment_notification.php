@@ -131,7 +131,7 @@ $message='<!DOCTYPE html>
                                                                                             </tr>
                                                                                             <tr>
                                                                                                 <td class="title-36 a-center pb-15" style="font-size:36px; line-height:40px; color:#282828 !important; font-family:PT Sans, Arial, sans-serif; min-width:auto !important; text-align:center; padding-bottom: 15px;">
-                                                                                                    <strong>'.$company_name.' Make changes in appointment</strong>
+                                                                                                    <strong>An Hour left in meeting with'.$company_name.'</strong>
                                                                                                 </td>
                                                                                             </tr>
                                                                                             <tr>
@@ -196,6 +196,8 @@ $message='<!DOCTYPE html>
                                                         </tr>
                                                         <tr>
                                                             <td class="text-14 lh-24 a-center c-white l-white pb-20" style="font-size:14px; font-family:PT Sans, Arial, sans-serif; min-width:auto !important; line-height: 24px; text-align:center; color:#fff; padding-bottom: 20px;">
+                                                                '.@$company_address.'
+                                                               <br>
                                                                 <a href="tel:'.@$company_phone.'" target="_blank" class="link c-white" style="text-decoration:none; color:#ffffff;"><span class="link c-white" style="text-decoration:none; color:#fff;">'.@$company_phone.'</span></a>
                                                                 <br>
                                                                 <a href="mailto:'.@$company_email.'" target="_blank" class="link c-white" style="text-decoration:none; color:#ffffff;"><span class="link c-white" style="text-decoration:none; color:#fff;">'.@$company_email.'</span></a>
