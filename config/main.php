@@ -1289,18 +1289,23 @@ function sendSMS($clientNumber, $message){
     global $account_sid;
     global $auth_token;
 
-
     $sid = $account_sid;
     $token = $auth_token;
     $twilio = new Client($sid, $token);
 
-    $message = $twilio->messages
-        ->create($clientNumber, // to
-            array(
-                "from" => $twilio_number,
-                "body" => $message
-            )
-        );
-    return $message;
+    try {
+        $message = $twilio->messages
+            ->create($clientNumber, // to
+                array(
+                    "from" => $twilio_number,
+                    "body" => $message
+                )
+            );
+        return $message;
+    } catch (Exception $e) {
+        // Log the error or handle it as needed
+        error_log("Error sending SMS: " . $e->getMessage());
+        return false;
+            }
 }
 ?>
