@@ -2,24 +2,54 @@
 {% block content %}
     <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.css">
     <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css">
-    <!--  BEGIN CONTENT AREA  -->
-    <div id="content" class="main-content">
-        <div class="layout-px-spacing">
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Toolbar-->
+        <div class="toolbar" id="kt_toolbar">
+            <!--begin::Container-->
+            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                    <!--begin::Title-->
+                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Document Hub List</h1>
 
-            <div class="middle-content container-xxl p-0">
-                <div id="call-ringing"></div>
-                <!-- /BREADCRUMB -->
-
-                <div class="row layout-spacing mt-5">
-                    <div class="col-lg-12 justify-content-end text-end ">
-                        <button type="button" class="btn btn-primary  me-4" data-bs-toggle="modal" data-bs-target="#editExampleModal">
-                            <span class="btn-text-inner">Upload File</span>
-                        </button>
-                    </div>
                 </div>
+
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Toolbar-->
+        <!--begin::Post-->
+        <div class="post d-flex flex-column-fluid" id="kt_post">
+            <!--begin::Container-->
+            <div id="kt_content_container" class="container-fluid">
+                <div id="call-ringing"></div>
+
                 <div class="row layout-spacing">
                     <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-                        <div class="widget-content widget-content-area">
+                        <div class="widget-content widget-content-area card">
+                            <div class="card-header border-0 pt-6">
+                                <!--begin::Card title-->
+                                <div class="col-md-6 text-start">
+                                    <!--begin::Search-->
+                                    <div class="d-flex align-items-center position-relative my-1">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                        <span class="svg-icon svg-icon-1 position-absolute ms-6">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+														<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+													</svg>
+												</span>
+                                        <!--end::Svg Icon-->
+                                        <input type="text" data-kt-customer-table-filter="search" id="search" class="form-control form-control-solid w-250px ps-15" placeholder="Search " />
+                                    </div>
+                                    <!--end::Search-->
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <button type="button" class="btn btn-primary  me-4" data-bs-toggle="modal" data-bs-target="#editExampleModal">
+                                        <span class="btn-text-inner">Upload File</span>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table id="table"  class="table dt-table-hover" style="width:100%">
                                     <thead>
@@ -59,7 +89,7 @@
                             <div class="row p-1">
                                 <div class="col-md-12">
                                     <label class="form-label">Description</label>
-                                    <textarea class="form-control" id="firm_des" name="firm_des" placeholder="Description"></textarea>
+                                    <textarea class="form-control form-control-solid" id="firm_des" name="firm_des" placeholder="Description"></textarea>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="upload_file" class="mb-2">Uploads</label>
@@ -67,7 +97,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer justify-content-center">
                             <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="button" name="add_new" id="btn-profile" class="btn btn-primary" onclick="upload_document()">Upload Document</button>
                         </div>
@@ -94,17 +124,6 @@
                   </div>
         </div>
 
-
-
-        <!--  BEGIN FOOTER  -->
-        <div class="footer-wrapper">
-            <div class="footer-wrapper">
-                <div class="footer-section f-section-1">
-                    <p class="">Copyright © <span class="dynamic-year">2024</span> <a target="_blank" href="https://zotecsoft.com/">ZotecSoft</a>, All rights reserved.</p>
-                </div>
-            </div>
-        </div>
-        <!--  END FOOTER  -->
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
@@ -131,6 +150,9 @@
                     {mData: 'Des'},
                     {mData: 'action'},
                 ]
+            });
+            $('#search').on('keyup', function() {
+                $('#table').DataTable().search(this.value).draw();
             });
         });
         function deleteUser(deleteid) {
@@ -231,5 +253,14 @@
                 $('#commentModal').modal('show');
             });
         });
+        function downloadFile(fileUrl) {
+            const randomName = Math.random().toString(36).substring(2, 15) + '_' + fileUrl.split('/').pop();
+            const link = document.createElement('a');
+            link.href = fileUrl;
+            link.download = randomName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     </script>
 {% endblock %}

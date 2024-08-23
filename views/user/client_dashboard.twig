@@ -1,0 +1,309 @@
+{% extends 'user/master.twig' %}
+{% block content %}
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Toolbar-->
+    <div class="toolbar" id="kt_toolbar">
+        <!--begin::Container-->
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <!--begin::Title-->
+                <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Dashboard</h1>
+
+            </div>
+
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Toolbar-->
+    <!--begin::Post-->
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <!--begin::Container-->
+        <div id="kt_content_container" class="container-fluid">
+            <!--begin::Row-->
+            <div class="row g-5 g-xl-10 mb-xl-10">
+
+                <div class="col-lg-12 col-xl-12 col-xxl-6 mb-5 mb-xl-0">
+                        <!--begin::Lists Widget 19-->
+                        <div class="card card-flush h-md-100">
+                            <!--begin::Heading-->
+                            <div class="card-header rounded bgi-no-repeat bgi-size-cover bgi-position-y-top bgi-position-x-center align-items-start h-250px" style="background-color: #1b1b28" data-bs-theme="light">
+                                <!--begin::Title-->
+                                <h3 class="card-title align-items-start flex-column text-white pt-15">
+                                    <span class="fw-bold fs-2x mb-3">My Statistics</span>
+                                </h3>
+                                <!--end::Title-->
+
+                                <!--begin::Toolbar-->
+                                <div class="card-toolbar pt-5">
+                                    <!--begin::Menu-->
+                                    <button class="btn btn-sm btn-icon btn-active-color-primary btn-color-white bg-white bg-opacity-25 bg-hover-opacity-100 bg-hover-white bg-active-opacity-25 w-20px h-20px" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-overflow="true">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+
+
+                                    <!--begin::Menu 2-->
+                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px" data-kt-menu="true">
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <div class="menu-content fs-6 text-gray-900 fw-bold px-3 py-4">Quick Actions</div>
+                                        </div>
+                                        <!--end::Menu item-->
+
+                                        <!--begin::Menu separator-->
+                                        <div class="separator mb-3 opacity-75"></div>
+                                        <!--end::Menu separator-->
+
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a href="/user/appointments" class="menu-link px-3">
+                                              Appointment
+                                            </a>
+                                        </div>
+                                        <!--end::Menu item-->
+
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a href="/user/invoices" class="menu-link px-3">
+                                                Invoices
+                                            </a>
+                                        </div>
+                                        <!--end::Menu item-->
+
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a href="/client/document" class="menu-link px-3">
+                                                Document Hub
+                                            </a>
+                                        </div>
+
+
+                                    </div>
+                                    <!--end::Menu 2-->
+
+                                    <!--end::Menu-->
+                                </div>
+                                <!--end::Toolbar-->
+                            </div>
+                            <!--end::Heading-->
+
+                            <!--begin::Body-->
+                            <div class="card-body mt-n20">
+                                <!--begin::Stats-->
+                                <div class="mt-n20 position-relative">
+                                    <!--begin::Row-->
+                                    <div class="row g-3 g-lg-6">
+                                        <!--begin::Col-->
+                                        <div class="col-6">
+                                            <!--begin::Items-->
+                                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5">
+                                                <!--begin::Symbol-->
+                                                <div class="symbol symbol-30px me-5 mb-8">
+                                <span class="symbol-label">
+                                    <i class="ki-duotone ki-flask fs-1 text-primary"><span class="path1"></span><span class="path2"></span></i>
+                                </span>
+                                                </div>
+                                                <!--end::Symbol-->
+
+                                                <!--begin::Stats-->
+                                                <div class="m-0">
+                                                    <!--begin::Number-->
+                                                    <span class="text-gray-700 fw-bolder d-block fs-2qx lh-1 ls-n1 mb-1">{{ appointments_count }}</span>
+                                                    <!--end::Number-->
+
+                                                    <!--begin::Desc-->
+                                                    <span class="text-gray-500 fw-semibold fs-6">Appointments</span>
+                                                    <!--end::Desc-->
+                                                </div>
+                                                <!--end::Stats-->
+                                            </div>
+                                            <!--end::Items-->
+                                        </div>
+                                        <!--end::Col-->
+                                        <!--begin::Col-->
+                                        <div class="col-6">
+                                            <!--begin::Items-->
+                                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5">
+                                                <!--begin::Symbol-->
+                                                <div class="symbol symbol-30px me-5 mb-8">
+                                <span class="symbol-label">
+                                    <i class="ki-duotone ki-bank fs-1 text-primary"><span class="path1"></span><span class="path2"></span></i>
+                                </span>
+                                                </div>
+                                                <!--end::Symbol-->
+
+                                                <!--begin::Stats-->
+                                                <div class="m-0">
+                                                    <!--begin::Number-->
+                                                    <span class="text-gray-700 fw-bolder d-block fs-2qx lh-1 ls-n1 mb-1">{{ InvoicePaidCount }}</span>
+                                                    <!--end::Number-->
+
+                                                    <!--begin::Desc-->
+                                                    <span class="text-gray-500 fw-semibold fs-6">Paid Invoices</span>
+                                                    <!--end::Desc-->
+                                                </div>
+                                                <!--end::Stats-->
+                                            </div>
+                                            <!--end::Items-->
+                                        </div>
+                                        <!--end::Col-->
+                                        <!--begin::Col-->
+                                        <div class="col-6">
+                                            <!--begin::Items-->
+                                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5">
+                                                <!--begin::Symbol-->
+                                                <div class="symbol symbol-30px me-5 mb-8">
+                                <span class="symbol-label">
+                                    <i class="ki-duotone ki-award fs-1 text-primary"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                                </span>
+                                                </div>
+                                                <!--end::Symbol-->
+
+                                                <!--begin::Stats-->
+                                                <div class="m-0">
+                                                    <!--begin::Number-->
+                                                    <span class="text-gray-700 fw-bolder d-block fs-2qx lh-1 ls-n1 mb-1">{{ InvoiceUnpaidCount }}</span>
+                                                    <!--end::Number-->
+
+                                                    <!--begin::Desc-->
+                                                    <span class="text-gray-500 fw-semibold fs-6">Un Paid Invoices</span>
+                                                    <!--end::Desc-->
+                                                </div>
+                                                <!--end::Stats-->
+                                            </div>
+                                            <!--end::Items-->
+                                        </div>
+                                        <!--end::Col-->
+                                        <!--begin::Col-->
+                                        <div class="col-6">
+                                            <!--begin::Items-->
+                                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5">
+                                                <!--begin::Symbol-->
+                                                <div class="symbol symbol-30px me-5 mb-8">
+                                <span class="symbol-label">
+                                    <i class="ki-duotone ki-timer fs-1 text-primary"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                                </span>
+                                                </div>
+                                                <!--end::Symbol-->
+
+                                                <!--begin::Stats-->
+                                                <div class="m-0">
+                                                    <!--begin::Number-->
+                                                    <span class="text-gray-700 fw-bolder d-block fs-2qx lh-1 ls-n1 mb-1">{{ document_hubUnseenCount }}</span>
+                                                    <!--end::Number-->
+
+                                                    <!--begin::Desc-->
+                                                    <span class="text-gray-500 fw-semibold fs-6">Un seen Document</span>
+                                                    <!--end::Desc-->
+                                                </div>
+                                                <!--end::Stats-->
+                                            </div>
+                                            <!--end::Items-->
+                                        </div>
+                                        <!--end::Col-->
+
+                                    </div>
+                                    <!--end::Row-->
+                                </div>
+                                <!--end::Stats-->
+                            </div>
+                            <!--end::Body-->
+                        </div>
+                        <!--end::Lists Widget 19-->
+                    </div>
+
+                <!--end::Col-->
+                <!--begin::Col-->
+                <div class="col-lg-12 col-xl-12 col-xxl-6 mb-5 mb-xl-0">
+                    <!--begin::Timeline widget 3-->
+                    <div class="card h-md-100">
+                        <!--begin::Header-->
+                        <div class="card-header border-0 pt-5">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder text-dark">What’s up Today</span>
+                                <span class="text-muted mt-1 fw-bold fs-7">Total {{ appointments_count }} Appointments</span>
+                            </h3>
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="card-body pt-7 px-0">
+                            <ul class="nav nav-stretch nav-pills nav-pills-custom nav-pills-active-custom d-flex justify-content-between mb-8 px-5">
+                                {% for i in 0..9 %}
+                                    {% set date = "now"|date_modify("+" ~ i ~ " day") %}
+                                    {% set day_short = date|date("D")|slice(0, 2) %}
+                                    {% set day_number = date|date("d") %}
+                                    {% set is_active = (i == 0) ? 'active' : '' %} {# Mark the first item as active #}
+
+                                    <li class="nav-item p-0 ms-0">
+                                        <!--begin::Date-->
+                                        <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px py-4 px-3 btn-active-danger {{ is_active }}" data-bs-toggle="tab" href="#kt_timeline_widget_3_tab_content_{{ i + 1 }}">
+                                            <span class="fs-7 fw-bold">{{ day_short }}</span>
+                                            <span class="fs-6 fw-bolder">{{ day_number }}</span>
+                                        </a>
+                                        <!--end::Date-->
+                                    </li>
+                                {% endfor %}
+                            </ul>
+
+                            <div class="tab-content mb-2 px-9">
+                                {% for i in 0..9 %}
+                                    {% set date = "now"|date_modify("+" ~ i ~ " day") %}
+                                    {% set is_active = (i == 0) ? 'show active' : '' %}
+
+                                    <div class="tab-pane fade {{ is_active }}" id="kt_timeline_widget_3_tab_content_{{ i + 1 }}">
+                                        {% set date_appointments = appointments|filter(a => a.date|date("Y-m-d") == date|date("Y-m-d")) %}
+
+                                        {% if date_appointments is empty %}
+                                            <p>No appointments for this day.</p>
+                                        {% else %}
+                                            {% for appointment in date_appointments %}
+                                                <!--begin::Wrapper-->
+                                                <div class="d-flex align-items-center mb-6">
+                                                    <!--begin::Bullet-->
+                                                    <span data-kt-element="bullet" class="bullet bullet-vertical d-flex align-items-center min-h-70px mh-100 me-4 bg-success"></span>
+                                                    <!--end::Bullet-->
+                                                    <!--begin::Info-->
+                                                    <div class="flex-grow-1 me-5">
+                                                        <!--begin::Time-->
+                                                        <div class="text-gray-800 fw-bold fs-2">
+                                                            {{ appointment.date|date("h:i") }}
+                                                            <span class="text-gray-400 fw-bold fs-7">{{ appointment.date|date("A") }}</span>
+                                                        </div>
+                                                        <!--end::Time-->
+                                                        <!--begin::Description-->
+                                                        <div class="text-gray-700 fw-bold fs-6">{{ appointment.title }}</div>
+                                                        <!--end::Description-->
+                                                        <!--begin::Link-->
+                                                        <div class="text-gray-400 fw-bold fs-7">Lead by
+                                                            <!--begin::Name-->
+                                                            <a href="#" class="text-primary opacity-75-hover fw-bold">{{ users[0].company_name }}</a>
+                                                            <!--end::Name-->
+                                                        </div>
+                                                        <!--end::Link-->
+                                                    </div>
+                                                    <!--end::Info-->
+                                                    <!--begin::Action-->
+                                                    <a href="/meet/{{ appointment.jitsi_link }}" class="btn btn-sm btn-light">Join Meeting</a>
+                                                    <!--end::Action-->
+                                                </div>
+                                                <!--end::Wrapper-->
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                        <!--end: Card Body-->
+                    </div>
+                </div>
+                <!--end::Col-->
+            </div>
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Post-->
+</div>
+<!--end::Content-->
+{% endblock %}

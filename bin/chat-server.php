@@ -57,24 +57,25 @@ class Chat implements MessageComponentInterface {
     public function onMessage(ConnectionInterface $from, $msg) {
         $data = json_decode($msg, true);
         if (isset($data['sender_id']) && isset($data['receiver_id']) && isset($data['message'])) {
-            // Debug output
-            echo "Data received: " . print_r($data['sender_id']) . "\n";
-
             try {
-                $sender_id=$data['sender_id'];
+                $sender_id = $data['sender_id'];
                 $safe_message = htmlspecialchars($data['message'], ENT_QUOTES, 'UTF-8');
 
+                // Insert message into database
                 $this->db->insert('chat')->values([
                     'sender_id' => $sender_id,
-                    'reciever_id' => $data['receiver_id'],
+                    'receiver_id' => $data['receiver_id'],
                     'message' => $safe_message,
                 ])->run();
 
+                // Send message to the recipient
                 foreach ($this->clients as $client) {
                     if ($from !== $client) {
                         $client->send($msg);
                     }
                 }
+
+                echo "Message sent from {$sender_id} to {$data['receiver_id']}: {$safe_message}\n";
             } catch (\Exception $e) {
                 echo "Database error: " . $e->getMessage() . "\n";
             }
@@ -82,7 +83,6 @@ class Chat implements MessageComponentInterface {
             echo "Invalid message format\n";
         }
     }
-
 
     public function onClose(ConnectionInterface $conn) {
         $this->clients->detach($conn);
@@ -105,5 +105,5 @@ $server = \Ratchet\Server\IoServer::factory(
     8005
 );
 
-echo "WebSocket server started on port 8000...\n";
+echo "WebSocket server started on port 8005...\n";
 $server->run();

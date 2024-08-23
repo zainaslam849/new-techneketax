@@ -11,16 +11,16 @@ $env=array(
     "SITE_NAME"=>"CRM",
     "DESCRIPTION"=>"description",
     "KEYWORDS"=>"keywords",
-    "APP_URL"=> "https://techneketaxnew.local/",
+    "APP_URL"=> "https://techneketax.local/",
     "ADMIN_EMAIL"=> "info@crm.com",
     "SENDER_EMAIL"=> "info@crm.com",
     "TIME_ZONE"=> "Asia/Karachi",
 
     //PRODUCTION DATABASE CREDENTIALS
     "DATABASE_HOST"=>"localhost",
-    "DATABASE_NAME"=>"chai_chaisbekmls",
-    "DATABASE_USERNAME"=>"chai_chaisbekmls",
-    "DATABASE_PASSWORD"=>"ruhC-uIhw2iciEl#",
+    "DATABASE_NAME"=>"dev_tecgneketax",
+    "DATABASE_USERNAME"=>"dev_tecgneketax",
+    "DATABASE_PASSWORD"=>"7L36?3mue",
 
 
     //LOCAL DATABASE CREDENTIALS
@@ -30,11 +30,11 @@ $env=array(
     "LC_DATABASE_PASSWORD"=>"root",
 
     //SMTP CREDENTIALS
-    "SMTP_HOST"=>"smtp.mailtrap.io",
-    "SMTP_USERNAME"=>"9fe09591ec711e",
-    "SMTP_PASSWORD"=>"3204f9705346b4",
+    "SMTP_HOST"=>"smtp.mailgun.org",
+    "SMTP_USERNAME"=>"no-reply@mg.techneketax.com",
+    "SMTP_PASSWORD"=>"64fe7fa24fa4ce87d40483bd9eae2d3b-a26b1841-7a394aef",
     "SMTP_ENC"=>"tls",
-    "SMTP_PORT"=>"2525",
+    "SMTP_PORT"=>"587",
 );
 $assets_url="https://crm-cu.local";
 
@@ -107,19 +107,26 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
     $userInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
     $loginUserName=$userInfo[0]['fname'] .' '.$userInfo[0]['lname'];
     $twig->addGlobal('loginId', $loginUserId);
-    $twig->addGlobal('loginType', $loginUserType);
-    $twig->addGlobal('loginName', $loginUserName);
-    $twig->addGlobal('userEmail', $userInfo[0]['email']);
-    $twig->addGlobal('userPhone', $userInfo[0]['phone']);
-    $twig->addGlobal('userProfileImage', $userInfo[0]['profile_image']);
+    $twig->addGlobal('loginType', @$loginUserType);
+    $twig->addGlobal('loginName', @$loginUserName);
+    $twig->addGlobal('userEmail', @$userInfo[0]['email']);
+    $twig->addGlobal('userPhone', @$userInfo[0]['phone']);
+    $twig->addGlobal('userProfileImage', @$userInfo[0]['profile_image']);
     if ($loginUserType == "firm"){
-        $twig->addGlobal('userCompanyImage', $userInfo[0]['company_image']);
-        $twig->addGlobal('whitelabel', $userInfo[0]['white_labeling']);
+        $twig->addGlobal('userCompanyImage', @$userInfo[0]['company_image']);
+        $twig->addGlobal('whitelabel', @$userInfo[0]['white_labeling']);
     }else{
-        $userInfo = $h->table('users')->select()->where('id', '=', $userInfo[0]['firm_id'])->fetchAll();
-        $twig->addGlobal('userCompanyImage', $userInfo[0]['company_image']);
-        $twig->addGlobal('whitelabel', $userInfo[0]['white_labeling']);
+        $userInfo = $h->table('users')->select()->where('id', '=', @$userInfo[0]['firm_id'])->fetchAll();
+        $twig->addGlobal('userCompanyImage', @$userInfo[0]['company_image']);
+        $twig->addGlobal('whitelabel', @$userInfo[0]['white_labeling']);
     }
+
+    $twig->addGlobal('Stripe_public_key', 'pk_test_51OgnsKB8z2Dlcg3z0Qz8mYPgaXouytYsnflrzr3hgWNNu91PY8ApCB2A6ZTbR49TZ59ag5KuLfIVIlBo2aCqgoZ900owqKbZDQ');
+    $Stripe_secret_key='sk_test_51OgnsKB8z2Dlcg3z6ZQl607w3HUhJ3SQu7FupPI2XWwTaBBLdVZpYA7fpzDQBd8n9jpa9DsBUUuYnKoT9CKRcwV700c0vbYFoi';
 endif;
+//TWILIO SMS API
+$twilio_number= '+17609040397';
+$account_sid= 'ACd5c325433100e2baf794a9c92caeeb55';
+$auth_token='aa8115bbf571ff82e60ae6ef26bdf4fe';
 
 

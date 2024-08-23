@@ -1,118 +1,49 @@
-<link href="{{ env.APP_URL }}assets/dashboard/layouts/css/light/loader.css" rel="stylesheet" type="text/css" />
-<link href="{{ env.APP_URL }}assets/dashboard/layouts/css/dark/loader.css" rel="stylesheet" type="text/css" />
-{#<script src="{{ env.APP_URL }}assets/dashboard/layouts/loader.js"></script>#}
-<link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
-<link href="{{ env.APP_URL }}assets/dashboard/src/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <link href="{{ env.APP_URL }}assets/dash/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="{{ env.APP_URL }}assets/dash/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="{{ env.APP_URL }}assets/dash/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+<link href="{{ env.APP_URL }}assets/dash/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 
-<link rel="stylesheet" href="{{ env.APP_URL }}assets/dashboard/src/assets/css/light/main.css">
-<link rel="stylesheet" href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/light/perfect-scrollbar/perfect-scrollbar.css">
-<link rel="stylesheet" href="{{ env.APP_URL }}assets/dashboard/src/plugins/src/waves/waves.min.css">
-<link rel="stylesheet" href="{{ env.APP_URL }}assets/dashboard/layouts/css/light/structure.css">
-<link rel="stylesheet" href="{{ env.APP_URL }}assets/dashboard/src/plugins/src/highlight/styles/monokai-sublime.css">
-<link href="{{ env.APP_URL }}assets/dashboard/src/assets/css/light/components/tabs.css" rel="stylesheet" type="text/css">
-<link href="{{ env.APP_URL }}assets/dashboard/src/assets/css/dark/components/tabs.css" rel="stylesheet" type="text/css">
-<link href="{{ env.APP_URL }}assets/dashboard/src/assets/css/light/users/account-setting.css" rel="stylesheet" type="text/css" />
-<link href="{{ env.APP_URL }}assets/dashboard/src/assets/css/dark/users/account-setting.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/assets/css/light/forms/switches.css">
-<link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/assets/css/dark/forms/switches.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-{#{% if route == '/admin/users' or route == '/admin/users/active' or route == '/admin/users/inactive' %}#}
-<link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/src/table/datatable/datatables.css">
-<link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/light/table/datatable/dt-global_style.css">
-<link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/light/table/datatable/custom_dt_custom.css">
-<link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/dark/table/datatable/dt-global_style.css">
-<link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/dark/table/datatable/custom_dt_custom.css">
-{#{% endif %}#}
-<link rel="stylesheet" href="{{ env.APP_URL }}assets/dashboard/src/plugins/src/filepond/filepond.min.css">
-<link rel="stylesheet" href=".{{ env.APP_URL }}assets/dashboard/src/plugins/src/filepond/FilePondPluginImagePreview.min.css">
 
-<link href="{{ env.APP_URL }}assets/dashboard/src/assets/css/light/scrollspyNav.css" rel="stylesheet" type="text/css" />
-<link href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/light/filepond/custom-filepond.css" rel="stylesheet" type="text/css" />
-
-<link href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/dark/filepond/custom-filepond.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-{% if route == '/admin/plans' or route == '/admin/plans/add' %}
-<link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/assets/css/light/forms/switches.css">
-<link href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/light/pricing-table/css/component.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/assets/css/dark/forms/switches.css">
-<link href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/dark/pricing-table/css/component.css" rel="stylesheet" type="text/css" />
-
-{% endif %}
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+<script src="https://unpkg.com/notie"></script>
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.css">
+    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" type="text/css" href="https://designreset.com/cork/html/src/assets/css/light/elements/alert.css">
 <style>
-    /* Pagination Button Styling */
-    .dataTables_wrapper .dataTables_paginate {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 10px;
+    .dataTables_filter{
+        display: none !important;
     }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-        margin: 0 5px;
-        padding: 5px 10px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.9em;
+    .dataTables_length{
+        display: none !important;
     }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-        background-color: #0056b3;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-        background-color: #0056b3;
-        font-weight: bold;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-        background-color: #ed141f1c;
-        cursor: not-allowed;
-    }
-    .page-item.active .page-link {
-        background-color: #ED141F !important;
-    }
-    li.paginate_button.page-item.active{
-        background-color: #ED141F !important;
-    }
-    div#table_info{
-        color: #262626 !important;
-        margin: 3px !important;
-    }
-    div#table_length {
-        margin: 7px !important;
-    }
-    .dataTables_wrapper {
-        padding: 6px !important;
-    }
-    /* Show Entries and Search Fields Styling */
-    .dataTables_wrapper .dataTables_length,
-    .dataTables_wrapper .dataTables_filter {
-        margin: 10px 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .dataTables_wrapper .dataTables_length select {
-        margin-right: 10px;
-        padding: 5px;
-    }
-
-    .dataTables_wrapper .dataTables_filter input {
-        margin-left: 10px;
-        padding: 5px;
-    }
-    li#table_previous{
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-    .table > thead > tr > th{
-        background: #ed141f1c !important;
+    .dataTables_info{
+        display: none !important;
     }
     .cke_notifications_area{
         display: none !important;
+    }
+    .page-item.active .page-link{
+        background-color: #000 !important;
+        color: white !important;
+    }
+    .close{
+        display: inline-block;
+        font-weight: 500;
+        line-height: 1.5;
+        color: #181c32;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        user-select: none;
+        background-color: transparent;
+        border: 1px solid transparent;
+        font-size: 1.1rem;
+        border-radius: .475rem;
+        transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        font-size: 25px;
     }
 </style>

@@ -5,14 +5,16 @@
         .nav.nav-pills {
             border: none;
             padding: 8px;
-            background: #fff5f5 !important;
+            background: #fff !important;
             border-radius: 8px;
         }
         .nav.nav-pills li.nav-item button.nav-link {
-            color: #ee4343 !important;
+            color: #1b1b28 !important;
         }
         .nav.nav-pills li.nav-item button.nav-link svg{
-            color: #ed141f !important;
+            color: #1b1b28 !important;
+        }.nav.nav-pills li.nav-item button.nav-link.active svg{
+            color: #ED141F !important;
         }
     </style>
     <link href="{{ env.APP_URL }}assets/dashboard/tabs.css" rel="stylesheet" type="text/css" />
@@ -37,8 +39,7 @@
         <!--begin::Post-->
         <div class="post d-flex flex-column-fluid" id="kt_post">
             <!--begin::Container-->
-            <div id="kt_content_container" class="container-xxl">
-                    <div class="middle-content container-xxl p-0">
+            <div id="kt_content_container" class="container-fluid">
                         <div id="call-ringing"></div>
                         <div class="row layout-top-spacing">
                             <div class="simple-pill">
@@ -250,14 +251,63 @@
                             </div>
                         </div>
 
-                    </div>
             </div>
             <!--end::Container-->
         </div>
         <!--end::Post-->
     </div>
 
+    <div class="modal fade" id="editExampleModal" tabindex="-1" aria-labelledby="editExampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-650px">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+                </div>
+                <div class="modal-body scroll-y mx-5 mx-xl-5 my-7">
+                <form  method="post" id="editUploadForm" enctype="multipart/form-data">
+                    <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll"
+                         data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                         data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header"
+                         data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px"
+                         style="max-height: 570px;">
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">First name</label>
+                                <input type="text" class="form-control form-control-solid" id="fname" name="fname" placeholder="First Name">
+                                <input type="hidden" name="csrf" value="{{ csrf}}">
+                                <input type="hidden" name="id" id="id">
+                            </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">Last name</label>
+                                <input type="text" class="form-control form-control-solid" id="lname" name="lname" placeholder="Last Name">
+                            </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">Email adress</label>
+                                <input type="text" class="form-control form-control-solid" id="email" name="email" placeholder="Email" readonly>
+                            </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">Phone No</label>
+                                <input type="tel" class="form-control form-control-solid" id="phone" name="phone" placeholder="Phone No">
+                            </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control form-control-solid" id="password " name="password" placeholder="Password">
+                            </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control form-control-solid" id="cpassword" name="cpassword" placeholder="Confirm Password">
+                            </div>
+                        </div>
 
+                    <div class="modal-footer justify-content-center">
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" name="add_new" id="btn-profile" class="btn btn-primary" onclick="update_tool()">Update</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
     <!--  END CONTENT AREA  -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 

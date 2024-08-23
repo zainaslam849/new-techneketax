@@ -34,6 +34,7 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
         ),
         'T' => 
         array (
+            'Twilio\\' => 7,
             'Twig\\' => 5,
         ),
         'S' => 
@@ -48,6 +49,7 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
             'Symfony\\Component\\HttpFoundation\\' => 33,
             'Symfony\\Component\\Finder\\' => 25,
             'Symfony\\Component\\Clock\\' => 24,
+            'Stripe\\' => 7,
             'Spiral\\Tokenizer\\' => 17,
             'Spiral\\Pagination\\' => 18,
             'Spiral\\Logger\\' => 14,
@@ -114,6 +116,10 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
         array (
             0 => __DIR__ . '/..' . '/yiisoft/friendly-exception/src',
         ),
+        'Twilio\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/twilio/sdk/src/Twilio',
+        ),
         'Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
@@ -157,6 +163,10 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
         'Symfony\\Component\\Clock\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/clock',
+        ),
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
         ),
         'Spiral\\Tokenizer\\' => 
         array (

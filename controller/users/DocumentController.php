@@ -20,6 +20,17 @@ if($route == '/client/document'):
     $document_hub = $h->table('document_hub')->select()->where('client_id', '=', $loginUserId)->fetchAll();
     echo $twig->render('user/document_hub/client_index.twig', ['seo' => $seo,'client' => $document_hub]);
 endif;
+if($route == '/client/dochubdetails/$id'):
+    $seo = array(
+        'title' => 'Document Hub',
+        'description' => 'CRM',
+        'keywords' => 'Admin Panel'
+    );
+    $document_hub = $h->table('document_hub')->select()->where('id', '=', $id)->fetchAll();
+$firm_id = $document_hub[0]['firm_id'];
+    $firmDetails = $h->table('users')->select()->where('id', '=', $firm_id)->fetchAll();
+    echo $twig->render('user/document_hub/client_index_detail.twig', ['seo' => $seo,'documentHub' => $document_hub,'firmDetail' => $firmDetails]);
+endif;
 if($route == '/client/document/add'):
     if (!empty($_POST['firm_id'])) {
         $firm_id = $_POST['firm_id'];
@@ -99,9 +110,46 @@ if($route == '/user/request_for_document'):
             $insert = $h->insert('document_hub')->values([ 'firm_id' => $loginUserId,'client_id' => $client_id,'firm_des' => $firm_des,'document_id' => $document_id])->run();
             $usersInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
             $email = $usersInfo[0]['email'];
+            if (!empty($loginUserId)){
+                $companyInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+                if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
+                    @$company_name =  @$companyInfo[0]['company_name'];
+                    @$company_phone =  @$companyInfo[0]['phone'];
+                    @$company_email =  @$companyInfo[0]['email'];
+                    @$company_address =  @$companyInfo[0]['address'];
+                    @$company_linkedin =  @$companyInfo[0]['linkedin'];
+                    @$company_tweet =  @$companyInfo[0]['tweet'];
+                    @$company_facebook =  @$companyInfo[0]['facebook'];
+                    @$company_github =  @$companyInfo[0]['github'];
+                    @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
+                }else{
+                    $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                    @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                    @$company_phone =  @$AdminInfo[0]['phone'];
+                    @$company_email =  @$AdminInfo[0]['email'];
+                    @$company_address =  @$AdminInfo[0]['address'];
+                    @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                    @$company_tweet =  @$AdminInfo[0]['tweet'];
+                    @$company_facebook =  @$AdminInfo[0]['facebook'];
+                    @$company_github =  @$AdminInfo[0]['github'];
+                    @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                }
+            }else{
+                $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                @$company_phone =  @$AdminInfo[0]['phone'];
+                @$company_email =  @$AdminInfo[0]['email'];
+                @$company_address =  @$AdminInfo[0]['address'];
+                @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                @$company_tweet =  @$AdminInfo[0]['tweet'];
+                @$company_facebook =  @$AdminInfo[0]['facebook'];
+                @$company_github =  @$AdminInfo[0]['github'];
+                @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+            }
+            sendSMS($companyInfo[0]['phone'],''.@$company_name.' Request for document\n\n '.$firm_des.' \n');
 
-            //include "views/email-template/firmRequestDocument.php";
-            //mailSender($env['SENDER_EMAIL'],$email,'Request For Document - '.$env['SITE_NAME'],$message,$mail);
+            include "views/email-template/firmRequestDocument.php";
+            mailSender($env['SENDER_EMAIL'],$email,'Request For Document - '.$env['SITE_NAME'],$message,$mail);
             echo "1";
             exit();
         } catch (PDOException $e) {

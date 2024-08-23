@@ -39,7 +39,7 @@
 .nav.nav-pills {
   border: none;
   padding: 8px;
-  background: #ebedf2;
+  background: #fff;
   border-radius: 8px;
 }
 .nav.nav-pills li.nav-item button.nav-link {
@@ -58,9 +58,10 @@
 }
 .nav.nav-pills li.nav-item button.nav-link.active {
   border-bottom: none;
-  background-color: #fff;
+  background-color: #1b1b28;
   box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.2);
   font-weight: 600;
+  color: #fff !important;
 }
 .nav.nav-pills li.nav-item button.nav-link:disabled {
   opacity: 0.5;

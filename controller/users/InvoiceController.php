@@ -9,7 +9,6 @@ $seo = array(
 
 echo $twig->render('user/invoice/list.twig', ['seo' => $seo]);
 endif;
-
 if($route == '/user/invoice/add'):
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_POST['firm_name'])) {
@@ -74,10 +73,21 @@ if($route == '/user/invoice/add'):
             $subtotal = $_POST['subtotal'];
             $discount_type = $_POST['discount_type'];
             $discount_amount = $_POST['discount_amount'];
-            $discount_amount_total = $_POST['discount_amount_total'];
+            if ($_POST['discount_amount_total'] != 'undefined'){
+                $discount_amount_total = $_POST['discount_amount_total'];
+            }else{
+                $discount_amount_total = 0;
+            }
+
+
             $final_total = $_POST['final_total'];
             $invoice_detail_notes = $_POST['invoice_detail_notes'];
             $currency = $_POST['currency'];
+            if($final_total > '0'){
+                $invoiceStatus='unpaid';
+            }else{
+                $invoiceStatus='paid';
+            }
             // Firm Bank details
             if (!empty($_POST['account_number']) && !empty($_POST['bank_name']) && !empty($_POST['swift_code']) && !empty($_POST['billing_country'])) {
                 $account_number = $_POST['account_number'];
@@ -101,13 +111,39 @@ if($route == '/user/invoice/add'):
                     // products details
                     'account_number' => $account_number, 'bank_name' => $bank_name, 'swift_code' => $swift_code, 'billing_country' => $billing_country,
                     // amount details
-                    'subtotal' => $subtotal, 'discount_type' => $discount_type, 'discount_amount' => $discount_amount, 'discount_amount_total' => $discount_amount_total, 'final_total' => $final_total, 'invoice_detail_notes' => $invoice_detail_notes, 'currency' => $currency,
+                    'subtotal' => $subtotal, 'discount_type' => $discount_type, 'discount_amount' => $discount_amount, 'discount_amount_total' => $discount_amount_total, 'final_total' => $final_total, 'invoice_detail_notes' => $invoice_detail_notes, 'currency' => $currency,'status' => $invoiceStatus,
                 ])->run();
                 $send_email = $_POST['send_email'];
                 $send_message = $_POST['send_message'];
                 if (!empty($send_email) && !empty($send_message)) {
+                        $companyInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+                        if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
+                            @$company_name =  @$companyInfo[0]['company_name'];
+                            @$company_phone =  @$companyInfo[0]['phone'];
+                            @$company_email =  @$companyInfo[0]['email'];
+                            @$company_address =  @$companyInfo[0]['address'];
+                            @$company_linkedin =  @$companyInfo[0]['linkedin'];
+                            @$company_tweet =  @$companyInfo[0]['tweet'];
+                            @$company_facebook =  @$companyInfo[0]['facebook'];
+                            @$company_github =  @$companyInfo[0]['github'];
+                            @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
+                        }else{
+                            $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                            @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                            @$company_phone =  @$AdminInfo[0]['phone'];
+                            @$company_email =  @$AdminInfo[0]['email'];
+                            @$company_address =  @$AdminInfo[0]['address'];
+                            @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                            @$company_tweet =  @$AdminInfo[0]['tweet'];
+                            @$company_facebook =  @$AdminInfo[0]['facebook'];
+                            @$company_github =  @$AdminInfo[0]['github'];
+                            @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                        }
+
+                    sendSMS($companyInfo[0]['phone'],'Invoice Sent - '.$invoice_number.' \n\n  '.$send_message.'');
+
                     include "views/email-template/invoice.php";
-                    mailSender($firm_email, $send_email, $firm_name . 'Send You An Invoice at - ' . $env['SITE_NAME'], $message, $mail);
+                    mailSender($firm_email, $send_email, 'Invoice Sent - '.$invoice_number, $message, $mail);
                 }
                 echo json_encode(array("statusCode" => "1", "id" => "$insert"));
                 exit();
@@ -135,17 +171,20 @@ if($route == '/user/invoice/add'):
             $company_name = $CompanyInfos[0]['company_name'];
             $company_email = $CompanyInfos[0]['email'];
             $company_phone = $CompanyInfos[0]['phone'];
+            $company_address = $firmInfo[0]['billing_address'];
             $profile_image = $CompanyInfos[0]['profile_image'];
         }else{
             $company_name = $AdminInfos[0]['company_name'];
             $company_email = $AdminInfos[0]['email'];
             $company_phone = $AdminInfos[0]['phone'];
+            $company_address = $AdminInfos[0]['address'];
             $profile_image = $AdminInfos[0]['profile_image'];
         }
         $CompanyInfo = array(
             'company_name' => $company_name,
             'email' => $company_email,
             'phone' => $company_phone,
+            'address' => $company_address,
             'profile_image' => $profile_image
         );
         echo $twig->render('user/invoice/add.twig', ['seo' => $seo,'firmInfo' => $firmInfo,'CompanyInfo' => $CompanyInfo,'firmPaymentInfo' => $firmPaymentInfo,'firmBillingInfo' => $firmBillingInfo,'clients' => $users,'invoiceNumber' => $invoiceNumber,'countries' => $CountriesInfo]);
@@ -251,10 +290,19 @@ if (!empty($_POST['firm_name'])){
     $subtotal = $_POST['subtotal'];
     $discount_type = $_POST['discount_type'];
     $discount_amount = $_POST['discount_amount'];
-    $discount_amount_total = $_POST['discount_amount_total'];
+    if ($_POST['discount_amount_total'] != 'undefined'){
+        $discount_amount_total = $_POST['discount_amount_total'];
+    }else{
+        $discount_amount_total = 0;
+    }
     $final_total = $_POST['final_total'];
     $invoice_detail_notes = $_POST['invoice_detail_notes'];
     $currency = $_POST['currency'];
+    if($final_total >'0'){
+        $invoiceStatus='unpaid';
+    }else{
+        $invoiceStatus='paid';
+    }
     // Firm Bank details
     if (!empty($_POST['account_number']) && !empty($_POST['bank_name']) && !empty($_POST['swift_code']) && !empty($_POST['billing_country'])) {
     $account_number = $_POST['account_number'];
@@ -279,7 +327,7 @@ if (!empty($_POST['firm_name'])){
             // products details
             'account_number' => $account_number, 'bank_name' => $bank_name, 'swift_code' => $swift_code,'billing_country' => $billing_country,
             // amount details
-            'subtotal' => $subtotal, 'discount_type' => $discount_type, 'discount_amount' => $discount_amount, 'discount_amount_total' => $discount_amount_total,'final_total' => $final_total,'invoice_detail_notes' => $invoice_detail_notes,'currency' => $currency,
+            'subtotal' => $subtotal, 'discount_type' => $discount_type, 'discount_amount' => $discount_amount, 'discount_amount_total' => $discount_amount_total,'final_total' => $final_total,'invoice_detail_notes' => $invoice_detail_notes,'currency' => $currency,'status' => $invoiceStatus
         ])->where('id','=',$id)->run();
         $send_email = $_POST['send_email'];
         $send_message = $_POST['send_message'];
@@ -335,4 +383,48 @@ if($route == '/invoice/view/$invoice_id'):
         'amount_item' => $invoiceInfo[0]['amount_item']
     ];
     echo $twig->render('user/invoice/view_invoice_email.twig', ['seo' => $seo,'invoiceInfo' => $invoiceInfo,'firmInfo' => $firmInfo,'clientInfo' => $clientInfo, 'ProductDetails' => $ProductDetails]);
+endif;
+
+if($route == '/stripe/pay-invoice'):
+    require 'vendor/autoload.php';
+    $invoiceID = $_POST['invoiceID'];
+    $invoiceInfo = $h->table('invoice')->select()->where('id', '=', $invoiceID)->fetchAll();
+    $token = $_POST['stripeToken'];
+    $finalCent= $invoiceInfo[0]['final_total'] * 100;
+    try {
+        $stripe = new \Stripe\StripeClient($Stripe_secret_key);
+        $charge = $stripe->charges->create([
+            'amount' => $finalCent,
+            'currency' => 'usd',
+            'description' => "Invoice #" . rand(99999, 999999999),
+            'source' => $token,
+        ]);
+        $id = $charge['id'];
+        $amount = $charge['amount'];
+        $balance_transaction = $charge['balance_transaction'];
+        $currency = $charge['currency'];
+        $status = $charge['status'];
+        if($status == 'succeeded'){
+            $insert = $h->update('invoice')->values([ 'transaction_id' => $balance_transaction,'status' => 'paid'])->where('id','=',$invoiceID)->run();
+            if ($insert) {
+                $insert = $h->insert('transactions')->values([ 'transaction_id' => $balance_transaction,'invoice_id' => $invoiceID,'client_id' => $invoiceInfo[0]['client_id'],'price' => $invoiceInfo[0]['final_total'],'pay_with'=>'stripe'])->run();
+//                include "views/email-template/invoice_paid.php";
+//                mailSender($env['SENDER_EMAIL'],$email,'Congratulation  - '.$env['SITE_NAME'],$message,$mail);
+                http_response_code(200);
+                echo json_encode(array("statusCode" => 200, "message"=>"Invoice payment processed successfully"));
+            } else {
+                http_response_code(202);
+                echo json_encode(array("statusCode" => 202, "message"=>"Something Went Wrong!"));
+            }
+        }else{
+            http_response_code(202);
+            echo json_encode(array("statusCode" => 202, "message"=>"Something Went Wrong!"));
+        }
+    }catch (\Stripe\Exception\CardException $e) {
+        http_response_code(202);
+        echo json_encode(array("statusCode" => 202, "message"=>$e->getMessage()));
+    } catch (Exception $e) {
+        http_response_code(202);
+        echo json_encode(array("statusCode" => 202, "message"=>$e->getMessage()));
+    }
 endif;

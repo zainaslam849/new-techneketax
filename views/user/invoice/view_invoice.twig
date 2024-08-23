@@ -1,23 +1,56 @@
 {% extends 'user/master.twig' %}
 {% block content %}
     <!--  BEGIN CONTENT AREA  -->
-    <div id="content" class="main-content">
-        <div class="layout-px-spacing">
-
-            <div class="middle-content container-xxl p-0">
+    <!--  BEGIN CONTENT AREA  -->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Toolbar-->
+        <div class="toolbar" id="kt_toolbar">
+            <!--begin::Container-->
+            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                    <!--begin::Title-->
+                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">View Invoice </h1>
+                    <!--end::Title-->
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-300 border-start mx-4"></span>
+                    <!--end::Separator-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">Invoices</li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-dark">View Invoice</li>
+                        <!--end::Item-->
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <div class="post d-flex flex-column-fluid" id="kt_post" >
+            <!--begin::Container-->
+            <div id="kt_content_container" class="container-fluid" >
                 <div id="call-ringing"></div>
 
-                <div class="row invoice layout-top-spacing layout-spacing">
+                <div class="row invoice layout-top-spacing layout-spacing" >
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 
-                        <div class="doc-container">
+                        <div class="doc-container card p-12">
 
                             <div class="row">
 
                                 <div class="col-xl-9">
 
-                                    <div class="invoice-container">
-                                        <div class="invoice-inbox" id="printableArea">
+                                    <div class="invoice-container" id="printableArea">
+                                        <div class="invoice-inbox" >
 
                                             <div id="ct" class="">
 
@@ -46,10 +79,10 @@
                                                                 </div>
 
                                                                 <div class="col-sm-6 text-sm-end">
-                                                                    <p class="inv-list-number mt-sm-3 pb-sm-2 mt-4"><span class="inv-title">Invoice : </span> <span class="inv-number">{{ invoiceInfo[0].invoice_number }}</span></p>
+                                                                    <p class="fw-bolder fs-3 text-gray-800 mb-8"><span class="inv-title">Invoice : </span> <span class="inv-number">{{ invoiceInfo[0].invoice_number }}</span></p>
                                                                     <p class="inv-created-date mt-sm-5 mt-3"><span class="inv-title">Invoice Date : </span> <span class="inv-date">{{ invoiceInfo[0].invoice_date }}</span></p>
                                                                     <p class="inv-due-date"><span class="inv-title">Due Date : </span> <span class="inv-date">{{ invoiceInfo[0].due_date }}</span></p>
-                                                                </div>
+                                                                    <p class="inv-due-date"> <span class="inv-title">Status: </span> <span class="inv-date badge {% if invoiceInfo[0].status == 'paid' %} badge-success {% else %} badge-danger {% endif %}"> {{ invoiceInfo[0].status | capitalize }} </span> </p>                                                                </div>
                                                             </div>
 
                                                         </div>
@@ -59,7 +92,7 @@
                                                             <div class="row">
 
                                                                 <div class="col-xl-8 col-lg-7 col-md-6 col-sm-4 align-self-center">
-                                                                    <p class="inv-to">Invoice To</p>
+                                                                    <h6 class="inv-to">Invoice To</h6>
                                                                 </div>
 
                                                                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 align-self-center order-sm-0 order-1 text-sm-end mt-sm-0 mt-5">
@@ -83,12 +116,11 @@
                                                             </div>
 
                                                         </div>
-
                                                         <div class="inv--product-table-section">
                                                             <div class="table-responsive">
                                                                 <table class="table">
                                                                     <thead class="">
-                                                                    <tr>
+                                                                    <tr class="border-bottom fs-6 fw-bolder text-muted">
                                                                         <th scope="col">S.No</th>
                                                                         <th scope="col">Items</th>
                                                                         <th class="text-end" scope="col">Qty</th>
@@ -110,7 +142,7 @@
 {#                                                                                {% continue %} #}
 {#                                                                            {% endif %}#}
                                                                             {% set SrNo = i + 1 %}
-                                                                            <tr>
+                                                                            <tr class="fw-bolder text-gray-700 fs-5 ">
                                                                                 <td>{{ SrNo }}</td>
                                                                                 <td>{{ item_des[i]|e }}</td>
                                                                                 <td class="text-end">{{ quantity[i]|e }}</td>
@@ -123,7 +155,7 @@
                                                                 </table>
                                                             </div>
                                                         </div>
-
+                                                        <div class="separator separator-dashed my-10"></div>
                                                         <div class="inv--total-amounts">
 
                                                             <div class="row mt-4">
@@ -133,22 +165,22 @@
                                                                     <div class="text-sm-end">
                                                                         <div class="row">
                                                                             <div class="col-sm-8 col-7">
-                                                                                <p class="">Sub Total :</p>
+                                                                                <p class="fw-bold pe-10 text-gray-600 fs-7">Sub Total :</p>
                                                                             </div>
                                                                             <div class="col-sm-4 col-5">
-                                                                                <p class="">${{ invoiceInfo[0].subtotal }}</p>
+                                                                                <p class="text-end fw-bolder fs-6 text-gray-800">${{ invoiceInfo[0].subtotal }}</p>
                                                                             </div>
                                                                             <div class="col-sm-8 col-7">
-                                                                                <p class=" discount-rate">Discount {% if invoiceInfo[0].discount_type == "Percent"  %}{{ invoiceInfo[0].discount_amount }}%    {% endif %}:</p>
+                                                                                <p class="fw-bold pe-10 text-gray-600 fs-7 discount-rate">Discount {% if invoiceInfo[0].discount_type == "Percent"  %}{{ invoiceInfo[0].discount_amount }}%    {% endif %}:</p>
                                                                             </div>
                                                                             <div class="col-sm-4 col-5">
-                                                                                <p class="">${{ invoiceInfo[0].discount_amount_total }}</p>
+                                                                                <p class="text-end fw-bolder fs-6 text-gray-800">${{ invoiceInfo[0].discount_amount_total }}</p>
                                                                             </div>
                                                                             <div class="col-sm-8 col-7 grand-total-title mt-3">
-                                                                                <h4 style="color: #515365;">Grand Total : </h4>
+                                                                                <p class="fw-bold pe-10 text-gray-600 fs-7">Grand Total : </p>
                                                                             </div>
                                                                             <div class="col-sm-4 col-5 grand-total-amount mt-3">
-                                                                                <h4 style="color: #515365;">${{ invoiceInfo[0].final_total }}</h4>
+                                                                                <h4 class="text-end fw-bolder fs-6 text-gray-800">${{ invoiceInfo[0].final_total }}</h4>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -181,20 +213,38 @@
 
                                 <div class="col-xl-3">
 
-                                    <div class="invoice-actions-btn">
+                                    <div class="d-print-none border border-dashed border-gray-300 card-rounded  p-9 bg-lighten">
 
                                         <div class="invoice-action-btn">
 
                                             <div class="row">
-                                                <div class="col-xl-12 col-md-3 col-sm-6">
-                                                    <a href="javascript:void(0);" class="btn btn-secondary btn-print  action-print">Print</a>
-                                                </div>
-                                                <div class="col-xl-12 col-md-3 col-sm-6">
-                                                    <button type="button" class="btn btn-success btn-download w-100" style="margin-bottom: 20px;" id="download">Download</button>
-                                                </div>
-                                                <div class="col-xl-12 col-md-3 col-sm-6">
-                                                    <a href="/user/invoice/update/{{ invoiceInfo[0].id }}" class="btn btn-dark btn-edit">Update</a>
-                                                </div>
+                                                {% if loginType == "firm" %}
+                                                    <div class="col-md-12">
+                                                        <a href="javascript:void(0);" class="btn btn-secondary btn-print w-100 action-print" style="margin-bottom: 20px;">Print</a>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        {% if invoiceInfo[0].status == "unpaid" %}
+                                                        <a href="/user/invoice/update/{{ invoiceInfo[0].id }}" class="btn btn-success btn-download w-100" id="btn"  style="margin-bottom: 20px;">Update</a>
+                                                        {% else %}
+                                                            <a href="#" disabled="disabled" class="btn btn-info btn-download w-100" id="btn"  style="margin-bottom: 20px;">Paid</a>
+
+                                                        {% endif %}
+                                                    </div>
+                                                {% else %}
+                                                    <div class="col-md-12">
+                                                        <a href="javascript:void(0);" class="btn btn-secondary btn-print w-100 action-print" style="margin-bottom: 20px;">Print</a>
+                                                    </div>
+                                                {% endif %}
+                                                    <div class=" col-md-12">
+                                                        <button type="button" class="btn btn-danger btn-download w-100" style="margin-bottom: 20px;" id="download">Download</button>
+                                                    </div>
+                                                {% if loginType == "client" %}
+                                                {% if invoiceInfo[0].status == "unpaid" %}
+                                                <div class=" col-md-12">
+                                                        <button type="button" class="btn btn-info w-100"  data-bs-toggle="modal" data-bs-target="#kt_modal_1" style="margin-bottom: 20px;" id="download">Pay Invoice</button>
+                                                    </div>
+                                                {% endif %}
+                                                {% endif %}
                                             </div>
 
                                         </div>
@@ -213,29 +263,173 @@
             </div>
 
         </div>
-        <!--  BEGIN FOOTER  -->
-        <div class="footer-wrapper">
-            <div class="footer-wrapper">
-                <div class="footer-section f-section-1">
-                    <p class="">Copyright © <span class="dynamic-year">2024</span> <a target="_blank" href="https://zotecsoft.com/">ZotecSoft</a>, All rights reserved.</p>
-                </div>
-            </div>
-        </div>
-        <!--  END FOOTER  -->
+
     </div>
     <!--  END CONTENT AREA  -->
+    <style>
+        /* Set styles for the container holding the Card Element */
+        #uploadForm #card-element {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Set styles for the Card Element container */
+        #uploadForm .StripeElement {
+            background-color: white !important;
+            padding: 10px !important;
+            border-radius: 5px !important;
+        }
+
+        /* Set styles for the Card Element inputs */
+        #uploadForm .StripeElement input {
+            border: none !important;
+            outline: none !important;
+        }
+
+        /* Style the placeholder text */
+        #uploadForm .StripeElement ::placeholder {
+            color: #aab7c4 !important;
+        }
+
+        /* Style the inputs when they are focused */
+        #uploadForm .StripeElement :focus {
+            box-shadow: 0 0 5px rgba(81, 203, 238, 1) !important;
+        }
+
+        /* Additional style for the CardField input wrapper */
+        .CardField-input-wrapper {
+            background-color: #f7f7f7 !important;
+            padding: 10px !important;
+            border: 1px solid #ccc !important;
+            border-radius: 5px !important;
+        }
+
+        /* Ensure the card element fits within the modal */
+        #uploadForm .StripeElement {
+            width: 100%;
+        }
+    </style>
+    <div class="modal fade" tabindex="-1" id="kt_modal_1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pay with Debit/Credit Card</h5>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <span class="svg-icon svg-icon-2x"></span>
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <form method="post" id="uploadForm">
+                    <div class="modal-body">
+
+                        <div id="card-element"></div>
+                        <br>
+                        <input type="hidden" name="invoiceID" id="invoiceID" value="{{ invoiceInfo[0].id }}">
+                        <div id="card-errors" role="alert"></div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="btn">Pay Invoice</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('{{ Stripe_public_key }}');
+        var elements = stripe.elements();
+        var style = {
+            base: {
+                fontSize: '16px',
+                color: '#32325d',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: 'antialiased',
+                '::placeholder': {
+                    color: '#7e7e7e',
+                },
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a',
+            },
+        };
+        var cardElement = elements.create('card', { style: style });
+        cardElement.mount('#card-element');
+
+        var form = document.getElementById('uploadForm');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            document.getElementById('btn').disabled = true;
+            document.getElementById("btn").innerHTML = "Loading...";
+
+            stripe.createToken(cardElement).then(function(result) {
+                if (result.error) {
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                    document.getElementById('btn').disabled = false;
+                    document.getElementById("btn").innerHTML = "Pay Invoice";
+                } else {
+                    stripe_tool(result.token.id);
+
+                }
+            });
+        });
+        function stripe_tool(stripeToken) {
+            $("#btn").prop("disabled", true);
+            var formData = new FormData(document.getElementById("uploadForm"));
+            formData.append('stripeToken', stripeToken);
+            $.ajax({
+                url: "/stripe/pay-invoice",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (data) {
+                    data=JSON.parse(data);
+                    console.log(data);
+                    $("#btn").prop("disabled", false);
+                    document.getElementById("btn").innerHTML = "Pay Invoice";
+                    if (data['statusCode'] == '200') {
+                       location.reload();
+                        $('#result').html('<div class="alert alert-success">'+data['message']+'</div>');
+                        // window.location.href = "/contact-form";
+                    } else {
+                        document.getElementById("uploadForm").reset();
+                        $('#card-errors').html('<div class="alert alert-danger">'+data['message']+'</div>');
+                    }
+                },
+                error: function() {
+                    // Re-enable the button in case of an error
+                    $("#btn").prop("disabled", false);
+                }
+            });
+        }
+    </script>
     <script>
         window.onload = function () {
             document.getElementById("download")
                 .addEventListener("click", () => {
-                    const invoice = this.document.getElementById("printableArea");
-                    let x = "Invoice";
+                    const printableArea = document.getElementById("printableArea");
+                    let baseFilename = "Invoice";
+
+                    // Generate a random number
+                    let randomNum = Math.floor(Math.random() * 1000000); // Random number up to 1,000,000
+                    let filename = `${baseFilename}_${randomNum}.pdf`; // Create filename with random number
 
                     var opt = {
-                        margin: 0,
-                        filename: x + '.pdf',
+                        margin: 0.5, // Set margin to 0.5 inch or any desired value
+                        filename: filename,
                         image: {
                             type: 'jpeg',
                             quality: 0.98
@@ -250,8 +444,10 @@
                             orientation: 'landscape', // Change orientation to 'landscape' for wider width
                         }
                     };
+
                     html2pdf().from(printableArea).set(opt).save();
-                })
+                });
         }
     </script>
+
 {% endblock %}
