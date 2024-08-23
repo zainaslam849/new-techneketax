@@ -486,6 +486,7 @@
                     CKEDITOR.instances[instance].updateElement();
                 }
                 document.getElementById('btn').disabled = true;
+                document.getElementById('btn').innerHTML = 'Loading';
                 var formData = new FormData(document.getElementById("invoiceForm"));
                 $.ajax({
                     url: "/user/invoice/add",
@@ -499,6 +500,7 @@
                         console.log(dataResult);
                         console.log(dataResult['statusCode']);
                         document.getElementById('btn').disabled = false;
+                        document.getElementById('btn').innerHTML = 'Loading';
                         if (dataResult['statusCode'] == 1) {
                             toastr.success('Added Successfully.');
                             document.getElementById("invoiceForm").reset();

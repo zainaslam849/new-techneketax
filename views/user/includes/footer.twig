@@ -425,6 +425,7 @@
                         response_client = $.parseJSON(response_client);
                         console.log(response_client);
                         if (response_client == 1) {
+                            $('#table').DataTable().ajax.reload(null, false);
                             document.getElementById('btn').disabled = false;
                             document.getElementById("btn").innerHTML = "ADD";
                             $('#addClientModal').modal('hide');
@@ -495,6 +496,7 @@
                         response_associate = $.parseJSON(response_associate);
                         console.log(response_associate);
                         if (response_associate == 1) {
+                            $('#table').DataTable().ajax.reload(null, false);
                             document.getElementById('btn').disabled = false;
                             document.getElementById("btn").innerHTML = "ADD";
                             $('#addAssociatesModal').modal('hide');
