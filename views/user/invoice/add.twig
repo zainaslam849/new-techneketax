@@ -100,7 +100,6 @@
                                                                     {% if CompanyInfo.company_name != "" %}
                                                                     <input type="text" class="form-control form-control-solid " id="company-name" name="firm_name" placeholder="Business Name" value="{{ CompanyInfo.company_name }}">
                                                                     {% else %}
-                                                                    <p style="color: red">*Please Add Business Name in Your Profile <a href="/user/profile">Click Here To Add</a> </p>
                                                                     <input type="text" class="form-control form-control-solid " id="company-name" name="firm_name" placeholder="Business Name" >
                                                                     {% endif %}
                                                                     <input type="hidden" name="firm_id" value="{{ loginId }}">
@@ -112,7 +111,6 @@
                                                                     {% if CompanyInfo.email != "" %}
                                                                         <input type="text" class="form-control form-control-solid " id="company-email" name="firm_email" placeholder="name@company.com" value="{{ CompanyInfo.email }}">
                                                                     {% else %}
-                                                                        <p style="color: red">*Please Add Firm Email in Your Profile <a href="/user/profile">Click Here To Add</a> </p>
                                                                         <input type="text" class="form-control form-control-solid " id="company-email" name="firm_email" placeholder="name@company.com" >
                                                                     {% endif %}
                                                                 </div>
@@ -123,7 +121,6 @@
                                                                     {% if CompanyInfo.address != "" %}
                                                                         <input type="text" class="form-control form-control-solid " id="firm_address" name="firm_address" placeholder="XYZ Street"  value="{{ CompanyInfo.address }}">
                                                                     {% else %}
-                                                                        <p style="color: red">*Please Add Firm Email in Your Profile <a href="/user/profile">Click Here To Add</a> </p>
                                                                         <input type="text" class="form-control form-control-solid " id="firm_address" name="firm_address" placeholder="XYZ Street"  value="{{ CompanyInfo.address }}">
                                                                     {% endif %}
 
@@ -135,7 +132,6 @@
                                                                     {% if  CompanyInfo.phone != "" %}
                                                                         <input type="text" class="form-control form-control-solid " id="company-phone" name="firm_phone" placeholder="(123) 456 789" value="{{ CompanyInfo.phone }}">
                                                                     {% else %}
-                                                                        <p style="color: red">*Please Add Firm Phone No in Your Profile <a href="/user/profile">Click Here To Add</a> </p>
                                                                         <input type="text" class="form-control form-control-solid " id="company-phone" name="firm_phone" placeholder="(123) 456 789">
                                                                     {% endif %}
 

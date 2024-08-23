@@ -79,14 +79,16 @@
                                             <!--end::Text-->
                                             <!--begin::Code-->
                                             <div class="row">
+                                                {% if documentHub[0].document_id != "" and documentHub[0].document_id != null %}
                                             <div class="col-lg-12 text-center">
-                                                <a role="button" onclick="download_files('{{documentHub[0].document_id }}')"  class="btn btn-primary ">
+                                                <a role="button" onclick="download_files('{{ documentHub[0].document_id }}')"  class="btn btn-primary ">
                                                     <!--begin::Svg Icon | path: icons/duotune/communication/com005.svg-->
                                                     <span class="svg-icon svg-icon-2">
 													<i class="fa-solid fa-download"></i>
 												</span>
                                                  Download File</a>
                                             </div>
+                                                {% endif %}
                                             </div>
                                         </div>
 
@@ -367,25 +369,12 @@
                 allowMultiple: false,
                 maxFiles: 1,
                 labelIdle: 'Drag & Drop your image or <span class="filepond--label-action">Browse</span>',
-                acceptedFileTypes: [
-                    'image/*',
-                    'application/pdf',
-                    'application/msword',
-                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                    'application/vnd.ms-excel',
-                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'text/plain',
-                    'application/zip',
-                    'application/x-rar-compressed',
-                    'application/x-7z-compressed',
-                    'application/x-tar',
-                    'application/gzip'
-                ],
                 maxFileSize: '205MB',
             });
 
             // Insert Data
             window.send_document = function() {
+                document.getElementById('btn-profile').disabled = true;
                 var formData = new FormData(document.getElementById("DocumentForm"));
                 const pondFiles = pond.getFiles();
                 pondFiles.forEach(file => {
@@ -400,6 +389,7 @@
                     cache: false,
                     processData: false,
                     success: function (data) {
+                        document.getElementById('btn-profile').disabled = false;
                         console.log(data);
                         pond.removeFiles();
                         if(data == '1'){

@@ -813,13 +813,13 @@ if($_GET['page_name']=="view_document_hub_client"){
     $document_hubs = $h->table('document_hub')->select()->where('client_id', '=', $loginUserId)->orderBy('id', 'desc')->fetchAll();
     if (!empty($document_hubs)) {
         foreach ($document_hubs as $document_hub) {
-            if (!empty($document_hub['firm_des']) && $document_hub['firm_des'] != ''){
+            if (!empty($document_hub['firm_des']) && $document_hub['firm_des'] != NULL){
                 $words = explode(' ', $document_hub['firm_des']);
                 $des = implode(' ', array_slice($words, 0, 40));
                 $firmDes = '<p><a role="button" onclick="userStatus('.$document_hub['id'].')"  class=" text-muted"><span class="text-muted fw-bold fs-6">' . $des . '....</span>Read More</a></p>';
 
             }else{
-                $firmDes = array('firmDes' =>'---');
+                $firmDes = '<p>---</p>';
             }
             $UserFirmDetails = $h->table('users')->select()->where('id', '=', $document_hub['firm_id'])->orderBy('id', 'desc')->fetchAll();
             if($document_hub['status'] == 'yes'){

@@ -218,7 +218,7 @@
         //Update  Data
         function request_for_document() {
             var form_Data = new FormData(document.getElementById("DocumentForm"));
-
+            document.getElementById('btn-profile').disabled = true;
             $.ajax({
                 url: "/user/request_for_document",
                 type: "POST",
@@ -228,11 +228,9 @@
                 processData: false,
                 success: function (dataResult) {
                     console.log(dataResult);
-
-                    $("#btn-profile").removeAttr("disabled");
+                    document.getElementById('btn-profile').disabled = false;
                     if (dataResult == '1') {
                         $('#table').DataTable().ajax.reload(null, false);
-                        $("#btn-profile").removeAttr("enabled");
                         $('#editExampleModal').modal('hide');
                         toastr.success('Document Request Sent.');
                         document.getElementById("DocumentForm").reset();

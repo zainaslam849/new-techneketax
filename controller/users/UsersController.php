@@ -38,3 +38,41 @@ endif;
             exit();
         }
 endif;
+    if ($route == '/user/add_user'):
+        if (!empty($_POST['fname']) && !empty($_POST['lname'])) {
+            @$fname = $_POST['fname'];
+            @$lname = $_POST['lname'];
+            @$phone = $_POST['phone'];
+            @$firm_id = $_POST['firm_id'];
+            @$type = $_POST['type'];
+                $email=$_POST['email'];
+            @$password = $_POST['password'];
+            $uppercase = preg_match('@[A-Z]@', $password);
+            $lowercase = preg_match('@[a-z]@', $password);
+            $number = preg_match('@[0-9]@', $password);
+
+            if (!$uppercase || !$lowercase || !$number || strlen($_POST['password']) < 8) {
+                echo "2";
+                exit();
+            } else {
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            }
+            $userAvailable = $h->table('users')->select()->where('email', '=', $email);
+            if($userAvailable->count() < 1){
+            try {
+            $insert = $h->insert('users')->values([ 'firm_id' => $firm_id,'fname' => $fname, 'lname' => $lname, 'email' => $email, 'phone' => $phone,'type' => $type, 'password' => $hashed_password])->run();
+            echo "1";
+            exit();
+        } catch (PDOException $e) {
+        echo "0";
+        exit();
+    }
+            }else{
+       echo  "4";
+       exit();
+        }
+        }else{
+            echo "3";
+            exit();
+        }
+endif;

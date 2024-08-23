@@ -9,10 +9,29 @@
         <!--begin::Menu-->
         <ul class="menu menu-gray-600 menu-hover-primary fw-bold order-1">
             <li class="menu-item">
-                <a href="/about" target="_blank" class="menu-link px-2">About</a>
-            </li>
-            <li class="menu-item">
-                <a href="/support" target="_blank" class="menu-link px-2">Support</a>
+                <div id="google_translate_element" style="display: none"></div>
+                <!-- Custom Language Selector -->
+                <select id="languageSelect" class=" form-select form-select-solid" >
+                    <option value="en" class="">English</option>
+                    <option value="es" class="">Spanish</option>
+                    <option value="ja" class="">Japanese</option>
+                    <option value="zh-CN" class="">Chinese</option>
+                    <option value="pt" class="">Portuguese</option>
+                    <option value="ar" class="">Arabic</option>
+                    <option value="nl" class="">Dutch</option>
+                    <option value="de" class="">German</option>
+                    <option value="fr" class="">French</option>
+                    <option value="it" class="">Italian</option>
+                    <option value="pl" class="">Polish</option>
+                    <option value="ru" class="">Russian</option>
+                    <option value="sw" class="">Swahili</option>
+                    <option value="ur" class="">Urdu</option>
+                    <option value="hi" class="">Hindi</option>
+                    <option value="bn" class="">Bengali</option>
+                    <option value="fa" class="">Persian</option>
+                    <option value="ta" class="">Tamil</option>
+                    <option value="ml" class="">Malayalam</option>
+                </select>
             </li>
 
         </ul>
@@ -46,7 +65,7 @@
                                                                 </svg>
                                                             </span>
                             <input type="text" class="form-control" placeholder="Email" name="email" >
-                            <input type="hidden" name="firm_id" value="{{ FirmId }}" >
+                            <input type="hidden" name="firm_id" value="{{ loginId }}" >
                             <input type="hidden" name="csrf" value="{{csrf}}">
                         </div>
                     </div>
@@ -87,7 +106,7 @@
                                                                 </svg>
                                                             </span>
                             <input type="text" class="form-control" placeholder="Email" name="email" >
-                            <input type="hidden" name="firm_id" value="{{ FirmId }}" >
+                            <input type="hidden" name="firm_id" value="{{ loginId }}" >
                             <input type="hidden" name="csrf" value="{{csrf}}">
                         </div>
                     </div>
@@ -109,8 +128,106 @@
         </div>
     </div>
 </div>
-
-
+<div class="modal fade inputForm-modal" id="addClientModal" tabindex="-1" aria-labelledby="addClientModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-700px">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addClientModalLabel">Add Client</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+            </div>
+            <div class="modal-body scroll-y mx-5 mx-xl-5 my-7">
+                <form  method="post" id="AddClientForm" enctype="multipart/form-data">
+                    <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll"
+                         data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                         data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header"
+                         data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px"
+                         style="max-height: 570px;">
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <label class="form-label">First name</label>
+                            <input type="text" class="form-control form-control-solid" id="fname_client" name="fname" placeholder="First Name">
+                            <input type="hidden" name="csrf" value="{{ csrf}}">
+                            <input type="hidden" name="firm_id_client" id="firm_id_client" value="{{ loginId}}">
+                        </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <label class="form-label">Last name</label>
+                            <input type="text" class="form-control form-control-solid" id="lname_client" name="lname" placeholder="Last Name">
+                        </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <label class="form-label">Email adress</label>
+                            <input type="text" class="form-control form-control-solid" id="email_client" name="email" placeholder="Email" >
+                        </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <label class="form-label">Phone No</label>
+                            <input type="tel" class="form-control form-control-solid" id="phone_client" name="phone" placeholder="Phone No">
+                        </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control form-control-solid" id="password_client" name="password" placeholder="Password">
+                        </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control form-control-solid" id="cpassword_client" name="cpassword" placeholder="Confirm Password">
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" name="add_new" id="btn" class="btn btn-primary" onclick="add_Client()">ADD</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade inputForm-modal" id="addAssociatesModal" tabindex="-1" aria-labelledby="addAssociatesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-700px">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAssociatesModalLabel">Add Associate</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+            </div>
+            <div class="modal-body scroll-y mx-5 mx-xl-5 my-7">
+                <form  method="post" id="addAssociateForm" enctype="multipart/form-data">
+                    <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll"
+                         data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                         data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header"
+                         data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px"
+                         style="max-height: 570px;">
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <label class="form-label">First name</label>
+                            <input type="text" class="form-control form-control-solid" id="fname_associate" name="fname" placeholder="First Name">
+                            <input type="hidden" name="csrf" value="{{ csrf}}">
+                            <input type="hidden" name="firm_id_associate" id="firm_id_associate" value="{{ loginId}}">
+                        </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <label class="form-label">Last name</label>
+                            <input type="text" class="form-control form-control-solid" id="lname_associate" name="lname" placeholder="Last Name">
+                        </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <label class="form-label">Email adress</label>
+                            <input type="text" class="form-control form-control-solid" id="email_associate" name="email" placeholder="Email" >
+                        </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <label class="form-label">Phone No</label>
+                            <input type="tel" class="form-control form-control-solid" id="phone_associate" name="phone" placeholder="Phone No">
+                        </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control form-control-solid" id="password_associate" name="password" placeholder="Password">
+                        </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control form-control-solid" id="cpassword_associate" name="cpassword" placeholder="Confirm Password">
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" name="add_new" id="btn" class="btn btn-primary" onclick="add_Associates()">ADD</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
     <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
     <span class="svg-icon">
@@ -152,7 +269,43 @@
     <script src="{{ env.APP_URL }}assets/dashboard/src/assets/js/apps/invoice-preview.js"></script>
 {% endif %}
 {#profile cdns#}
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        document.documentElement.lang = 'en'; // Ensure the language is set before Google Translate initializes
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,es,fr,de,it,ar,ja,zh-CN,pt,nl,pl,ru,sw,ur,hi,bn,fa,ta,ml', // Include all the languages
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
 
+    function triggerGoogleTranslate(languageCode) {
+        var googleFrame = document.querySelector('.goog-te-combo');
+        if (googleFrame) {
+            googleFrame.value = languageCode;
+            googleFrame.dispatchEvent(new Event('change'));
+        }
+    }
+
+    document.getElementById('languageSelect').addEventListener('change', function () {
+        var languageCode = this.value;
+        console.log(languageCode);
+        triggerGoogleTranslate(languageCode);
+    });
+    window.onscroll = function() {
+        // Assuming "languageSelect" is the class name of the header
+        var header = document.getElementsByClassName("languageSelect")[0]; // Access the first element with this class
+        var select = document.getElementById("languageSelect");
+
+        if (window.pageYOffset > 50) {
+            header.classList.add("scrolled");
+        } else {
+            header.classList.remove("scrolled");
+        }
+    };
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script>
     $(document).ready(function() {
         // Load the spinner initially
@@ -239,6 +392,145 @@
 
             }
         });
+    }
+    function add_Client() {
+        var fname = $("#fname_client").val();
+        var lname = $("#lname_client").val();
+        var phone = $("#phone_client").val();
+        var email = $("#email_client").val();
+        var firm_id = $("#firm_id_client").val();
+        var password = $("#password_client").val();
+        var cpassword = $("#cpassword_client").val();
+        var csrf_token = $("input[name=csrf]").val();
+
+        if (fname != "" && lname != "" && email != ""&& firm_id != "" && password != "" && cpassword != "") {
+            if (password == cpassword) {
+                document.getElementById("btn").innerHTML = "Loading";
+                document.getElementById('btn').disabled = true;
+                $.ajax({
+                    type: 'post',
+                    url: '/user/add_user',
+                    data: {
+                        add_Client: "add_Client",
+                        fname: fname,
+                        lname: lname,
+                        phone: phone,
+                        firm_id: firm_id,
+                        email: email,
+                        password: password,
+                         type:"client",
+                        csrf: csrf_token,
+                    },
+                    success: function (response_client) {
+                        response_client = $.parseJSON(response_client);
+                        console.log(response_client);
+                        if (response_client == 1) {
+                            document.getElementById('btn').disabled = false;
+                            document.getElementById("btn").innerHTML = "ADD";
+                            $('#addClientModal').modal('hide');
+                            toastr.success('Client Added');
+                            document.getElementById("AddClientForm").reset();
+
+                        } else if (response_client == 2) {
+                            document.getElementById('btn').disabled = false;
+                            document.getElementById("btn").innerHTML = "ADD";
+                            toastr.error("A minimum 8 characters password contains a combination of uppercase and lowercase letter and number.");
+                        } else if (response_client == 3) {
+                            document.getElementById('btn').disabled = false;
+                            document.getElementById("btn").innerHTML = "ADD";
+                            toastr.error("Missing Required Input");
+                        } else if (response_client == 4) {
+                            document.getElementById('btn').disabled = false;
+                            document.getElementById("btn").innerHTML = "ADD";
+                            toastr.error("Email Already Exist. Login to continue.");
+                        } else {
+                            document.getElementById('btn').disabled = false;
+                            document.getElementById("btn").innerHTML = "ADD";
+                            toastr.error('Somthing Went Wrong.');
+                        }
+                    }
+                });
+            }else {
+                document.getElementById("btn").innerHTML = "ADD";
+                 document.getElementById("btn").disabled = false;
+                    toastr.error('Password Not Matched');
+            }
+        }else{
+            document.getElementById("btn").innerHTML = "ADD";
+             document.getElementById("btn").disabled = false;
+                toastr.error('Missing Required Input');
+        }
+        return false;
+    }
+    function add_Associates() {
+        var fname = $("#fname_associate").val();
+        var lname = $("#lname_associate").val();
+        var phone = $("#phone_associate").val();
+        var email = $("#email_associate").val();
+        var firm_id = $("#firm_id_associate").val();
+        var password = $("#password_associate").val();
+        var cpassword = $("#cpassword_associate").val();
+        var csrf_token = $("input[name=csrf]").val();
+
+        if (fname != "" && lname != "" && email != "" && firm_id != "" && password != "" && cpassword != "") {
+            if (password == cpassword) {
+                document.getElementById("btn").innerHTML = "Loading";
+                document.getElementById('btn').disabled = true;
+                $.ajax
+                ({
+                    type: 'post',
+                    url: '/user/add_user',
+                    data: {
+                        add_Associates: "add_Associates",
+                        fname: fname,
+                        lname: lname,
+                        phone: phone,
+                        firm_id: firm_id,
+                        email: email,
+                        password: password,
+                        type:"member",
+                        csrf: csrf_token,
+                    },
+                    success: function (response_associate) {
+                        response_associate = $.parseJSON(response_associate);
+                        console.log(response_associate);
+                        if (response_associate == 1) {
+                            document.getElementById('btn').disabled = false;
+                            document.getElementById("btn").innerHTML = "ADD";
+                            $('#addAssociatesModal').modal('hide');
+                            toastr.success('Associate Added');
+                            document.getElementById("addAssociateForm").reset();
+
+                        } else if (response_associate == 2) {
+                            document.getElementById('btn').disabled = false;
+                            document.getElementById("btn").innerHTML = "ADD";
+                            toastr.error("A minimum 8 characters password contains a combination of uppercase and lowercase letter and number.");
+                        } else if (response_associate == 3) {
+                            document.getElementById('btn').disabled = false;
+                            document.getElementById("btn").innerHTML = "ADD";
+                            toastr.error("Missing Required Input");
+                        } else if (response_associate == 4) {
+                            document.getElementById('btn').disabled = false;
+                            document.getElementById("btn").innerHTML = "ADD";
+                            toastr.error("Email Already Exist. Login to continue.");
+                        } else {
+                            document.getElementById('btn').disabled = false;
+                            document.getElementById("btn").innerHTML = "ADD";
+                            toastr.error('Somthing Went Wrong.');
+                        }
+                    }
+                    });
+            }else {
+                    document.getElementById("btn").innerHTML = "ADD";
+                    document.getElementById("btn").disabled = false;
+                    toastr.error('Password Not Matched');
+                }
+            }else{
+                document.getElementById("btn").innerHTML = "ADD";
+                document.getElementById("btn").disabled = false;
+                toastr.error('Missing Required Input');
+            }
+            return false;
     }
     $(document).ready(function() {
         var loginId = '{{ loginId }}'; // Replace with your actual loginId
