@@ -102,32 +102,41 @@ if ($route == '/user/get_users'):
             ->fetchAll();
         $UserInfo []= $UserInfoArray;
     }
-    $output='';
-    $output.='  <div class="text-center mb-8">
-                                <h1 class="mb-3">'.$appointment[0]['title'].'</h1>
-                                <div class="text-muted fw-bold fs-5">'.$formattedDate.'
-                            </div>
 
-                            <a href="/meet/'.$appointment[0]['jitsi_link'].'" class="btn btn-primary fw-bolder w-100  mt-5">
-                                                Join with Techneke Meet
-                            </a>
-                        
-                            </div>
-                          ';
-    $output .= '<div class="mb-5">
-                       
-                <div class="fs-6 fw-bold mb-2">Meeting Members</div>
-                             
-                <div class="mh-300px scroll-y me-n7 pe-7">';
+    $output = '';
+    $output .= '  <div class="text-center mb-8">
+                    <h1 class="mb-3">' . $appointment[0]['title'] . '</h1>
+                    <div class="text-muted fw-bold fs-5">' . $formattedDate . '</div>
+                    <a href="/meet/' . $appointment[0]['jitsi_link'] . '" class="btn btn-primary fw-bolder w-100  mt-5">
+                        Join with Techneke Meet
+                    </a>
+                </div>';
+
+// Check if $UserInfo is not empty and contains at least one non-empty sub-array
+    $hasValidUserInfo = false;
+
     foreach ($UserInfo as $user) {
-        $email = $user[0]['email'];
-        if($loginUserType !='client'){
-            $maskedEmail = $user[0]['email'];
-        }else{
-            $maskedEmail = substr($email, 0, 3) . str_repeat('*', strlen($email) - 6) . substr($email, -3);
+        if (!empty($user)) {
+            $hasValidUserInfo = true;
+            break;
         }
+    }
 
-        $output .= '   
+    if ($hasValidUserInfo) {
+        $output .= '<div class="mb-5">
+                    <div class="fs-6 fw-bold mb-2">Meeting Members</div>
+                    <div class="mh-300px scroll-y me-n7 pe-7">';
+
+        foreach ($UserInfo as $user) {
+            if (!empty($user)) {
+                $email = $user[0]['email'];
+                if ($loginUserType != 'client') {
+                    $maskedEmail = $user[0]['email'];
+                } else {
+                    $maskedEmail = substr($email, 0, 3) . str_repeat('*', strlen($email) - 6) . substr($email, -3);
+                }
+
+                $output .= '   
                     <!--begin::User-->
                     <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
                         <!--begin::Details-->
@@ -135,48 +144,52 @@ if ($route == '/user/get_users'):
                             <!--begin::Avatar-->
                             <div class="symbol symbol-35px symbol-circle">';
 
-        if (empty($user[0]['profile_image']) || $user[0]['profile_image'] == 'null') {
-            $output .= '<img alt="Pic" src="'.$env['APP_URL'].'uploads/profile/avatar.png" />';
-        } else {
-            $output .= '<img alt="Pic" src="'.$env['APP_URL'].'uploads/profile/'. $user[0]['profile_image'] .'" />';
-        }
+                if (empty($user[0]['profile_image']) || $user[0]['profile_image'] == 'null') {
+                    $output .= '<img alt="Pic" src="' . $env['APP_URL'] . 'uploads/profile/avatar.png" />';
+                } else {
+                    $output .= '<img alt="Pic" src="' . $env['APP_URL'] . 'uploads/profile/' . $user[0]['profile_image'] . '" />';
+                }
 
-        $output .= '            </div>
+                $output .= '            </div>
                             <!--end::Avatar-->
                             <!--begin::Details-->
                             <div class="ms-5">
                                 <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">'
-            . $user[0]['fname'] . ' ' . $user[0]['lname'] . '</a>
+                    . $user[0]['fname'] . ' ' . $user[0]['lname'] . '</a>
                                 <div class="fw-bold text-muted">' . $maskedEmail . '</div>
                             </div>
                             <!--end::Details-->
                         </div>
                     </div>
-                    <!--end::User-->
-                </div>
-                
-';
-    }
+                    <!--end::User-->';
+            }
+        }
 
+        $output .= '</div></div>';
+    }
 
     echo $output;
     exit();
-
 endif;
 
 
 
 if($route == '/user/add/appointments'):
     if (!empty($_POST['title'])) {
-        if (!empty($_POST['title']) && !empty($_POST['dateTime'])&& !empty($_POST['client_id'])&& !empty($_POST['purpose'])) {
+        if (!empty($_POST['title']) && !empty($_POST['dateTime']) && !empty($_POST['purpose'])) {
             @$title = $_POST['title'];
             @$dateTime = $_POST['dateTime'];
-            @$client_id = implode(', ', $_POST['client_id']);
+
             @$purpose = $_POST['purpose'];
            @$jitsi_link = random_strings(10);
         }else{
             echo "2";
             exit();
+        }
+        if (!empty($_POST['client_id'])) {
+           @$client_ids = implode(', ', $_POST['client_id']);
+        }else{
+            @$client_ids = null;
         }
         try {
             if($loginUserType == 'firm') {
@@ -184,11 +197,10 @@ if($route == '/user/add/appointments'):
                     'firm_id' => $loginUserId,
                     'title' => $title,
                     'date' => $dateTime,
-                    'client_id' => $client_id,
+                    'client_id' => $client_ids,
                     'purpose' => $purpose,
                     'jitsi_link' => $jitsi_link
                 ])->run();
-                $client_ids = explode(',', $client_id);
                 if (!empty($client_ids)) {
                     foreach ($client_ids as $client_id) {
                         $ClientInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
@@ -257,13 +269,17 @@ if($route == '/user/update/appointments'):
         @$id = $_POST['id'];
         @$title = $_POST['title'];
         @$dateTime = $_POST['dateTime'];
-        @$client_id = implode(', ', $_POST['client_id']);
+        if (!empty($_POST['client_id'])) {
+            @$client_ids = implode(', ', $_POST['client_id']);
+        }else{
+            @$client_ids = null;
+        }
         @$purpose = $_POST['purpose'];
         try {
             if($loginUserType == 'firm') {
-                $update = $h->update('appointment')->values(['title' => $title, 'date' => $dateTime, 'client_id' => $client_id, 'purpose' => $purpose])->where('id', '=', $id)->run();
+                $update = $h->update('appointment')->values(['title' => $title, 'date' => $dateTime, 'client_id' => $client_ids, 'purpose' => $purpose])->where('id', '=', $id)->run();
                 $AppointmentInfo = $h->table('appointment')->select()->where('id', '=', $id)->fetchAll();
-                $client_ids = explode(',', $client_id);
+
                 if (!empty($client_ids)) {
                     foreach ($client_ids as $client_id) {
                         $ClientInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();

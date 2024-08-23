@@ -64,7 +64,7 @@
                         <div class="doc-container" id="reloadForm">
                             <form method="post" id="invoiceForm"  enctype="multipart/form-data">
                             <div class="row ">
-                                <div class="col-xl-8">
+                                <div class="col-xl-9">
                                     <div class="invoice-content card p-12">
                                         <div class="invoice-detail-body">
                                             <div class="invoice-detail-title">
@@ -100,7 +100,6 @@
                                                                     {% if CompanyInfo.company_name != "" %}
                                                                     <input type="text" class="form-control form-control-solid " id="company-name" name="firm_name" placeholder="Business Name" value="{{ CompanyInfo.company_name }}">
                                                                     {% else %}
-                                                                    <p style="color: red">*Please Add Business Name in Your Profile <a href="/user/profile">Click Here To Add</a> </p>
                                                                     <input type="text" class="form-control form-control-solid " id="company-name" name="firm_name" placeholder="Business Name" >
                                                                     {% endif %}
                                                                     <input type="hidden" name="firm_id" value="{{ loginId }}">
@@ -112,7 +111,6 @@
                                                                     {% if CompanyInfo.email != "" %}
                                                                         <input type="text" class="form-control form-control-solid " id="company-email" name="firm_email" placeholder="name@company.com" value="{{ CompanyInfo.email }}">
                                                                     {% else %}
-                                                                        <p style="color: red">*Please Add Firm Email in Your Profile <a href="/user/profile">Click Here To Add</a> </p>
                                                                         <input type="text" class="form-control form-control-solid " id="company-email" name="firm_email" placeholder="name@company.com" >
                                                                     {% endif %}
                                                                 </div>
@@ -123,7 +121,6 @@
                                                                     {% if CompanyInfo.address != "" %}
                                                                         <input type="text" class="form-control form-control-solid " id="firm_address" name="firm_address" placeholder="XYZ Street"  value="{{ CompanyInfo.address }}">
                                                                     {% else %}
-                                                                        <p style="color: red">*Please Add Firm Email in Your Profile <a href="/user/profile">Click Here To Add</a> </p>
                                                                         <input type="text" class="form-control form-control-solid " id="firm_address" name="firm_address" placeholder="XYZ Street"  value="{{ CompanyInfo.address }}">
                                                                     {% endif %}
 
@@ -135,7 +132,6 @@
                                                                     {% if  CompanyInfo.phone != "" %}
                                                                         <input type="text" class="form-control form-control-solid " id="company-phone" name="firm_phone" placeholder="(123) 456 789" value="{{ CompanyInfo.phone }}">
                                                                     {% else %}
-                                                                        <p style="color: red">*Please Add Firm Phone No in Your Profile <a href="/user/profile">Click Here To Add</a> </p>
                                                                         <input type="text" class="form-control form-control-solid " id="company-phone" name="firm_phone" placeholder="(123) 456 789">
                                                                     {% endif %}
 
@@ -336,7 +332,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-4">
+                                <div class="col-xl-3">
                                     <div class="card p-12">
                                     <div class="invoice-actions">
                                         <div class="invoice-action-currency">
@@ -490,6 +486,7 @@
                     CKEDITOR.instances[instance].updateElement();
                 }
                 document.getElementById('btn').disabled = true;
+                document.getElementById('btn').innerHTML = 'Loading';
                 var formData = new FormData(document.getElementById("invoiceForm"));
                 $.ajax({
                     url: "/user/invoice/add",
@@ -503,6 +500,7 @@
                         console.log(dataResult);
                         console.log(dataResult['statusCode']);
                         document.getElementById('btn').disabled = false;
+                        document.getElementById('btn').innerHTML = 'Loading';
                         if (dataResult['statusCode'] == 1) {
                             toastr.success('Added Successfully.');
                             document.getElementById("invoiceForm").reset();
