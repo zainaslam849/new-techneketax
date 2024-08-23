@@ -3,15 +3,43 @@
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
         <div class="toolbar" id="kt_toolbar">
             <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-                <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
-                     data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-                     class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <!--begin::Page title-->
+                <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                    <!--begin::Title-->
                     <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Basic Info</h1>
+                    <!--end::Title-->
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-300 border-start mx-4"></span>
+                    <!--end::Separator-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                       <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">Settings</li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">Profile</li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-dark">Basic Info</li>
+                        <!--end::Item-->
+                    </ul>
+                    <!--end::Breadcrumb-->
                 </div>
+                <!--end::Page title-->
             </div>
         </div>
         <div class="post d-flex flex-column-fluid" id="kt_post">
-            <div id="kt_content_container" class="container-xxl">
+            <div id="kt_content_container" class="container-fluid">
                 <div class="card mb-5 mb-xl-10">
                     <div class="card-body pt-9 pb-0">
                         <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
@@ -171,6 +199,15 @@
                                    class="fw-bold fs-6 text-gray-800 text-hover-primary" id="email"></a>
                             </div>
                         </div>
+                        <div class="row mb-7">
+                            <label class="col-lg-4 fw-bold text-muted">Address
+                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
+                                   title="Enter Complete Address"></i></label>
+                            <div class="col-lg-8">
+                                <a href="#"
+                                   class="fw-bold fs-6 text-gray-800 text-hover-primary" id="address"></a>
+                            </div>
+                        </div>
 
                         <div class="row mb-7">
                             <label class="col-lg-4 fw-bold text-muted">Linked in</label>
@@ -303,6 +340,14 @@
 
                                 <div class="fv-plugins-message-container invalid-feedback"></div>
                             </div>
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="required fw-bold fs-6 mb-2">Address</label>
+                                <input type="text" name="address"
+                                       class="form-control form-control-solid mb-3 mb-lg-0"
+                                       placeholder="Address" id="address_model">
+
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                            </div>
 
                             <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="required fw-bold fs-6 mb-2">Linkedin </label>
@@ -415,6 +460,7 @@
                     $('#fullName').html(dataResult['users'][0].fname+' '+dataResult['users'][0].lname);
                     $('#phone').html(dataResult['users'][0].phone);
                     $('#email').html(dataResult['users'][0].email);
+                    $('#address').html(dataResult['users'][0].address);
                     $('#linkedin').html(dataResult['users'][0].linkedin);
                     $('#tweet').html(dataResult['users'][0].tweet);
                     $('#facebook').html(dataResult['users'][0].facebook);
@@ -424,6 +470,7 @@
                     $('#lname_model').val(dataResult['users'][0].lname);
                     $('#phone_model').val(dataResult['users'][0].phone);
                     $('#email_model').val(dataResult['users'][0].email);
+                    $('#address_model').val(dataResult['users'][0].address);
                     $('#linkedin_model').val(dataResult['users'][0].linkedin);
                     $('#tweet_model').val(dataResult['users'][0].tweet);
                     $('#facebook_model').val(dataResult['users'][0].facebook);

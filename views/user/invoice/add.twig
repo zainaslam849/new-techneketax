@@ -26,17 +26,33 @@
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
         <!--begin::Toolbar-->
         <div class="toolbar" id="kt_toolbar">
-            <!--begin::Container-->
             <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
                 <!--begin::Page title-->
                 <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                     <!--begin::Title-->
-                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Add Invoice</h1>
-
+                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Add Invoice </h1>
+                    <!--end::Title-->
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-300 border-start mx-4"></span>
+                    <!--end::Separator-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">Invoices</li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-dark">Add Invoice</li>
+                        <!--end::Item-->
+                    </ul>
+                    <!--end::Breadcrumb-->
                 </div>
-
+                <!--end::Page title-->
             </div>
-            <!--end::Container-->
         </div>
         <div class="post d-flex flex-column-fluid" id="kt_post">
             <!--begin::Container-->
@@ -104,7 +120,13 @@
                                                             <div class="form-group row">
                                                                 <label for="firm_address" class="col-sm-3 col-form-label col-form-label-sm">Address</label>
                                                                 <div class="col-sm-9">
-                                                                    <input type="text" class="form-control form-control-solid " id="firm_address" name="firm_address" placeholder="XYZ Street"  value="{{ firmBillingInfo[0].billing_address }}">
+                                                                    {% if CompanyInfo.address != "" %}
+                                                                        <input type="text" class="form-control form-control-solid " id="firm_address" name="firm_address" placeholder="XYZ Street"  value="{{ CompanyInfo.address }}">
+                                                                    {% else %}
+                                                                        <p style="color: red">*Please Add Firm Email in Your Profile <a href="/user/profile">Click Here To Add</a> </p>
+                                                                        <input type="text" class="form-control form-control-solid " id="firm_address" name="firm_address" placeholder="XYZ Street"  value="{{ CompanyInfo.address }}">
+                                                                    {% endif %}
+
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
@@ -157,7 +179,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="invoice-detail-terms">
+                                            <div class="invoice-detail-terms mt-2">
                                                 <div class="row justify-content-between">
                                                     <div class="col-md-3">
                                                         <div class="form-group mb-4">
@@ -214,7 +236,7 @@
                                                             <td class="ps-0">
                                                                 <input type="number" class="form-control form-control-solid price" placeholder="Price" name="price[]">
                                                             </td>
-                                                            <td class="text-right qty"><input type="number" class="form-control form-control-solid quantity" placeholder="Quantity" name="quantity[]"></td>
+                                                            <td class="text-right qty"><input type="number" value="1" class="form-control form-control-solid quantity" placeholder="Quantity" name="quantity[]"></td>
                                                             <td class="pt-8 text-end text-nowrap"><span class="editable-amount"><span class="currency">$</span> <span class="amount">0.00</span></span></td>
                                                             <input type="hidden" name="amount_item[]" class="amount_item">
                                                         </tr>
@@ -261,7 +283,7 @@
                                                         <div class="totals-row">
                                                             <div class="row">
 
-                                                                <div class="col-6"><h3>Subtotal</h3></div>
+                                                                <div class="col-6"><h5>Subtotal</h5></div>
 
                                                                 <div class="col-6 text-end">
                                                                     <div class="subtotal-amount">
@@ -273,7 +295,7 @@
                                                             </div>
                                                             <div class="row">
 
-                                                                <div class="col-6"><h3>Discount</h3></div>
+                                                                <div class="col-6"><h5>Discount</h5></div>
 
                                                                 <div class="col-6 text-end">
                                                                     <div class="total-amount">
@@ -284,7 +306,7 @@
                                                             </div>
                                                             <div class="separator separator-dashed my-10"></div>
                                                             <div class="row">
-                                                                <div class="col-6"><h3>Total</h3></div>
+                                                                <div class="col-6"><h5>Total</h5></div>
                                                                 <div class="col-6 text-end">
                                                                     <div class="balance-due-amount">
                                                                         <span class="currency">$</span><span id="finalTotal">0</span>
@@ -330,7 +352,7 @@
                                             <h5>Discount</h5>
                                             <div class="invoice-action-discount-fields">
                                                 <div class="row">
-                                                    <div class="col-6">
+                                                    <div class="col-12">
                                                         <div class="form-group mb-0">
                                                             <label for="discount">Type</label>
                                                             <select class="form-select form-select-solid" name="discount_type" id="discount" onchange="applyDiscount()">
@@ -340,7 +362,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-6 discount-amount">
+                                                    <div class="col-12 discount-amount">
                                                         <div class="form-group mb-0">
                                                             <label for="rated1">Amount</label>
                                                             <input type="number" class="form-control form-control-solid input-rate" id="rated1" name="discount_amount" placeholder="Rate" min="0" value="0" oninput="applyDiscount()">

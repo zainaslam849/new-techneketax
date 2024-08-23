@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
-        'reference' => '6b9b62154f469931b380c661e6c371164c6c7573',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'reference' => null,
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => '6b9b62154f469931b380c661e6c371164c6c7573',
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'reference' => null,
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -391,6 +391,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'stripe/stripe-php' => array(
+            'pretty_version' => 'v15.7.0',
+            'version' => '15.7.0.0',
+            'reference' => '3e8161c1d7d1e9fb79751a693cd6123550f6ce21',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../stripe/stripe-php',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'symfony/clock' => array(
             'pretty_version' => 'v6.4.8',
             'version' => '6.4.8.0',
@@ -511,6 +520,15 @@
             'reference' => '67f29781ffafa520b0bbfbd8384674b42db04572',
             'type' => 'library',
             'install_path' => __DIR__ . '/../twig/twig',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'twilio/sdk' => array(
+            'pretty_version' => '8.2.2',
+            'version' => '8.2.2.0',
+            'reference' => '10dbd6ecbc6ac1e0c61ab7d70c44e0794f8d3a1f',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../twilio/sdk',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

@@ -8,16 +8,46 @@
     </style>
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
         <div class="toolbar" id="kt_toolbar">
+            <!--begin::Container-->
             <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-                <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
-                     data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-                     class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <!--begin::Page title-->
+                <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                    <!--begin::Title-->
                     <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Payment Method</h1>
+                    <!--end::Title-->
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-300 border-start mx-4"></span>
+                    <!--end::Separator-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">Settings</li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">Profile</li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-dark">Payment Method</li>
+                        <!--end::Item-->
+                    </ul>
+                    <!--end::Breadcrumb-->
                 </div>
+                <!--end::Page title-->
             </div>
+            <!--end::Container-->
         </div>
         <div class="post d-flex flex-column-fluid" id="kt_post">
-            <div id="kt_content_container" class="container-xxl">
+            <div id="kt_content_container" class="container-fluid">
                 <div class="card mb-5 mb-xl-10">
                     <div class="card-body pt-9 pb-0">
                         <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
@@ -151,6 +181,7 @@
 
                     <div class="card-body">
                         <div class="row gx-9 gy-6" id="reloadpayment">
+                            {% if paymentMethods  %}
                             {% for paymentMethod in paymentMethods %}
                                 <div class="col-xl-6">
                                     <input type="radio" class="btn-check d-none paymentMethod" name="paymentMethod" value="{{ paymentMethod.id }}" id="paymentMethod{{ paymentMethod.id }}"  {% if paymentMethod.status == "primary" %}checked{% endif %}/>
@@ -174,10 +205,16 @@
                                     </label>
                                 </div>
                             {% endfor %}
+                                <div class="col-xl-12">
+                                    <button class="btn btn-sm btn-primary me-3 float-end" onclick="Payment_method_make_it_primary()"  id="btn-payment"  >Make Primary</button>
+                                </div>
+                            {% else %}
+                                <div class="col-xl-12 text-center">
+                                    <h4>No Records Available</h4>
+                                </div>
+                            {% endif %}
 
-                            <div class="col-xl-12">
-                                <button class="btn btn-sm btn-primary me-3 float-end" onclick="Payment_method_make_it_primary()"  id="btn-payment"  >Make Primary</button>
-                            </div>
+
                             <div class="col-xl-6">
                                 <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed flex-stack h-xl-100 mb-10 p-6">
                                     <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">

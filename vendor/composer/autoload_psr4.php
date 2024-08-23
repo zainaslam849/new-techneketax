@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Yiisoft\\FriendlyException\\' => array($vendorDir . '/yiisoft/friendly-exception/src'),
+    'Twilio\\' => array($vendorDir . '/twilio/sdk/src/Twilio'),
     'Twig\\' => array($vendorDir . '/twig/twig/src'),
     'Symfony\\Polyfill\\Php83\\' => array($vendorDir . '/symfony/polyfill-php83'),
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
@@ -18,6 +19,7 @@ return array(
     'Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
     'Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
     'Symfony\\Component\\Clock\\' => array($vendorDir . '/symfony/clock'),
+    'Stripe\\' => array($vendorDir . '/stripe/stripe-php/lib'),
     'Spiral\\Tokenizer\\' => array($vendorDir . '/spiral/tokenizer/src'),
     'Spiral\\Pagination\\' => array($vendorDir . '/spiral/pagination/src'),
     'Spiral\\Logger\\' => array($vendorDir . '/spiral/logger/src'),

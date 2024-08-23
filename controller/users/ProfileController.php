@@ -7,10 +7,12 @@ if($route == '/user/profile'):
             if (!empty($_POST['fname']) && !empty($_POST['lname'])) {
                 $fname = $_POST['fname'];
                 $lname = $_POST['lname'];
+
             }else{
                 echo "2";
                 exit();
             }
+            $address = $_POST['address'];
             $linkedin = $_POST['linkedin'];
             $tweet = $_POST['tweet'];
             $facebook = $_POST['facebook'];
@@ -25,6 +27,7 @@ if($route == '/user/profile'):
                     'profile_image' => $profile_image,
                     'fname' => $fname,
                     'lname' => $lname,
+                    'address' => $address,
                     'linkedin' => $linkedin,
                     'tweet' => $tweet,
                     'facebook' => $facebook,
@@ -91,7 +94,8 @@ if($route == '/user/firm-info'):
             'keywords' => 'Admin Panel'
         );
         $UserInfo=$h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
-        echo $twig->render('user/profile/firm.twig', ['seo' => $seo,'userinfo' => $UserInfo,'csrf'=>set_csrf()]);
+        $CountriesInfo = $h->table('countries')->select()->fetchAll();
+        echo $twig->render('user/profile/firm.twig', ['seo' => $seo,'countries' => $CountriesInfo,'userinfo' => $UserInfo,'csrf'=>set_csrf()]);
     }
 endif;
 if($route == '/user/profile/security'):
@@ -101,6 +105,7 @@ if($route == '/user/profile/security'):
             'keywords' => 'Admin Panel'
         );
     $UserInfo=$h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+
         echo $twig->render('user/profile/security.twig', ['seo' => $seo,'userinfo' => $UserInfo,'csrf'=>set_csrf()]);
 endif;
 if($route == '/user/profile/billing'):

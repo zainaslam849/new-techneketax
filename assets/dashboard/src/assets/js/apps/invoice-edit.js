@@ -78,7 +78,7 @@ document.querySelector('.additem').addEventListener('click', function() {
         '<td class="ps-0">'+
         '<input type="number" class="form-control form-control-solid price" placeholder="Price" name="price[]">'+
         ' </td>'+
-        '<td class="text-right qty"><input type="number" class="form-control form-control-solid quantity" placeholder="Quantity" name="quantity[]"></td>'+
+        '<td class="text-right qty"><input type="number" class="form-control form-control-solid quantity" value="1" placeholder="Quantity" name="quantity[]"></td>'+
         '<td class="pt-8 text-end text-nowrap"><span class="editable-amount"><span class="currency">$</span> <span class="amount">0.00</span></td><input type="hidden" name="amount_item[]" class="amount_item">'+
         '</tr>';
 

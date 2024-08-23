@@ -14,6 +14,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" type="text/css" href="https://designreset.com/cork/html/src/assets/css/light/elements/alert.css">
 <style>
+.aside-dark .menu .menu-item .menu-link .menu-icon, .aside-dark .menu .menu-item .menu-link .menu-icon .svg-icon, .aside-dark .menu .menu-item .menu-link .menu-icon i {
+    color: #d1d1d1;
+}
     .dataTables_filter{
         display: none !important;
     }
@@ -29,5 +32,21 @@
     .page-item.active .page-link{
         background-color: #000 !important;
         color: white !important;
+    }
+    .close{
+        display: inline-block;
+        font-weight: 500;
+        line-height: 1.5;
+        color: #181c32;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        user-select: none;
+        background-color: transparent;
+        border: 1px solid transparent;
+        font-size: 1.1rem;
+        border-radius: .475rem;
+        transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        font-size: 25px;
     }
 </style>

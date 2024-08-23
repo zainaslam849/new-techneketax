@@ -3,9 +3,8 @@ require("config/env.php");
 
 if($route == '/admin/add_user'):
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        //LOGIN
-        if(isset($_POST['email']) && isset($_POST['fname'])&& isset($_POST['lname'])&& isset($_POST['phone'])&& isset($_POST['password'])):
-            echo $response=userRegister($_POST['fname'], $_POST['lname'], $_POST['email'],$_POST['phone'], $_POST['password'], 'users');
+        if(isset($_POST['email']) && isset($_POST['fname'])&& isset($_POST['lname'])&& isset($_POST['phone'])&& isset($_POST['password']) && isset($_POST['account_type'])):
+            echo $response=userRegister($_POST['fname'], $_POST['lname'], $_POST['email'],$_POST['phone'], $_POST['password'], $_POST['account_type'], 'users');
         endif;
         exit();
 
@@ -31,13 +30,14 @@ endif;
             @$fname = $_POST['fname'];
             @$lname = $_POST['lname'];
             @$phone = $_POST['phone'];
+            @$account_type = $_POST['account_type'];
             @$id = $_POST['id'];
             @$password = $_POST['password'];
             @$confirmPassword = $_POST['cpassword'];
             if (!empty($password) &&  !empty($confirmPassword)) {
                 if ($password === $confirmPassword) {
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                    $update = $h->update('users')->values([ 'fname' => $fname, 'lname' => $lname, 'phone' => $phone, 'password' => $hashedPassword])->where('id','=',$id)->run();
+                    $update = $h->update('users')->values([ 'fname' => $fname, 'lname' => $lname, 'phone' => $phone,'account_type' => $account_type, 'password' => $hashedPassword])->where('id','=',$id)->run();
                     echo "1";
                     exit();
                 }else{
@@ -46,7 +46,7 @@ endif;
                 }
 
             }else{
-                $update = $h->update('users')->values([ 'fname' => $fname, 'lname' => $lname, 'phone' => $phone])->where('id','=',$id)->run();
+                $update = $h->update('users')->values([ 'fname' => $fname, 'lname' => $lname, 'phone' => $phone,'account_type' => $account_type])->where('id','=',$id)->run();
                 echo "1";
                 exit();
             }

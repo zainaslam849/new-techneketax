@@ -22,6 +22,7 @@ post('/join/$firm_id/$invite', 'controller/auth/AuthController.php');
 get('/forget-password', 'controller/auth/AuthController.php');
 post('/forget-password', 'controller/auth/AuthController.php');
 get('/invoice/view/$invoice_id', 'controller/users/InvoiceController.php');
+post('/stripe/pay-invoice', 'controller/users/InvoiceController.php');
 // Jitsi Related Routes
 get('/meet/$room_id', 'controller/users/MeetingController.php');
 
@@ -53,6 +54,7 @@ get('/user/api', 'controller/users/UserApi.php');
 get('/user/dashboard', 'controller/users/DashboardController.php');
 get('/user/appointments', 'controller/users/AppointmentsController.php');
 get('/user/get_appointment', 'controller/users/AppointmentsController.php');
+get('/user/get_users', 'controller/users/AppointmentsController.php');
 post('/user/add/appointments', 'controller/users/AppointmentsController.php');
 post('/user/update/appointments', 'controller/users/AppointmentsController.php');
 
@@ -69,6 +71,8 @@ if(@$_SESSION['users']['type'] == 'client'):
     post('/client/document/add', 'controller/users/DocumentController.php');
     get('/client/template/request', 'controller/users/TemplatesController.php');
     post('/client/download/document', 'controller/users/DocumentController.php');
+    get('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
+    post('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
 endif;
     post('/user/request_for_document', 'controller/users/DocumentController.php');
     get('/user/upload/document/all', 'controller/users/DocumentController.php');
@@ -172,9 +176,9 @@ post('/admin/get_plan', 'controller/admin/PlanController.php');
 post('/admin/plan_edit', 'controller/admin/PlanController.php');
 
 get('/admin/profile', 'controller/admin/ProfileController.php');
+post('/admin/fetch_profile', 'controller/admin/ProfileController.php');
 post('/admin/profile', 'controller/admin/ProfileController.php');
-    get('/admin/security', 'controller/admin/ProfileController.php');
-    post('/admin/security', 'controller/admin/ProfileController.php');
+    get('/admin/profile/security', 'controller/admin/ProfileController.php');
     post('/admin/profile/password_change', 'controller/admin/ProfileController.php');
 
 

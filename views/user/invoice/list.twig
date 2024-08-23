@@ -10,7 +10,7 @@
                 <!--begin::Page title-->
                 <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                     <!--begin::Title-->
-                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Invoice List</h1>
+                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Invoices</h1>
 
                 </div>
 
@@ -21,14 +21,14 @@
             <!--begin::Container-->
             <div id="kt_content_container" class="container-fluid">
                 <div id="call-ringing"></div>
-
+                <div id="result"></div>
                 <div class="row layout-spacing">
                     <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                         <div class="widget-content widget-content-area br-8">
                             <div class="widget-content widget-content-area card">
                                 <div class="card-header border-0 pt-6">
                                     <!--begin::Card title-->
-                                    <div class="card-title">
+                                    <div class="col-md-6 text-start">
                                         <!--begin::Search-->
                                         <div class="d-flex align-items-center position-relative my-1">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
@@ -43,19 +43,24 @@
                                         </div>
                                         <!--end::Search-->
                                     </div>
-
+                                    {% if loginType == "firm" %}
+                                    <div class="col-md-6 text-end">
+                                        <a href="/user/invoice/add" class="btn btn-primary  me-4"  >
+                                            <span class="btn-text-inner">ADD</span>
+                                        </a>
+                                    </div>
+                                    {% endif %}
                                 </div>
                                 <div class="table-responsive">
                                     <table id="table"  class="table dt-table-hover" style="width:100%">
                                         <thead>
                                         <tr>
                                             <th>Invoice Id</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
+                                            <th>Client Detail</th>
                                             <th>Status</th>
                                             <th>Amount</th>
-                                            <th>Date</th>
-                                            <th >Action</th>
+                                            <th>Due Date</th>
+                                            <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -70,8 +75,165 @@
         </div>
 
     </div>
+    <style>
+        /* Set styles for the container holding the Card Element */
+        #uploadForm #card-element {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Set styles for the Card Element container */
+        #uploadForm .StripeElement {
+            background-color: white !important;
+            padding: 10px !important;
+            border-radius: 5px !important;
+        }
+
+        /* Set styles for the Card Element inputs */
+        #uploadForm .StripeElement input {
+            border: none !important;
+            outline: none !important;
+        }
+
+        /* Style the placeholder text */
+        #uploadForm .StripeElement ::placeholder {
+            color: #aab7c4 !important;
+        }
+
+        /* Style the inputs when they are focused */
+        #uploadForm .StripeElement :focus {
+            box-shadow: 0 0 5px rgba(81, 203, 238, 1) !important;
+        }
+
+        /* Additional style for the CardField input wrapper */
+        .CardField-input-wrapper {
+            background-color: #f7f7f7 !important;
+            padding: 10px !important;
+            border: 1px solid #ccc !important;
+            border-radius: 5px !important;
+        }
+
+        /* Ensure the card element fits within the modal */
+        #uploadForm .StripeElement {
+            width: 100%;
+        }
+    </style>
+    <div class="modal fade" tabindex="-1" id="kt_modal_1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pay with Debit/Credit Card</h5>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <span class="svg-icon svg-icon-2x"></span>
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <form method="post" id="uploadForm">
+                <div class="modal-body">
+
+                        <div id="card-element"></div>
+                        <br>
+                        <input type="hidden" name="invoiceID" id="invoiceID">
+                        <div id="card-errors" role="alert"></div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="btn">Pay Invoice</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <!--  END CONTENT AREA  -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('{{ Stripe_public_key }}');
+        var elements = stripe.elements();
+        var style = {
+            base: {
+                fontSize: '16px',
+                color: '#32325d',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: 'antialiased',
+                '::placeholder': {
+                    color: '#7e7e7e',
+                },
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a',
+            },
+        };
+        var cardElement = elements.create('card', { style: style });
+        cardElement.mount('#card-element');
+
+        var form = document.getElementById('uploadForm');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            document.getElementById('btn').disabled = true;
+            document.getElementById("btn").innerHTML = "Loading...";
+
+            stripe.createToken(cardElement).then(function(result) {
+                if (result.error) {
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                    document.getElementById('btn').disabled = false;
+                    document.getElementById("btn").innerHTML = "Pay Invoice";
+                } else {
+                    stripe_tool(result.token.id);
+
+                }
+            });
+        });
+        function stripe_tool(stripeToken) {
+            $("#btn").prop("disabled", true);
+            var formData = new FormData(document.getElementById("uploadForm"));
+            formData.append('stripeToken', stripeToken);
+            $.ajax({
+                url: "/stripe/pay-invoice",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (data) {
+                    data=JSON.parse(data);
+
+                    // Re-enable the button
+                    $("#btn").prop("disabled", false);
+                    document.getElementById("btn").innerHTML = "Pay Invoice";
+                    if (data['statusCode'] == '200') {
+                        $('#table').DataTable().ajax.reload(null, false);
+                        $('#kt_modal_1').modal('hide');
+                        document.getElementById("uploadForm").reset();
+                        $('#result').html('<div class="alert alert-success">'+data['message']+'</div>');
+                        // window.location.href = "/contact-form";
+                    } else {
+                        document.getElementById("uploadForm").reset();
+                        $('#card-errors').html('<div class="alert alert-danger">'+data['message']+'</div>');
+                    }
+                },
+                error: function() {
+                    // Re-enable the button in case of an error
+                    $("#btn").prop("disabled", false);
+                }
+            });
+        }
+
+        function getDataForStripe(invoiceID){
+             $('#invoiceID').val(invoiceID);
+        }
+    </script>
+
     <script>
         $(document).ready(function () {
             var csrf_token = $("input[name=csrf]").val();
@@ -88,7 +250,6 @@
                 "aoColumns": [
                     {mData: 'ids'},
                     {mData: 'userView'},
-                    {mData: 'ClientEmail'},
                     {mData: 'statusView'},
                     {mData: 'FinalTotal'},
                     {mData: 'DueDate'},
@@ -141,7 +302,8 @@
             var csrf_token = $("input[name=csrf]").val();
             $.ajax({
                 url: '/user/api',
-                type: 'GET', data: {
+                type: 'GET',
+                data: {
                     id: deleteid,
                     page_name: "delete",
                     table_name: "invoice",

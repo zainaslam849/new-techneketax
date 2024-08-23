@@ -221,46 +221,41 @@ if($_GET['page_name']=="view_clients"){
             // Determine user status
             if ($user['status'] == "active") {
                 $statusView = "<span class='badge badge-light-success'>Active</span>";
-                $userStatus = "<div class='menu-item px-3'><a  onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Lock</a></div>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
             } else if ($user['status'] == "block") {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<div class='menu-item px-3'><a  onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>UnLock</a></div>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<div class='menu-item px-3'><a  onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>UnLock</a></div>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
             }
-            $action = array('action' => '<a href="#" class="btn btn-sm btn-light btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
-														<span class="svg-icon svg-icon-5 m-0">
-															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-																<path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="currentColor"></path>
-															</svg>
-														</span>
-													</a>
-											
-														<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true" style="">
-														      '.$userStatus.'
-															<div class="menu-item px-3">
-																<a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal"  class="menu-link px-3" >Edit</a>
-															</div>
-															<div class="menu-item px-3">
-																<a href="javascript:;"  onclick="deleteUser('.$user["id"].')" class="menu-link px-3" data-kt-customer-table-filter="delete_row">Delete</a>
-															</div>
-															<!--end::Menu item-->
-														</div>');
+
+            // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+            $action = array('action' =>  $userStatus.'
+                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           
+                      ');
 
 
             $status = array("statusView" => $statusView);
-
+            if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                $profile_image = $user["profile_image"];
+            }else{
+                $profile_image = "avatar.png";
+            }
             $userView = array(
-                "userView" => '
-                          <div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">' . $user['fname'] .' '.  $user['lname'] . '</span>
-        <small class="emp_post text-truncate">'.  $user['email'] . '</small>
-    </div>
-</div>'
+                "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
             );
-
             $srNo++;
             $ids = array("ids" => "$srNo");
             $check_arr[] = array_merge($ids, $user,$userView, $status, $action);
@@ -296,34 +291,41 @@ if($_GET['page_name']=="view_clients_unassigned"){
                     // Determine user status
                     if ($user['status'] == "active") {
                         $statusView = "<span class='badge badge-light-success'>Active</span>";
-                        $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='badge badge-light-success text-start me-2 action-edit' ><i class='fa-solid fa-unlock'></i></a>";
+                        $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
                     } else if ($user['status'] == "block") {
                         $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                        $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                        $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
                     } else {
                         $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                        $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                        $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
                     }
 
                     // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
                     $action = array('action' =>  $userStatus.'
-                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-pen-to-square"></i></a>
-                   <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>
+                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
            
                       ');
 
-
                 $status = array("statusView" => $statusView);
 
-                        $userView = array(
-                            "userView" => '
-                                      <div class="d-flex justify-content-start align-items-center user-name">
-                <div class="d-flex flex-column">
-                    <span class="emp_name text-truncate text-heading fw-medium">' . $user['fname'] .' '.  $user['lname'] . '</span>
-                    <small class="emp_post text-truncate">'.  $user['email'] . '</small>
-                </div>
-            </div>'
-                        );
+                    if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                        $profile_image = $user["profile_image"];
+                    }else{
+                        $profile_image = "avatar.png";
+                    }
+                    $userView = array(
+                        "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
+                    );
 
                 $srNo++;
                 $ids = array("ids" => "$srNo");
@@ -367,36 +369,43 @@ if($_GET['page_name']=="view_clients_inProgress"){
             if(!empty($check)){
                 $saaud ='0';
             // Determine user status
-            if ($user['status'] == "active") {
-                $statusView = "<span class='badge badge-light-success'>Active</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='badge badge-light-success text-start me-2 action-edit' ><i class='fa-solid fa-unlock'></i></a>";
-            } else if ($user['status'] == "block") {
-                $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
-            } else {
-                $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
-            }
+                if ($user['status'] == "active") {
+                    $statusView = "<span class='badge badge-light-success'>Active</span>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
+                } else if ($user['status'] == "block") {
+                    $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
+                } else {
+                    $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
+                }
 
-            // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
-            $action = array('action' =>  $userStatus.'
-            <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-pen-to-square"></i></a>
-           <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>
-   
-              ');
+                // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+                $action = array('action' =>  $userStatus.'
+                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           
+                      ');
 
 
             $status = array("statusView" => $statusView);
-
-            $userView = array(
-                "userView" => '
-                          <div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">' . $user['fname'] .' '.  $user['lname'] . '</span>
-        <small class="emp_post text-truncate">'.  $user['email'] . '</small>
-    </div>
-</div>'
-            );
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                    $profile_image = $user["profile_image"];
+                }else{
+                    $profile_image = "avatar.png";
+                }
+                $userView = array(
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
+                );
 
             $srNo++;
             $ids = array("ids" => "$srNo");
@@ -440,36 +449,44 @@ if($_GET['page_name']=="view_clients_completed"){
             if(!empty($check)){
                 $saaud ='0';
             // Determine user status
-            if ($user['status'] == "active") {
-                $statusView = "<span class='badge badge-light-success'>Active</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='badge badge-light-success text-start me-2 action-edit' ><i class='fa-solid fa-unlock'></i></a>";
-            } else if ($user['status'] == "block") {
-                $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
-            } else {
-                $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
-            }
+                if ($user['status'] == "active") {
+                    $statusView = "<span class='badge badge-light-success'>Active</span>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
+                } else if ($user['status'] == "block") {
+                    $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
+                } else {
+                    $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
+                }
 
-            // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
-            $action = array('action' =>  $userStatus.'
-            <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-pen-to-square"></i></a>
-           <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>
-   
-              ');
+                // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+                $action = array('action' =>  $userStatus.'
+                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           
+                      ');
 
 
             $status = array("statusView" => $statusView);
 
-            $userView = array(
-                "userView" => '
-                          <div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">' . $user['fname'] .' '.  $user['lname'] . '</span>
-        <small class="emp_post text-truncate">'.  $user['email'] . '</small>
-    </div>
-</div>'
-            );
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                    $profile_image = $user["profile_image"];
+                }else{
+                    $profile_image = "avatar.png";
+                }
+                $userView = array(
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
+                );
 
             $srNo++;
             $ids = array("ids" => "$srNo");
@@ -511,32 +528,40 @@ if($_GET['page_name']=="view_members"){
             // Determine user status
             if ($user['status'] == "active") {
                 $statusView = "<span class='badge badge-light-success'>Active</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='badge badge-light-success text-start me-2 action-edit' ><i class='fa-solid fa-unlock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
             } else if ($user['status'] == "block") {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit'><i class='fa-solid fa-lock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit'><i class='fa-solid fa-lock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
             }
+
             // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
             $action = array('action' =>  $userStatus.'
-            <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-pen-to-square"></i></a>
-           <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>
-   
-              ');
-
+                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           
+                      ');
 
             $status = array("statusView" => $statusView);
 
+            if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                $profile_image = $user["profile_image"];
+            }else{
+                $profile_image = "avatar.png";
+            }
             $userView = array(
-                "userView" => '
-                          <div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">' . $user['fname'] .' '.  $user['lname'] . '</span>
-        <small class="emp_post text-truncate">'.  $user['email'] . '</small>
-    </div>
-</div>'
+                "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
             );
 
             $srNo++;
@@ -580,11 +605,17 @@ if($_GET['page_name']=="view_invoices"){
                 $statusView = "<span class='badge badge-light-danger'>Unpaid</span>";
             }
             if ($loginUserType == 'firm'){
-                $action = array('action' =>'<a href="/user/invoice/update/'.$invoice["id"].'" class="badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-pen-to-square"></i></a>
-           <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$invoice["id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>
+                $action = array('action' =>'<a href="/user/invoice/update/'.$invoice["id"].'" class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px" class="fa-solid fa-pen-to-square"></i></a>
+           <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$invoice["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
               ');
             }else{
-                $action = array('action' =>'---');
+                if ($invoice['status'] == "unpaid") {
+                    $action = array('action' => ' <a href="javascript:;" class="btn btn-danger btn-sm text-start me-2 " data-bs-toggle="modal" data-bs-target="#kt_modal_1" onclick="getDataForStripe(' . $invoice["id"] . ')" >Pay Invoice</a>
+              ');
+                }else{
+                    $action = array('action' => ' <a href="javascript:;" class="btn btn-info btn-sm text-start me-2 " >Paid</a>
+              ');
+                }
             }
 
             $clientInfo = $h->table('users')->select()->where('id', '=', $invoice['client_id'])->fetchAll();
@@ -594,18 +625,59 @@ $profile_image = $clientInfo[0]["profile_image"];
     $profile_image = "avatar.png";
 }
             $userView = array(
-                "userView" => '  <div class="d-flex">
-                                                    <div class="usr-img-frame me-2 rounded-circle">
-                                                    
-                                                        <img alt="avatar" class="img-fluid rounded-circle" style="height: 40px;" src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'">
-                                                    </div>
-                                                    <p class="align-self-center mb-0 user-name">'. $clientInfo[0]["fname"].' '.$clientInfo[0]["lname"].'</p>
-                                                </div>'
+                "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">'. $clientInfo[0]["fname"].' '.$clientInfo[0]["lname"].'</a>
+															<span>'.$invoice["client_email"].'</span>
+														</div></div>'
             );
             $status = array("statusView" => $statusView);
+
             $date = new DateTime($invoice["due_date"]);
             $newDate = $date->format('d M');
-            $DueDate = array("DueDate" => '<span class="inv-date"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> '.$newDate.' </span>');
+            $currentDate = new DateTime();
+
+// Check if the current date is greater than the due date
+            if ($currentDate > $date) {
+                // If the due date is in the past, display it in red
+                if($invoice["status"] == 'paid'){
+                    $color='green';
+                }else{
+                    $color='red';
+                }
+                $DueDate = array(
+                    "DueDate" => '<span class="inv-date" style="color:'.$color.'"  >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg> ' . $newDate . ' 
+        </span>'
+                );
+            } else {
+                if($invoice["status"] == 'paid'){
+                    $color='green';
+                }else{
+                    $color='black';
+                }
+                // If the due date is not in the past, display it in the default color
+                $DueDate = array(
+                    "DueDate" => '<span class="inv-date" style="color:'.$color.'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg> ' . $newDate . ' 
+        </span>'
+                );
+            }
             $ClientEmail = array("ClientEmail" => '<span class="inv-email"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> '.$invoice["client_email"].'</span>');
             $FinalTotal = array("FinalTotal" => "$".$invoice["final_total"]);
             $srNo++;
@@ -644,7 +716,7 @@ if($_GET['page_name']=="view_document_hub"){
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Not Uploaded Yet</span>";
             }
-            $action = array('action' =>'<a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$document_hub["id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>');
+            $action = array('action' =>'<a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$document_hub["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>');
             if (!empty($document_hub['client_des']) && $document_hub['client_des'] != ''){
                 $words = explode(' ', $document_hub['client_des']);
                 $des = implode(' ', array_slice($words, 0, 10));
@@ -708,7 +780,10 @@ if($_GET['page_name']=="view_firm_documents"){
                 $Des = array('Des' =>'---');
             }
 
-            $action = array('action' =>'<a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$firm_upload_file["id"].')" ><i class="fa-regular fa-circle-xmark"></i></a><a href="'.$env['APP_URL'].$firm_upload_file["file"].'" download="'.$env['APP_URL'].$firm_upload_file["file"].'" class="badge badge-light-info text-start me-2"><i class="fa-solid fa-download"></i></a>');
+            $action = array(
+                'action' => '<a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser(' . htmlspecialchars($firm_upload_file["id"], ENT_QUOTES, 'UTF-8') . ')"><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>' .
+                    '<a href="#" onclick="downloadFile(\'' . htmlspecialchars($env['APP_URL'] . $firm_upload_file['file'], ENT_QUOTES, 'UTF-8') . '\')" class="btn-sm btn btn-light-info text-start me-2"><i style="font-size: 16px;" class="fa-solid fa-download"></i></a>'
+            );
             $FileName = array('FileName' =>'<div class="d-inline-flex"><svg style="color: red;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg><p style="margin-top: 3px;
     margin-left: 11px;">'.$firm_upload_file["file_name"].'<p></div>');
             $srNo++;
@@ -738,51 +813,73 @@ if($_GET['page_name']=="view_document_hub_client"){
     $document_hubs = $h->table('document_hub')->select()->where('client_id', '=', $loginUserId)->orderBy('id', 'desc')->fetchAll();
     if (!empty($document_hubs)) {
         foreach ($document_hubs as $document_hub) {
-            // Determine user status
-            if (!empty($document_hub['document_id'])){
-                $document_ids = htmlspecialchars($document_hub['document_id'], ENT_QUOTES, 'UTF-8');
-                $downloadFiles = '<a type="button" class="edit btn btn-info  me-4"  onclick="download_files(\'' . $document_ids . '\')" >Download File</a>';
-            }else{
-                $downloadFiles = '';
-            }
-            if ($document_hub['status'] == "yes") {
-                $statusView = "<span class='badge badge-light-success'>Uploaded</span>";
-                $action = array('action' =>$downloadFiles.'Your File Has Been Uploaded');
-            } else if ($document_hub['status'] == "no") {
-                $statusView = "<span class='badge badge-light-danger'>Not Uploaded Yet</span>";
-                $action = array('action' =>$downloadFiles.'<a type="button" class="edit btn btn-primary  me-4" data-id="'. $document_hub['id'].'" role="button" data-bs-toggle="modal" data-bs-target="#editExampleModal" >Upload File</a>');
-            } else {
-                $statusView = "<span class='badge badge-light-danger'>Not Uploaded Yet</span>";
-                $action = array('action' =>$downloadFiles.'<a type="button" class="edit btn btn-primary  me-4" data-id="'. $document_hub['id'].'" role="button" data-bs-toggle="modal" data-bs-target="#editExampleModal" >Upload File</a>');
-            }
             if (!empty($document_hub['firm_des']) && $document_hub['firm_des'] != ''){
                 $words = explode(' ', $document_hub['firm_des']);
-                $des = implode(' ', array_slice($words, 0, 10));
-                $firmDes = array('firmDes' =>'<p>' . $des . '... <a href="#" class="see-more text-danger" data-description="' . htmlspecialchars($document_hub['firm_des'], ENT_QUOTES, 'UTF-8') . '">Read More</a></p>');
+                $des = implode(' ', array_slice($words, 0, 40));
+                $firmDes = '<p><a role="button" onclick="userStatus('.$document_hub['id'].')"  class=" text-muted"><span class="text-muted fw-bold fs-6">' . $des . '....</span>Read More</a></p>';
 
             }else{
                 $firmDes = array('firmDes' =>'---');
             }
-            $status = array("statusView" => $statusView);
-            if (!empty($document_hub['firm_id'])){
-                $usersInfo = $h->table('users')->select()->where('id', '=', $document_hub['firm_id'])->fetchAll();
-                $userView = array(
-                    "userView" => '<div class="d-flex justify-content-start align-items-center user-name">
-    <div class="d-flex flex-column">
-        <span class="emp_name text-truncate text-heading fw-medium">' . $usersInfo[0]['fname'] .' '.  $usersInfo[0]['lname'] . '</span>
-        <small class="emp_post text-truncate">'.  $usersInfo[0]['email'] . '</small>
-    </div>
-</div>' );
-            }else{
-                $userView = array(
-                    "userView" => '---'
-                );
-            }
+            $UserFirmDetails = $h->table('users')->select()->where('id', '=', $document_hub['firm_id'])->orderBy('id', 'desc')->fetchAll();
+            if($document_hub['status'] == 'yes'){
 
+                $StatusView = '<span class="badge badge-light-success my-1">Uploaded</span>';
+            }else{
+                $StatusView = '<span class="badge badge-light-danger my-1">Not Uploaded</span>';
+            }
+            if($document_hub['see_doc'] == '0'){
+                $SeeDoc = '<span class="svg-icon svg-icon-2x me-5 ms-n1 mt-2 svg-icon-warning">
+                                                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM16 13.5L12.5 13V10C12.5 9.4 12.6 9.5 12 9.5C11.4 9.5 11.5 9.4 11.5 10L11 13L8 13.5C7.4 13.5 7 13.4 7 14C7 14.6 7.4 14.5 8 14.5H11V18C11 18.6 11.4 19 12 19C12.6 19 12.5 18.6 12.5 18V14.5L16 14C16.6 14 17 14.6 17 14C17 13.4 16.6 13.5 16 13.5Z" fill="currentColor"></path>
+																	<rect x="11" y="19" width="10" height="2" rx="1" transform="rotate(-90 11 19)" fill="currentColor"></rect>
+																	<rect x="7" y="13" width="10" height="2" rx="1" fill="currentColor"></rect>
+																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
+																</svg></span>';
+            }else{
+                if($document_hub['status'] == 'yes'){
+                    $SeeDoc = '<span class="svg-icon svg-icon-2x me-5 ms-n1 mt-2 svg-icon-success">
+																<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM11.7 17.7L16 14C16.4 13.6 16.4 12.9 16 12.5C15.6 12.1 15.4 12.6 15 13L11 16L9 15C8.6 14.6 8.4 14.1 8 14.5C7.6 14.9 8.1 15.6 8.5 16L10.3 17.7C10.5 17.9 10.8 18 11 18C11.2 18 11.5 17.9 11.7 17.7Z" fill="currentColor" />
+																	<path d="M10.4343 15.4343L9.25 14.25C8.83579 13.8358 8.16421 13.8358 7.75 14.25C7.33579 14.6642 7.33579 15.3358 7.75 15.75L10.2929 18.2929C10.6834 18.6834 11.3166 18.6834 11.7071 18.2929L16.25 13.75C16.6642 13.3358 16.6642 12.6642 16.25 12.25C15.8358 11.8358 15.1642 11.8358 14.75 12.25L11.5657 15.4343C11.2533 15.7467 10.7467 15.7467 10.4343 15.4343Z" fill="currentColor" />
+																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor" />
+																</svg>
+															</span>';
+                }else{
+                    $SeeDoc = '<span class="svg-icon svg-icon-2x me-5 ms-n1 mt-2 svg-icon-danger">
+                                                                   <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM16 13.5L12.5 13V10C12.5 9.4 12.6 9.5 12 9.5C11.4 9.5 11.5 9.4 11.5 10L11 13L8 13.5C7.4 13.5 7 13.4 7 14C7 14.6 7.4 14.5 8 14.5H11V18C11 18.6 11.4 19 12 19C12.6 19 12.5 18.6 12.5 18V14.5L16 14C16.6 14 17 14.6 17 14C17 13.4 16.6 13.5 16 13.5Z" fill="currentColor"></path>
+																	<rect x="11" y="19" width="10" height="2" rx="1" transform="rotate(-90 11 19)" fill="currentColor"></rect>
+																	<rect x="7" y="13" width="10" height="2" rx="1" fill="currentColor"></rect>
+																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
+																</svg></span>';
+                }
+
+            }
+            $viewDoc = '
+           <div class="d-flex mb-10">
+                                      '.$SeeDoc.'
+                                        <div class="d-flex flex-column">
+                                            <!--begin::Content-->
+                                            <div class="d-flex align-items-center mb-2">
+                                                <!--begin::Title-->
+                                                <a role="button" onclick="userStatus('.$document_hub['id'].')" class="text-dark text-hover-primary fs-4 me-3 fw-bold"><span style="color: #ED141F;">'.$UserFirmDetails[0]['fname'].' '.$UserFirmDetails[0]['lname'].'</span> Request For document.</a>
+                                             '.$StatusView.'
+                                            </div>
+                                            <!--end::Content-->
+                                            <!--begin::Text-->
+                                            '.$firmDes.'
+                                         
+                                            <!--end::Text-->
+                                        </div>
+                                        <!--end::Section-->
+                                    </div>
+         ';
+            $ViewDocs =   array("viewDocs" => "$viewDoc");
 
             $srNo++;
             $ids = array("ids" => "$srNo");
-            $check_arr[] = array_merge($ids, $document_hub,$userView, $status, $action,$firmDes);
+            $check_arr[] = array_merge($ids, $document_hub,$ViewDocs);
         }
 
         $result = array(
@@ -803,7 +900,26 @@ if($_GET['page_name']=="view_document_hub_client"){
     }
 
 }
+if($_GET['page_name']=="DocStatusUpdate") {
+    if(isset($_GET['id'])) {
+        $id=$_GET['id'];
+        $status=$_GET['status'];
+        $table_name=$_GET['table_name'];
+        $status_table=$_GET['status_table'];
 
+        try {
+            $statusUpdate = $h->table($table_name)
+                ->update([$status_table=>$status])
+                ->where('id','=',$id)
+                ->run();
+            echo json_encode(array("statusCode" => "1", "id"=>$id));
+            exit;
+        }catch (PDOException $e) {
+            echo 0;
+            exit;
+        }
+    }
+}
 if($_GET['page_name']=="userStatusUpdate") {
 //    if (!is_csrf_v_script()) {
 //        exit();
@@ -827,6 +943,7 @@ if($_GET['page_name']=="userStatusUpdate") {
         }
     }
 }
+
 if($_GET['page_name']=="profileStatusUpdate") {
 //    if (!is_csrf_v_script()) {
 //        exit();
