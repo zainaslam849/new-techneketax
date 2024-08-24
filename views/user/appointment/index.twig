@@ -485,7 +485,7 @@
                     var calendar = new FullCalendar.Calendar(calendarEl, {
                         selectable: true,
                         height: checkWidowWidth() ? 900 : 1052,
-                        initialView: checkWidowWidth() ? 'listWeek' : 'dayGridMonth',
+                        initialView: checkWidowWidth() ? 'dayGridMonth' : 'dayGridMonth',
                         initialDate: `${newDate.getFullYear()}-${getDynamicMonth()}-07`,
                         headerToolbar: calendarHeaderToolbar,
                         events: calendarEventsList,
@@ -509,7 +509,7 @@
                         eventClick: calendarEventClick,
                         windowResize: function (arg) {
                             if (checkWidowWidth()) {
-                                calendar.changeView('listWeek');
+                                calendar.changeView('dayGridMonth');
                                 calendar.setOption('height', 900);
                             } else {
                                 calendar.changeView('dayGridMonth');

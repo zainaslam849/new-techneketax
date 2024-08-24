@@ -17,7 +17,6 @@
     <link rel="icon" type="image/webp" href="{{ env.APP_URL }}assets/img/favicon.webp"/>
     {{ include('user/includes/styles.twig') }}
 </head>
-<!--end::Head-->
 <!--begin::Body-->
 <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed" style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
 <!--begin::Main-->
@@ -25,10 +24,15 @@
 <div class="d-flex flex-column flex-root">
     <!--begin::Page-->
     <div class="page d-flex flex-row flex-column-fluid">
-        {{ include('user/includes/sidebar.twig') }}
+        {% if route != '/video-call/$room_id' %}
+            {{ include('user/includes/sidebar.twig') }}
+        {% endif %}
 
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
             {{ include('user/includes/navbar.twig') }}
             {% block content %} {% endblock %}
 
-{{ include('user/includes/footer.twig') }}
+
+            {% if route != '/video-call/$room_id' %}
+                {{ include('user/includes/footer.twig') }}
+            {% endif %}

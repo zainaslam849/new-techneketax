@@ -53,7 +53,7 @@
                                     <!--end::Svg Icon-->
                                     <!--end::Icon-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid px-15" name="search" value="" placeholder="Search by username or email..." />
+                                    <input type="text" class="form-control form-control-solid px-15" name="search" value="" placeholder="Search by name or email..." />
                                     <!--end::Input-->
                                 </form>
                                 <!--end::Form-->
@@ -67,13 +67,16 @@
 
                                     {% for user in chatUsers %}
                                         <!--begin::User-->
-                                        <div class="d-flex flex-stack py-4">
+                                        <div class="d-flex flex-stack py-4" data-user-name="{{ user.fname }} {{ user.lname }}" data-user-email="{{ user.email }}">
                                             <!--begin::Details-->
                                             <div class="d-flex align-items-center">
                                                 <!--begin::Avatar-->
                                                 <div class="symbol symbol-45px symbol-circle">
-                                                    <img alt="Pic" src="{{ env.APP_URL }}uploads/profile/{{ user.profile_image }}" />
-                                                </div>
+                                                    {% if user.profile_image %}
+                                                        <img alt="Pic" src="{{ env.APP_URL }}uploads/profile/{{ user.profile_image }}" />
+                                                    {% else %}
+                                                        <img alt="Pic" src="https://avatar.iran.liara.run/username?username={{ user.fname }} {{ user.lname }}" />
+                                                    {% endif %}                                                </div>
                                                 <!--end::Avatar-->
                                                 <!--begin::Details-->
                                                 <div class="ms-5">
@@ -115,7 +118,11 @@
                                     <div class="symbol-group symbol-hover">
                                         <!--begin::Avatar-->
                                         <div class="symbol symbol-35px symbol-circle">
-                                            <img alt="Pic" src="{{ env.APP_URL }}uploads/profile/{{ chatWithUserInfo.profile_image }}" />
+                                            {% if user.profile_image == null %}
+                                                <img alt="Pic" src="{{ env.APP_URL }}uploads/profile/{{ chatWithUserInfo.profile_image }}" />
+                                            {% else %}
+                                                <img alt="Pic" src="https://avatar.iran.liara.run/username?username={{ chatWithUserInfo.fname }} {{ chatWithUserInfo.lname }}" />
+                                            {% endif %}
                                         </div>
                                         <!--end::Avatar-->
 
@@ -125,71 +132,44 @@
 {#                                        </a>#}
 
                                         <a href="#" class=" pl-4" >
-                                            <h4 class="" title="{{ chatWithUserInfo.fname }} {{ chatWithUserInfo.lname }}">{{ chatWithUserInfo.fname }} {{ chatWithUserInfo.lname }}<h4>
+                                            <h4 style="margin-left: 15px;" title="{{ chatWithUserInfo.fname }} {{ chatWithUserInfo.lname }}">{{ chatWithUserInfo.fname }} {{ chatWithUserInfo.lname }}</h4>
                                         </a>
+
+
+
                                         <!--end::All users-->
                                     </div>
                                     <!--end::Users-->
                                 </div>
                                 <!--end::Title-->
+                                <div class="card-toolbar">
+                                    <!--begin::Menu-->
+                                    <div class="me-n3">
+                                        <button class="btn btn-lg btn-icon btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <i class="bi bi-telephone-fill"></i>
+                                        </button>
+                                    </div>
+                                    <div class="me-n3">
+                                        <button class="btn btn-lg btn-icon btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                            <i class="bi bi-camera-video-fill"></i>
+                                        </button>
+                                    </div>
+                                    <!--end::Menu-->
+                                </div>
                             </div>
                             <!--end::Card header-->
                             <!--begin::Card body-->
                             <div class="card-body" id="kt_chat_messenger_body">
                                 <!--begin::Messages-->
                                 <div class="scroll-y me-n5 pe-5 h-300px h-lg-auto" data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_messenger_header, #kt_chat_messenger_footer" data-kt-scroll-wrappers="#kt_content, #kt_chat_messenger_body" data-kt-scroll-offset="5px">
-                                    <!--begin::Message(in)-->
-                                    <div class="d-flex justify-content-start mb-10">
-                                        <!--begin::Wrapper-->
-                                        <div class="d-flex flex-column align-items-start">
-                                            <!--begin::User-->
-                                            <div class="d-flex align-items-center mb-2">
-                                                <!--begin::Avatar-->
-                                                <div class="symbol symbol-35px symbol-circle">
-                                                    <img alt="Pic" src="{{ env.APP_URL }}uploads/profile/{{ chatWithUserInfo.profile_image }}" />
-                                                </div>
-                                                <!--end::Avatar-->
-                                                <!--begin::Details-->
-                                                <div class="ms-3">
-                                                    <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary me-1">{{ chatWithUserInfo.fname }} {{ chatWithUserInfo.lname }}</a>
-                                                    <span class="text-muted fs-7 mb-1">2 mins</span>
-                                                </div>
-                                                <!--end::Details-->
-                                            </div>
-                                            <!--end::User-->
-                                            <!--begin::Text-->
-                                            <div class="p-5 rounded bg-light-info text-dark fw-bold mw-lg-400px text-start" data-kt-element="message-text">How likely are you to recommend our company to your friends and family ?</div>
-                                            <!--end::Text-->
+
+
+                                    <div class="text-muted text-center py-20">
+                                        <div class="spinner-border" role="status">
+                                            <span class="visually-hidden">Loading...</span>
                                         </div>
-                                        <!--end::Wrapper-->
                                     </div>
-                                    <!--end::Message(in)-->
-                                    <!--begin::Message(out)-->
-                                    <div class="d-flex justify-content-end mb-10">
-                                        <!--begin::Wrapper-->
-                                        <div class="d-flex flex-column align-items-end">
-                                            <!--begin::User-->
-                                            <div class="d-flex align-items-center mb-2">
-                                                <!--begin::Details-->
-                                                <div class="me-3">
-                                                    <span class="text-muted fs-7 mb-1">5 mins</span>
-                                                    <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary ms-1">You</a>
-                                                </div>
-                                                <!--end::Details-->
-                                                <!--begin::Avatar-->
-                                                <div class="symbol symbol-35px symbol-circle">
-                                                    <img alt="Pic" src="{{ env.APP_URL }}assets/dash/assets/media/avatars/300-1.jpg" />
-                                                </div>
-                                                <!--end::Avatar-->
-                                            </div>
-                                            <!--end::User-->
-                                            <!--begin::Text-->
-                                            <div class="p-5 rounded bg-light-primary text-dark fw-bold mw-lg-400px text-end" data-kt-element="message-text">Hey there, we’re just writing to let you know that you’ve been subscribed to a repository on GitHub.</div>
-                                            <!--end::Text-->
-                                        </div>
-                                        <!--end::Wrapper-->
-                                    </div>
-                                    <!--end::Message(out)-->
+
 
                                     <!--begin::Message(template for out)-->
                                     <div class="d-flex justify-content-end mb-10 d-none" data-kt-element="template-out">
@@ -254,16 +234,7 @@
                                 <!--end::Input-->
                                 <!--begin:Toolbar-->
                                 <div class="d-flex flex-stack">
-                                    <!--begin::Actions-->
-                                    <div class="d-flex align-items-center me-2">
-                                        <button class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button" data-bs-toggle="tooltip" title="Coming soon">
-                                            <i class="bi bi-paperclip fs-3"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button" data-bs-toggle="tooltip" title="Coming soon">
-                                            <i class="bi bi-upload fs-3"></i>
-                                        </button>
-                                    </div>
-                                    <!--end::Actions-->
+
                                     <!--begin::Send-->
                                     <button class="btn btn-primary" type="button" data-kt-element="send">Send</button>
                                     <!--end::Send-->
@@ -1197,111 +1168,223 @@
     <script src="https://cdn.jsdelivr.net/npm/perfect-scrollbar@1.5.3/dist/perfect-scrollbar.min.js"></script>
 
     <script>
-        $(document).ready(function() {
-            // Get the user ID from the hidden input field
+        $(document).ready(function () {
             const userId = $('#chatWithUserID').val();
-            if (userId) {
-                getMessages(userId); // Call the function to fetch messages on page load
+            const userProfileImage = "{{ userProfileImage }}"
+                ? "{{ env.APP_URL }}uploads/profile/{{ userProfileImage }}"
+                : "https://avatar.iran.liara.run/username?username={{ loginName }}";
+            const wsUrl = 'ws://localhost:8000';
+            let ws;
+            function initializeWebSocket() {
+                try {
+                    ws = new WebSocket(wsUrl);
+
+                    ws.onopen = function () {
+                        console.log('WebSocket connected');
+                        if (userId) {
+                            getMessages(userId);
+                        }
+                    };
+
+                    ws.onmessage = function (event) {
+                        console.log('WebSocket message received:', event.data);
+                        handleIncomingMessage(JSON.parse(event.data));
+                    };
+
+                    ws.onerror = function (error) {
+                        console.error('WebSocket error:', error);
+                    };
+
+                    ws.onclose = function (event) {
+                        console.warn('WebSocket connection closed:', event);
+                    };
+                } catch (error) {
+                    console.error('Error initializing WebSocket:', error);
+                }
             }
 
-            // Function to fetch messages from the server
-            function getMessages(userId) {
-                console.log("Fetching messages for userId:", userId); // Debugging line
+            initializeWebSocket();
 
+            function getMessages(userId) {
                 $.ajax({
                     url: `/chat/messages/${userId}`,
                     method: 'GET',
                     dataType: 'json',
-                    success: function(response) {
+                    success: function (response) {
                         const chatContainer = $('#kt_chat_messenger_body [data-kt-element="messages"]');
                         chatContainer.empty(); // Clear existing messages
-                        let currentDate = '';
 
-                        response.messages.forEach(message => {
-                            const messageDate = new Date(message.timestamp).toLocaleDateString();
-                            // Add date separator if the date has changed
-                            if (messageDate !== currentDate) {
-                                currentDate = messageDate;
-                                const dateElement = `
-                            <div class="conversation-start">
-                                <span>${currentDate}</span>
-                            </div>`;
-                                chatContainer.append(dateElement);
-                            }
-                            const messageClass = message.sender === 'me' ? 'bubble me' : 'bubble you';
-                            const messageElement = `
-                        <div class="${messageClass}">
-                            ${message.message}
-                            <div>
-                                <small>${new Date(message.timestamp).toLocaleTimeString()}</small>
-                            </div>
-                        </div>`;
-                            chatContainer.append(messageElement);
-                        });
+                        if (response.messages.length === 0) {
+                            const noMessagesElement = `
+                        <div class="text-muted text-center py-10">No messages</div>
+                    `;
+                            chatContainer.append(noMessagesElement);
+                        } else {
+                            let currentDate = '';
 
-                        // Scroll to the bottom of the chat
-                        chatContainer.scrollTop(chatContainer[0].scrollHeight);
+                            response.messages.forEach(message => {
+                                //const messageDate = new Date(message.timestamp).toLocaleDateString();
+                                const messageDate = timeAgo(message.timestamp);
+                                if (messageDate !== currentDate) {
+                                    currentDate = messageDate;
+                                    const dateElement = `<div class="conversation-start"><span>${currentDate}</span></div>`;
+                                    chatContainer.append(dateElement);
+                                }
+
+                                const messageElement = (message.sender === 'me') ?
+                                    createOutgoingMessageElement(message) :
+                                    createIncomingMessageElement(message);
+
+                                chatContainer.append(messageElement);
+                            });
+
+                            chatContainer.scrollTop(chatContainer[0].scrollHeight);
+                        }
                     },
-                    error: function(xhr, status, error) {
-                        console.error("AJAX error:", status, error); // Log the error
-                        notie.alert({ type: 'warning', text: 'Error fetching messages: ' + xhr.responseText });
+                    error: function (xhr, status, error) {
+                        console.error('AJAX error fetching messages:', xhr.responseText);
                     }
                 });
             }
+            function timeAgo(timestamp) {
+                const now = new Date();
+                const messageTime = new Date(timestamp);
+                const diffInSeconds = Math.floor((now - messageTime) / 1000);
 
-            // WebSocket connection handling
-            const ws = new WebSocket('ws://localhost:8005');
-            ws.onmessage = function(event) {
-                const message = JSON.parse(event.data);
-                const activeChat = $('#kt_chat_messenger_body [data-kt-element="messages"]');
+                const intervals = {
+                    year: 31536000,
+                    month: 2592000,
+                    day: 86400,
+                    hour: 3600,
+                    minute: 60,
+                    second: 1
+                };
 
-                const messageElement = `
-            <div class="bubble you">
-                ${message.message}
-                <div>
-                    <small>${new Date().toLocaleTimeString()}</small>
+                for (const interval in intervals) {
+                    const diff = Math.floor(diffInSeconds / intervals[interval]);
+                    if (diff > 1) {
+                        return `${diff} ${interval}s ago`;
+                    } else if (diff === 1) {
+                        return `1 ${interval} ago`;
+                    }
+                }
+                return "just now";
+            }
+            function createOutgoingMessageElement(message) {
+                return `
+            <div class="d-flex justify-content-end mb-10">
+                <div class="d-flex flex-column align-items-end">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="me-3">
+                            <span class="text-muted fs-7 mb-1">${timeAgo(message.timestamp)}</span>
+                            <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary ms-1">You</a>
+                        </div>
+                        <div class="symbol symbol-35px symbol-circle">
+                            <img alt="Pic" src="${userProfileImage}" />
+                        </div>
+                    </div>
+                    <div class="p-5 rounded bg-light-primary text-dark fw-bold mw-lg-400px text-end" data-kt-element="message-text">${message.message}</div>
                 </div>
-            </div>`;
-                activeChat.append(messageElement);
-                activeChat.scrollTop(activeChat[0].scrollHeight);
-            };
+            </div>
+        `;
+            }
 
-            // Event listener for sending messages
-            $('.mail-write-box').on('keydown', function(event) {
+            function createIncomingMessageElement(message) {
+                return `
+            <div class="d-flex justify-content-start mb-10">
+                <div class="d-flex flex-column align-items-start">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="symbol symbol-35px symbol-circle">
+                            <img alt="Pic" src="${message.senderProfileImage}" />
+                        </div>
+                        <div class="ms-3">
+                            <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary me-1">${message.senderName}</a>
+                            <span class="text-muted fs-7 mb-1">${new Date(message.timestamp).toLocaleTimeString()}</span>
+                        </div>
+                    </div>
+                    <div class="p-5 rounded bg-light-info text-dark fw-bold mw-lg-400px text-start" data-kt-element="message-text">${message.message}</div>
+                </div>
+            </div>
+        `;
+            }
+
+            function handleIncomingMessage(message) {
+                const chatContainer = $('#kt_chat_messenger_body [data-kt-element="messages"]');
+                const messageElement = createIncomingMessageElement(message);
+                chatContainer.append(messageElement);
+                chatContainer.scrollTop(chatContainer[0].scrollHeight);
+            }
+
+            function sendMessage() {
+                const chatInput = $('[data-kt-element="input"]');
+                const chatMessageValue = chatInput.val().trim();
+                if (chatMessageValue === '') return;
+
+                const messageData = {
+                    sender_id: '{{ loginId }}',
+                    receiver_id: userId,
+                    message: chatMessageValue
+                };
+
+                try {
+                    ws.send(JSON.stringify(messageData));
+                    const messageElement = createOutgoingMessageElement({
+                        message: chatMessageValue,
+                        timestamp: new Date(),
+                        senderProfileImage: userProfileImage
+                    });
+                    const chatContainer = $('#kt_chat_messenger_body [data-kt-element="messages"]');
+                    chatContainer.append(messageElement);
+                    chatContainer.scrollTop(chatContainer[0].scrollHeight);
+                    chatInput.val(''); // Clear the input
+                } catch (error) {
+                    console.error('Error sending message through WebSocket:', error);
+                }
+            }
+            $('[data-kt-element="input"]').on('keydown', function (event) {
                 if (event.key === 'Enter') {
                     event.preventDefault();
-                    const chatInput = $(this);
-                    const chatMessageValue = chatInput.val();
-                    const receiverId = $('#chatWithUserID').val();
-                    const senderId = '{{ loginId }}'; // Replace with dynamic user ID
-
-                    if (chatMessageValue === '') {
-                        return;
-                    }
-
-                    const messageData = {
-                        sender_id: senderId,
-                        receiver_id: receiverId,
-                        message: chatMessageValue
-                    };
-
-                    ws.send(JSON.stringify(messageData));
-                    const $messageHtml = $('<div class="bubble me">' + chatMessageValue + '</div>');
-                    $('#kt_chat_messenger_body [data-kt-element="messages"]').append($messageHtml);
-                    chatInput.val(''); // Clear the input
+                    sendMessage();
                 }
             });
-
-            // Event listener for user clicks
-            $('.user-list-box .person').on('click', function() {
-                const userId = $(this).attr('data-chat');
-                $('#chatWithUserID').val(userId);
-                getMessages(userId);
+            $('[data-kt-element="send"]').on('click', function () {
+                sendMessage();
             });
         });
+
     </script>
+    <script>
+        //SEARCH
+        $(document).ready(function () {
+            // Listen for keyup events on the search input
+            $('input[name="search"]').on('keyup', function () {
+                // Get the search value and convert it to lowercase for case-insensitive comparison
+                const searchValue = $(this).val().toLowerCase().trim();
+                console.log("Search Value:", searchValue);
+
+                // Show all users if search value is empty
+                if (searchValue === "") {
+                    $('#kt_chat_contacts_body .d-flex.flex-stack').show();
+                    return;
+                }
+
+                // Iterate over each user block in the contacts list
+                $('#kt_chat_contacts_body .d-flex.flex-stack').each(function () {
+                    const userName = $(this).attr('data-user-name').toLowerCase();
+                    const userEmail = $(this).attr('data-user-email').toLowerCase();
+
+                    // Check if either the name or email contains the search value
+                    if (userName.includes(searchValue) || userEmail.includes(searchValue)) {
+                        $(this).show();  // Show the element if it matches the search
+                    } else {
+                        $(this).hide();  // Hide the element if it doesn't match the search
+                    }
+                });
+            });
+        });
 
 
+    </script>
 
 
 {% endblock %}

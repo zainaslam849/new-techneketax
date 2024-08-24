@@ -487,7 +487,7 @@
                         $("#view_doc").append('<img src="{{ env.APP_URL }}uploads/profile/'+dataResult['users'][0].profile_image+'" >');
                         console.log(dataResult['users'][0].profile_image)
                     }else{
-                        $("#view_doc").append('<img src="{{ env.APP_URL }}uploads/profile/avatar.png" >');
+                        $("#view_doc").append('<img src="https://avatar.iran.liara.run/username?username={{ loginName }}" >');
                         console.log("lora lele")
                     }
                     if(dataResult['appointment'] != ''){

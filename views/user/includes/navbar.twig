@@ -815,7 +815,7 @@
                         {% if userProfileImage != "null" and userProfileImage != "" %}
                             <img src="{{ env.APP_URL }}uploads/profile/{{ userProfileImage }}" alt="user">
                         {% else %}
-                            <img src="{{ env.APP_URL }}uploads/settings/{{ logo }}" alt="user" >
+                            <img src="https://avatar.iran.liara.run/username?username={{ loginName }}" alt="default" >
                         {% endif %}
                     </div>
                     <!--begin::User account menu-->
@@ -828,7 +828,7 @@
                                     {% if userProfileImage != "null" and userProfileImage != "" %}
                                         <img src="{{ env.APP_URL }}uploads/profile/{{ userProfileImage }}" alt="user">
                                     {% else %}
-                                        <img src="{{ env.APP_URL }}uploads/settings/{{ logo }}" alt="user" >
+                                        <img src="https://avatar.iran.liara.run/username?username={{ loginName }}" alt="user" >
                                     {% endif %}
                                 </div>
                                 <!--end::Avatar-->
