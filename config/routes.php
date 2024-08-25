@@ -123,6 +123,7 @@ post('/user/get_payment_method', 'controller/users/ProfileController.php');
 post('/user/update_payment_method', 'controller/users/ProfileController.php');
 // user
 post('/user/get_user', 'controller/users/UsersController.php');
+post('/user/add_user', 'controller/users/UsersController.php');
 post('/user/user_edit', 'controller/users/UsersController.php');
 get('/user/clients', 'controller/users/ClientsController.php');
 get('/user/members', 'controller/users/ClientsController.php');

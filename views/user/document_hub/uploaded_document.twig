@@ -121,7 +121,7 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
-                  </div>
+              </div>
         </div>
 
     </div>
@@ -188,20 +188,12 @@
                 allowMultiple: false,
                 maxFiles: 1,
                 labelIdle: 'Drag & Drop your image or <span class="filepond--label-action">Browse</span>',
-                acceptedFileTypes: [
-                    'image/*',
-                    'application/pdf',
-                    'application/msword',
-                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                    'application/vnd.ms-excel',
-                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'text/plain'
-                ],
                 maxFileSize: '105MB',
             });
 
             // Insert Data
             window.upload_document = function() {
+                document.getElementById('btn-profile').disabled = true;
                 var formData = new FormData(document.getElementById("DocumentForm"));
                 const pondFiles = pond.getFiles();
                 pondFiles.forEach(file => {
@@ -216,9 +208,11 @@
                     cache: false,
                     processData: false,
                     success: function (data) {
+                        document.getElementById('btn-profile').disabled = false;
                         console.log(data);
                         pond.removeFiles();
                         data= JSON.parse(data);
+
                         if(data['statusCode'] == '1'){
                             $('#editExampleModal').modal('hide');
                             document.getElementById("DocumentForm").reset();

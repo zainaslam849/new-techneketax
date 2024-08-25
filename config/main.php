@@ -166,20 +166,6 @@ function uploadFirmDocumentFile($userFolder, $file) {
         'file_path' => '',
     ];
 
-    // Define the allowed file types
-    $allowedFileTypes = [
-        'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'application/vnd.ms-excel',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ];
-
-    // Check if the file type is allowed
-    if (!in_array($file['type'], $allowedFileTypes)) {
-        $response['message'] = 'Invalid file type. Only PDF and Word documents are allowed.';
-        return $response;
-    }
 
     // Define the target directory
     $targetDirectory = 'uploads/firm_document/' . $userFolder;
@@ -247,19 +233,6 @@ function uploadFile($firmName, $userName, $file) {
                 throw new Exception('Exceeded filesize limit');
             default:
                 throw new Exception('Unknown errors');
-        }
-        // Define the allowed file types
-        $allowedTypes = array(
-            'application/pdf',
-            'application/msword',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'application/vnd.ms-excel',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'application/zip'
-        );
-        // Check the file type
-        if (!in_array($file['type'], $allowedTypes)) {
-            throw new Exception('Invalid file type');
         }
         // Define the file path with a random file name
         $randomFileName = uniqid() . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);

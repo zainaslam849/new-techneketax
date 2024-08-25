@@ -96,15 +96,17 @@ endif;
 endif;
 if($route == '/user/request_for_document'):
     if (!empty($_POST['client_id'])) {
-        if (!empty($_POST['client_id']) && !empty($_POST['document_id'])){
+        if (!empty($_POST['client_id'])){
             $client_id = $_POST['client_id'];
-
-            @$document_id = implode(', ', $_POST['document_id']);
         }else{
             echo "3";
             exit();
         }
-
+        if (!empty($_POST['document_id'])) {
+            @$document_id = implode(', ', $_POST['document_id']);
+        }else{
+            @$document_id = null;
+        }
         $firm_des = $_POST['firm_des'];
         try {
             $insert = $h->insert('document_hub')->values([ 'firm_id' => $loginUserId,'client_id' => $client_id,'firm_des' => $firm_des,'document_id' => $document_id])->run();
