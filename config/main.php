@@ -12,7 +12,7 @@ use Tracy\Debugger;
 //use GuzzleHttp\Client;
 use Twilio\Rest\Client;
 use Carbon\Carbon;
-//Debugger::enable();
+Debugger::enable();
 session_start();
 
 
