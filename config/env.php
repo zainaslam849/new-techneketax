@@ -116,6 +116,8 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
     if ($loginUserType == "firm"){
         $twig->addGlobal('userCompanyImage', @$userInfo[0]['company_image']);
         $twig->addGlobal('whitelabel', @$userInfo[0]['white_labeling']);
+        $twig->addGlobal('company_name', @$userInfo[0]['company_name']);
+
     }else{
         $userInfo = $h->table('users')->select()->where('id', '=', @$userInfo[0]['firm_id'])->fetchAll();
         $twig->addGlobal('userCompanyImage', @$userInfo[0]['company_image']);

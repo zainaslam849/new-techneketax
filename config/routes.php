@@ -92,6 +92,7 @@ post('/call/status', 'controller/users/ChatController.php');
 post('/call/hangup/$room_id', 'controller/users/ChatController.php');
 get('/user/file', 'controller/users/FilemanagerController.php');
 get('/file', 'controller/users/FilemanagerController.php');
+get('/user/files', 'controller/users/FilemanagerController.php');
 
 
 get('/file-manager', 'controller/users/FilemanagerController.php');

@@ -3,31 +3,8 @@
     <input type="text" id="chatWithUserID" value="{{ user_id }}" hidden>
     <!--begin::Content-->
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-        <!--begin::Toolbar-->
-        <div class="toolbar" id="kt_toolbar">
-            <!--begin::Container-->
-            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-                <!--begin::Page title-->
-                <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                    <!--begin::Title-->
-                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Chat</h1>
-                    <!--end::Title-->
-                </div>
-                <!--end::Page title-->
-                <!--begin::Actions-->
-                <div class="d-flex align-items-center gap-2 gap-lg-3">
 
-                    <!--begin::Secondary button-->
-                    <!--end::Secondary button-->
-                    <!--begin::Primary button-->
-                    <a href="/create" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">Create</a>
-                    <!--end::Primary button-->
-                </div>
-                <!--end::Actions-->
-            </div>
-            <!--end::Container-->
-        </div>
-        <!--end::Toolbar-->
+
         <!--begin::Post-->
         <div class="post d-flex flex-column-fluid" id="kt_post">
             <!--begin::Container-->
@@ -72,7 +49,7 @@
                                             <div class="d-flex align-items-center">
                                                 <!--begin::Avatar-->
                                                 <div class="symbol symbol-45px symbol-circle">
-                                                    {% if user.profile_image %}
+                                                    {% if user.profile_image is not null %}
                                                         <img alt="Pic" src="{{ env.APP_URL }}uploads/profile/{{ user.profile_image }}" />
                                                     {% else %}
                                                         <img alt="Pic" src="https://avatar.iran.liara.run/username?username={{ user.fname }} {{ user.lname }}" />
@@ -118,7 +95,7 @@
                                     <div class="symbol-group symbol-hover">
                                         <!--begin::Avatar-->
                                         <div class="symbol symbol-35px symbol-circle">
-                                            {% if user.profile_image == null %}
+                                            {% if chatWithUserInfo.profile_image != null %}
                                                 <img alt="Pic" src="{{ env.APP_URL }}uploads/profile/{{ chatWithUserInfo.profile_image }}" />
                                             {% else %}
                                                 <img alt="Pic" src="https://avatar.iran.liara.run/username?username={{ chatWithUserInfo.fname }} {{ chatWithUserInfo.lname }}" />
@@ -135,8 +112,6 @@
                                             <h4 style="margin-left: 15px;" title="{{ chatWithUserInfo.fname }} {{ chatWithUserInfo.lname }}">{{ chatWithUserInfo.fname }} {{ chatWithUserInfo.lname }}</h4>
                                         </a>
 
-
-
                                         <!--end::All users-->
                                     </div>
                                     <!--end::Users-->
@@ -144,15 +119,15 @@
                                 <!--end::Title-->
                                 <div class="card-toolbar">
                                     <!--begin::Menu-->
+{#                                    <div class="me-n3">#}
+{#                                        <a href="/call/ring/{{ user_id }}" class="btn btn-lg btn-icon btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">#}
+{#                                        <i class="bi bi-telephone-fill"></i>#}
+{#                                        </a>#}
+{#                                    </div>#}
                                     <div class="me-n3">
-                                        <button class="btn btn-lg btn-icon btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                        <i class="bi bi-telephone-fill"></i>
-                                        </button>
-                                    </div>
-                                    <div class="me-n3">
-                                        <button class="btn btn-lg btn-icon btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                            <i class="bi bi-camera-video-fill"></i>
-                                        </button>
+                                        <a href="/video-call/ring/{{ user_id }}" class="btn btn-lg btn-icon btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                            <i class="bi bi-telephone-fill"></i>
+                                        </a>
                                     </div>
                                     <!--end::Menu-->
                                 </div>

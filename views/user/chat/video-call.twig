@@ -1,4 +1,4 @@
-{% extends 'user/master.twig' %}
+{% extends 'user/master_call.twig' %}
 {% block content %}
 
     <!--begin::Content-->
@@ -50,7 +50,7 @@
     <script>
         function StartMeeting(meeting_name, room_name, user_name, user_email, user_image_url) {
             const domain = 'meet.techneketax.com';
-            const tool_bar_buttons = ['microphone', 'camera', 'hangup'];
+            const tool_bar_buttons = ['microphone', 'camera', 'desktop', 'profile', 'settings', 'raisehand', 'videoquality', 'hangup'];
             const options = {
                 roomName: room_name,
                 width: '100%',
@@ -109,7 +109,7 @@
         const room_name = '{{ room_id }}';
         const user_name = '{{ loginName }}';
         const user_email = '{{ userEmail }}';
-        const user_image = '{{ userProfileImage is not empty ? userProfileImage : "https://avatar.iran.liara.run/username?username=" ~ loginName }}';
+        const user_image = '{{ profile_image }}';
 
         StartMeeting(meeting_name, room_name, user_name, user_email, user_image);
 
@@ -122,7 +122,7 @@
                 },
                 success: function (response) {
                     if (response.status === "hangup") {
-                        window.location.href = '/user/chat';
+                        window.location.href = '/user/chat/{{ pickup_id }}';
                     }
                 },
                 error: function (error) {
@@ -133,5 +133,27 @@
 
         // Check the call status periodically
         setInterval(checkCallStatus, 1000);
+
+        function hangUpCall(channelId, user_id= null) {
+            $.ajax({
+                url: '/call/hangup/' + encodeURIComponent(channelId),
+                type: 'POST',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === true) {
+                        // Redirect to /user/chat if status is true
+                        window.location.href = '/user/chat/'+user_id;
+                    } else {
+                        console.error('Hangup failed: ', response.message || 'Unknown error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error: ' + status + ' - ' + error);
+                }
+            });
+        }
+
     </script>
+
+
 {% endblock %}

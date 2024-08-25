@@ -560,30 +560,38 @@
                         // Show the call alert if not already shown
                         if (!CallAlertShown) {
                             $('#call-ringing').html(`
-                        <div id="call-alert" class="alert custom-alert-1 rounded-3 fade show mb-4" role="alert" style="z-index: 999; margin-top:20px;">
-                            <div class="media">
-                                <div class="media-body">
-                                    <div class="alert-text pt-0">
-                                        <h5 class="text-light">
-                                            <div class="avatar avatar-sm avatar-indicators avatar-online">
-                                                <img alt="avatar" src="https://techneketax.local/assets/dashboard/src/assets/img/profile-30.png" class="rounded-circle">
+
+                             <!--begin::Toolbar-->
+                            <div class="toolbar bg-dark" id="kt_toolbar">
+                                <!--begin::Container-->
+                                <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                                    <!--begin::Page title-->
+                                    <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                                        <!--begin::Title-->
+                                         <div class="avatar avatar-sm avatar-indicators avatar-online">
+                                                <img width="50%" alt="avatar" src="https://techneketax.local/assets/dashboard/src/assets/img/profile-30.png" class="rounded-circle">
                                             </div>
-                                            <span class="pt-3">Video call from ${callerName}</span>
-                                        </h5>
+                                        <h1 class="d-flex text-light fw-bolder fs-3 align-items-center my-1">Call from ${callerName}</h1>
+                                        <!--end::Title-->
                                     </div>
-                                    <div class="alert-btn p-2 text-center" style="letter-spacing: 60px;">
-                                        <button onclick="hangUpCall('${channel_id}')" type="button" class="btn btn-lg btn-danger rounded-5">
+                                    <!--end::Page title-->
+                                    <!--begin::Actions-->
+                                    <div class="d-flex align-items-center gap-2 gap-lg-3">
+                                        <button onclick="hangUpCall('${channel_id}')" type="button" class="btn btn-sm btn-danger">
                                             <img width="24px" src="{{ env.APP_URL }}assets/img/phone-hangup.png" alt="">
                                         </button>
-                                        <a href="${callLink}" type="button" class="btn btn-lg btn-success rounded-5">
+                                        <a href="${callLink}" type="button" class="btn btn-sm btn-success">
                                             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
                                                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                                             </svg>
                                         </a>
+
                                     </div>
+                                    <!--end::Actions-->
                                 </div>
+                                <!--end::Container-->
                             </div>
-                        </div>
+                            <!--end::Toolbar-->
                     `);
                             CallAlertShown = true; // Mark that the alert has been shown
 
@@ -655,7 +663,7 @@
             };
         }
     }
-    function hangUpCall(channelId) {
+    function hangUpCall(channelId, user_id= null) {
         $.ajax({
             url: '/call/hangup/' + encodeURIComponent(channelId),
             type: 'POST',
@@ -663,7 +671,7 @@
             success: function(response) {
                 if (response.status === true) {
                     // Redirect to /user/chat if status is true
-                    window.location.href = '/user/chat';
+                    window.location.href = '/user/chat/'+user_id;
                 } else {
                     console.error('Hangup failed: ', response.message || 'Unknown error');
                 }
