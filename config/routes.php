@@ -93,7 +93,8 @@ post('/call/hangup/$room_id', 'controller/users/ChatController.php');
 get('/user/file', 'controller/users/FilemanagerController.php');
 get('/file', 'controller/users/FilemanagerController.php');
 get('/user/files', 'controller/users/FilemanagerController.php');
-
+post('/user/file/del', 'controller/users/FilemanagerController.php');
+post('/user/file/upload', 'controller/users/FilemanagerController.php');
 
 get('/file-manager', 'controller/users/FilemanagerController.php');
 

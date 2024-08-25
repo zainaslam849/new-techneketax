@@ -1281,4 +1281,60 @@ function sendSMS($clientNumber, $message){
         return false;
         }
 }
+
+function getDirectoryContents($directory) {
+    $result = [];
+    if (is_dir($directory)) {
+        $items = scandir($directory);
+        foreach ($items as $item) {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+            $path = $directory . DIRECTORY_SEPARATOR . $item;
+            // Replace backslashes with forward slashes
+            $path = str_replace('\\', '/', $path);
+
+            if (is_dir($path)) {
+                $result[] = [
+                    'name' => $item,
+                    'type' => 'folder',
+                    'size' => '-',
+                    'format' => '-',
+                    'path' => $path,  // Include the complete directory path
+                ];
+            } elseif (is_file($path)) {
+                $fileSize = filesize($path);
+                $fileFormat = pathinfo($path, PATHINFO_EXTENSION);
+
+                $result[] = [
+                    'name' => $item,
+                    'type' => 'file',
+                    'size' => formatSizeUnits($fileSize),
+                    'format' => $fileFormat,
+                    'path' => $path,  // Include the complete file path
+                ];
+            }
+        }
+    }
+
+    return $result;
+}
+
+function formatSizeUnits($bytes) {
+    if ($bytes >= 1073741824) {
+        $bytes = number_format($bytes / 1073741824, 2) . ' GB';
+    } elseif ($bytes >= 1048576) {
+        $bytes = number_format($bytes / 1048576, 2) . ' MB';
+    } elseif ($bytes >= 1024) {
+        $bytes = number_format($bytes / 1024, 2) . ' KB';
+    } elseif ($bytes > 1) {
+        $bytes = $bytes . ' bytes';
+    } elseif ($bytes == 1) {
+        $bytes = $bytes . ' byte';
+    } else {
+        $bytes = '0 bytes';
+    }
+
+    return $bytes;
+}
 ?>
