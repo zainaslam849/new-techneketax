@@ -45,6 +45,47 @@ if($route == '/user/files'){
     ]);
 
 }
+if($route == "/user/file/del-all"){
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $filePaths = isset($input['filePaths']) ? $input['filePaths'] : [];
+        $response = [
+            'status' => 'error',
+            'message' => 'No files were deleted.',
+        ];
+
+        if (!empty($filePaths)) {
+            $deletedFiles = [];
+            $errors = [];
+
+            foreach ($filePaths as $filePath) {
+                if (file_exists($filePath)) {
+                    if (unlink($filePath)) {
+                        $deletedFiles[] = basename($filePath);
+                    } else {
+                        $errors[] = 'Could not delete the file "' . basename($filePath) . '".';
+                    }
+                } else {
+                    $errors[] = 'File "' . basename($filePath) . '" not found.';
+                }
+            }
+
+            if (count($deletedFiles) > 0) {
+                $response['status'] = 'success';
+                $response['message'] = 'Files deleted: ' . implode(', ', $deletedFiles) . '.';
+            }
+
+            if (count($errors) > 0) {
+                $response['status'] = 'partial_success';
+                $response['message'] = implode(' ', $errors);
+            }
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    }
+}
 if($route == "/user/file/del"){
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $filePath = isset($_POST['filePath']) ? $_POST['filePath'] : '';
