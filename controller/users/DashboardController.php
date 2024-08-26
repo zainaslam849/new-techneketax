@@ -9,14 +9,14 @@ require("config/env.php");
 if ($loginUserType == "firm") {
     $seo = array(
         'title' => 'Dashboard',
-        'description' => $val,
+        'description' => @$val,
         'keywords' => 'Admin Panel'
     );
     echo $twig->render('user/dashboard.twig', ['seo' => $seo]);
 }else{
     $seo = array(
         'title' => 'Dashboard',
-        'description' => $val,
+        'description' => @$val,
         'keywords' => 'Admin Panel'
     );
     $users = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
