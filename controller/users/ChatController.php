@@ -54,7 +54,7 @@ if($route === '/user/chat/$user_id'){
         ->fetchAll();
     $chatWithUserInfo= $chatWithUserInfo[0];
     $seo = array(
-        'title' => 'Chat with '.$chatWithUserInfo['fname'],
+        'title' => 'Chat with '.$chatWithUserInfo['fname']." ".$chatWithUserInfo['lname'],
         'description' => 'CRM',
         'keywords' => 'Admin Panel'
     );
