@@ -24,12 +24,9 @@
 <div class="d-flex flex-column flex-root">
     <!--begin::Page-->
     <div class="page d-flex flex-row flex-column-fluid">
-            {{ include('user/includes/sidebar.twig') }}
 
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
             {{ include('user/includes/navbar.twig') }}
-            <div id="call-ringing"></div>
             {% block content %} {% endblock %}
 
 
-                {{ include('user/includes/footer.twig') }}

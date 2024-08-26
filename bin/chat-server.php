@@ -39,7 +39,6 @@ $config = new Config\DatabaseConfig([
 $dbal = new Database\DatabaseManager($config);
 $db = $dbal->database('default');
 
-// Define the WebSocket Chat server
 class Chat implements MessageComponentInterface {
     protected $clients;
     protected $db;
@@ -68,10 +67,16 @@ class Chat implements MessageComponentInterface {
                     'message' => $safe_message,
                 ])->run();
 
-                // Send message to the recipient
+                // Send message to the recipient only
                 foreach ($this->clients as $client) {
                     if ($from !== $client) {
-                        $client->send($msg);
+                        $client->send(json_encode([
+                            'sender_id' => $sender_id,
+                            'receiver_id' => $data['receiver_id'],
+                            'message' => $safe_message,
+                            'senderName' => $data['senderName'], // Add additional fields as necessary
+                            'senderProfileImage' => $data['senderProfileImage']
+                        ]));
                     }
                 }
 
@@ -102,8 +107,8 @@ $server = \Ratchet\Server\IoServer::factory(
             new Chat($db)
         )
     ),
-    8005
+    8000
 );
 
-echo "WebSocket server started on port 8005...\n";
+echo "WebSocket server started on port 8000...\n";
 $server->run();

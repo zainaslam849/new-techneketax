@@ -1,6 +1,19 @@
-{% extends 'user/master.twig' %}
+{% extends 'user/master_call.twig' %}
 {% block content %}
     <style>
+        .wrapper{
+            padding-top: 50px !important;
+            padding-left: unset !important;
+        }
+        .header {
+            left: 0px !important;
+        }
+        /* Full height container for the meeting */
+        #kt_content {
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
         /* Base styles for desktop */
         .endbtn-col {
             margin-top: 15%;
@@ -119,7 +132,8 @@
         }
     </style>
     <!--  BEGIN CONTENT AREA  -->
-    <div id="content" class="main-content">
+<div class="d-flex flex-column flex-column-fluid" >
+    <div class=" h-lg-100" id="kt_meeting_card">
         <div class="video-container" id="video-container">
             <video id="background-video" autoplay muted></video>
         </div>
@@ -127,11 +141,11 @@
         <audio id="ringtone" src="{{ env.APP_URL }}assets/phone-calling.mp3" preload="auto" loop></audio>
         <div class="layout-px-spacing">
             <div class="middle-content container-xxl p-0" style="z-index: 999;">
-                <div class="chat-section layout-top-spacing">
+                <div class="chat-section layout-top-spacing py-20">
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 p-5">
                             <div class="call-animation">
-                                <img class="img-circle img-profile" src="https://techneketax.local/assets/dashboard/src/assets/img/profile-30.png" alt="" width="135"/>
+                                <img class="img-circle img-profile" src="{{ profile_image }}" alt="" width="135"/>
                             </div>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 p-2">
@@ -139,7 +153,7 @@
                             <h2 class="text-light text-center"><strong>{{ fullname }}</strong></h2>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 endbtn-col text-center" style="z-index: 999;">
-                            <a onclick="hangUpCall('{{ channel_id }}')" type="button">
+                            <a onclick="hangUpCall('{{ channel_id }}', '{{ pickup_id }}')" type="button">
                                 <div class="bg-danger end-btn">
                                     <img width="38px" src="{{ env.APP_URL }}assets/img/phone-hangup.png" alt="">
                                 </div>
@@ -150,6 +164,7 @@
             </div>
         </div>
     </div>
+</div>
     <!--  END CONTENT AREA  -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script>
@@ -186,7 +201,7 @@
                             window.location.href = response.call_link;
                         } else if (response.status === "hangup") {
                             console.log('Call HangUp');
-                            window.location.href = '/user/chat';
+                            window.location.href = '/user/chat/{{ pickup_id }}';
                         }
                     },
                     error: function(error) {
@@ -201,5 +216,25 @@
             // Check call status every 1 second
             setInterval(checkCallStatus, 1000);
         });
+
+
+        function hangUpCall(channelId, user_id= null) {
+            $.ajax({
+                url: '/call/hangup/' + encodeURIComponent(channelId),
+                type: 'POST',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === true) {
+                        // Redirect to /user/chat if status is true
+                        window.location.href = '/user/chat/'+user_id;
+                    } else {
+                        console.error('Hangup failed: ', response.message || 'Unknown error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error: ' + status + ' - ' + error);
+                }
+            });
+        }
     </script>
 {% endblock %}
