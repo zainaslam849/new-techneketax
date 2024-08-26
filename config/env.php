@@ -7,11 +7,11 @@
 
 require_once("./config/main.php");
 $env=array(
-    "ENV_TYPE"=>"local", // local or production
+    "ENV_TYPE"=>"production", // local or production
     "SITE_NAME"=>"CRM",
     "DESCRIPTION"=>"description",
     "KEYWORDS"=>"keywords",
-    "APP_URL"=> "https://techneketax.local/",
+    "APP_URL"=> "https://dev.techneketax.com/",
     "ADMIN_EMAIL"=> "info@crm.com",
     "SENDER_EMAIL"=> "info@crm.com",
     "TIME_ZONE"=> "Asia/Karachi",
