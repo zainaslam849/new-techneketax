@@ -54,7 +54,7 @@ if($route === '/user/chat/$user_id'){
         ->fetchAll();
     $chatWithUserInfo= $chatWithUserInfo[0];
     $seo = array(
-        'title' => 'Chat with '.$chatWithUserInfo['fname'],
+        'title' => 'Chat with '.$chatWithUserInfo['fname']." ".$chatWithUserInfo['lname'],
         'description' => 'CRM',
         'keywords' => 'Admin Panel'
     );
@@ -150,12 +150,9 @@ if ($route == '/chat/messages/$userId') {
             ]);
         }
     }
-
 // Output JSON response
     header('Content-Type: application/json');
     echo getUserChat($loginUserId, $userId);
-
-
 }
 
 
@@ -168,18 +165,24 @@ if($route == '/call/ring/$userId'){
         ->where('id', '=', $userId)
         ->fetchAll();
     $fullname= $user[0]['fname'].' '.$user[0]['lname'];
-    echo $twig->render('user/chat/audio-call_ringing.twig', ['fullname'=>$fullname]);
+    echo $twig->render('user/chat/audio-call_ringing.twig', ['fullname'=>$fullname, 'userId'=>$userId]);
 }
 
 if($route == '/video-call/ring/$userId'){
 
     $user = $h->table('users')
-        ->select('id','fname','lname', 'email', 'type')
+        ->select('id','fname','lname', 'email', 'type', 'profile_image')
         ->where('id', '=', $userId)
         ->fetchAll();
     $fullname= $user[0]['fname'].' '.$user[0]['lname'];
     $caller_pickup_id= $user[0]['id'];
     $caller_start_id= $loginUserId;
+
+    if(!empty($user[0]['profile_image'])){
+        $profile_image= $env['APP_URL'].'uploads/profile/'.$user[0]['profile_image'];
+    }else{
+        $profile_image= "https://avatar.iran.liara.run/username?username=".$fullname;
+    }
 
     $call = $h->table('calls')
         ->select()
@@ -187,6 +190,8 @@ if($route == '/video-call/ring/$userId'){
         ->where('reciever_pickup_id','=',$caller_pickup_id)
         ->where('status','!=', 'cancel')
         ->where('status','!=', 'hangup');
+
+
     if($call->count() > 0){
         //UPdate scnerio
         $previousData=$call->fetchAll();
@@ -197,6 +202,7 @@ if($route == '/video-call/ring/$userId'){
                 ])->where('id','=',$data['id'])->run();
         }
     }
+
         $channel_id=random_strings(14);
         $insert = $h->insert('calls')
             ->values([
@@ -207,7 +213,7 @@ if($route == '/video-call/ring/$userId'){
                 'status' => 'ringing',
             ])->run();
 
-    echo $twig->render('user/chat/video-call_ringing.twig', ['fullname'=>$fullname, 'pickup_id'=>$userId, 'channel_id'=>$channel_id]);
+    echo $twig->render('user/chat/video-call_ringing.twig', ['fullname'=>$fullname, 'pickup_id'=>$userId, 'channel_id'=>$channel_id, 'profile_image'=>$profile_image]);
 }
 
 if($route == '/call/status'){
@@ -238,10 +244,21 @@ if($route == '/video-call/$room_id'){
             ->where('status','=', 'pickup');
         $data=$call->fetchAll();
 
+
+
+        if(!empty($userInfo[0]['profile_image'])){
+            $profile_image= $env['APP_URL'].'uploads/profile/'.$userInfo[0]['profile_image'];
+        }else{
+            $profile_image= "https://avatar.iran.liara.run/username?username=".$loginUserName;
+        }
+
+
+
         echo $twig->render('user/chat/video-call.twig',[
             'room_id'=>$room_id,
             'pickup_id'=>$data[0]['reciever_pickup_id'],
-            'caller_id'=>$data[0]['caller_start_id']
+            'caller_id'=>$data[0]['caller_start_id'],
+            'profile_image'=>$profile_image
         ]);
     }
 }

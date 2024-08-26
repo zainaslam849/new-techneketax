@@ -1,6 +1,19 @@
-{% extends 'user/master.twig' %}
+{% extends 'user/master_call.twig' %}
 {% block content %}
     <style>
+        .wrapper{
+            padding-top: 50px !important;
+            padding-left: unset !important;
+        }
+        .header {
+            left: 0px !important;
+        }
+        /* Full height container for the meeting */
+        #kt_content {
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
         /* Base styles for desktop */
         .endbtn-col {
             margin-top: 15%;
@@ -81,7 +94,6 @@
         }
     </style>
     <!--  BEGIN CONTENT AREA  -->
-    <div id="content" class="main-content" style="background: linear-gradient(to bottom, #434343 0%, black 100%);" >
         <div class="layout-px-spacing">
             <div class="middle-content container-xxl p-0">
                 <div class="chat-section layout-top-spacing">
@@ -106,9 +118,57 @@
                 </div>
             </div>
         </div>
-    </div>
     <!--  END CONTENT AREA  -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            const video = document.getElementById('background-video');
+            const videoContainer = $('#video-container');
+            const overlay = $('#overlay');
+            const ringtone = document.getElementById('ringtone');
 
+            function enableCamera() {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        video.srcObject = stream;
+                        videoContainer.addClass('blurred'); // Apply blur effect
+                        overlay.addClass('hidden'); // Hide overlay
+                        ringtone.pause(); // Stop ringing sound
+                    })
+                    .catch(error => {
+                        notie.alert({ type: 'warning', text: 'Error accessing media devices: '+error, time:2})
+                        console.error('Error accessing media devices.', error);
+                    });
+            }
+
+            function checkCallStatus() {
+                $.ajax({
+                    url: '/call/status',
+                    type: 'POST',
+                    data: {
+                        channel_id: '{{ channel_id }}',
+                        pickup_id: '{{ pickup_id }}'
+                    },
+                    success: function(response) {
+                        if (response.status === "pickup") {
+                            window.location.href = response.call_link;
+                        } else if (response.status === "hangup") {
+                            console.log('Call HangUp');
+                            window.location.href = '/user/chat/{{ userId }}';
+                        }
+                    },
+                    error: function(error) {
+                        console.error('Error checking call status.', error);
+                    }
+                });
+            }
+
+            //ringtone.play();
+            enableCamera();
+
+            // Check call status every 1 second
+            setInterval(checkCallStatus, 1000);
+        });
+    </script>
 
 {% endblock %}

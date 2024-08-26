@@ -83,7 +83,6 @@ $twig->addGlobal('currentYear', date("Y"));
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-
 require 'vendor/autoload.php';
 $mail = new PHPMailer(true);
 //SMTP CREDENTIALS
@@ -103,25 +102,29 @@ $settings = $h->table('site_setting')->select()->where('id', '=', 1)->fetchAll()
 $twig->addGlobal('logo', $settings[0]['logo']);
 //DEFINE YOUR GLOBAL STUFF HERE
 if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
-    $loginUserId=$_SESSION['users']['id'];
-    $loginUserType=$_SESSION['users']['type'];
-    $userInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
-    $loginUserName=$userInfo[0]['fname'] .' '.$userInfo[0]['lname'];
-    $twig->addGlobal('loginId', $loginUserId);
-    $twig->addGlobal('loginType', @$loginUserType);
-    $twig->addGlobal('loginName', @$loginUserName);
-    $twig->addGlobal('userEmail', @$userInfo[0]['email']);
-    $twig->addGlobal('userPhone', @$userInfo[0]['phone']);
-    $twig->addGlobal('userProfileImage', @$userInfo[0]['profile_image']);
+        $loginUserId=$_SESSION['users']['id'];
+        $loginUserType=$_SESSION['users']['type'];
+        $userInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+        $loginUserName=$userInfo[0]['fname'] .' '.$userInfo[0]['lname'];
+        $twig->addGlobal('loginId', $loginUserId);
+        $twig->addGlobal('loginType', @$loginUserType);
+        $twig->addGlobal('loginName', @$loginUserName);
+        $twig->addGlobal('userEmail', @$userInfo[0]['email']);
+        $twig->addGlobal('userPhone', @$userInfo[0]['phone']);
+        $twig->addGlobal('userProfileImage', @$userInfo[0]['profile_image']);
     if ($loginUserType == "firm"){
         $twig->addGlobal('userCompanyImage', @$userInfo[0]['company_image']);
         $twig->addGlobal('whitelabel', @$userInfo[0]['white_labeling']);
+        $twig->addGlobal('company_name', @$userInfo[0]['company_name']);
+
     }else{
         $userInfo = $h->table('users')->select()->where('id', '=', @$userInfo[0]['firm_id'])->fetchAll();
         $twig->addGlobal('userCompanyImage', @$userInfo[0]['company_image']);
         $twig->addGlobal('whitelabel', @$userInfo[0]['white_labeling']);
     }
-
+    $twig->addFilter(new \Twig\TwigFilter('base64_encode', function ($string) {
+        return base64_encode($string);
+    }));
     $twig->addGlobal('Stripe_public_key', 'pk_test_51OgnsKB8z2Dlcg3z0Qz8mYPgaXouytYsnflrzr3hgWNNu91PY8ApCB2A6ZTbR49TZ59ag5KuLfIVIlBo2aCqgoZ900owqKbZDQ');
     $Stripe_secret_key='sk_test_51OgnsKB8z2Dlcg3z6ZQl607w3HUhJ3SQu7FupPI2XWwTaBBLdVZpYA7fpzDQBd8n9jpa9DsBUUuYnKoT9CKRcwV700c0vbYFoi';
 endif;
