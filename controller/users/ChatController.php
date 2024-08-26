@@ -150,12 +150,9 @@ if ($route == '/chat/messages/$userId') {
             ]);
         }
     }
-
 // Output JSON response
     header('Content-Type: application/json');
     echo getUserChat($loginUserId, $userId);
-
-
 }
 
 
