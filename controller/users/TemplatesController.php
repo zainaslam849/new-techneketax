@@ -166,7 +166,7 @@ echo $twig->render('user/templates/view.twig', [
 
 endif;
 
-if($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST'):
+if ($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $templateId = $_POST['template_id'];
     $userId = $_POST['user_id'];
     $questions = $_POST['questions'];
@@ -176,15 +176,15 @@ if($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST'):
         'sections' => []
     ];
 
-// Directory where files will be uploaded
+    // Directory where files will be uploaded
     $uploadDir = 'uploads/template_files/' . $templateId;
 
-// Ensure the upload directory exists
+    // Ensure the upload directory exists
     if (!file_exists($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
 
-// Organize questions by their section IDs
+    // Organize questions by their section IDs
     $sections = [];
     foreach ($questions as $questionId => $question) {
         $sectionId = $question['section_id'];
@@ -205,6 +205,14 @@ if($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST'):
             ];
             $uploadedFilePath = uploadTemplateFile($file, $uploadDir);
             $value = $uploadedFilePath ? $uploadedFilePath : 'File upload failed';
+        } elseif (isset($question['value']) && strpos($question['value'], 'data:image/png;base64,') === 0) {
+            // Handle signature if the value is a base64 encoded image
+            $signatureData = $question['value'];
+            $signatureImage = uniqid(rand(100, 100000)) . '.png';
+            $signatureImagePath = $uploadDir . '/' . $signatureImage;
+            $decodedSignature = base64_decode(str_replace('data:image/png;base64,', '', $signatureData));
+            file_put_contents($signatureImagePath, $decodedSignature);
+            $value = $signatureImagePath;
         } else {
             $value = isset($question['value']) ? (is_array($question['value']) ? json_encode($question['value']) : $question['value']) : null;
         }
@@ -216,16 +224,16 @@ if($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST'):
         ];
     }
 
-// Re-index the sections array to ensure correct ordering and structure
+    // Re-index the sections array to ensure correct ordering and structure
     $data['sections'] = array_values($sections);
 
-// Update the template request status
+    // Update the template request status
     $h->update('template_request')->values(['status' => 'completed'])->where('user_id', '=', $userId)->where('template_id', '=', $templateId)->run();
 
-// Path to the JSON file
+    // Path to the JSON file
     $filePath = 'uploads/templates/' . $templateId . '.json';
 
-// Check if the file exists
+    // Check if the file exists
     if (file_exists($filePath)) {
         // Read existing data
         $existingData = json_decode(file_get_contents($filePath), true);
@@ -234,15 +242,16 @@ if($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST'):
         $existingData = [];
     }
 
-// Append the new data to the existing data
+    // Append the new data to the existing data
     $existingData[] = $data;
 
-// Save data to the JSON file
+    // Save data to the JSON file
     file_put_contents($filePath, json_encode($existingData, JSON_PRETTY_PRINT));
 
     echo 'Data saved successfully!';
     exit();
-endif;
+}
+
 
 if($route == '/user/template/all'):
     $seo = array(
