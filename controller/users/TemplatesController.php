@@ -205,11 +205,17 @@ if ($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
             $uploadedFilePath = uploadTemplateFile($file, $uploadDir);
             $value = $uploadedFilePath ? $uploadedFilePath : 'File upload failed';
-        } else {
+        } elseif (isset($question['value']) && is_string($question['value']) && strpos($question['value'], 'data:image/png;base64,') === 0) {
+            // Handle signature if the value is a base64 encoded image
+            $signatureData = $question['value'];
+            $signatureImage = uniqid(rand(100, 100000)) . '.png';
+            $signatureImagePath = $uploadDir . '/' . $signatureImage;
+            $decodedSignature = base64_decode(str_replace('data:image/png;base64,', '', $signatureData));
+            file_put_contents($signatureImagePath, $decodedSignature);
+            $value = $signatureImagePath;
+        }  else {
             $value = isset($question['value']) ? (is_array($question['value']) ? json_encode($question['value']) : $question['value']) : null;
         }
-
-        // Add the response to the corresponding section
         $sections[$sectionId]['responses'][] = [
             'label' => $question['label'],
             'value' => $value
@@ -240,20 +246,10 @@ if ($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     // Save data to the JSON file
     file_put_contents($filePath, json_encode($existingData, JSON_PRETTY_PRINT));
 
-    // Signature Handling
-    if (!empty($_POST['parents_signature'])) {
-        $parentsSignature = $_POST['parents_signature'];
-        $parentsSignatureImage = uniqid(rand(100, 100000)) . '.png';
-        $parentSignatureImagePath = 'uploads/card_special_status/' . $parentsSignatureImage;
-        $parentDecodedSignature = base64_decode(str_replace('data:image/png;base64,', '', $parentsSignature));
-        file_put_contents($parentSignatureImagePath, $parentDecodedSignature);
-        // Add the signature path to the data array if needed
-        $data['parents_signature'] = $parentSignatureImagePath;
-    }
-
     echo 'Data saved successfully!';
     exit();
 }
+
 
 
 if($route == '/user/template/all'):

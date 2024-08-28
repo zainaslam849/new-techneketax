@@ -311,6 +311,16 @@
 										<span class="menu-arrow"></span>
 									</span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        {% if loginType == 'firm' %}
+                        <div class="menu-item">
+                            <a class="menu-link {% if route == '/user/plans' %}active{% endif %}" href="/user/plans">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+                                <span class="menu-title">Plans</span>
+                            </a>
+                        </div>
+                        {% endif %}
                         <div class="menu-item">
                             <a class="menu-link {% if route == '/user/profile' %}active{% endif %}" href="/user/profile">
 												<span class="menu-bullet">
