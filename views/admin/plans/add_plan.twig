@@ -2,7 +2,11 @@
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/src/tagify/tagify.css">
     <link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/light/tagify/custom-tagify.css">
-
+<style>
+    .tagify__input{
+        padding:0px !important;
+    }
+</style>
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <!--begin::Toolbar-->
     <div class="toolbar" id="kt_toolbar">
@@ -44,18 +48,7 @@
     <div id="kt_content_container" class="container-fluid">
         <div class="layout-px-spacing">
 
-            <div class="middle-content container-xxl p-0">
-
-                <!-- BREADCRUMB -->
-                <div class="page-meta">
-                    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            {#                <li class="breadcrumb-item"><a href="#">Users</a></li>#}
-                            <li class="breadcrumb-item active" aria-current="page">Add Plan</li>
-                        </ol>
-                    </nav>
-                </div>
-                <!-- /BREADCRUMB -->
+            <div class="middle-content container-fluid p-0">
 
 
                 <div class="account-settings-container layout-top-spacing">
@@ -67,27 +60,25 @@
                                 <div class="col-xl-12 col-lg-12">
                                     <div id="ErrorMessage"></div>
                                     <div class="card  card-bx m-b30">
-                                        <div class="card-header">
-                                            <h6 class="title">Add Plan</h6>
-                                        </div>
+                                            <h6 class="title" style="padding-top: 25px; padding-left: 25px;">Add Plan</h6>
                                         <form method="post" id="AddPlansForm" class="profile-form">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-sm-6 mb-2">
                                                         <label class="form-label">Name</label>
-                                                        <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                                                        <input type="text" class="form-control form-control-solid" id="name" name="name" placeholder="Name">
                                                         <input type="hidden" name="csrf" value="{{ csrf }}">
                                                     </div>
                                                     <div class="col-sm-6 mb-2">
-                                                        <label for="tags">Tags:</label>
-                                                        <input name='basic' id="tags" value=''>
+                                                        <label class="form-label" for="tags">Tags:</label>
+                                                        <input name='basic' id="tags" value='' class="form-control form-control-solid">
                                                     </div>
                                                     <div class="col-lg-12 mt-2 mb-2">
                                                         <button class="btn btn-success" type="button" onclick="addKey_points();" style="float: right; background: #28a745 !important; border-color: #28a745 !important;">ADD <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                                     </div>
                                                     <div class="col-sm-12 mb-2">
                                                         <label class="form-label">Key Points</label>
-                                                        <input type="text" class="form-control" id="key_points" name="key_points[]" placeholder="Add Key Point">
+                                                        <input type="text" class="form-control form-control-solid" id="key_points" name="key_points[]" placeholder="Add Key Point">
                                                     </div>
 
                                                     <div class="col-sm-12 mb-2">
@@ -97,20 +88,20 @@
                                                     </div>
                                                     <div class="col-sm-12 mb-2">
                                                         <label class="form-label">Discount (%)</label>
-                                                        <input type="number" class="form-control" id="percentage" min="0" name="percentage" placeholder="Discount (%)" value="0">
+                                                        <input type="number" class="form-control form-control-solid" id="percentage" min="0" name="percentage" placeholder="Discount (%)" value="0">
                                                     </div>
                                                     <div class="col-sm-6 mb-2">
                                                         <label class="form-label">Monthly Price</label>
-                                                        <input type="number" class="form-control" id="monthly_price" min="0" name="monthly_price" placeholder="Monthly Price">
+                                                        <input type="number" class="form-control form-control-solid" id="monthly_price" min="0" name="monthly_price" placeholder="Monthly Price">
                                                     </div>
                                                     <div class="col-sm-6 mb-2">
                                                         <label class="form-label">Yearly Price</label>
-                                                        <input type="number" class="form-control" id="yearly_price" min="0" name="yearly_price" placeholder="Yearly Price">
+                                                        <input type="number" class="form-control form-control-solid" id="yearly_price" min="0" name="yearly_price" placeholder="Yearly Price">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="card-footer">
-                                                <button type="button" class="btn btn-secondary" id="btn" onclick="add_plan()">ADD</button>
+                                                <button type="button" class="btn btn-primary" id="btn" onclick="add_plan()">ADD</button>
                                             </div>
                                         </form>
                                     </div>
@@ -156,6 +147,9 @@
                     } else if (dataResult == 2) {
                         toastr.error("Please Fill all the required Fields");
                         document.getElementById('btn').disabled = false;
+                    }else if (dataResult == 3) {
+                        toastr.error("Please Add Prices");
+                        document.getElementById('btn').disabled = false;
                     } else {
                         toastr.error('Something Went Wrong.');
                         document.getElementById('btn').disabled = false;
@@ -176,7 +170,7 @@
             divtest.setAttribute("class", "form-group row removeclass"+room);
             var rdiv = 'removeclass'+room;
 
-            divtest.innerHTML = ' <div class="col-sm-10 mt-2"><input type="text" class="form-control" id="key_points" name="key_points[]" placeholder="Add Key Point"></div><div class="col-sm-2 "><button class="btn btn-danger mt-3 mb-2" type="button" onclick="remove_Key_points('+ room +');" style="float: right; background: #dc3545 !important; border-color: #dc3545 !important;">DELETE <span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></div>';
+            divtest.innerHTML = ' <div class="col-sm-10 mt-2"><input type="text" class="form-control form-control-solid" id="key_points" name="key_points[]" placeholder="Add Key Point"></div><div class="col-sm-2 "><button class="btn btn-danger mt-3 mb-2" type="button" onclick="remove_Key_points('+ room +');" style="float: right; background: #dc3545 !important; border-color: #dc3545 !important;">DELETE <span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></div>';
             objTo.appendChild(divtest)
         }
         // children remove fields

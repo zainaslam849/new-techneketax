@@ -101,9 +101,43 @@
                         </div>
                     </div>
                 </div>
+                <div data-kt-menu-trigger="click" class="menu-item {% if route == '/admin/plans' or route == '/admin/add_plan'  %} here show {% endif %} menu-accordion">
+									<span class="menu-link">
+										<span class="menu-icon">
+											<!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+											<span class="svg-icon svg-icon-2">
+											<!--begin::Svg Icon | path: assets/media/icons/duotune/coding/cod001.svg-->
+<span class="svg-icon svg-icon-muted svg-icon-1x">                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+</span>
+                                                <!--end::Svg Icon-->
+											</span>
+                                            <!--end::Svg Icon-->
+										</span>
+										<span class="menu-title">Plans</span>
+										<span class="menu-arrow"></span>
+									</span>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link {% if route == '/admin/plans' %}active{% endif %}" href="/admin/plans">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+                                <span class="menu-title">List</span>
+                            </a>
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link {% if route == '/admin/add_plan' %}active{% endif %}" href="/admin/add_plan">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+                                <span class="menu-title">Add Plan</span>
+                            </a>
+                        </div>
 
+                    </div>
+                </div>
 
-                <div data-kt-menu-trigger="click" class="menu-item {% if route == '/admin/plans' or route == '/admin/profile'  %} here show {% endif %} menu-accordion">
+                <div data-kt-menu-trigger="click" class="menu-item {% if route == '/admin/profile'  %} here show {% endif %} menu-accordion">
 									<span class="menu-link">
 										<span class="menu-icon">
 											<!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
@@ -131,6 +165,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
             <!--end::Menu-->
         </div>

@@ -3,28 +3,78 @@
     <link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/src/tagify/tagify.css">
     <link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/light/tagify/custom-tagify.css">
     <!--  BEGIN CONTENT AREA  -->
-    <div id="content" class="main-content">
+    <!--  BEGIN CONTENT AREA  -->
+    <style>
+        .tagify__input{
+            padding:0px !important;
+        }
+    </style>
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Toolbar-->
+    <div class="toolbar" id="kt_toolbar">
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <!--begin::Title-->
+                <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Plans </h1>
+                <!--end::Title-->
+                <!--begin::Separator-->
+                <span class="h-20px border-gray-300 border-start mx-4"></span>
+                <!--end::Separator-->
+                <!--begin::Breadcrumb-->
+                <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">Dashboard</li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-dark">Plans</li>
+                    <!--end::Item-->
+                </ul>
+                <!--end::Breadcrumb-->
+            </div>
+            <!--end::Page title-->
+        </div>
+    </div>
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+    <!--begin::Container-->
+    <div id="kt_content_container" class="container-fluid">
+    <div class="layout-px-spacing">
+    <div class="middle-content container-fluid p-0">
         <div class="layout-px-spacing">
 
-            <div class="middle-content container-xxl p-0">
-
-                <!-- BREADCRUMB -->
-                <div class="page-meta">
-                    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Plans</li>
-                        </ol>
-                    </nav>
-                </div>
-                <!-- /BREADCRUMB -->
+            <div class="middle-content container-fluid p-0">
 
                 <div class="row layout-spacing">
                     <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                         <div class="widget-content widget-content-area br-8">
-                            <div class="widget-content widget-content-area">
+                            <div class="widget-content widget-content-area card">
+                                <div class="card-header border-0 pt-6 w-100">
+                                    <div class="col-md-6 mt-3 text-md-start text-center">
+                                        <div class="d-flex align-items-center position-relative my-1">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+														<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+													</svg>
+												</span>
+                                            <!--end::Svg Icon-->
+                                            <input type="text" data-kt-customer-table-filter="search" id="search" class="form-control form-control-solid w-250px ps-15" placeholder="Search " />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mt-3 text-md-end text-center">
+                                        <a href="/admin/add_plan" class="btn btn-primary  me-4" >
+                                            <span class="btn-text-inner">Add</span>
+                                        </a>
+                                    </div>
+                                </div>
                                 <div class="table-responsive">
-                                    <table id="table"  class="table dt-table-hover" style="width:100%">
+                                    <table id="table"  class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
                                         <thead>
                                         <tr>
                                             <th> Id </th>
@@ -48,73 +98,73 @@
 
         </div>
 
-        <!--  BEGIN FOOTER  -->
-        <div class="footer-wrapper">
-            <div class="footer-section f-section-1">
-                <p class="">Copyright © <span class="dynamic-year">2022</span> <a target="_blank" href="https://designreset.com/cork-admin/">DesignReset</a>, All rights reserved.</p>
-            </div>
-            <div class="footer-section f-section-2">
-                <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></p>
-            </div>
-        </div>
-        <!--  END CONTENT AREA  -->
+    </div>
+    </div>
+    </div>
+    </div>
     </div>
     <!--  END CONTENT AREA  -->
     <div class="modal fade" id="editExampleModal" tabindex="-1" aria-labelledby="editExampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content bg-white">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Plan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
                 </div>
+                <div class="modal-body scroll-y mx-5 mx-xl-5 my-7">
                 <form  method="post" id="editUploadForm" enctype="multipart/form-data">
+                    <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll"
+                         data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                         data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header"
+                         data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px"
+                         style="max-height: 570px;">
                     <input type="hidden"  id="id" name="id" >
-                    <div class="modal-body">
-                        <div class="row p-1">
-                            <div class="col-sm-6 mb-2">
+
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                                <input type="text" class="form-control form-control-solid" id="name" name="name" placeholder="Name">
 
                                 <input type="hidden" name="csrf" value="{{ csrf }}">
                             </div>
-                            <div class="col-sm-6 mb-2">
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label for="tags">Tags:</label>
-                                <input name='basic' id="tagsData">
+                                <input name='basic' id="tagsData" class="form-control form-control-solid">
                             </div>
-                            <div class="col-sm-12 mb-2">
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="form-label">Key Points</label>
                                 <div id="key_points_inputs">
 
                                 </div>
                             </div>
-                            <div class="col-lg-12  mb-2">
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <button class="btn btn-success " type="button" onclick="addKey_points();" style="float: right; background: #28a745 !important; border-color: #28a745 !important;">ADD <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                             </div>
-
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
                             <div id="addKey_points">
-
                             </div>
-                            <div class="col-sm-12 mb-2">
+                            </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="form-label">Discount (%)</label>
-                                <input type="number" class="form-control" id="percentage" min="0" name="percentage" placeholder="Discount (%)" value="0">
+                                <input type="number" class="form-control form-control-solid" id="percentage" min="0" name="percentage" placeholder="Discount (%)" value="0">
                             </div>
-                            <div class="col-sm-6 mb-2">
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="form-label">Monthly Price</label>
-                                <input type="number" class="form-control" id="monthly_price" min="0" name="monthly_price" placeholder="Monthly Price">
+                                <input type="number" class="form-control form-control-solid" id="monthly_price" min="0" name="monthly_price" placeholder="Monthly Price">
                             </div>
-                            <div class="col-sm-6 mb-2">
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="form-label">Yearly Price</label>
-                                <input type="number" class="form-control" id="yearly_price" min="0" name="yearly_price" placeholder="Yearly Price">
+                                <input type="number" class="form-control form-control-solid" id="yearly_price" min="0" name="yearly_price" placeholder="Yearly Price">
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
+
+                    <div class="modal-footer justify-content-center">
                         <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" name="add_new" id="btn-profile" class="btn btn-primary" onclick="update_tool()">Update</button>
                     </div>
                 </form>
             </div>
         </div>
+    </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.27.0/tagify.min.js" integrity="sha512-RZnh1b5EBFnw6IaiqEhT0dQy+dCbeC6ZybZY/CkMlk2OW8Eyj20/t8Js3Ka1Ot/sQIVL20N81p7FRQvloTZgtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -142,6 +192,9 @@
                     {mData: 'statusView'},
                     {mData: 'action'},
                 ]
+            });
+            $('#search').on('keyup', function() {
+                $('#table').DataTable().search(this.value).draw();
             });
         });
         function userStatus(userID, status) {
@@ -243,6 +296,7 @@
             const keyPointInput = document.createElement('input');
             keyPointInput.type = 'text';
             keyPointInput.classList.add('form-control');
+            keyPointInput.classList.add('form-control-solid');
             keyPointInput.classList.add('mb-2');
             keyPointInput.classList.add('mt-2');
             keyPointInput.name = 'key_points[]';
@@ -274,9 +328,9 @@
                         toastr.success('Plan Updated Successfully.');
                         document.getElementById("editUploadForm").reset();
                     } else if (dataResult == 2) {
-                        toastr.error("Password doesn't Matched.");
-                    } else if (dataResult == 3) {
                         toastr.error("Required fields are empty!");
+                    } else if (dataResult == 3) {
+                        toastr.error("Please Add Prices");
                     } else {
                         toastr.error('Something Went Wrong.');
                     }
@@ -299,7 +353,7 @@
             divtest.setAttribute("class", "form-group row removeclass"+room);
             var rdiv = 'removeclass'+room;
 
-            divtest.innerHTML = ' <div class="col-sm-10 mt-2"><input type="text" class="form-control" id="key_points" name="key_points[]" placeholder="Add Key Point"></div><div class="col-sm-2 "><button class="btn btn-danger mt-3 mb-2" type="button" onclick="remove_Key_points('+ room +');" style="float: right; background: #dc3545 !important; border-color: #dc3545 !important;">DELETE <span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></div>';
+            divtest.innerHTML = ' <div class="col-sm-10 mt-2"><input type="text" class="form-control form-control-solid" id="key_points" name="key_points[]" placeholder="Add Key Point"></div><div class="col-sm-2 "><button class="btn btn-danger mt-3 mb-2" type="button" onclick="remove_Key_points('+ room +');" style="float: right; background: #dc3545 !important; border-color: #dc3545 !important;">DELETE <span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></div>';
             objTo.appendChild(divtest)
         }
         // children remove fields

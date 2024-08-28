@@ -5,7 +5,7 @@
             border-collapse: collapse !important;
         }
 
-        td, th {
+        td, th,table {
             border: 1px dashed #dddddd !important;
             text-align: left !important;
             padding:15px !important;
@@ -74,7 +74,7 @@
                                                         {% for section in record.sections %}
                                                             <h5 class="m-2">{{ section.section_name | capitalize }}</h5>
                                                             <div class="table-responsive">
-                                                                <table class="table table-dashed align-middle gs-0 gy-4">
+                                                                <table class="table align-middle gs-0 gy-4">
                                                                     <thead>
                                                                     <tr>
                                                                         <th style="font-weight: bold; width:50%;">Label</th>
