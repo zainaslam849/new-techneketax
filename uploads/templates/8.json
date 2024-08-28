@@ -19,7 +19,7 @@
                     },
                     {
                         "label": "Fourth Input",
-                        "value": "fgf"
+                        "value": "vsdzfvf"
                     },
                     {
                         "label": "Fifth Input",
@@ -32,121 +32,11 @@
                 "responses": [
                     {
                         "label": "Full Name",
-                        "value": "Abdullah Mansoor"
+                        "value": "Adam Mansoor Robertson"
                     },
                     {
                         "label": "Father Name",
-                        "value": "dfvdf"
-                    },
-                    {
-                        "label": "Sex",
-                        "value": "Other"
-                    },
-                    {
-                        "label": "Phone Number",
-                        "value": "03483951305"
-                    },
-                    {
-                        "label": "Email",
-                        "value": "abdullahmansoor7786@gmail.com"
-                    },
-                    {
-                        "label": "Password",
-                        "value": "++Team@@11@@"
-                    },
-                    {
-                        "label": "Confirm Password",
-                        "value": "++Team@@11@@"
-                    },
-                    {
-                        "label": "User Type",
-                        "value": "Firm"
-                    }
-                ]
-            },
-            {
-                "section_id": "3",
-                "responses": [
-                    {
-                        "label": "Identification Type",
-                        "value": "ID CARD"
-                    },
-                    {
-                        "label": "Second Input ha ",
-                        "value": "2024-08-30T19:58"
-                    }
-                ]
-            },
-            {
-                "section_id": "10",
-                "responses": [
-                    {
-                        "label": "ghh",
-                        "value": "uploads\/template_files\/8\/30466cde89939772.png"
-                    },
-                    {
-                        "label": "gh",
-                        "value": "uploads\/template_files\/8\/7130466cde89939b8e.png"
-                    }
-                ]
-            },
-            {
-                "section_id": "11",
-                "responses": [
-                    {
-                        "label": "chbgfdbhn",
-                        "value": "uploads\/template_files\/8\/2067166cde89939d79.png"
-                    },
-                    {
-                        "label": "sdgfvxdsgbv",
-                        "value": "uploads\/template_files\/8\/2537666cde89939ecf.png"
-                    },
-                    {
-                        "label": "jhh",
-                        "value": "uploads\/template_files\/8\/6534866cde8993a024.png"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "user_id": "100",
-        "sections": [
-            {
-                "section_id": "1",
-                "responses": [
-                    {
-                        "label": "Business Name",
-                        "value": "Abdullah Mansoor pvt.LTD"
-                    },
-                    {
-                        "label": "Business EIN (Employer Identification Number)",
-                        "value": "Abdullah Mansoor pvt.LTD"
-                    },
-                    {
-                        "label": "Business Address",
-                        "value": "hassan street new gulgusht colony multan"
-                    },
-                    {
-                        "label": "Fourth Input",
-                        "value": "sdfgvfsgbv"
-                    },
-                    {
-                        "label": "Fifth Input",
-                        "value": "zotec soft"
-                    }
-                ]
-            },
-            {
-                "section_id": "2",
-                "responses": [
-                    {
-                        "label": "Full Name",
-                        "value": "cvdzxvcd"
-                    },
-                    {
-                        "label": "Father Name",
-                        "value": "dvdv"
+                        "value": "dvdzcxv"
                     },
                     {
                         "label": "Sex",
@@ -154,19 +44,19 @@
                     },
                     {
                         "label": "Phone Number",
-                        "value": "4535656"
+                        "value": "1702511010"
                     },
                     {
                         "label": "Email",
-                        "value": "demomalik@gmail.com"
+                        "value": "support@bitstock.com"
                     },
                     {
                         "label": "Password",
-                        "value": "ddzcvdv"
+                        "value": "wfdas"
                     },
                     {
                         "label": "Confirm Password",
-                        "value": "dzvfsdv"
+                        "value": "dzfvdzv"
                     },
                     {
                         "label": "User Type",
@@ -179,11 +69,11 @@
                 "responses": [
                     {
                         "label": "Identification Type",
-                        "value": "ID CARD"
+                        "value": "passport"
                     },
                     {
                         "label": "Second Input ha ",
-                        "value": "2024-09-07T12:17"
+                        "value": "2024-08-30T12:31"
                     }
                 ]
             },
@@ -192,11 +82,11 @@
                 "responses": [
                     {
                         "label": "ghh",
-                        "value": "uploads\/template_files\/8\/990266cdfb8f4a0b9.png"
+                        "value": "uploads\/template_files\/8\/7049666ced266adb97.png"
                     },
                     {
                         "label": "gh",
-                        "value": "uploads\/template_files\/8\/5816266cdfb8f4a2c7.png"
+                        "value": "uploads\/template_files\/8\/5107666ced266af68a.png"
                     }
                 ]
             },
@@ -205,15 +95,15 @@
                 "responses": [
                     {
                         "label": "chbgfdbhn",
-                        "value": "uploads\/template_files\/8\/5869966cdfb8f4a40c.png"
+                        "value": "uploads\/template_files\/8\/5483266ced266af8dd.png"
                     },
                     {
                         "label": "sdgfvxdsgbv",
-                        "value": "uploads\/template_files\/8\/7893266cdfb8f4a541.png"
+                        "value": "uploads\/template_files\/8\/5148366ced266b04eb.png"
                     },
                     {
                         "label": "jhh",
-                        "value": "uploads\/template_files\/8\/2768266cdfb8f4a6c4.png"
+                        "value": "uploads\/template_files\/8\/6718466ced266b1a6e.png"
                     }
                 ]
             }

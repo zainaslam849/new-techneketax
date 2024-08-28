@@ -133,7 +133,9 @@ get('/user/clients', 'controller/users/ClientsController.php');
 get('/user/members', 'controller/users/ClientsController.php');
 post('/user/send_invite', 'controller/users/ClientsController.php');
 // plans
+    if(@$_SESSION['users']['type'] == 'firm'):
 get('/user/plans', 'controller/users/PlansController.php');
+    endif;
 // interviews
 get('/user/interviews/all', 'controller/users/InterviewsController.php');
 get('/user/interviews/questions', 'controller/users/InterviewsController.php');
