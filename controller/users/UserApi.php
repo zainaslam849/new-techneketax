@@ -10,18 +10,18 @@ if($_GET['page_name']=="view_sections"){
             // Determine user status
             if ($section['status'] == "active") {
                 $statusView = "<span class='badge badge-light-success'>Active</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$section['id'].", 0)' class='badge badge-light-success text-start me-2 action-edit' ><i class='fa-solid fa-unlock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$section['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px' class='fa-solid fa-unlock'></i></a>";
             } else if ($section['status'] == "block") {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$section['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$section['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px' class='fa-solid fa-lock'></i></a>";
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$section['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$section['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px' class='fa-solid fa-lock'></i></a>";
             }
 
             // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
             $action = array('action' =>  $userStatus.'
-            <a role="button" href="/user/interviews/questions/update/'.$section["id"].'" class="badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-edit"></i></a>
+            <a role="button" href="/user/interviews/questions/update/'.$section["id"].'" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px" class="fa-solid fa-edit"></i></a>
        
               ');
 
@@ -61,22 +61,22 @@ if($_GET['page_name']=="view_interview_List"){
             if ($template['template_request_status'] == "completed") {
                 $statusView = "<span class='badge badge-light-success'>Completed</span>";
                 $action = array('action' => '
-           <a role="button" href="/user/template/display-data/'.$template["user_id"].'/'.$templates_slug[0]['id'].'" class="badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-eye"></i></a>
-            <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$template["template_request_id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>
+           <a role="button" href="/user/template/display-data/'.$template["user_id"].'/'.$templates_slug[0]['id'].'" class="btn btn-light-info btn-sm text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>
+            <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$template["template_request_id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
    
               ');
             } else if ($template['template_request_status'] == "pending") {
                 $statusView = "<span class='badge badge-light-danger'>Pending</span>";
                 $action = array('action' => '
-           <button type="button" disabled class="badge badge-light-danger text-start me-2 action-edit" title="data is not available"><i class="fa-solid fa-eye"></i></button>
-            <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" title="" onclick="deleteUser('.$template["template_request_id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>
+           <button type="button" disabled class="btn btn-light-info btn-sm text-start me-2 action-edit" title="data is not available"><i style="font-size: 16px;" class="fa-solid fa-eye"></i></button>
+            <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" title="" onclick="deleteUser('.$template["template_request_id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
    
               ');
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Pending</span>";
                 $action = array('action' => '
-           <a role="button" disabled="" class="badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-eye"></i></a>
-            <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$template["template_request_id"].')" ><i class="fa-regular fa-circle-xmark"></i></a>
+           <a role="button" disabled="" class="btn btn-light-info btn-sm text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>
+            <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$template["template_request_id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
    
               ');
             }
@@ -115,19 +115,19 @@ if($_GET['page_name']=="view_Templates"){
             // Determine user status
             if ($template['status'] == "active") {
                 $statusView = "<span class='badge badge-light-success'>Active</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$template['id'].", 0)' class='badge badge-light-success text-start me-2 action-edit' ><i class='fa-solid fa-unlock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$template['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
             } else if ($template['status'] == "block") {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$template['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$template['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$template['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$template['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
             }
 
             // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
             $action = array('action' => '
-            <a role="button" data-id="'.$template["id"].'" data-bs-toggle="modal" data-bs-target="#inputFormModal" class="edit badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-user-plus"></i></a>
-           <a role="button" href="/user/template/interview-list/'.$template["slug"].'" class="badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-eye"></i></a>
+            <a role="button" data-id="'.$template["id"].'" data-bs-toggle="modal" data-bs-target="#inputFormModal" class="edit btn-sm btn btn-light-secondary text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-user-plus"></i></a>
+           <a role="button" href="/user/template/interview-list/'.$template["slug"].'" class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>
            
               ');
             if (!empty($template['description']) && $template['description'] != ''){
@@ -172,17 +172,17 @@ if($_GET['page_name']=="view_Templates_request"){
             // Determine user status
             if ($template['template_request_status'] == "completed") {
                 $statusView = "<span class='badge badge-light-success'>Completed</span>";
-                $action = array('action' => '            <a role="button" disabled href="#" class="badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-eye"></i></a>
+                $action = array('action' => '            <a role="button" disabled href="#" class="btn-sm btn btn-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>
 ');
             } else if ($template['template_request_status'] == "pending") {
                 $statusView = "<span class='badge badge-light-danger'>Pending</span>";
                 $action = array('action' => '
-            <a role="button" href="/user/template/view/'.$template["slug"].'" class="badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-eye"></i></a>
+            <a role="button" href="/user/template/view/'.$template["slug"].'" class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>
               ');
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Pending</span>";
                 $action = array('action' => '
-            <a role="button" href="/user/template/view/'.$template["slug"].'" class="badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-eye"></i></a>
+            <a role="button" href="/user/template/view/'.$template["slug"].'" class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>
               ');
             }
 

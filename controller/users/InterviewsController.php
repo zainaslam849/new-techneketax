@@ -8,7 +8,6 @@ if($route == '/user/interviews/all'):
         'description' => 'CRM',
         'keywords' => 'User Panel'
     );
-
     echo $twig->render('user/interviews/all.twig', ['seo' => $seo]);
 endif;
 

@@ -166,7 +166,7 @@ echo $twig->render('user/templates/view.twig', [
 
 endif;
 
-if($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST'):
+if ($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $templateId = $_POST['template_id'];
     $userId = $_POST['user_id'];
     $questions = $_POST['questions'];
@@ -176,15 +176,15 @@ if($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST'):
         'sections' => []
     ];
 
-// Directory where files will be uploaded
+    // Directory where files will be uploaded
     $uploadDir = 'uploads/template_files/' . $templateId;
 
-// Ensure the upload directory exists
+    // Ensure the upload directory exists
     if (!file_exists($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
 
-// Organize questions by their section IDs
+    // Organize questions by their section IDs
     $sections = [];
     foreach ($questions as $questionId => $question) {
         $sectionId = $question['section_id'];
@@ -216,16 +216,16 @@ if($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST'):
         ];
     }
 
-// Re-index the sections array to ensure correct ordering and structure
+    // Re-index the sections array to ensure correct ordering and structure
     $data['sections'] = array_values($sections);
 
-// Update the template request status
+    // Update the template request status
     $h->update('template_request')->values(['status' => 'completed'])->where('user_id', '=', $userId)->where('template_id', '=', $templateId)->run();
 
-// Path to the JSON file
+    // Path to the JSON file
     $filePath = 'uploads/templates/' . $templateId . '.json';
 
-// Check if the file exists
+    // Check if the file exists
     if (file_exists($filePath)) {
         // Read existing data
         $existingData = json_decode(file_get_contents($filePath), true);
@@ -234,15 +234,27 @@ if($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST'):
         $existingData = [];
     }
 
-// Append the new data to the existing data
+    // Append the new data to the existing data
     $existingData[] = $data;
 
-// Save data to the JSON file
+    // Save data to the JSON file
     file_put_contents($filePath, json_encode($existingData, JSON_PRETTY_PRINT));
+
+    // Signature Handling
+    if (!empty($_POST['parents_signature'])) {
+        $parentsSignature = $_POST['parents_signature'];
+        $parentsSignatureImage = uniqid(rand(100, 100000)) . '.png';
+        $parentSignatureImagePath = 'uploads/card_special_status/' . $parentsSignatureImage;
+        $parentDecodedSignature = base64_decode(str_replace('data:image/png;base64,', '', $parentsSignature));
+        file_put_contents($parentSignatureImagePath, $parentDecodedSignature);
+        // Add the signature path to the data array if needed
+        $data['parents_signature'] = $parentSignatureImagePath;
+    }
 
     echo 'Data saved successfully!';
     exit();
-endif;
+}
+
 
 if($route == '/user/template/all'):
     $seo = array(
