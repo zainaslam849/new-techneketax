@@ -1,5 +1,16 @@
 {% extends 'user/master.twig' %}
 {% block content %}
+    <style>
+        table {
+            border-collapse: collapse !important;
+        }
+
+        td, th {
+            border: 1px dashed #dddddd !important;
+            text-align: left !important;
+            padding:15px !important;
+        }
+    </style>
 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <!--begin::Toolbar-->
     <div class="toolbar" id="kt_toolbar">
@@ -63,11 +74,11 @@
                                                         {% for section in record.sections %}
                                                             <h5 class="m-2">{{ section.section_name | capitalize }}</h5>
                                                             <div class="table-responsive">
-                                                                <table class="table table-bordered">
+                                                                <table class="table table-dashed align-middle gs-0 gy-4">
                                                                     <thead>
                                                                     <tr>
-                                                                        <th>Label</th>
-                                                                        <th>Value</th>
+                                                                        <th style="font-weight: bold; width:50%;">Label</th>
+                                                                        <th style="font-weight: bold; width:50%;">Value</th>
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
