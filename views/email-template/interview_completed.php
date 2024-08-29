@@ -131,35 +131,17 @@ $message='<!DOCTYPE html>
                                                                                             </tr>
                                                                                             <tr>
                                                                                                 <td class="title-36 a-center pb-15" style="font-size:36px; line-height:40px; color:#282828 !important; font-family:PT Sans, Arial, sans-serif; min-width:auto !important; text-align:center; padding-bottom: 15px;">
-                                                                                                    <strong>Your Appointment Has Been Scheduled - '.$title.'</strong>
+                                                                                                    <strong>Client Interview Form Submission Completed</strong>
                                                                                                 </td>
                                                                                             </tr>
                                                                                             <tr>
                                                                                                 <td class="text-16 lh-26 a-center pb-25" style="font-size:16px; color:#6e6e6e !important; font-family:PT Sans, Arial, sans-serif; min-width:auto !important; line-height: 26px; text-align:center; padding-bottom: 25px;">
-                                                                                                Dear '.$ClientInfo[0]['fname'].' '.$ClientInfo[0]['lname'].',<br>
-
-                                                                                                We are pleased to confirm that your appointment has been successfully scheduled. Below are the details of your appointment:
+                                                                                                Dear '.$company_name.',<br>
+I am pleased to inform you that '.$ClientInfo[0]['fname'].' '.$ClientInfo[0]['lname'].' has successfully completed the interview form.
+<br>
                                                                                                     <br>
-                                                                                                  Title : '.$title.'. <br>
-                                                                                                   Date & Time : '.$formattedDate.'. <br>
-                                                                                                   Purpose : '.$purpose.'.
-                                                                                                    <br>
-                                                                                                   We have marked your calendar in your dashboard. Please check your appointments there.
-                                                                                                </td>
-                                                                                            </tr>
-                                                                                            <tr>
-                                                                                                <td align="center">
-                                                                                                    <!-- Button -->
-                                                                                                    <table border="0" cellspacing="0" cellpadding="0" style="min-width: 200px;">
-                                                                                                        <tr>
-                                                                                                            <td class="btn-16 c-white l-white"  style="background-color:#ED141F !important; font-size:16px; line-height:20px; mso-padding-alt:15px 35px; font-family:PT Sans, Arial, sans-serif; text-align:center; font-weight:bold; text-transform:uppercase; border-radius:25px; min-width:auto !important; color:#ffffff;">
-                                                                                                                <a href="'.$env['APP_URL'].'meet/'.$jitsi_link.'" target="_blank" class="link c-white" style="display: block; padding: 15px 35px; text-decoration:none; color:#ffffff;">
-                                                                                                                    <span class="link c-white" style="text-decoration:none; color:#ffffff;">Start Meeting Here</span>
-                                                                                                                </a>
-                                                                                                            </td>
-                                                                                                        </tr>
-                                                                                                    </table>
-                                                                                                    <!-- END Button -->
+                                                                                             
+                                                                                                 If you have any questions or need assistance, please do not hesitate to reach out.
                                                                                                 </td>
                                                                                             </tr>
                                                                                             <tr>

@@ -30,8 +30,13 @@ if($route == '/admin/add_plan'):
             } else {
                 $key_points = '';
             }
-            @$monthly_price = $_POST['monthly_price'];
-            @$yearly_price = $_POST['yearly_price'];
+            if (!empty($_POST['monthly_price']) && !empty($_POST['yearly_price'])) {
+                @$monthly_price = $_POST['monthly_price'];
+                @$yearly_price = $_POST['yearly_price'];
+            }else{
+                echo "3";
+                exit();
+            }
             try {
 
                 $insert = $h->insert('plans')->values([ 'name' => $name, 'tags' => $tags, 'key_points' => $key_points, 'percentage' => $percentage, 'monthly_price' => $monthly_price, 'yearly_price' => $yearly_price])->run();
@@ -81,8 +86,13 @@ if ($route == '/admin/plan_edit'):
         }else{
             @$key_points = '';
         }
-        @$monthly_price = $_POST['monthly_price'];
-        @$yearly_price = $_POST['yearly_price'];
+        if (!empty($_POST['monthly_price']) && !empty($_POST['yearly_price'])) {
+            @$monthly_price = $_POST['monthly_price'];
+            @$yearly_price = $_POST['yearly_price'];
+        }else{
+            echo "3";
+            exit();
+        }
         try {
             $update = $h->update('plans')->values([ 'name' => $name, 'tags' => $tags, 'key_points' => $key_points, 'percentage' => $percentage, 'monthly_price' => $monthly_price, 'yearly_price' => $yearly_price])->where('id','=',$id)->run();
 

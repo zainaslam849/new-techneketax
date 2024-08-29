@@ -299,18 +299,18 @@ if($_GET['page_name']=="view_plans"){
             // Determine user status
             if ($plan['status'] == "active") {
                 $statusView = "<span class='badge badge-light-success'>Active</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$plan['id'].", 0)' class='badge badge-light-success text-start me-2 action-edit' ><i class='fa-solid fa-unlock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$plan['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
             } else if ($plan['status'] == "block") {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$plan['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$plan['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$plan['id'].", 1)' class='badge badge-light-danger text-start me-2 action-edit' ><i class='fa-solid fa-lock'></i></a>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$plan['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
             }
             // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
             $action = array('action' =>  $userStatus.'
-           <a href="javascript:;" class="badge badge-light-danger text-start me-2 action-edit" onclick="deleteUser('.$plan['id'].')" ><i class="fa-regular fa-circle-xmark"></i></a>
-           <a role="button" data-id="'.$plan['id'].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit badge badge-light-info text-start me-2 action-edit" ><i class="fa-solid fa-pen-to-square"></i></a>
+                       <a role="button" data-id="'.$plan['id'].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+           <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$plan['id'].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
            ');
 
 

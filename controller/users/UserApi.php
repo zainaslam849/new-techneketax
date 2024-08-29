@@ -126,7 +126,7 @@ if($_GET['page_name']=="view_Templates"){
 
             // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
             $action = array('action' => '
-            <a role="button" data-id="'.$template["id"].'" data-bs-toggle="modal" data-bs-target="#inputFormModal" class="edit btn-sm btn btn-light-secondary text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-user-plus"></i></a>
+            <a role="button" data-id="'.$template["id"].'" data-bs-toggle="modal" data-bs-target="#inputFormModal" class="edit btn-sm btn btn-light-success text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-user-plus"></i></a>
            <a role="button" href="/user/template/interview-list/'.$template["slug"].'" class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>
            
               ');
@@ -172,7 +172,7 @@ if($_GET['page_name']=="view_Templates_request"){
             // Determine user status
             if ($template['template_request_status'] == "completed") {
                 $statusView = "<span class='badge badge-light-success'>Completed</span>";
-                $action = array('action' => '            <a role="button" disabled href="#" class="btn-sm btn btn-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>
+                $action = array('action' => '<a role="button" disabled href="/user/template/display-data/'.$template["user_id"].'/'.$template['template_id'].'" class="btn-sm btn btn-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>
 ');
             } else if ($template['template_request_status'] == "pending") {
                 $statusView = "<span class='badge badge-light-danger'>Pending</span>";

@@ -9,6 +9,46 @@ if ($route == '/user/templates/send_request'  && $_SERVER['REQUEST_METHOD'] === 
             $res=$h->insert('template_request')->values(['user_id' => $client_id,'template_id' => $template_id])->run();
             if($res){
                 echo 1;
+                $ClientInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
+                if (!empty($loginUserId)){
+                    $companyInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+                    if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
+                        @$company_name =  @$companyInfo[0]['company_name'];
+                        @$company_phone =  @$companyInfo[0]['phone'];
+                        @$company_email =  @$companyInfo[0]['email'];
+                        @$company_address =  @$companyInfo[0]['address'];
+                        @$company_linkedin =  @$companyInfo[0]['linkedin'];
+                        @$company_tweet =  @$companyInfo[0]['tweet'];
+                        @$company_facebook =  @$companyInfo[0]['facebook'];
+                        @$company_github =  @$companyInfo[0]['github'];
+                        @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
+                    }else{
+                        $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                        @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                        @$company_phone =  @$AdminInfo[0]['phone'];
+                        @$company_email =  @$AdminInfo[0]['email'];
+                        @$company_address =  @$AdminInfo[0]['address'];
+                        @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                        @$company_tweet =  @$AdminInfo[0]['tweet'];
+                        @$company_facebook =  @$AdminInfo[0]['facebook'];
+                        @$company_github =  @$AdminInfo[0]['github'];
+                        @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                    }
+                }else{
+                    $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                    @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                    @$company_phone =  @$AdminInfo[0]['phone'];
+                    @$company_email =  @$AdminInfo[0]['email'];
+                    @$company_address =  @$AdminInfo[0]['address'];
+                    @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                    @$company_tweet =  @$AdminInfo[0]['tweet'];
+                    @$company_facebook =  @$AdminInfo[0]['facebook'];
+                    @$company_github =  @$AdminInfo[0]['github'];
+                    @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                }
+                sendSMS($companyInfo[0]['phone'],'Invitation to Complete Your Interview Form \n We kindly invite you to complete the interview form as part of our ongoing process. Your insights are highly valued and will greatly assist us in tailoring our services to your needs.');
+                include "views/email-template/interview_request.php";
+                mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], 'Invitation to Complete Your Interview Form', $message, $mail);
                 exit();
             }else{
                 echo 0;
@@ -245,7 +285,46 @@ if ($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Save data to the JSON file
     file_put_contents($filePath, json_encode($existingData, JSON_PRETTY_PRINT));
-
+    $ClientInfo = $h->table('users')->select()->where('id', '=', $userId)->fetchAll();
+    $companyInfo = $h->table('users')->select()->where('id', '=', $userInfo[0]['id'])->fetchAll();
+    if (!empty($loginUserId)){
+        if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
+            @$company_name =  @$companyInfo[0]['company_name'];
+            @$company_phone =  @$companyInfo[0]['phone'];
+            @$company_email =  @$companyInfo[0]['email'];
+            @$company_address =  @$companyInfo[0]['address'];
+            @$company_linkedin =  @$companyInfo[0]['linkedin'];
+            @$company_tweet =  @$companyInfo[0]['tweet'];
+            @$company_facebook =  @$companyInfo[0]['facebook'];
+            @$company_github =  @$companyInfo[0]['github'];
+            @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
+        }else{
+            $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+            @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+            @$company_phone =  @$AdminInfo[0]['phone'];
+            @$company_email =  @$AdminInfo[0]['email'];
+            @$company_address =  @$AdminInfo[0]['address'];
+            @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+            @$company_tweet =  @$AdminInfo[0]['tweet'];
+            @$company_facebook =  @$AdminInfo[0]['facebook'];
+            @$company_github =  @$AdminInfo[0]['github'];
+            @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+        }
+    }else{
+        $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+        @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+        @$company_phone =  @$AdminInfo[0]['phone'];
+        @$company_email =  @$AdminInfo[0]['email'];
+        @$company_address =  @$AdminInfo[0]['address'];
+        @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+        @$company_tweet =  @$AdminInfo[0]['tweet'];
+        @$company_facebook =  @$AdminInfo[0]['facebook'];
+        @$company_github =  @$AdminInfo[0]['github'];
+        @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+    }
+    sendSMS($companyInfo[0]['phone'],'Client Interview Form Submission Completed \n I am pleased to inform you that '.$ClientInfo[0]['fname'].' '.$ClientInfo[0]['lname'].' has successfully completed the interview form.');
+    include "views/email-template/interview_completed.php";
+    mailSender($_SESSION['users']['email'], $companyInfo[0]['email'], 'Client Interview Form Submission Completed', $message, $mail);
     echo 'Data saved successfully!';
     exit();
 }
