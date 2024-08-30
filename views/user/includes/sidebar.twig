@@ -102,7 +102,7 @@
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>
-                                <span class="menu-title">Clients List</span>
+                                <span class="menu-title">Clients</span>
                             </a>
                         </div>
                         <div class="menu-item">
@@ -250,6 +250,49 @@
                     </a>
                 </div>
                 {% endif %}
+                {% if loginType == 'firm' %}
+                    <div class="menu-item">
+                        <a class="menu-link {% if route == '/user/template/all' %}active{% endif %}" href="/user/template/all">
+										<span class="menu-icon">
+											<!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
+											<span class="svg-icon svg-icon-2">
+										<!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen007.svg-->
+<span class="svg-icon svg-icon-muted svg-icon-1x">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+</span>
+                                                <!--end::Svg Icon-->	</span>
+                                            <!--end::Svg Icon-->
+										</span>
+                            <span class="menu-title">Interviews</span>
+                        </a>
+                    </div>
+
+                {% endif %}
+                {% if loginType == 'client' %}
+                    <div class="menu-item">
+                        <a class="menu-link {% if route == '/client/template/request' %}active{% endif %}" href="/client/template/request">
+										<span class="menu-icon">
+											<!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
+											<span class="svg-icon svg-icon-2">
+										<!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen007.svg-->
+<span class="svg-icon svg-icon-muted svg-icon-1x">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+</span>
+                                                <!--end::Svg Icon-->	</span>
+                                            <!--end::Svg Icon-->
+										</span>
+                            <span class="menu-title">Interviews</span>
+                        </a>
+                    </div>
+                {% endif %}
+                {# <li class="menu">#}
+                {#                <a href="/user/template/all" aria-expanded="false" class="dropdown-toggle">#}
+                {#                    <div class="">#}
+                {#                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>#}
+                {#                        <span>Templates</span>#}
+                {#                    </div>#}
+                {#                </a>#}
+                {#            </li>#}
                 <div data-kt-menu-trigger="click" class="menu-item {% if route == '/user/plans' or route == '/user/profile'  %} here show {% endif %} menu-accordion">
 									<span class="menu-link">
 										<span class="menu-icon">
@@ -268,6 +311,16 @@
 										<span class="menu-arrow"></span>
 									</span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        {% if loginType == 'firm' %}
+                        <div class="menu-item">
+                            <a class="menu-link {% if route == '/user/plans' %}active{% endif %}" href="/user/plans">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+                                <span class="menu-title">Plans</span>
+                            </a>
+                        </div>
+                        {% endif %}
                         <div class="menu-item">
                             <a class="menu-link {% if route == '/user/profile' %}active{% endif %}" href="/user/profile">
 												<span class="menu-bullet">

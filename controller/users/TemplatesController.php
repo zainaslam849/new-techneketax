@@ -9,6 +9,46 @@ if ($route == '/user/templates/send_request'  && $_SERVER['REQUEST_METHOD'] === 
             $res=$h->insert('template_request')->values(['user_id' => $client_id,'template_id' => $template_id])->run();
             if($res){
                 echo 1;
+                $ClientInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
+                if (!empty($loginUserId)){
+                    $companyInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+                    if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
+                        @$company_name =  @$companyInfo[0]['company_name'];
+                        @$company_phone =  @$companyInfo[0]['phone'];
+                        @$company_email =  @$companyInfo[0]['email'];
+                        @$company_address =  @$companyInfo[0]['address'];
+                        @$company_linkedin =  @$companyInfo[0]['linkedin'];
+                        @$company_tweet =  @$companyInfo[0]['tweet'];
+                        @$company_facebook =  @$companyInfo[0]['facebook'];
+                        @$company_github =  @$companyInfo[0]['github'];
+                        @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
+                    }else{
+                        $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                        @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                        @$company_phone =  @$AdminInfo[0]['phone'];
+                        @$company_email =  @$AdminInfo[0]['email'];
+                        @$company_address =  @$AdminInfo[0]['address'];
+                        @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                        @$company_tweet =  @$AdminInfo[0]['tweet'];
+                        @$company_facebook =  @$AdminInfo[0]['facebook'];
+                        @$company_github =  @$AdminInfo[0]['github'];
+                        @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                    }
+                }else{
+                    $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                    @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                    @$company_phone =  @$AdminInfo[0]['phone'];
+                    @$company_email =  @$AdminInfo[0]['email'];
+                    @$company_address =  @$AdminInfo[0]['address'];
+                    @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                    @$company_tweet =  @$AdminInfo[0]['tweet'];
+                    @$company_facebook =  @$AdminInfo[0]['facebook'];
+                    @$company_github =  @$AdminInfo[0]['github'];
+                    @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                }
+                sendSMS($companyInfo[0]['phone'],'Invitation to Complete Your Interview Form \n We kindly invite you to complete the interview form as part of our ongoing process. Your insights are highly valued and will greatly assist us in tailoring our services to your needs.');
+                include "views/email-template/interview_request.php";
+                mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], 'Invitation to Complete Your Interview Form', $message, $mail);
                 exit();
             }else{
                 echo 0;
@@ -166,7 +206,7 @@ echo $twig->render('user/templates/view.twig', [
 
 endif;
 
-if($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST'):
+if ($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $templateId = $_POST['template_id'];
     $userId = $_POST['user_id'];
     $questions = $_POST['questions'];
@@ -176,15 +216,15 @@ if($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST'):
         'sections' => []
     ];
 
-// Directory where files will be uploaded
+    // Directory where files will be uploaded
     $uploadDir = 'uploads/template_files/' . $templateId;
 
-// Ensure the upload directory exists
+    // Ensure the upload directory exists
     if (!file_exists($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
 
-// Organize questions by their section IDs
+    // Organize questions by their section IDs
     $sections = [];
     foreach ($questions as $questionId => $question) {
         $sectionId = $question['section_id'];
@@ -205,27 +245,33 @@ if($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST'):
             ];
             $uploadedFilePath = uploadTemplateFile($file, $uploadDir);
             $value = $uploadedFilePath ? $uploadedFilePath : 'File upload failed';
-        } else {
+        } elseif (isset($question['value']) && is_string($question['value']) && strpos($question['value'], 'data:image/png;base64,') === 0) {
+            // Handle signature if the value is a base64 encoded image
+            $signatureData = $question['value'];
+            $signatureImage = uniqid(rand(100, 100000)) . '.png';
+            $signatureImagePath = $uploadDir . '/' . $signatureImage;
+            $decodedSignature = base64_decode(str_replace('data:image/png;base64,', '', $signatureData));
+            file_put_contents($signatureImagePath, $decodedSignature);
+            $value = $signatureImagePath;
+        }  else {
             $value = isset($question['value']) ? (is_array($question['value']) ? json_encode($question['value']) : $question['value']) : null;
         }
-
-        // Add the response to the corresponding section
         $sections[$sectionId]['responses'][] = [
             'label' => $question['label'],
             'value' => $value
         ];
     }
 
-// Re-index the sections array to ensure correct ordering and structure
+    // Re-index the sections array to ensure correct ordering and structure
     $data['sections'] = array_values($sections);
 
-// Update the template request status
+    // Update the template request status
     $h->update('template_request')->values(['status' => 'completed'])->where('user_id', '=', $userId)->where('template_id', '=', $templateId)->run();
 
-// Path to the JSON file
+    // Path to the JSON file
     $filePath = 'uploads/templates/' . $templateId . '.json';
 
-// Check if the file exists
+    // Check if the file exists
     if (file_exists($filePath)) {
         // Read existing data
         $existingData = json_decode(file_get_contents($filePath), true);
@@ -234,15 +280,56 @@ if($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST'):
         $existingData = [];
     }
 
-// Append the new data to the existing data
+    // Append the new data to the existing data
     $existingData[] = $data;
 
-// Save data to the JSON file
+    // Save data to the JSON file
     file_put_contents($filePath, json_encode($existingData, JSON_PRETTY_PRINT));
-
+    $ClientInfo = $h->table('users')->select()->where('id', '=', $userId)->fetchAll();
+    $companyInfo = $h->table('users')->select()->where('id', '=', $userInfo[0]['id'])->fetchAll();
+    if (!empty($loginUserId)){
+        if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
+            @$company_name =  @$companyInfo[0]['company_name'];
+            @$company_phone =  @$companyInfo[0]['phone'];
+            @$company_email =  @$companyInfo[0]['email'];
+            @$company_address =  @$companyInfo[0]['address'];
+            @$company_linkedin =  @$companyInfo[0]['linkedin'];
+            @$company_tweet =  @$companyInfo[0]['tweet'];
+            @$company_facebook =  @$companyInfo[0]['facebook'];
+            @$company_github =  @$companyInfo[0]['github'];
+            @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
+        }else{
+            $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+            @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+            @$company_phone =  @$AdminInfo[0]['phone'];
+            @$company_email =  @$AdminInfo[0]['email'];
+            @$company_address =  @$AdminInfo[0]['address'];
+            @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+            @$company_tweet =  @$AdminInfo[0]['tweet'];
+            @$company_facebook =  @$AdminInfo[0]['facebook'];
+            @$company_github =  @$AdminInfo[0]['github'];
+            @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+        }
+    }else{
+        $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+        @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+        @$company_phone =  @$AdminInfo[0]['phone'];
+        @$company_email =  @$AdminInfo[0]['email'];
+        @$company_address =  @$AdminInfo[0]['address'];
+        @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+        @$company_tweet =  @$AdminInfo[0]['tweet'];
+        @$company_facebook =  @$AdminInfo[0]['facebook'];
+        @$company_github =  @$AdminInfo[0]['github'];
+        @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+    }
+    sendSMS($companyInfo[0]['phone'],'Client Interview Form Submission Completed \n I am pleased to inform you that '.$ClientInfo[0]['fname'].' '.$ClientInfo[0]['lname'].' has successfully completed the interview form.');
+    include "views/email-template/interview_completed.php";
+    mailSender($_SESSION['users']['email'], $companyInfo[0]['email'], 'Client Interview Form Submission Completed', $message, $mail);
     echo 'Data saved successfully!';
     exit();
-endif;
+}
+
+
 
 if($route == '/user/template/all'):
     $seo = array(

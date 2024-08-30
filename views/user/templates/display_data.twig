@@ -1,8 +1,52 @@
 {% extends 'user/master.twig' %}
 {% block content %}
-    <div id="content" class="main-content">
+    <style>
+        table {
+            border-collapse: collapse !important;
+        }
+
+        td, th,table {
+            border: 1px dashed #dddddd !important;
+            text-align: left !important;
+            padding:15px !important;
+        }
+    </style>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Toolbar-->
+    <div class="toolbar" id="kt_toolbar">
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <!--begin::Title-->
+                <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Interviews</h1>
+                <!--end::Title-->
+                <!--begin::Separator-->
+                <span class="h-20px border-gray-300 border-start mx-4"></span>
+                <!--end::Separator-->
+                <!--begin::Breadcrumb-->
+                <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">Dashboard</li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-dark">{{ template[0].name | capitalize }}</li>
+                    <!--end::Item-->
+                </ul>
+                <!--end::Breadcrumb-->
+            </div>
+            <!--end::Page title-->
+        </div>
+    </div>
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <!--begin::Container-->
+        <div id="kt_content_container" class="container-fluid">
         <div class="layout-px-spacing">
-            <div class="middle-content container-xxl p-0">
+            <div class="middle-content container-fluid p-0">
                 <div class="row layout-top-spacing" id="cancel-row">
                     <div class="col-lg-12 layout-spacing">
                         <div class="statbox widget box box-shadow">
@@ -30,11 +74,11 @@
                                                         {% for section in record.sections %}
                                                             <h5 class="m-2">{{ section.section_name | capitalize }}</h5>
                                                             <div class="table-responsive">
-                                                                <table class="table table-bordered">
+                                                                <table class="table align-middle gs-0 gy-4">
                                                                     <thead>
                                                                     <tr>
-                                                                        <th>Label</th>
-                                                                        <th>Value</th>
+                                                                        <th style="font-weight: bold; width:50%;">Label</th>
+                                                                        <th style="font-weight: bold; width:50%;">Value</th>
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -87,5 +131,7 @@
                 </div>
             </div>
         </div>
+    </div>
+    </div>
     </div>
 {% endblock %}

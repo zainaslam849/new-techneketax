@@ -268,6 +268,9 @@
 {% if route == '/user/invoice/view/$invoice_id' or route == '/invoice/view/$invoice_id' %}
     <script src="{{ env.APP_URL }}assets/dashboard/src/assets/js/apps/invoice-preview.js"></script>
 {% endif %}
+{% if route == '/user/plans' %}
+<script src="{{ env.APP_URL }}assets/dash/assets/js/custom/pages/pricing/general.js"></script>
+{% endif %}
 {#profile cdns#}
 <script type="text/javascript">
     function googleTranslateElementInit() {

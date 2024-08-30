@@ -1,0 +1,112 @@
+[
+    {
+        "user_id": "100",
+        "sections": [
+            {
+                "section_id": "1",
+                "responses": [
+                    {
+                        "label": "Business Name",
+                        "value": "Abdullah Mansoor pvt.LTD"
+                    },
+                    {
+                        "label": "Business EIN (Employer Identification Number)",
+                        "value": "Abdullah Mansoor pvt.LTD"
+                    },
+                    {
+                        "label": "Business Address",
+                        "value": "hassan street new gulgusht colony multan"
+                    },
+                    {
+                        "label": "Fourth Input",
+                        "value": "vsdzfvf"
+                    },
+                    {
+                        "label": "Fifth Input",
+                        "value": "zotec soft"
+                    }
+                ]
+            },
+            {
+                "section_id": "2",
+                "responses": [
+                    {
+                        "label": "Full Name",
+                        "value": "Adam Mansoor Robertson"
+                    },
+                    {
+                        "label": "Father Name",
+                        "value": "dvdzcxv"
+                    },
+                    {
+                        "label": "Sex",
+                        "value": "Male"
+                    },
+                    {
+                        "label": "Phone Number",
+                        "value": "1702511010"
+                    },
+                    {
+                        "label": "Email",
+                        "value": "support@bitstock.com"
+                    },
+                    {
+                        "label": "Password",
+                        "value": "wfdas"
+                    },
+                    {
+                        "label": "Confirm Password",
+                        "value": "dzfvdzv"
+                    },
+                    {
+                        "label": "User Type",
+                        "value": "Firm"
+                    }
+                ]
+            },
+            {
+                "section_id": "3",
+                "responses": [
+                    {
+                        "label": "Identification Type",
+                        "value": "passport"
+                    },
+                    {
+                        "label": "Second Input ha ",
+                        "value": "2024-08-30T12:31"
+                    }
+                ]
+            },
+            {
+                "section_id": "10",
+                "responses": [
+                    {
+                        "label": "ghh",
+                        "value": "uploads\/template_files\/8\/7049666ced266adb97.png"
+                    },
+                    {
+                        "label": "gh",
+                        "value": "uploads\/template_files\/8\/5107666ced266af68a.png"
+                    }
+                ]
+            },
+            {
+                "section_id": "11",
+                "responses": [
+                    {
+                        "label": "chbgfdbhn",
+                        "value": "uploads\/template_files\/8\/5483266ced266af8dd.png"
+                    },
+                    {
+                        "label": "sdgfvxdsgbv",
+                        "value": "uploads\/template_files\/8\/5148366ced266b04eb.png"
+                    },
+                    {
+                        "label": "jhh",
+                        "value": "uploads\/template_files\/8\/6718466ced266b1a6e.png"
+                    }
+                ]
+            }
+        ]
+    }
+]
