@@ -2,7 +2,7 @@
 require("config/env.php");
 use Carbon\Carbon;
 
-if ($route == '/user/group/$groupId' || $route === '/user/chat/$user_id') {
+if ($route == '/user/group/$groupId') {
     // Fetch users based on the login type
     if ($loginUserType == 'firm') {
         $usersList = $h->table('users')
@@ -115,6 +115,24 @@ if ($route == '/user/group/$groupId' || $route === '/user/chat/$user_id') {
                 'members' => $groupMembers
             ];
 
+
+            //GROUP MEMBERS ACCORDING TO GROUP ID
+            $existingMembers = $h->table('group_members')
+                ->select('user_id')
+                ->where('group_id', '=', $groupId)
+                ->fetchAll();
+            $existingMemberIds = array_column($existingMembers, 'user_id');
+            $query = $h->table('users')
+                ->select();
+
+            foreach ($existingMemberIds as $userId) {
+                $query->where('id', '!=', $userId);
+            }
+            $availableUsers = $query->fetchAll();
+
+
+
+
             $seo = [
                 'title' => 'Group Chat - ' . $group['group_name'],
                 'description' => 'CRM',
@@ -128,18 +146,14 @@ if ($route == '/user/group/$groupId' || $route === '/user/chat/$user_id') {
                 'chatWithUserInfo' => $chatWithUserInfo,
                 'groupId' => $groupId,
                 'groupMembers' => $groupMembers,  // Group members passed to Twig
-                'groupMembersCount' => $groupMembersCount
+                'groupMembersCount' => $groupMembersCount,
+                'availableUsers'=>$availableUsers
             ]);
         } else {
             echo "Group not found.";
         }
     }
 }
-
-
-
-
-
 
 if($route == '/chat/messages/group/$groupId'){
 
@@ -160,9 +174,31 @@ if($route == '/group/del/$groupId'){
     header('Location: /user/chat');
 }
 
-
 if($route == '/group/delete/$group_id/$member_id'){
     $h->table('group_members')->delete()->where('group_id',$group_id)->where('user_id',$member_id)->run();
     echo json_encode(['status' => true]);
     exit;
+}
+
+if ($route === '/group/add-members') {
+    $groupId = $_POST['group_id'];
+    $members = $_POST['members'];
+
+    $newMembers = [];
+    foreach ($members as $memberId) {
+        // Insert the member into the group_members table
+        $inserted = $h->insert('group_members')
+            ->values([
+                'group_id' => $groupId,
+                'user_id' => $memberId,
+                'joined_at' => date('Y-m-d H:i:s')
+            ])
+            ->run();
+        }
+
+        echo json_encode([
+            'status' => true,
+            'message' => 'Members added'
+        ]);
+
 }
