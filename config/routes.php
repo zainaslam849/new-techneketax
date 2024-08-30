@@ -84,6 +84,7 @@ get('/user/chat/$user_id', 'controller/users/ChatController.php');
 get('/user/group/$groupId', 'controller/users/GroupChatController.php');
 get('/group/del/$groupId', 'controller/users/GroupChatController.php');
 post('/group/delete/$group_id/$member_id', 'controller/users/GroupChatController.php');
+post('/group/add-members', 'controller/users/GroupChatController.php');
 
 get('/chat/messages/group/$groupId', 'controller/users/ChatController.php');
 
