@@ -7,11 +7,11 @@
 
 require_once("./config/main.php");
 $env=array(
-    "ENV_TYPE"=>"production", // local or production
+    "ENV_TYPE"=>"local", // local or production
     "SITE_NAME"=>"CRM",
     "DESCRIPTION"=>"description",
     "KEYWORDS"=>"keywords",
-    "APP_URL"=> "https://dev.techneketax.com/",
+    "APP_URL"=> "https://techneketax.local/",
     "ADMIN_EMAIL"=> "info@crm.com",
     "SENDER_EMAIL"=> "info@crm.com",
     "TIME_ZONE"=> "Asia/Karachi",
@@ -35,6 +35,10 @@ $env=array(
     "SMTP_PASSWORD"=>"64fe7fa24fa4ce87d40483bd9eae2d3b-a26b1841-7a394aef",
     "SMTP_ENC"=>"tls",
     "SMTP_PORT"=>"587",
+
+    //CHAT or MESSAGING
+    "CAHT_WSS"=>'wss://dev.techneketax.com/ws/',
+    "CHAT_PORT"=>"8005"
 );
 $assets_url="https://crm-cu.local";
 
@@ -124,6 +128,9 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
     }
     $twig->addFilter(new \Twig\TwigFilter('base64_encode', function ($string) {
         return base64_encode($string);
+    }));
+    $twig->addFilter(new \Twig\TwigFilter('ucwords', function ($string) {
+        return ucwords($string);
     }));
     $twig->addGlobal('Stripe_public_key', 'pk_test_51OgnsKB8z2Dlcg3z0Qz8mYPgaXouytYsnflrzr3hgWNNu91PY8ApCB2A6ZTbR49TZ59ag5KuLfIVIlBo2aCqgoZ900owqKbZDQ');
     $Stripe_secret_key='sk_test_51OgnsKB8z2Dlcg3z6ZQl607w3HUhJ3SQu7FupPI2XWwTaBBLdVZpYA7fpzDQBd8n9jpa9DsBUUuYnKoT9CKRcwV700c0vbYFoi';
