@@ -9,10 +9,16 @@ use Cycle\Database\Config;
 
 // Define environment variables directly
 $env = [
-    "DATABASE_HOST" => "localhost",
-    "DATABASE_NAME" => "techneketax",
-    "DATABASE_USERNAME" => "root",
-    "DATABASE_PASSWORD" => "root",
+
+    "DATABASE_HOST"=>"localhost",
+    "DATABASE_NAME"=>"dev_tecgneketax",
+    "DATABASE_USERNAME"=>"dev_tecgneketax",
+    "DATABASE_PASSWORD"=>"7L36?3mue",
+
+//    "DATABASE_HOST" => "localhost",
+//    "DATABASE_NAME" => "techneketax",
+//    "DATABASE_USERNAME" => "root",
+//    "DATABASE_PASSWORD" => "root",
     "ENV_TYPE" => "local"
 ];
 
@@ -52,35 +58,40 @@ class Chat implements MessageComponentInterface {
         $this->clients->attach($conn);
         echo "New connection! ({$conn->resourceId})\n";
     }
-
     public function onMessage(ConnectionInterface $from, $msg) {
         $data = json_decode($msg, true);
-        if (isset($data['sender_id']) && isset($data['receiver_id']) && isset($data['message'])) {
-            try {
-                $sender_id = $data['sender_id'];
-                $safe_message = htmlspecialchars($data['message'], ENT_QUOTES, 'UTF-8');
 
-                // Insert message into database
+        if (isset($data['sender_id']) && isset($data['message'])) {
+            try {
+                $safe_message = htmlspecialchars($data['message'], ENT_QUOTES, 'UTF-8');
+                $timestamp = date('Y-m-d H:i:s');
+
+                // Insert message into the database
                 $this->db->insert('chat')->values([
-                    'sender_id' => $sender_id,
-                    'receiver_id' => $data['receiver_id'],
+                    'sender_id' => $data['sender_id'],
                     'message' => $safe_message,
+                    'group_id' => $data['group_id'] ?? null,
+                    'receiver_id' => $data['receiver_id'] ?? null,
+                    'created_at' => $timestamp,
                 ])->run();
 
-                // Send message to the recipient only
+                // Broadcast the message to other clients
                 foreach ($this->clients as $client) {
-                    if ($from !== $client) {
+                    if ($client !== $from) {
                         $client->send(json_encode([
-                            'sender_id' => $sender_id,
-                            'receiver_id' => $data['receiver_id'],
+                            'sender_id' => $data['sender_id'],
+                            'group_id' => $data['group_id'] ?? null,
+                            'receiver_id' => $data['receiver_id'] ?? null,
                             'message' => $safe_message,
-                            'senderName' => $data['senderName'], // Add additional fields as necessary
-                            'senderProfileImage' => $data['senderProfileImage']
+                            'senderName' => $data['senderName'],
+                            'senderProfileImage' => $data['senderProfileImage'],
+                            'timestamp' => $timestamp
                         ]));
                     }
                 }
 
-                echo "Message sent from {$sender_id} to {$data['receiver_id']}: {$safe_message}\n";
+                echo "Message from {$data['sender_id']} sent and saved: {$safe_message}\n";
+
             } catch (\Exception $e) {
                 echo "Database error: " . $e->getMessage() . "\n";
             }
@@ -88,6 +99,43 @@ class Chat implements MessageComponentInterface {
             echo "Invalid message format\n";
         }
     }
+
+
+//    public function onMessage(ConnectionInterface $from, $msg) {
+//        $data = json_decode($msg, true);
+//        if (isset($data['sender_id']) && isset($data['receiver_id']) && isset($data['message'])) {
+//            try {
+//                $sender_id = $data['sender_id'];
+//                $safe_message = htmlspecialchars($data['message'], ENT_QUOTES, 'UTF-8');
+//
+//                // Insert message into database
+//                $this->db->insert('chat')->values([
+//                    'sender_id' => $sender_id,
+//                    'receiver_id' => $data['receiver_id'],
+//                    'message' => $safe_message,
+//                ])->run();
+//
+//                // Send message to the recipient only
+//                foreach ($this->clients as $client) {
+//                    if ($from !== $client) {
+//                        $client->send(json_encode([
+//                            'sender_id' => $sender_id,
+//                            'receiver_id' => $data['receiver_id'],
+//                            'message' => $safe_message,
+//                            'senderName' => $data['senderName'], // Add additional fields as necessary
+//                            'senderProfileImage' => $data['senderProfileImage']
+//                        ]));
+//                    }
+//                }
+//
+//                echo "Message sent from {$sender_id} to {$data['receiver_id']}: {$safe_message}\n";
+//            } catch (\Exception $e) {
+//                echo "Database error: " . $e->getMessage() . "\n";
+//            }
+//        } else {
+//            echo "Invalid message format\n";
+//        }
+//    }
 
     public function onClose(ConnectionInterface $conn) {
         $this->clients->detach($conn);

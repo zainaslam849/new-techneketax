@@ -73,7 +73,7 @@ if(@$_SESSION['users']['type'] == 'client'):
     post('/client/download/document', 'controller/users/DocumentController.php');
     get('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
     post('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
-endif;
+    endif;
     post('/user/request_for_document', 'controller/users/DocumentController.php');
     get('/user/upload/document/all', 'controller/users/DocumentController.php');
     post('/user/upload/document/all', 'controller/users/DocumentController.php');
@@ -81,9 +81,21 @@ endif;
 
 get('/user/chat', 'controller/users/ChatController.php');
 get('/user/chat/$user_id', 'controller/users/ChatController.php');
+get('/user/group/$groupId', 'controller/users/GroupChatController.php');
+get('/group/del/$groupId', 'controller/users/GroupChatController.php');
+post('/group/delete/$group_id/$member_id', 'controller/users/GroupChatController.php');
+
+get('/chat/messages/group/$groupId', 'controller/users/ChatController.php');
 
 get('/chat/users', 'controller/users/ChatController.php');
 get('/chat/messages/$userId', 'controller/users/ChatController.php');
+post('/chat/upload-file', 'controller/users/ChatController.php');
+post('/chat/send-group-message', 'controller/users/ChatController.php');
+post('/group/create', 'controller/users/ChatController.php');
+
+
+
+
 get('/call/ring/$userId', 'controller/users/ChatController.php');
 get('/video-call/ring/$userId', 'controller/users/ChatController.php');
 get('/video-call/$room_id', 'controller/users/ChatController.php');
