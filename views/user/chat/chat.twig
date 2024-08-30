@@ -88,9 +88,10 @@
                                                             <a style="margin-left: 10px;" class="ml-5" href="/group/del/{{ user.id }}"><i class="bi bi-trash text-danger"></i></a>
                                                         </small>
                                                     {% else %}
-                                                        <a href="/user/chat/{{ user.id }}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{ user.fname|ucwords }} {{ user.lname|ucwords }}</a>
-                                                    {% endif %}
-                                                    <div class="fw-bold text-muted">{{ user.email }}</div>
+                                                        <a href="/user/chat/{{ user.id }}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{ user.fname|ucwords }} {{ user.lname|ucwords }}
+                                                            <small class="fw-bold text-muted">{{ user.email }}</small>
+                                                        </a>
+                                                            {% endif %}
                                                 </div>
                                                 <!--end::Details-->
                                             </div>

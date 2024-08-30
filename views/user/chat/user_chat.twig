@@ -89,9 +89,10 @@
                                                     {% if user.type == 'group' %}
                                                         <a href="/user/group/{{ user.id }}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{ user.fname|ucwords }} {{ user.lname|ucwords }}</a>
                                                     {% else %}
-                                                        <a href="/user/chat/{{ user.id }}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{ user.fname|ucwords }} {{ user.lname|ucwords }}</a>
+                                                        <a href="/user/chat/{{ user.id }}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{ user.fname|ucwords }} {{ user.lname|ucwords }}
+                                                            <small class="fw-bold text-muted">{{ user.email }}</small>
+                                                        </a>
                                                     {% endif %}
-                                                    <div class="fw-bold text-muted">{{ user.email }}</div>
                                                 </div>
                                                 <!--end::Details-->
                                             </div>

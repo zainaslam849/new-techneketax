@@ -92,7 +92,7 @@ if ($route == '/user/group/$groupId' || $route === '/user/chat/$user_id') {
             $group = $groupResult[0];
 
             $groupMembersSQL = $h->table('group_members')
-                ->select('users.id', 'users.fname', 'users.lname', 'users.email', 'users.profile_image', 'users.type')
+                ->select('users.id as user_id', 'users.fname', 'users.lname', 'users.email', 'users.profile_image', 'users.type')
                 ->leftJoin('users')->on('users.id', 'group_members.user_id')
                 ->where('group_members.group_id', '=', $group['group_id']);
 
@@ -158,4 +158,11 @@ if($route == '/chat/messages/group/$groupId'){
 if($route == '/group/del/$groupId'){
     $h->table('groups')->delete()->where('id',$groupId)->run();
     header('Location: /user/chat');
+}
+
+
+if($route == '/group/delete/$group_id/$member_id'){
+    $h->table('group_members')->delete()->where('group_id',$group_id)->where('user_id',$member_id)->run();
+    echo json_encode(['status' => true]);
+    exit;
 }

@@ -87,11 +87,14 @@
                                                 <!--begin::Details-->
                                                 <div class="ms-5">
                                                     {% if user.type == 'group' %}
-                                                        <a href="/user/group/{{ user.id }}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{ user.fname|ucwords }} {{ user.lname|ucwords }}</a>
+                                                        <a href="/user/group/{{ user.id }}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{ user.fname|ucwords }} {{ user.lname|ucwords }}
+                                                        <div class="fw-bold text-muted">{{ user.email }}</div>
+                                                        </a>
                                                     {% else %}
-                                                        <a href="/user/chat/{{ user.id }}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{ user.fname|ucwords }} {{ user.lname|ucwords }}</a>
+                                                        <a href="/user/chat/{{ user.id }}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{ user.fname|ucwords }} {{ user.lname|ucwords }}
+                                                        <small class="fw-bold text-muted">{{ user.email }}</small>
+                                                        </a>
                                                     {% endif %}
-                                                    <div class="fw-bold text-muted">{{ user.email }}</div>
                                                 </div>
                                                 <!--end::Details-->
                                             </div>
@@ -160,11 +163,11 @@
                                     {#                                        <i class="bi bi-telephone-fill"></i>#}
                                     {#                                        </a>#}
                                     {#                                    </div>#}
-                                    <div class="me-n3">
-                                        <a href="/video-call/ring/{{ user_id }}" class="btn btn-lg btn-icon btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                            <i class="bi bi-telephone-fill"></i>
-                                        </a>
-                                    </div>
+{#                                    <div class="me-n3">#}
+{#                                        <a href="/video-call/ring/{{ user_id }}" class="btn btn-lg btn-icon btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">#}
+{#                                            <i class="bi bi-telephone-fill"></i>#}
+{#                                        </a>#}
+{#                                    </div>#}
                                     <!--end::Menu-->
                                 </div>
                             </div>
@@ -293,38 +296,43 @@
                                 <!--begin::Users-->
                                 <div class="mb-15">
                                     <!--begin::List-->
-                                    <div class="mh-375px scroll-y me-n7 pe-7">
+                                    <div class="mh-375px scroll-y me-n7 pe-7" id="groupMembersList">
                                         {% for groupMember in groupMembers %}
-                                        <!--begin::User-->
-                                        <div class="d-flex flex-stack py-5 border-bottom border-gray-300 border-bottom-dashed">
-                                            <!--begin::Details-->
-                                            <div class="d-flex align-items-center">
-                                                <!--begin::Avatar-->
-                                                <div class="symbol symbol-35px symbol-circle">
-                                                    {% if groupMember.profile_image != null %}
-                                                        <img alt="Pic" src="{{ env.APP_URL }}uploads/profile/{{ groupMember.profile_image }}" />
-                                                    {% else %}
-                                                        <img alt="Pic" src="https://avatar.iran.liara.run/username?username={{ groupMember.fname }} {{ groupMember.lname }}" />
-                                                    {% endif %}
-                                                </div>
-                                                <!--end::Avatar-->
+                                            <!--begin::User-->
+                                            <div class="d-flex justify-content-between py-5 border-bottom border-gray-300 border-bottom-dashed align-items-center group-member" id="member-{{ groupMember.user_id }}">
                                                 <!--begin::Details-->
-                                                <div class="ms-6">
-                                                    <!--begin::Name-->
-                                                    <a href="#" class="d-flex align-items-center fs-5 fw-bolder text-dark text-hover-primary">{{ groupMember.fname|ucwords }} {{ groupMember.lname|ucwords }}
-                                                        <span class="badge badge-light fs-8 fw-bold ms-2">{{ groupMember.type|ucwords }}</span>
-                                                    </a>
-                                                    <!--end::Name-->
+                                                <div class="d-flex align-items-center">
+                                                    <!--begin::Avatar-->
+                                                    <div class="symbol symbol-35px symbol-circle">
+                                                        {% if groupMember.profile_image != null %}
+                                                            <img alt="Pic" src="{{ env.APP_URL }}uploads/profile/{{ groupMember.profile_image }}" />
+                                                        {% else %}
+                                                            <img alt="Pic" src="https://avatar.iran.liara.run/username?username={{ groupMember.fname }} {{ groupMember.lname }}" />
+                                                        {% endif %}
+                                                    </div>
+                                                    <!--end::Avatar-->
+                                                    <!--begin::Details-->
+                                                    <div class="ms-6">
+                                                        <!--begin::Name-->
+                                                        <a href="#" class="d-flex align-items-center fs-5 fw-bolder text-dark text-hover-primary">
+                                                            {{ groupMember.fname|ucwords }} {{ groupMember.lname|ucwords }}
+                                                            <span class="badge badge-light fs-8 fw-bold ms-2">{{ groupMember.type|ucwords }}</span>
+                                                        </a>
+                                                        <!--end::Name-->
+                                                    </div>
                                                 </div>
                                                 <!--end::Details-->
+                                                <!--begin::Action-->
+                                                <div class="text-end">
+                                                    <a href="#" onclick="deleteGroupMember('/group/delete/{{ groupId }}/{{ groupMember.user_id }}', '{{ groupMember.user_id }}')" class="btn btn-danger btn-sm">Delete</a>
+                                                </div>
+                                                <!--end::Action-->
                                             </div>
-                                            <!--end::Details-->
-
-                                        </div>
-                                        <!--end::User-->
-
+                                            <!--end::User-->
                                         {% endfor %}
                                     </div>
+
+
                                     <!--end::List-->
                                 </div>
                                 <!--end::Users-->
@@ -1436,5 +1444,26 @@
 
     </script>
 
+    <script>
+        function deleteGroupMember(url, userId) {
+            $.ajax({
+                url: url,
+                method: 'POST',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === true) {
+                        // Remove the user from the list
+                        $('#member-' + userId).remove();
+                    } else {
+                        alert('Failed to delete the member. Please try again.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', xhr.responseText);
+                    alert('An error occurred while processing your request.');
+                }
+            });
+        }
+    </script>
 
 {% endblock %}
