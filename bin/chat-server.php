@@ -10,15 +10,15 @@ use Cycle\Database\Config;
 // Define environment variables directly
 $env = [
 
-//    "DATABASE_HOST"=>"localhost",
-//    "DATABASE_NAME"=>"dev_tecgneketax",
-//    "DATABASE_USERNAME"=>"dev_tecgneketax",
-//    "DATABASE_PASSWORD"=>"7L36?3mue",
+    "DATABASE_HOST"=>"localhost",
+    "DATABASE_NAME"=>"dev_tecgneketax",
+    "DATABASE_USERNAME"=>"dev_tecgneketax",
+    "DATABASE_PASSWORD"=>"7L36?3mue",
 
-    "DATABASE_HOST" => "localhost",
-    "DATABASE_NAME" => "techneketax",
-    "DATABASE_USERNAME" => "root",
-    "DATABASE_PASSWORD" => "root",
+//    "DATABASE_HOST" => "localhost",
+//    "DATABASE_NAME" => "techneketax",
+//    "DATABASE_USERNAME" => "root",
+//    "DATABASE_PASSWORD" => "root",
     "ENV_TYPE" => "local"
 ];
 
