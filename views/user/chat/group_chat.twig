@@ -1209,8 +1209,8 @@
             const userProfileImage = "{{ userProfileImage }}"
                 ? "{{ env.APP_URL }}uploads/profile/{{ userProfileImage }}"
                 : "https://avatar.iran.liara.run/username?username={{ loginName }}";
-            //const wsUrl = 'wss://dev.techneketax.com/ws/';
-            const wsUrl = 'ws://localhost:8000/';
+            const wsUrl = 'wss://dev.techneketax.com/ws/';
+            //const wsUrl = 'ws://localhost:8000/';
             let ws;
 
             function initializeWebSocket() {
