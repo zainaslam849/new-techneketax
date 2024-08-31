@@ -173,8 +173,11 @@ if($route == '/user/dochubdetails/$id'):
     );
     $document_hub = $h->table('document_hub')->select()->where('id', '=', $id)->fetchAll();
     $client_id = $document_hub[0]['client_id'];
+    $firm_id = $document_hub[0]['firm_id'];
+    $firmDetails = $h->table('users')->select()->where('id', '=', $firm_id)->fetchAll();
+
     $clientDetails = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
-    echo $twig->render('user/document_hub/firm_index_details.twig', ['seo' => $seo,'documentHub' => $document_hub,'client_details' => $clientDetails]);
+    echo $twig->render('user/document_hub/firm_index_details.twig', ['seo' => $seo,'documentHub' => $document_hub,'client_details' => $clientDetails,'firmDetail' => $firmDetails]);
 endif;
 if($route == '/user/upload/document/all'):
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
