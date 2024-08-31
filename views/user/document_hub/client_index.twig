@@ -322,5 +322,34 @@
 
             });
         }
+        function download_files(document_id) {
+            var csrf_token = $("input[name=csrf]").val();
+            $.ajax({
+                url: '/client/download/document',
+                type: 'POST',
+                data: {
+                    document_id: document_id,
+                    csrf: csrf_token
+                },
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (data) {
+                    var blob = new Blob([data], { type: 'application/zip' });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+
+                    // Generate a random number and append it to the file name
+                    var randomNum = Math.floor(Math.random() * 1000000); // Adjust the range if needed
+                    link.download =  randomNum + '.zip';
+
+                    link.click();
+                    toastr.success('Successfully downloaded.');
+                },
+                error: function () {
+                    toastr.error('Something went wrong.');
+                }
+            });
+        }
     </script>
 {% endblock %}
