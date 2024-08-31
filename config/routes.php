@@ -59,8 +59,8 @@ post('/user/add/appointments', 'controller/users/AppointmentsController.php');
 post('/user/update/appointments', 'controller/users/AppointmentsController.php');
 
 get('/user/document', 'controller/users/DocumentController.php');
-    get('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
-    post('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
+    get('/user/dochubdetails/$id', 'controller/users/DocumentController.php');
+    post('/user/dochubdetails/$id', 'controller/users/DocumentController.php');
 
 if(@$_SESSION['users']['type'] == 'firm'):
     get('/user/template/all', 'controller/users/TemplatesController.php');
@@ -72,7 +72,8 @@ if(@$_SESSION['users']['type'] == 'client'):
     post('/client/document/add', 'controller/users/DocumentController.php');
     get('/client/template/request', 'controller/users/TemplatesController.php');
     post('/client/download/document', 'controller/users/DocumentController.php');
-
+    get('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
+    post('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
     endif;
     post('/user/request_for_document', 'controller/users/DocumentController.php');
     get('/user/upload/document/all', 'controller/users/DocumentController.php');
