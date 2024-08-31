@@ -342,7 +342,6 @@ if($_GET['page_name']=="view_plans"){
     }
 
 }
-
 if($_GET['page_name']=="userStatusUpdate") {
 //    if (!is_csrf_v_script()) {
 //        exit();

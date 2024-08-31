@@ -2,11 +2,53 @@
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/src/tagify/tagify.css">
     <link rel="stylesheet" type="text/css" href="{{ env.APP_URL }}assets/dashboard/src/plugins/css/light/tagify/custom-tagify.css">
-    <!--  BEGIN CONTENT AREA  -->
-    <!--  BEGIN CONTENT AREA  -->
     <style>
         .tagify__input{
             padding:0px !important;
+        }
+        .radioButton {
+            float: left;
+            margin: 0 5px 0 0;
+            width: 100%;
+            height: 100px;
+            position: relative;
+        }
+
+        .radioButton label,
+        .radioButton input {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .radioButton input[type="checkbox"] {
+            opacity: 0.011;
+            z-index: 100;
+        }
+
+        .radioButton input[type="checkbox"]:checked + label > button {
+            background: #ED141F;
+            color: white;
+            border-color: #ED141F;
+        }
+
+        .radioButton label {
+            cursor: pointer;
+            z-index: 90;
+            line-height: 70px;
+        }
+
+        .radioButton label > button {
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            background-color: transparent;
+            border: 1px solid #000;
+            color: #000;
+            font-size: 16px;
         }
     </style>
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
@@ -130,19 +172,20 @@
                                 <label for="tags">Tags:</label>
                                 <input name='basic' id="tagsData" class="form-control form-control-solid">
                             </div>
-                        <div class="fv-row mb-7 fv-plugins-icon-container">
-                                <label class="form-label">Key Points</label>
-                                <div id="key_points_inputs">
+{#                        <div class="fv-row mb-7 fv-plugins-icon-container">#}
+{#                                <label class="form-label">Key Points</label>#}
+{#                                <div id="key_points_inputs">#}
 
-                                </div>
-                            </div>
-                        <div class="fv-row mb-7 fv-plugins-icon-container">
-                                <button class="btn btn-success " type="button" onclick="addKey_points();" style="float: right; background: #28a745 !important; border-color: #28a745 !important;">ADD <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                            </div>
-                        <div class="fv-row mb-7 fv-plugins-icon-container">
-                            <div id="addKey_points">
-                            </div>
-                            </div>
+{#                                </div>#}
+{#                            </div>#}
+{#                        <div class="fv-row mb-7 fv-plugins-icon-container">#}
+{#                                <button class="btn btn-success " type="button" onclick="addKey_points();" style="float: right; background: #28a745 !important; border-color: #28a745 !important;">ADD <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>#}
+{#                            </div>#}
+{#                        <div class="fv-row mb-7 fv-plugins-icon-container">#}
+{#                            <div id="addKey_points">#}
+{#                            </div>#}
+{#                            </div>#}
+
                         <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="form-label">Discount (%)</label>
                                 <input type="number" class="form-control form-control-solid" id="percentage" min="0" name="percentage" placeholder="Discount (%)" value="0">
@@ -155,6 +198,19 @@
                                 <label class="form-label">Yearly Price</label>
                                 <input type="number" class="form-control form-control-solid" id="yearly_price" min="0" name="yearly_price" placeholder="Yearly Price">
                             </div>
+                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <div class="row">
+                                {% for permission in permissions %}
+                                    <div class="col-xl-4 col-md-6 mt-2">
+                                        <div class="radioButton" style="margin-right: 10px">
+                                            <input class=" m4 required-input" type="checkbox" name="key_points[]" id="{{ permission.id }}"
+                                                   value="{{ permission.id }}">
+                                            <label  for="{{ permission.id }}"><button type="button" class="btn btn-light-primary">{{ permission.title }}</button></label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
                         </div>
 
                     <div class="modal-footer justify-content-center">
@@ -284,27 +340,27 @@
 
                     var keyPoints = dataResult[0].key_points.split(',');
                     keyPoints.forEach(keyPoint => {
-                        addKeyPointInput(keyPoint.trim());
+                        // Trim any extra spaces and select the corresponding checkbox
+                        $('#editUploadForm input[name="key_points[]"][value="' + keyPoint.trim() + '"]').prop('checked', true);
                     });
-
                 }
             });
         });
 
-        function addKeyPointInput(keyPoint) {
-            const keyPointsInputs = document.getElementById('key_points_inputs');
-            const keyPointInput = document.createElement('input');
-            keyPointInput.type = 'text';
-            keyPointInput.classList.add('form-control');
-            keyPointInput.classList.add('form-control-solid');
-            keyPointInput.classList.add('mb-2');
-            keyPointInput.classList.add('mt-2');
-            keyPointInput.name = 'key_points[]';
-            keyPointInput.value = keyPoint;
-            keyPointInput.placeholder = 'Add Key Point';
 
-            keyPointsInputs.appendChild(keyPointInput);
-        }
+        // function addKeyPointInput(keyPoint) {
+        //     const keyPointsInputs = document.getElementById('key_points_inputs');
+        //     const keyPointInput = document.createElement('input');
+        //     keyPointInput.type = 'text';
+        //     keyPointInput.classList.add('form-control');
+        //     keyPointInput.classList.add('form-control-solid');
+        //     keyPointInput.classList.add('mb-2');
+        //     keyPointInput.classList.add('mt-2');
+        //     keyPointInput.name = 'key_points[]';
+        //     keyPointInput.value = keyPoint;
+        //     keyPointInput.placeholder = 'Add Key Point';
+        //     keyPointsInputs.appendChild(keyPointInput);
+        // }
         var input = document.querySelector('input[name=basic]');
         new Tagify(input)
         function update_tool() {
@@ -345,21 +401,21 @@
     <script>
 
 
-        var room = 1;
-        function addKey_points() {
-            room++;
-            var objTo = document.getElementById('addKey_points')
-            var divtest = document.createElement("div");
-            divtest.setAttribute("class", "form-group row removeclass"+room);
-            var rdiv = 'removeclass'+room;
-
-            divtest.innerHTML = ' <div class="col-sm-10 mt-2"><input type="text" class="form-control form-control-solid" id="key_points" name="key_points[]" placeholder="Add Key Point"></div><div class="col-sm-2 "><button class="btn btn-danger mt-3 mb-2" type="button" onclick="remove_Key_points('+ room +');" style="float: right; background: #dc3545 !important; border-color: #dc3545 !important;">DELETE <span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></div>';
-            objTo.appendChild(divtest)
-        }
-        // children remove fields
-        function remove_Key_points(rid) {
-            $('.removeclass'+rid).remove();
-        }
+        // var room = 1;
+        // function addKey_points() {
+        //     room++;
+        //     var objTo = document.getElementById('addKey_points')
+        //     var divtest = document.createElement("div");
+        //     divtest.setAttribute("class", "form-group row removeclass"+room);
+        //     var rdiv = 'removeclass'+room;
+        //
+        //     divtest.innerHTML = ' <div class="col-sm-10 mt-2"><input type="text" class="form-control form-control-solid" id="key_points" name="key_points[]" placeholder="Add Key Point"></div><div class="col-sm-2 "><button class="btn btn-danger mt-3 mb-2" type="button" onclick="remove_Key_points('+ room +');" style="float: right; background: #dc3545 !important; border-color: #dc3545 !important;">DELETE <span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></div>';
+        //     objTo.appendChild(divtest)
+        // }
+        // // children remove fields
+        // function remove_Key_points(rid) {
+        //     $('.removeclass'+rid).remove();
+        // }
 
         // The DOM element you wish to replace with Tagify
         var input = document.querySelector('input[name=basic]');

@@ -61,61 +61,55 @@
                             <div class="nav-group nav-group-outline mx-auto mb-15" data-kt-buttons="true">
                                 <button class="btn btn-color-gray-400 btn-active btn-active-secondary px-6 py-3 me-2 active" data-kt-plan="month">Monthly</button>
                                 <button class="btn btn-color-gray-400 btn-active btn-active-secondary px-6 py-3" data-kt-plan="annual">Annual</button>
+                                <input type="hidden" id="selected-plan-type" value="month">
                             </div>
                             <div class="row g-10">
                                 {% for plan in plans %}
-                                <div class="col-xl-3">
-                                    <div class="d-flex h-100 align-items-center">
-                                        <!--begin::Option-->
-                                        <div class="w-100 d-flex flex-column flex-center rounded-3 bg-light bg-opacity-75 py-15 px-10">
-                                            <!--begin::Heading-->
-                                            <div class="mb-7 text-center">
-                                                <!--begin::Title-->
-                                                <h1 class="text-dark mb-5 fw-boldest">{{ plan.name }}<span> {% if plan.percentage == "0" or plan.percentage == "" %}
-
-                                                        {% else %}
-                                                            <div class="badge badge-pill badge-success show text-white" style="display: ruby-text"> {{ plan.percentage }} %  Off</div>
-                                                        {% endif %}</span></h1>
-                                                <!--end::Title-->
-                                                <!--begin::Description-->
-                                                <div class="text-gray-400 fw-bold mb-5">  </div>
-                                                <!--end::Description-->
-                                                <!--begin::Price-->
-                                                <div class="text-center">
-                                                    <span class="mb-2 text-primary">$</span>
-                                                    <span class="fs-3x fw-bolder text-primary" data-kt-plan-price-month="{{ plan.monthly_price }}" data-kt-plan-price-annual="{{ plan.yearly_price }}">$ {{ plan.monthly_price }}</span>
-                                                    <span class="fs-7 fw-bold opacity-50">/
-																	<span data-kt-element="period">Mon</span></span>
+                                    <div class="col-xl-4">
+                                        <div class="d-flex h-100 ">
+                                            <div class="w-100 d-flex flex-column  rounded-3 bg-light bg-opacity-75 py-15 px-10">
+                                                <div class="mb-7 text-center">
+                                                    <h1 class="text-dark mb-5 fw-boldest">
+                                                        {{ plan.name }}
+                                                        {% if plan.percentage != "0" and plan.percentage != "" %}
+                                                            <div class="badge badge-pill badge-success show text-white" style="display: ruby-text">
+                                                                {{ plan.percentage }}% Off
+                                                            </div>
+                                                        {% endif %}
+                                                    </h1>
+                                                    <div class="text-gray-400 fw-bold mb-5">
+                                                        {% set tags = plan.tags|split(',') %}
+                                                        {% for tag in tags %}
+                                                            {% if tag %}
+                                                                <span class="badge badge-pill badge-primary show text-white">{{ tag }}</span>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <span class="mb-2 text-primary">$</span>
+                                                        <span class="fs-3x fw-bolder text-primary" data-kt-plan-price-month="{{ plan.monthly_price }}" data-kt-plan-price-annual="{{ plan.yearly_price }}">
+                            {{ plan.monthly_price }}
+                        </span>
+                                                        <span class="fs-7 fw-bold opacity-50">/ <span data-kt-element="period">Mon</span></span>
+                                                    </div>
                                                 </div>
-                                                <!--end::Price-->
-                                            </div>
-                                            <!--end::Heading-->
-                                            <!--begin::Features-->
-                                            <div class="w-100 mb-10">
-                                                <!--begin::Item-->
-                                                {% set key_points = plan.key_points|split(',') %}
-                                                {% for key_point in key_points %}
-                                                <div class="d-flex align-items-center mb-5">
-                                                    <span class="fw-bold fs-6 text-gray-800 flex-grow-1 pe-3"> {{ key_point }}</span>
-                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen043.svg-->
-                                                    <span class="svg-icon svg-icon-1 svg-icon-success">
-																		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-																			<rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor" />
-																			<path d="M10.4343 12.4343L8.75 10.75C8.33579 10.3358 7.66421 10.3358 7.25 10.75C6.83579 11.1642 6.83579 11.8358 7.25 12.25L10.2929 15.2929C10.6834 15.6834 11.3166 15.6834 11.7071 15.2929L17.25 9.75C17.6642 9.33579 17.6642 8.66421 17.25 8.25C16.8358 7.83579 16.1642 7.83579 15.75 8.25L11.5657 12.4343C11.2533 12.7467 10.7467 12.7467 10.4343 12.4343Z" fill="currentColor" />
-																		</svg>
-																	</span>
-                                                    <!--end::Svg Icon-->
+                                                <div class="w-100 mb-10">
+                                                    {% for key_point in plan.key_points_titles %}
+                                                        <div class="d-flex align-items-center mb-5">
+                                                            <span class="fw-bold fs-6 text-gray-800 flex-grow-1 pe-3">{{ key_point }}</span>
+                                                            <span class="svg-icon svg-icon-1 svg-icon-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor" />
+                                    <path d="M10.4343 12.4343L8.75 10.75C8.33579 10.3358 7.66421 10.3358 7.25 10.75C6.83579 11.1642 6.83579 11.8358 7.25 12.25L10.2929 15.2929C10.6834 15.6834 11.3166 15.6834 11.7071 15.2929L17.25 9.75C17.6642 9.33579 17.6642 8.66421 17.25 8.25C16.8358 7.83579 16.1642 7.83579 15.75 8.25L11.5657 12.4343C11.2533 12.7467 10.7467 12.7467 10.4343 12.4343Z" fill="currentColor" />
+                                </svg>
+                            </span>
+                                                        </div>
+                                                    {% endfor %}
                                                 </div>
-                                                {% endfor %}
+                                                <a role="button" class="btn btn-sm btn-primary" onclick="userStatus('{{ plan.slug }}')">Select</a>
                                             </div>
-                                            <!--end::Features-->
-                                            <!--begin::Select-->
-                                            <a href="#" class="btn btn-sm btn-primary">Select</a>
-                                            <!--end::Select-->
                                         </div>
-                                        <!--end::Option-->
                                     </div>
-                                </div>
                                 {% endfor %}
                             </div>
                             <!--end::Row-->
@@ -130,6 +124,39 @@
         </div>
         <!--end::Post-->
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('[data-kt-plan]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const selectedPlan = this.getAttribute('data-kt-plan');
+                    document.getElementById('selected-plan-type').value = selectedPlan;
+                });
+            });
+        });
+        function userStatus(userID) {
+            var type =   $('#selected-plan-type').val();
 
+            $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
+            var csrf_token = $("input[name=csrf]").val();
+            $.ajax({
+                url: '/user/plan/get_plan',
+                type: 'POST',
+                data: {
+                    slug: userID,
+                    type: type,
+                    csrf: csrf_token
+                }, success: function (data) {
+                    data= JSON.parse(data);
+                    if (data['statusCode'] == "1") {
+                        window.location.href = '/user/plans_details/'+data['slug'];
+                    } else {
+                        toastr.error('Something went wrong.');
+
+                    }
+                }
+
+            });
+        }
+    </script>
 
 {% endblock %}
