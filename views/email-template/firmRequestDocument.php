@@ -140,7 +140,8 @@ $message='<!DOCTYPE html>
                                                                                                 
                                                                                                    Document Description: '.$firm_des.'
                                                                                                     <br>
-                                                                                                    Please upload the requested document to your dashboard at your earliest convenience.
+                                                                                                    <br>
+                                                                                                    <b>Please upload the requested document to your dashboard at your earliest convenience.</b>
                                                                                                     <br>
                                                                                                 </td>
                                                                                             </tr>

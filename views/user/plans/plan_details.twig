@@ -1,0 +1,152 @@
+{% extends 'user/master.twig' %}
+{% block content %}
+    <style>
+        .hidden{
+            display: none;
+        }
+    </style>
+{#    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">#}
+{#   #}
+{#                                                {% for permission in permissions %}#}
+{#                                                <div class="col-md-6">#}
+{#                                                    <div class="w-100 mb-10">#}
+
+{#                                                            <div class="d-flex align-items-center mb-5">#}
+{#                                                                <span class="fw-bold fs-6 text-gray-800 flex-grow-1 pe-3">{{ permission[0].title }}</span>#}
+{#                                                                <span class="svg-icon svg-icon-1 svg-icon-success">#}
+{#                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">#}
+{#                                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor" />#}
+{#                                    <path d="M10.4343 12.4343L8.75 10.75C8.33579 10.3358 7.66421 10.3358 7.25 10.75C6.83579 11.1642 6.83579 11.8358 7.25 12.25L10.2929 15.2929C10.6834 15.6834 11.3166 15.6834 11.7071 15.2929L17.25 9.75C17.6642 9.33579 17.6642 8.66421 17.25 8.25C16.8358 7.83579 16.1642 7.83579 15.75 8.25L11.5657 12.4343C11.2533 12.7467 10.7467 12.7467 10.4343 12.4343Z" fill="currentColor" />#}
+{#                                </svg>#}
+{#                            </span>#}
+{#                                                            </div>#}
+
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                                {% endfor %}#}
+{#                                            </div>#}
+
+
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Toolbar-->
+        <div class="toolbar" id="kt_toolbar">
+            <!--begin::Container-->
+            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                    <!--begin::Title-->
+                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Plans</h1>
+                    <!--end::Title-->
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-300 border-start mx-4"></span>
+                    <!--end::Separator-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">
+                            <a href="../../demo1/dist/index.html" class="text-muted text-hover-primary">Dashboard</a>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">Plans</li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">Plan Details</li>
+                    </ul>
+                </div>
+            </div>
+            <!--end::Container-->
+        </div>
+        <div class="post d-flex flex-column-fluid" id="kt_post">
+            <!--begin::Container-->
+            <div id="kt_content_container" class="container-xxl">
+                <!--begin::Pricing card-->
+                <div class="card" id="kt_pricing">
+                    <!--begin::Card body-->
+                    <div class="card-body p-lg-17">
+                        <!--begin::Plans-->
+                        <div class="d-flex flex-column">
+                            <!--begin::Heading-->
+                            <div class="mb-13 text-center">
+                                <h1 class="fs-2hx fw-bolder mb-5">    {{ plans[0].name }}  {% if plans[0].percentage != "0" and plans[0].percentage != "" %}
+                                        <div class="badge badge-pill badge-success show text-white" style="display: ruby-text">
+                                            {{ plans[0].percentage }}% Off
+                                        </div>
+                                    {% endif %}</h1>
+                                <div class="text-gray-400 fw-bold fs-5"> Discover the unique benefits and features of our plan. Unlock a range of services tailored to meet your specific needs.</div>
+                            </div>
+                            <!--end::Heading-->
+                            <!--begin::Nav group-->
+                            {# Get the plan type from the query string (default to 'month' if not present) #}
+
+                            <div class="nav-group nav-group-outline mx-auto mb-15" data-kt-buttons="true">
+                                <button class="btn btn-color-gray-400 btn-active btn-active-secondary px-6 py-3 me-2 {% if type == 'month' %}active{% endif %}" data-kt-plan="month" disabled>Monthly</button>
+                                <button class="btn btn-color-gray-400 btn-active btn-active-secondary px-6 py-3 {% if type == 'annual' %}active{% endif %}" data-kt-plan="annual" disabled>Annual</button>
+                            </div>
+
+                            <div class="text-center mb-20">
+                                <div class="text-gray-400 fw-bold fs-5 w-100">Invest in value with our competitive pricing. This plan offers a comprehensive set of features designed to maximize your benefits at an affordable rate.</div>
+
+
+                                <span class="fs-3x fw-bolder text-primary">
+
+        {% if type == 'month' %}
+            ${{ plans[0].monthly_price }}
+        {% else %}
+            ${{ plans[0].yearly_price }}
+        {% endif %}
+    </span>
+                                <span class="fs-7 fw-bold opacity-50">/ <span data-kt-element="period">
+        {% if type == 'month' %}Mon{% else %}Year{% endif %}
+    </span></span>
+                            </div>
+                            <!--end::Nav group-->
+                            <!--begin::Row-->
+                            <div class="row g-10 bg-light bg-opacity-75 py-15 px-10">
+                                <div class="col-xl-12 text-center">
+                                  <h5>Access detailed insights into the permissions associated with this plan, ensuring you have the control and flexibility required.</h5>
+                                </div>
+                                            {% for permission in permissions %}
+                                                <div class="col-xl-4 col-md-6">
+                                            <div class="w-100 mb-5">
+                                                <div class="d-flex align-items-center mb-5">
+                                                    <span class="fw-bold fs-6 text-gray-800 flex-grow-1 pe-3">{{ permission[0].title }}</span>
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen043.svg-->
+                                                    <span class="svg-icon svg-icon-1 svg-icon-success">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																			<rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor" />
+																			<path d="M10.4343 12.4343L8.75 10.75C8.33579 10.3358 7.66421 10.3358 7.25 10.75C6.83579 11.1642 6.83579 11.8358 7.25 12.25L10.2929 15.2929C10.6834 15.6834 11.3166 15.6834 11.7071 15.2929L17.25 9.75C17.6642 9.33579 17.6642 8.66421 17.25 8.25C16.8358 7.83579 16.1642 7.83579 15.75 8.25L11.5657 12.4343C11.2533 12.7467 10.7467 12.7467 10.4343 12.4343Z" fill="currentColor" />
+																		</svg>
+																	</span>
+                                                    <!--end::Svg Icon-->
+                                            </div>
+
+                                        </div>
+                                        </div>
+                                            {% endfor %}
+                                <!--end::Col-->
+                            </div>
+                            <!--end::Row-->
+                        </div>
+                        <!--end::Plans-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Pricing card-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Post-->
+    </div>
+{% endblock %}

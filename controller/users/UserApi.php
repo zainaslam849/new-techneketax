@@ -716,7 +716,10 @@ if($_GET['page_name']=="view_document_hub"){
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Not Uploaded Yet</span>";
             }
-            $action = array('action' =>'<a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$document_hub["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>');
+            $action = array('action' =>'
+            <a href="/user/dochubdetails/'.$document_hub['id'].'" target="_blank" class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>
+            <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$document_hub["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+');
             if (!empty($document_hub['client_des']) && $document_hub['client_des'] != ''){
                 $words = explode(' ', $document_hub['client_des']);
                 $des = implode(' ', array_slice($words, 0, 10));
