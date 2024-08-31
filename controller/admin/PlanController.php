@@ -6,8 +6,10 @@ $seo = array(
     'description' => 'CRM',
     'keywords' => 'Admin Panel'
 );
-echo $twig->render('admin/plans/list.twig', ['seo'=>$seo]);
+    $permissions = $h->table('permissions')->select()->orderBy('id', 'desc')->fetchAll();
+echo $twig->render('admin/plans/list.twig', ['seo'=>$seo,'permissions'=>$permissions]);
 endif;
+
 if($route == '/admin/add_plan'):
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -17,6 +19,7 @@ if($route == '/admin/add_plan'):
             @$tags= $_POST['tags'];
             $percentage = $_POST['percentage'];
             $basic = $_POST['basic'];
+            $slug = slugify($name).random_strings(5);
             if(!empty($basic)){
                 $basicArray = json_decode($basic, true);
                 $values = array_column($basicArray, 'value');
@@ -24,7 +27,6 @@ if($route == '/admin/add_plan'):
             }else{
                 $tags ='';
             }
-
             if (!empty($_POST['key_points'])) {
                 $key_points = implode(',', array_filter($_POST['key_points']));
             } else {
@@ -38,8 +40,7 @@ if($route == '/admin/add_plan'):
                 exit();
             }
             try {
-
-                $insert = $h->insert('plans')->values([ 'name' => $name, 'tags' => $tags, 'key_points' => $key_points, 'percentage' => $percentage, 'monthly_price' => $monthly_price, 'yearly_price' => $yearly_price])->run();
+                $insert = $h->insert('plans')->values([ 'slug' => $slug,'name' => $name, 'tags' => $tags, 'key_points' => $key_points, 'percentage' => $percentage, 'monthly_price' => $monthly_price, 'yearly_price' => $yearly_price])->run();
                 echo "1";
                 exit();
             } catch (PDOException $e) {
@@ -56,7 +57,8 @@ if($route == '/admin/add_plan'):
             'description' => 'Add User',
             'keywords' => 'Admin Panel'
         );
-        echo $twig->render('admin/plans/add_plan.twig', ['seo'=>$seo, 'csrf'=>set_csrf()]);
+        $permissions = $h->table('permissions')->select()->orderBy('id', 'desc')->fetchAll();
+        echo $twig->render('admin/plans/add_plan.twig', ['seo'=>$seo,'permissions'=>$permissions, 'csrf'=>set_csrf()]);
     }
 endif;
 if ($route == '/admin/get_plan'):
@@ -73,6 +75,7 @@ if ($route == '/admin/plan_edit'):
         @$id = $_POST['id'];
         $percentage = $_POST['percentage'];
         $basic = $_POST['basic'];
+        $slug = slugify($name).random_strings(5);
         if(!empty($basic)){
             $basicArray = json_decode($basic, true);
             $values = array_column($basicArray, 'value');
@@ -94,7 +97,7 @@ if ($route == '/admin/plan_edit'):
             exit();
         }
         try {
-            $update = $h->update('plans')->values([ 'name' => $name, 'tags' => $tags, 'key_points' => $key_points, 'percentage' => $percentage, 'monthly_price' => $monthly_price, 'yearly_price' => $yearly_price])->where('id','=',$id)->run();
+            $update = $h->update('plans')->values(['slug' => $slug,'name' => $name, 'tags' => $tags, 'key_points' => $key_points, 'percentage' => $percentage, 'monthly_price' => $monthly_price, 'yearly_price' => $yearly_price])->where('id','=',$id)->run();
 
             echo "1";
             exit();

@@ -31,6 +31,7 @@ $firm_id = $document_hub[0]['firm_id'];
     $firmDetails = $h->table('users')->select()->where('id', '=', $firm_id)->fetchAll();
     echo $twig->render('user/document_hub/client_index_detail.twig', ['seo' => $seo,'documentHub' => $document_hub,'firmDetail' => $firmDetails]);
 endif;
+
 if($route == '/client/document/add'):
     if (!empty($_POST['firm_id'])) {
         $firm_id = $_POST['firm_id'];
@@ -163,7 +164,17 @@ if($route == '/user/request_for_document'):
         exit();
     }
 endif;
-
+if($route == '/user/dochubdetails/$id'):
+    $seo = array(
+        'title' => 'Document Hub',
+        'description' => 'CRM',
+        'keywords' => 'Admin Panel'
+    );
+    $document_hub = $h->table('document_hub')->select()->where('id', '=', $id)->fetchAll();
+    $client_id = $document_hub[0]['client_id'];
+    $clientDetails = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
+    echo $twig->render('user/document_hub/firm_index_details.twig', ['seo' => $seo,'documentHub' => $document_hub,'client_details' => $clientDetails]);
+endif;
 if($route == '/user/upload/document/all'):
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_POST['firm_id'])) {
