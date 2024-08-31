@@ -19,7 +19,8 @@ if ($route == '/user/group/$groupId') {
 
         $usersList = $h->table('users')
             ->select('users.id', 'users.fname', 'users.lname', 'users.email', 'users.type', 'users.profile_image')
-            ->where('users.firm_id', '=', $userFirmId)
+            ->where('users.type','firm')
+            ->Where('users.id', '=', $userFirmId)
             ->fetchAll();
     }
 
