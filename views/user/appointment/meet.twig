@@ -1,7 +1,7 @@
-6{% extends 'user/master_call.twig' %}
+{% extends 'user/master_call.twig' %}
 {% block content %}
     <style>
-        .wrapper{
+        .wrapper {
             padding-top: 50px !important;
             padding-left: unset !important;
         }
@@ -28,6 +28,20 @@
             width: 100%;
         }
 
+        #loader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
         /* Mobile responsiveness */
         @media (max-width: 768px) {
             #kt_meeting_card .card-body {
@@ -35,17 +49,23 @@
             }
         }
     </style>
+    <div id="loader">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+
     <!--begin::Content-->
-    <div class="d-flex flex-column flex-column-fluid" >
+    <div class="d-flex flex-column flex-column-fluid mt-5" >
         <div class="card card-flush h-lg-100" id="kt_meeting_card">
             <div class="card-body p-0" id="meet" style="height: 100%; width: 100%;"></div>
         </div>
     </div>
-    <!--end::Content-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src='https://meet.techneketax.com/external_api.js'></script>
     <script>
-        function StartMeeting(meeting_name, room_name, user_name, user_email, user_image_url){
+        function StartMeeting(meeting_name, room_name, user_name, user_email, user_image_url) {
             const domain = 'meet.techneketax.com';
 
             const tool_bar_buttons = ['microphone', 'camera', 'desktop', 'profile', 'settings', 'raisehand', 'videoquality', 'hangup'];
@@ -59,7 +79,7 @@
                     displayName: user_name,
                     email: user_email
                 },
-                configOverwrite:{
+                configOverwrite: {
                     doNotStoreRoom: true,
                     startVideoMuted: 0,
                     startWithVideoMuted: true,
@@ -70,10 +90,10 @@
                     remoteVideoMenu: {
                         disableKick: true
                     },
-                    desktopSharingChromeExtId: null, // Extension ID for Chrome
+                    desktopSharingChromeExtId: null,
                     desktopSharingChromeDisabled: false,
                     desktopSharingChromeSources: ['screen', 'window', 'tab'],
-                    desktopSharingFirefoxExtId: null, // Extension ID for Firefox
+                    desktopSharingFirefoxExtId: null,
                     desktopSharingFirefoxDisabled: false,
                     desktopSharingFrameRate: {
                         min: 5,
@@ -87,16 +107,14 @@
                     DEFAULT_REMOTE_DISPLAY_NAME: 'New User',
                     TOOLBAR_BUTTONS: tool_bar_buttons
                 },
-                onload: function () {
-                    //alert('loaded');
-                    // $('#toolbox').show();
-                }
             };
+
             const apiObj = new JitsiMeetExternalAPI(domain, options);
             apiObj.executeCommand('subject', meeting_name);
             apiObj.addEventListeners({
                 readyToClose: function () {
                     $('#meet').empty();
+                    window.location.href = '/user/appointments'; // Redirect to /user/appointments when the meeting ends
                 },
                 participantJoined: function(data){
                     console.log('participantJoined', data);
@@ -106,15 +124,28 @@
                     console.log('participantLeft', data);
                 }
             });
+
             apiObj.executeCommand('avatarUrl', user_image_url);
+
+            // Hide the loader when the iframe loads
+            const iframe = document.querySelector('#meet iframe');
+            iframe.onload = function() {
+                console.log('Iframe loaded');
+                $('#loader').fadeOut(); // Hide the loader when the iframe is fully loaded
+            };
         }
 
         const meeting_name = '{{ meet.title }}';
         const room_name = '{{ meet.jitsi_link }}';
         const user_name = '{{ loginName }}';
         const user_email = '{{ userEmail }}';
-        const user_image = 'https://avatar.iran.liara.run/username?username='+user_name;
+        const user_image = 'https://avatar.iran.liara.run/username?username=' + user_name;
 
         StartMeeting(meeting_name, room_name, user_name, user_email, user_image);
     </script>
+
+
+
+
+
 {% endblock %}
