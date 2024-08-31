@@ -17,7 +17,7 @@
                         <!--begin::Separator-->
                         <span class="h-20px border-1 border-gray-200 border-start ms-3 mx-2 me-1">-</span>
                         <!--end::Separator-->
-                        <div class="text-muted">{{ chatWithUserInfo.fname|ucwords }} {{ chatWithUserInfo.lname|ucwords }}</div>
+                        <div class="text-muted">{{ chatWithUserInfo.fname }} {{ chatWithUserInfo.lname }}</div>
                         <!--end::Description-->
                     </h1>
                     <!--end::Title-->
@@ -87,13 +87,14 @@
                                                 <!--begin::Details-->
                                                 <div class="ms-5">
                                                     {% if user.type == 'group' %}
-                                                        <a href="/user/group/{{ user.id }}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{ user.fname|ucwords }} {{ user.lname|ucwords }}</a>
-                                                        <small>
-                                                            <a style="margin-left: 10px;" class="ml-5" href="/group/del/{{ user.id }}"><i class="bi bi-trash text-danger"></i></a>
-                                                        </small>
+                                                        <a href="/user/group/{{ user.id }}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{ user.fname|ucwords }} {{ user.lname|ucwords }}
+                                                            <small>
+                                                                <a style="margin-left: 10px;" class="ml-5" href="/group/del/{{ user.id }}"><i class="bi bi-trash text-danger"></i></a>
+                                                            </small>
+                                                        </a>
                                                     {% else %}
                                                         <a href="/user/chat/{{ user.id }}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{ user.fname|ucwords }} {{ user.lname|ucwords }}
-                                                            <div class="fw-bold text-muted">{{ user.email }}</div>
+                                                        <div class="fw-bold text-muted">{{ user.email }}</div>
                                                         </a>
                                                     {% endif %}
                                                 </div>
@@ -101,9 +102,9 @@
                                             </div>
                                             <!--end::Details-->
                                             <!--begin::Last seen-->
-{#                                            <div class="d-flex flex-column align-items-end ms-2">#}
-{#                                                <span class="text-muted fs-7 mb-1">1 week</span>#}
-{#                                            </div>#}
+                                            {#                                            <div class="d-flex flex-column align-items-end ms-2">#}
+                                            {#                                                <span class="text-muted fs-7 mb-1">1 week</span>#}
+                                            {#                                            </div>#}
                                             <!--end::Last seen-->
                                         </div>
                                         <!--end::User-->
@@ -143,10 +144,11 @@
                                         <!--end::Avatar-->
 
                                         <!--begin::All users-->
-{#                                        <a href="#" class="symbol symbol-35px symbol-circle" data-bs-toggle="modal" data-bs-target="#kt_modal_view_users">#}
-{#                                            <span class="symbol-label fs-8 fw-bolder" data-bs-toggle="tooltip" data-bs-trigger="hover" title="View more users">+42</span>#}
-{#                                        </a>#}
-
+                                        {% if groupMembersCount != null %}
+                                            <a href="#" class="symbol symbol-35px symbol-circle" >
+                                                <span class="symbol-label fs-8 fw-bolder" data-bs-toggle="tooltip" data-bs-trigger="hover" title="View more users">+{{ groupMembersCount }}</span>
+                                            </a>
+                                        {% endif %}
                                         <a href="#" class=" pl-4" >
                                             <h4 style="margin-left: 15px;" title="{{ chatWithUserInfo.fname }} {{ chatWithUserInfo.lname }}">{{ chatWithUserInfo.fname|ucwords }} {{ chatWithUserInfo.lname|ucwords }}</h4>
                                         </a>
@@ -158,16 +160,24 @@
                                 <!--end::Title-->
                                 <div class="card-toolbar">
                                     <!--begin::Menu-->
+                                    {#                                    <div class="me-n3">#}
+                                    {#                                        <a href="/call/ring/{{ user_id }}" class="btn btn-lg btn-icon btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">#}
+                                    {#                                        <i class="bi bi-telephone-fill"></i>#}
+                                    {#                                        </a>#}
+                                    {#                                    </div>#}
+
 {#                                    <div class="me-n3">#}
-{#                                        <a href="/call/ring/{{ user_id }}" class="btn btn-lg btn-icon btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">#}
-{#                                        <i class="bi bi-telephone-fill"></i>#}
+{#                                        <a href="/video-call/ring/{{ user_id }}" class="btn btn-lg btn-icon btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">#}
+{#                                            <i class="bi bi-telephone-fill"></i>#}
 {#                                        </a>#}
 {#                                    </div>#}
+
                                     <div class="me-n3">
-                                        <a href="/video-call/ring/{{ user_id }}" class="btn btn-lg btn-icon btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                            <i class="bi bi-telephone-fill"></i>
+                                        <a  class="btn btn-lg btn-icon" data-bs-toggle="modal" data-bs-target="#kt_modal_view_users">
+                                            <i class="bi bi-plus" style="font-size: 2rem;"></i>
                                         </a>
                                     </div>
+
                                     <!--end::Menu-->
                                 </div>
                             </div>
@@ -183,7 +193,6 @@
                                             <span class="visually-hidden">Loading...</span>
                                         </div>
                                     </div>
-
 
                                     <!--begin::Message(template for out)-->
                                     <div class="d-flex justify-content-end mb-10 d-none" data-kt-element="template-out">
@@ -295,70 +304,65 @@
                                 </div>
                                 <!--end::Heading-->
 
-
-
+                                <!--begin::Add Group Members-->
+                                <div class="d-flex justify-content-between mb-10">
+                                    <div class="flex-grow-1 me-3">
+                                        <select id="Groupmember_ids" name="Groupmember_ids[]" class="form-select form-select-solid" data-control="select2" data-placeholder="Select members to add" data-allow-clear="true" multiple="multiple">
+                                            {% for user in availableUsers %}
+                                                <option value="{{ user.id }}">{{ user.fname }} {{ user.lname }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <button id="addGroupMembers" class="btn btn-dark btn-sm">Add</button>
+                                    </div>
+                                </div>
+                                <!--end::Add Group Members-->
 
                                 <!--begin::Users-->
                                 <div class="mb-15">
                                     <!--begin::List-->
-                                    <div class="mh-375px scroll-y me-n7 pe-7">
-                                        <!--begin::User-->
-                                        <div class="d-flex flex-stack py-5 border-bottom border-gray-300 border-bottom-dashed">
-                                            <!--begin::Details-->
-                                            <div class="d-flex align-items-center">
-                                                <!--begin::Avatar-->
-                                                <div class="symbol symbol-35px symbol-circle">
-                                                    <img alt="Pic" src="{{ env.APP_URL }}assets/dash/assets/media/avatars/300-6.jpg" />
-                                                </div>
-                                                <!--end::Avatar-->
+                                    <div class="mh-375px scroll-y me-n7 pe-7" id="groupMembersList">
+                                        {% for groupMember in groupMembers %}
+                                            <!--begin::User-->
+                                            <div class="d-flex justify-content-between py-5 border-bottom border-gray-300 border-bottom-dashed align-items-center group-member" id="member-{{ groupMember.user_id }}">
                                                 <!--begin::Details-->
-                                                <div class="ms-6">
-                                                    <!--begin::Name-->
-                                                    <a href="#" class="d-flex align-items-center fs-5 fw-bolder text-dark text-hover-primary">Emma Smith
-                                                        <span class="badge badge-light fs-8 fw-bold ms-2">Team Member</span>
-                                                    </a>
-                                                    <!--end::Name-->
+                                                <div class="d-flex align-items-center">
+                                                    <!--begin::Avatar-->
+                                                    <div class="symbol symbol-35px symbol-circle">
+                                                        {% if groupMember.profile_image != null %}
+                                                            <img alt="Pic" src="{{ env.APP_URL }}uploads/profile/{{ groupMember.profile_image }}" />
+                                                        {% else %}
+                                                            <img alt="Pic" src="https://avatar.iran.liara.run/username?username={{ groupMember.fname }} {{ groupMember.lname }}" />
+                                                        {% endif %}
+                                                    </div>
+                                                    <!--end::Avatar-->
+                                                    <!--begin::Details-->
+                                                    <div class="ms-6">
+                                                        <!--begin::Name-->
+                                                        <a href="#" class="d-flex align-items-center fs-5 fw-bolder text-dark text-hover-primary">
+                                                            {{ groupMember.fname|ucwords }} {{ groupMember.lname|ucwords }}
+                                                            <span class="badge badge-light fs-8 fw-bold ms-2">{{ groupMember.type|ucwords }}</span>
+                                                        </a>
+                                                        <!--end::Name-->
+                                                    </div>
                                                 </div>
                                                 <!--end::Details-->
-                                            </div>
-                                            <!--end::Details-->
-
-                                        </div>
-                                        <!--end::User-->
-                                        <!--begin::User-->
-                                        <div class="d-flex flex-stack py-5 border-bottom border-gray-300 border-bottom-dashed">
-                                            <!--begin::Details-->
-                                            <div class="d-flex align-items-center">
-                                                <!--begin::Avatar-->
-                                                <div class="symbol symbol-35px symbol-circle">
-                                                    <span class="symbol-label bg-light-danger text-danger fw-bold">M</span>
+                                                <!--begin::Action-->
+                                                <div class="text-end">
+                                                    <a href="#" onclick="deleteGroupMember('/group/delete/{{ groupId }}/{{ groupMember.user_id }}', '{{ groupMember.user_id }}')" class="btn btn-danger btn-sm">Delete</a>
                                                 </div>
-                                                <!--end::Avatar-->
-                                                <!--begin::Details-->
-                                                <div class="ms-6">
-                                                    <!--begin::Name-->
-                                                    <a href="#" class="d-flex align-items-center fs-5 fw-bolder text-dark text-hover-primary">Melody Macy
-                                                        <span class="badge badge-light fs-8 fw-bold ms-2">Team Member</span></a>
-                                                    <!--end::Name-->
-
-                                                </div>
-                                                <!--end::Details-->
+                                                <!--end::Action-->
                                             </div>
-                                            <!--end::Details-->
-                                            <!--begin::Stats-->
-
-                                            <!--end::Stats-->
-                                        </div>
-                                        <!--end::User-->
-
-
+                                            <!--end::User-->
+                                        {% endfor %}
                                     </div>
                                     <!--end::List-->
                                 </div>
                                 <!--end::Users-->
-
                             </div>
                             <!--end::Modal body-->
+
                         </div>
                         <!--end::Modal content-->
                     </div>
@@ -416,21 +420,22 @@
 
     <script>
         $(document).ready(function () {
-            const userId = $('#chatWithUserID').val();
+            const groupId = $('#groupId').val();
             const userProfileImage = "{{ userProfileImage }}"
                 ? "{{ env.APP_URL }}uploads/profile/{{ userProfileImage }}"
                 : "https://avatar.iran.liara.run/username?username={{ loginName }}";
             const wsUrl = 'wss://dev.techneketax.com/ws/';
             //const wsUrl = 'ws://localhost:8000/';
             let ws;
+
             function initializeWebSocket() {
                 try {
                     ws = new WebSocket(wsUrl);
 
                     ws.onopen = function () {
                         console.log('WebSocket connected');
-                        if (userId) {
-                            getMessages(userId);
+                        if (groupId) {
+                            getGroupMessages(groupId);
                         }
                     };
 
@@ -453,9 +458,9 @@
 
             initializeWebSocket();
 
-            function getMessages(userId) {
+            function getGroupMessages(groupId) {
                 $.ajax({
-                    url: `/chat/messages/${userId}`,
+                    url: `/chat/messages/group/${groupId}`,
                     method: 'GET',
                     dataType: 'json',
                     success: function (response) {
@@ -471,7 +476,6 @@
                             let currentDate = '';
 
                             response.messages.forEach(message => {
-                                //const messageDate = new Date(message.timestamp).toLocaleDateString();
                                 const messageDate = timeAgo(message.timestamp);
                                 if (messageDate !== currentDate) {
                                     currentDate = messageDate;
@@ -494,6 +498,7 @@
                     }
                 });
             }
+
             function timeAgo(timestamp) {
                 const now = new Date();
                 const messageTime = new Date(timestamp);
@@ -518,6 +523,7 @@
                 }
                 return "just now";
             }
+
             function createOutgoingMessageElement(message) {
                 return `
             <div class="d-flex justify-content-end mb-10">
@@ -563,14 +569,14 @@
                 chatContainer.scrollTop(chatContainer[0].scrollHeight);
             }
 
-            function sendMessage() {
+            function sendMessage(groupId) {
                 const chatInput = $('[data-kt-element="input"]');
                 const chatMessageValue = chatInput.val().trim();
                 if (chatMessageValue === '') return;
 
                 const messageData = {
                     sender_id: '{{ loginId }}',
-                    receiver_id: userId,
+                    group_id: groupId,
                     message: chatMessageValue
                 };
 
@@ -589,49 +595,127 @@
                     console.error('Error sending message through WebSocket:', error);
                 }
             }
+
             $('[data-kt-element="input"]').on('keydown', function (event) {
                 if (event.key === 'Enter') {
                     event.preventDefault();
-                    sendMessage();
+                    sendMessage(groupId);
                 }
             });
+
             $('[data-kt-element="send"]').on('click', function () {
-                sendMessage();
+                sendMessage(groupId);
             });
         });
+
+        function timeAgo(timestamp) {
+            const now = new Date();
+            const messageTime = new Date(timestamp);
+            const diffInSeconds = Math.floor((now - messageTime) / 1000);
+
+            const intervals = {
+                year: 31536000,
+                month: 2592000,
+                day: 86400,
+                hour: 3600,
+                minute: 60,
+                second: 1
+            };
+
+            for (const interval in intervals) {
+                const diff = Math.floor(diffInSeconds / intervals[interval]);
+                if (diff > 1) {
+                    return `${diff} ${interval}s ago`;
+                } else if (diff === 1) {
+                    return `1 ${interval} ago`;
+                }
+            }
+            return "just now";
+        }
 
     </script>
     <script>
         //SEARCH
         $(document).ready(function () {
-            // Listen for keyup events on the search input
             $('input[name="search"]').on('keyup', function () {
-                // Get the search value and convert it to lowercase for case-insensitive comparison
                 const searchValue = $(this).val().toLowerCase().trim();
                 console.log("Search Value:", searchValue);
-
-                // Show all users if search value is empty
                 if (searchValue === "") {
                     $('#kt_chat_contacts_body .d-flex.flex-stack').show();
                     return;
                 }
-
-                // Iterate over each user block in the contacts list
                 $('#kt_chat_contacts_body .d-flex.flex-stack').each(function () {
                     const userName = $(this).attr('data-user-name').toLowerCase();
                     const userEmail = $(this).attr('data-user-email').toLowerCase();
-
-                    // Check if either the name or email contains the search value
                     if (userName.includes(searchValue) || userEmail.includes(searchValue)) {
-                        $(this).show();  // Show the element if it matches the search
+                        $(this).show();
                     } else {
-                        $(this).hide();  // Hide the element if it doesn't match the search
+                        $(this).hide();
                     }
                 });
             });
         });
+
+
     </script>
 
+    <script>
+        function deleteGroupMember(url, userId) {
+            $.ajax({
+                url: url,
+                method: 'POST',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === true) {
+                        // Remove the user from the list
+                        $('#member-' + userId).remove();
+                    } else {
+                        alert('Failed to delete the member. Please try again.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', xhr.responseText);
+                    alert('An error occurred while processing your request.');
+                }
+            });
+        }
 
+        $(document).ready(function() {
+            $('#addGroupMembers').on('click', function() {
+                const selectedMembers = $('#Groupmember_ids').val();
+                const groupId = '{{ groupId }}';
+
+                if (selectedMembers.length > 0) {
+                    $.ajax({
+                        url: '/group/add-members',
+                        method: 'POST',
+                        data: {
+                            group_id: groupId,
+                            members: selectedMembers
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.status === true) {
+                                // Append new members to the list
+                               window.location.reload();
+                            } else {
+                                alert('Failed to add members. Please try again.');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('AJAX error:', xhr.responseText);
+                            alert('An error occurred while processing your request.');
+                        }
+                    });
+                } else {
+                    alert('Please select at least one member to add.');
+                }
+            });
+        });
+
+
+
+
+    </script>
 
 {% endblock %}
