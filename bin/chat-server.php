@@ -9,7 +9,7 @@ use Cycle\Database\Config;
 
 // Define environment variables directly
 $env = [
-
+    "APP_URL"=>"https://dev.techneketax.com/",
     "DATABASE_HOST"=>"localhost",
     "DATABASE_NAME"=>"dev_tecgneketax",
     "DATABASE_USERNAME"=>"dev_tecgneketax",
@@ -70,11 +70,12 @@ class Chat implements MessageComponentInterface {
                 $sender = $this->db->table('users')
                     ->select('fname', 'lname', 'profile_image')
                     ->where('id', '=', $data['sender_id'])
-                    ->fetchOne();
+                    ->fetchAll();
+                $sender=$sender[0];
 
                 // Handle the profile image logic
                 $senderProfileImage = $sender['profile_image']
-                    ? $env['APP_URL'] . "uploads/profile/" . $sender['profile_image']
+                    ? "https://dev.techneketax.com/uploads/profile/".$sender['profile_image']
                     : "https://avatar.iran.liara.run/username?username=" . urlencode($sender['fname'] . ' ' . $sender['lname']);
 
                 // Insert the message into the database
