@@ -155,7 +155,7 @@ $server = \Ratchet\Server\IoServer::factory(
             new Chat($db)
         )
     ),
-    8000
+    8005
 );
 
 echo "WebSocket server started on port 8000...\n";

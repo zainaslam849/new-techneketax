@@ -21,7 +21,8 @@ if($route == '/user/chat'){
             ->fetchAll();
         $usersList = $h->table('users')
             ->select('users.id', 'users.fname', 'users.lname', 'users.email', 'users.type', 'users.profile_image')
-            ->where('users.firm_id', '=', $userFirmId[0]['firm_id'])
+            ->where('users.type','firm')
+            ->Where('users.id', '=', $userFirmId[0]['firm_id'])
             ->fetchAll();
     }
     $groups = $h->table('group_members')
@@ -32,6 +33,7 @@ if($route == '/user/chat'){
                 ->orWhere('groups.created_by', '=', $loginUserId);
         })
         ->fetchAll();
+
     foreach ($groups as &$group) {
         $groupMembers = $h->table('group_members')
             ->select('users.id', 'users.fname', 'users.lname', 'users.email', 'users.profile_image')
@@ -73,7 +75,8 @@ if ($route === '/user/chat/$user_id') {
             ->fetchAll();
         $usersList = $h->table('users')
             ->select('users.id', 'users.fname', 'users.lname', 'users.email', 'users.type', 'users.profile_image')
-            ->where('users.firm_id', '=', $userFirmId[0]['firm_id'])
+            ->where('users.type','firm')
+            ->Where('users.id', '=', $userFirmId[0]['firm_id'])
             ->fetchAll();
     }
     $groups = $h->table('group_members')
