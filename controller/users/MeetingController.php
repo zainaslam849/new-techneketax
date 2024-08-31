@@ -6,5 +6,6 @@ require("config/env.php");
         'keywords' => 'Admin Panel'
     );
     $appointment = $h->table('appointment')->select()->where('jitsi_link', '=', $room_id)->fetchAll();
+
     echo $twig->render('user/appointment/meet.twig', ['seo' => $seo, 'meet'=>$appointment[0]]);
 

@@ -1,13 +1,47 @@
-{% extends 'user/master.twig' %}
+6{% extends 'user/master_call.twig' %}
 {% block content %}
+    <style>
+        .wrapper{
+            padding-top: 50px !important;
+            padding-left: unset !important;
+        }
+        .header {
+            left: 0px !important;
+        }
+        /* Full height container for the meeting */
+        #kt_content {
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-    <!--  BEGIN CONTENT AREA  -->
-    <div id="content"  class="main-content">
-        <div id="call-ringing"></div>
+        /* Ensure the card body takes up full height */
+        #kt_meeting_card .card-body {
+            height: 100%;
+            padding: 0;
+            background-color: #f0f0f0; /* Optional background while the meeting loads */
+        }
 
-        <div id="meet" style="height: 100%;"></div>
+        /* For a seamless Jitsi iframe experience */
+        #meet {
+            height: 100%;
+            width: 100%;
+        }
 
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            #kt_meeting_card .card-body {
+                padding: 0;
+            }
+        }
+    </style>
+    <!--begin::Content-->
+    <div class="d-flex flex-column flex-column-fluid" >
+        <div class="card card-flush h-lg-100" id="kt_meeting_card">
+            <div class="card-body p-0" id="meet" style="height: 100%; width: 100%;"></div>
+        </div>
     </div>
+    <!--end::Content-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src='https://meet.techneketax.com/external_api.js'></script>
     <script>
@@ -79,7 +113,7 @@
         const room_name = '{{ meet.jitsi_link }}';
         const user_name = '{{ loginName }}';
         const user_email = '{{ userEmail }}';
-        const user_image = 'https://techneketax.local/assets/dashboard/src/assets/img/profile-30.png';
+        const user_image = 'https://avatar.iran.liara.run/username?username='+user_name;
 
         StartMeeting(meeting_name, room_name, user_name, user_email, user_image);
     </script>
