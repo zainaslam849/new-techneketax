@@ -9,7 +9,7 @@ use Cycle\Database\Config;
 
 // Define environment variables directly
 $env = [
-
+    "APP_URL"=>"https://dev.techneketax.com/",
     "DATABASE_HOST"=>"localhost",
     "DATABASE_NAME"=>"dev_tecgneketax",
     "DATABASE_USERNAME"=>"dev_tecgneketax",
@@ -66,7 +66,19 @@ class Chat implements MessageComponentInterface {
                 $safe_message = htmlspecialchars($data['message'], ENT_QUOTES, 'UTF-8');
                 $timestamp = date('Y-m-d H:i:s');
 
-                // Insert message into the database
+                // Fetch the sender's profile image and name from the database
+                $sender = $this->db->table('users')
+                    ->select('fname', 'lname', 'profile_image')
+                    ->where('id', '=', $data['sender_id'])
+                    ->fetchAll();
+                $sender=$sender[0];
+
+                // Handle the profile image logic
+                $senderProfileImage = $sender['profile_image']
+                    ? "https://dev.techneketax.com/uploads/profile/".$sender['profile_image']
+                    : "https://avatar.iran.liara.run/username?username=" . urlencode($sender['fname'] . ' ' . $sender['lname']);
+
+                // Insert the message into the database
                 $this->db->insert('chat')->values([
                     'sender_id' => $data['sender_id'],
                     'message' => $safe_message,
@@ -83,8 +95,8 @@ class Chat implements MessageComponentInterface {
                             'group_id' => $data['group_id'] ?? null,
                             'receiver_id' => $data['receiver_id'] ?? null,
                             'message' => $safe_message,
-                            'senderName' => $data['senderName'],
-                            'senderProfileImage' => $data['senderProfileImage'],
+                            'senderName' => $sender['fname'] . ' ' . $sender['lname'],
+                            'senderProfileImage' => $senderProfileImage,
                             'timestamp' => $timestamp
                         ]));
                     }
