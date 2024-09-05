@@ -149,6 +149,8 @@ post('/user/send_invite', 'controller/users/ClientsController.php');
 // plans
     if(@$_SESSION['users']['type'] == 'firm'):
 get('/user/plans', 'controller/users/PlansController.php');
+post('/user/plan/get_plan', 'controller/users/PlansController.php');
+get('/user/plans_details/$slug', 'controller/users/PlansController.php');
     endif;
 // interviews
 get('/user/interviews/all', 'controller/users/InterviewsController.php');
