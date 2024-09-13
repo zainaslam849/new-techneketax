@@ -171,7 +171,7 @@ if($route == '/register'):
         echo $twig->render('auth/register.twig', ['seo'=>$seo , 'csrf'=>set_csrf()]);
     }
 endif;
-if($route == '/join/$firm_id/$invite'):
+if($route == '/join/$firm_id/$associates_id/$email/$invite'):
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //LOGIN
         if(isset($_POST['email']) && isset($_POST['fname'])&& isset($_POST['lname'])&& isset($_POST['phone'])&& isset($_POST['password'])):
@@ -184,6 +184,13 @@ if($route == '/join/$firm_id/$invite'):
                 $invite = $_POST['invite'];
             }else{
                 $invite = '';
+            }
+            if(!empty($_POST['associates_id']) && $_POST['associates_id'] !='null') {
+                $associates_id = $_POST['associates_id'];
+                $work_status = "assigned";
+            }else{
+                $associates_id = NULL;
+                $work_status = "unassigned";
             }
             $fname = $_POST['fname'];
             $lname = $_POST['lname'];
@@ -212,6 +219,7 @@ if($route == '/join/$firm_id/$invite'):
                 try {
 
                     $h->table('users')->insertOne([
+                        'associates_id' => $associates_id,
                         'firm_id' => $firm_id,
                         'fname' => $fname,
                         'lname' => $lname,
@@ -219,7 +227,19 @@ if($route == '/join/$firm_id/$invite'):
                         'phone' => $phone,
                         'password' => $hashed_password,
                         'type' => $invite,
+                        'work_status' => $work_status,
                     ]);
+                    $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                    @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                    @$company_phone =  @$AdminInfo[0]['phone'];
+                    @$company_email =  @$AdminInfo[0]['email'];
+                    @$company_address =  @$AdminInfo[0]['address'];
+                    @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                    @$company_tweet =  @$AdminInfo[0]['tweet'];
+                    @$company_facebook =  @$AdminInfo[0]['facebook'];
+                    @$company_github =  @$AdminInfo[0]['github'];
+                    @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                    $UserInfo = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
                     include "views/email-template/WelcomeRegister.php";
                     mailSender($env['SENDER_EMAIL'],$email,'Welcome at - '.$env['SITE_NAME'],$message,$mail);
                     echo "1";
@@ -246,6 +266,36 @@ if($route == '/join/$firm_id/$invite'):
             'description' => '',
             'keywords' => 'sign up, register, create account'
         );
-        echo $twig->render('auth/register.twig', ['seo'=>$seo , 'firm_id'=>$firm_id,'invite'=>$invite, 'csrf'=>set_csrf()]);
+        echo $twig->render('auth/register.twig', ['seo'=>$seo , 'email'=>$email,'associates_id'=>$associates_id, 'firm_id'=>$firm_id,'invite'=>$invite, 'csrf'=>set_csrf()]);
+    }
+endif;
+if($route == '/user/member/login_as_client'):
+
+    $client_id = $_POST['client_id'];
+unset($_SESSION['member_id']);
+    $_SESSION['member_id'] = $loginUserId;
+            $clientData = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
+    unset($_SESSION['users']);
+    $_SESSION['users'] = $clientData[0];
+    if (!empty($_SESSION['users'])){
+        echo '1';
+        exit();
+    }else{
+        echo '0';
+        exit();
+    }
+endif;
+if($route == '/user/member/login_as_member'):
+    unset($_SESSION['member_id']);
+    $member_id = $_POST['member_id'];
+    $clientData = $h->table('users')->select()->where('id', '=', $member_id)->fetchAll();
+    unset($_SESSION['users']);
+    $_SESSION['users'] = $clientData[0];
+    if (!empty($_SESSION['users'])){
+        echo '1';
+        exit();
+    }else{
+        echo '0';
+        exit();
     }
 endif;

@@ -10,17 +10,30 @@ if ($route == '/user/get_user'):
     }
 endif;
     if ($route == '/user/user_edit'):
+
         if (!empty($_POST['fname']) && !empty($_POST['lname'])) {
+            @$id = $_POST['id'];
+            $users = $h->table('users')->select()->where('id', '=', $id)->fetchAll();
             @$fname = $_POST['fname'];
             @$lname = $_POST['lname'];
             @$phone = $_POST['phone'];
-            @$id = $_POST['id'];
+            if (!empty($_POST['associates_update_id'])){
+                @$associates_update_id = $_POST['associates_update_id'];
+            }else{
+                @$associates_update_id = NULL;
+            }
+         if(!empty($associates_update_id) && $associates_update_id != '' && $users[0]['work_status'] == 'unassigned'){
+             $work_status = "assigned";
+         }else{
+             $work_status = $users[0]['work_status'];
+         }
+
             @$password = $_POST['password'];
             @$confirmPassword = $_POST['cpassword'];
             if (!empty($password) &&  !empty($confirmPassword)) {
                 if ($password === $confirmPassword) {
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                    $update = $h->update('users')->values([ 'fname' => $fname, 'lname' => $lname, 'phone' => $phone, 'password' => $hashedPassword])->where('id','=',$id)->run();
+                    $update = $h->update('users')->values([ 'associates_id' => $associates_update_id,'fname' => $fname, 'lname' => $lname, 'phone' => $phone, 'password' => $hashedPassword, 'work_status' => $work_status])->where('id','=',$id)->run();
                     echo "1";
                     exit();
                 }else{
@@ -29,7 +42,7 @@ endif;
                 }
 
             }else{
-                $update = $h->update('users')->values([ 'fname' => $fname, 'lname' => $lname, 'phone' => $phone])->where('id','=',$id)->run();
+                $update = $h->update('users')->values([ 'associates_id' => $associates_update_id,'fname' => $fname, 'lname' => $lname, 'phone' => $phone, 'work_status' => $work_status])->where('id','=',$id)->run();
                 echo "1";
                 exit();
             }
@@ -44,6 +57,14 @@ endif;
             @$lname = $_POST['lname'];
             @$phone = $_POST['phone'];
             @$firm_id = $_POST['firm_id'];
+            if (!empty($_POST['associates_add_id'])){
+                @$associates_add_id = $_POST['associates_add_id'];
+                $work_status = "assigned";
+            }else{
+                @$associates_add_id = NULL;
+                $work_status = "unassigned";
+            }
+
             @$type = $_POST['type'];
                 $email=$_POST['email'];
             @$password = $_POST['password'];
@@ -60,7 +81,7 @@ endif;
             $userAvailable = $h->table('users')->select()->where('email', '=', $email);
             if($userAvailable->count() < 1){
             try {
-            $insert = $h->insert('users')->values([ 'firm_id' => $firm_id,'fname' => $fname, 'lname' => $lname, 'email' => $email, 'phone' => $phone,'type' => $type, 'password' => $hashed_password])->run();
+            $insert = $h->insert('users')->values([ 'associates_id' => $associates_add_id,'firm_id' => $firm_id,'fname' => $fname, 'lname' => $lname, 'email' => $email, 'phone' => $phone,'type' => $type, 'password' => $hashed_password])->run();
             echo "1";
             exit();
         } catch (PDOException $e) {

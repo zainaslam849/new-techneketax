@@ -1,0 +1,263 @@
+{% extends 'user/master.twig' %}
+{% block content %}
+    <style>
+        .tagify__input{
+            padding:0px !important;
+        }
+        .radioButton {
+            float: left;
+            margin: 0 5px 0 0;
+            width: 100%;
+            height: 100px;
+            position: relative;
+        }
+
+        .radioButton label,
+        .radioButton input {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .radioButton input[type="checkbox"] {
+            opacity: 0.011;
+            z-index: 100;
+        }
+
+        .radioButton input[type="checkbox"]:checked + label > button {
+            background: #ED141F;
+            color: white;
+            border-color: #ED141F;
+        }
+
+        .radioButton label {
+            cursor: pointer;
+            z-index: 90;
+            line-height: 70px;
+        }
+
+        .radioButton label > button {
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            background-color: transparent;
+            border: 1px solid #000;
+            color: #000;
+            font-size: 16px;
+        }
+    </style>
+    <!--  BEGIN CONTENT AREA  -->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Toolbar-->
+        <div class="toolbar" id="kt_toolbar">
+            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                    <!--begin::Title-->
+                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Manage Clients</h1>
+                    <!--end::Title-->
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-300 border-start mx-4"></span>
+                    <!--end::Separator-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">Users</li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-dark">Manage Clients</li>
+                        <!--end::Item-->
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+            </div>
+        </div>
+        <div class="post d-flex flex-column-fluid" id="kt_post">
+            <!--begin::Container-->
+            <div id="kt_content_container" class="container-fluid">
+                <div class="layout-px-spacing">
+
+                    <div class="middle-content container-fluid p-0">
+                        <div id="call-ringing"></div>
+                        <div class="row layout-spacing">
+                            <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                                <div class="widget-content widget-content-area card">
+                                    <div class="card-header border-0 pt-6 w-100">
+                                        <div class="col-md-6 mt-3 text-md-start text-center">
+                                            <div class="d-flex align-items-center position-relative my-1">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+														<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+													</svg>
+												</span>
+                                                <!--end::Svg Icon-->
+                                                <input type="text" data-kt-customer-table-filter="search" id="search" class="form-control form-control-solid w-250px ps-15" placeholder="Search " />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mt-3 text-md-end text-center">
+
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table id="table"  class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" style="width:100%">
+                                            <thead>
+                                            <tr>
+                                                <th class="min-w-40px"> Id </th>
+                                                <th class="min-w-125px">Member Profile</th>
+                                                <th class="min-w-125px">Client Profile</th>
+                                                <th class="min-w-125px">Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editPerModal" tabindex="-1" aria-labelledby="editPerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-650px">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Give Permissions To Associate</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+                </div>
+                <div class="modal-body scroll-y mx-5 mx-xl-5 my-7">
+                    <form  method="post" id="editPerForm" enctype="multipart/form-data">
+                        <input type="hidden" name="csrf" value="{{ csrf}}">
+                        <input type="hidden" name="id_per" id="id_per">
+                        <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll"
+                             data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                             data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header"
+                             data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px"
+                             style="max-height: 570px;">
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <div class="row">
+                                    {% for permission in permissions %}
+                                        <div class=" col-md-6 mt-2">
+                                            <div class="radioButton" style="margin-right: 10px">
+                                                <input class=" m4 required-input" type="checkbox" name="permissions[]" id="{{ permission[0].id }}"
+                                                       value="{{ permission[0].value }}">
+                                                <label  for="{{ permission[0].id }}"><button type="button" class="btn btn-light-primary">{{ permission[0].title }}</button></label>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer justify-content-center">
+                            <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" name="add_new" id="btn-per" class="btn btn-primary" onclick="permission_tool()">Give Permissions To Associate</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!--  END CONTENT AREA  -->
+    <script>
+        $(document).ready(function () {
+            var csrf_token = $("input[name=csrf]").val();
+            var table = $('#table').dataTable({
+                "language": {
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+                },
+                "responsive": true,
+                "bProcessing": true,
+                "sAjaxSource": "/user/api?page_name=view_manage_clients&csrf="+csrf_token,
+                "bPaginate": true,
+                "sPaginationType": "full_numbers",
+                "iDisplayLength": 10,
+                "aoColumns": [
+                    {mData: 'ids'},
+                    {mData: 'memberView'},
+                    {mData: 'clientView'},
+                    {mData: 'action'},
+                ]
+            });
+            $('#search').on('keyup', function() {
+                $('#table').DataTable().search(this.value).draw();
+            });
+        });
+        $('body').on('click', '.edit', function () {
+            var id = $(this).data('id');
+
+            $('#editUploadForm').trigger("reset");
+
+            $.ajax({
+                url: "/user/get_user",
+                type: "POST",
+                data: {
+                    edit: 1,
+                    id: id,
+                },
+                cache: false,
+                success: function (dataResult) {
+
+                    var dataResult = JSON.parse(dataResult);
+                    console.log(dataResult);
+                    $('#id_per').val(dataResult[0].id);
+                    $('#fname').val(dataResult[0].fname);
+                    $('#lname').val(dataResult[0].lname);
+                    $('#email').val(dataResult[0].email);
+                    $('#phone').val(dataResult[0].phone);
+                    $('input[name=id]').val(dataResult[0].id);
+                    var permissions = dataResult[0].permissions.split(',');
+                    permissions.forEach(permissions => {
+                        $('#editPerModal input[name="permissions[]"][value="' + permissions.trim() + '"]').prop('checked', true);
+                    });
+                }
+            });
+        });
+        function permission_tool() {
+            var form_Data = new FormData(document.getElementById("editPerForm"));
+            document.getElementById("btn-per").innerHTML = "Loading";
+            document.getElementById('btn-per').disabled = false;
+            $.ajax({
+                url: "/user/user_per",
+                type: "POST",
+                data: form_Data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (dataResult) {
+                    console.log(dataResult);
+                    document.getElementById("btn-per").innerHTML = "Give Permissions";
+                    document.getElementById('btn-per').disabled = false;
+                    if (dataResult == 1) {
+                        $('#table').DataTable().ajax.reload(null, false);
+                        $('#editPerModal').modal('hide');
+                        toastr.success('Associates Permissions Updated Successfully.');
+                        document.getElementById("editPerForm").reset();
+
+                    } else {
+                        toastr.error('Somthing Went Wrong.');
+                    }
+
+                }
+            });
+        }
+    </script>
+{% endblock %}

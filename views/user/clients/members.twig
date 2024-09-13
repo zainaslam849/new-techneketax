@@ -1,6 +1,55 @@
 {% extends 'user/master.twig' %}
 {% block content %}
 
+    <style>
+        .tagify__input{
+            padding:0px !important;
+        }
+        .radioButton {
+            float: left;
+            margin: 0 5px 0 0;
+            width: 100%;
+            height: 100px;
+            position: relative;
+        }
+
+        .radioButton label,
+        .radioButton input {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .radioButton input[type="checkbox"] {
+            opacity: 0.011;
+            z-index: 100;
+        }
+
+        .radioButton input[type="checkbox"]:checked + label > button {
+            background: #ED141F;
+            color: white;
+            border-color: #ED141F;
+        }
+
+        .radioButton label {
+            cursor: pointer;
+            z-index: 90;
+            line-height: 70px;
+        }
+
+        .radioButton label > button {
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            background-color: transparent;
+            border: 1px solid #000;
+            color: #000;
+            font-size: 16px;
+        }
+    </style>
     <!--  BEGIN CONTENT AREA  -->
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
         <!--begin::Toolbar-->
@@ -145,6 +194,46 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="editPerModal" tabindex="-1" aria-labelledby="editPerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-650px">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Give Permissions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+                </div>
+                <div class="modal-body scroll-y mx-5 mx-xl-5 my-7">
+                    <form  method="post" id="editPerForm" enctype="multipart/form-data">
+                        <input type="hidden" name="csrf" value="{{ csrf}}">
+                        <input type="hidden" name="id_per" id="id_per">
+                        <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll"
+                             data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                             data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header"
+                             data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px"
+                             style="max-height: 570px;">
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <div class="row">
+                                    {% for permission in permissions %}
+                                        <div class=" col-md-6 mt-2">
+                                            <div class="radioButton" style="margin-right: 10px">
+                                                <input class=" m4 required-input" type="checkbox" name="permissions[]" id="{{ permission[0].id }}"
+                                                       value="{{ permission[0].value }}">
+                                                <label  for="{{ permission[0].id }}"><button type="button" class="btn btn-light-primary">{{ permission[0].title }}</button></label>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer justify-content-center">
+                            <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" name="add_new" id="btn-per" class="btn btn-primary" onclick="permission_tool()">Give Permissions</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!--  END CONTENT AREA  -->
     <script>
@@ -242,13 +331,12 @@
 
                     var dataResult = JSON.parse(dataResult);
                     console.log(dataResult);
+                    $('#id_per').val(dataResult[0].id);
                     $('#fname').val(dataResult[0].fname);
                     $('#lname').val(dataResult[0].lname);
                     $('#email').val(dataResult[0].email);
                     $('#phone').val(dataResult[0].phone);
                     $('input[name=id]').val(dataResult[0].id);
-
-
                 }
             });
         });
@@ -273,13 +361,41 @@
                         $('#table').DataTable().ajax.reload(null, false);
                         $("#btn-profile").removeAttr("enabled");
                         $('#editExampleModal').modal('hide');
-                        toastr.success('Client Updated Successfully.');
+                        toastr.success('Associates Updated Successfully.');
                         document.getElementById("editUploadForm").reset();
 
                     } else if (dataResult == 2) {
                         toastr.error("Password doesn't Matched.");
                     } else if (dataResult == 3) {
                         toastr.error("Required fields are empty!");
+                    } else {
+                        toastr.error('Somthing Went Wrong.');
+                    }
+
+                }
+            });
+        }
+        function permission_tool() {
+            var form_Data = new FormData(document.getElementById("editPerForm"));
+            document.getElementById("btn-per").innerHTML = "Loading";
+            document.getElementById('btn-per').disabled = false;
+            $.ajax({
+                url: "/user/user_per",
+                type: "POST",
+                data: form_Data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (dataResult) {
+                    console.log(dataResult);
+                    document.getElementById("btn-per").innerHTML = "Give Permissions";
+                    document.getElementById('btn-per').disabled = false;
+                    if (dataResult == 1) {
+                        $('#table').DataTable().ajax.reload(null, false);
+                        $('#editPerModal').modal('hide');
+                        toastr.success('Associates Permissions Updated Successfully.');
+                        document.getElementById("editPerForm").reset();
+
                     } else {
                         toastr.error('Somthing Went Wrong.');
                     }

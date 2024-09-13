@@ -18,14 +18,16 @@
     {{ include('user/includes/styles.twig') }}
 </head>
 <!--begin::Body-->
-<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed" style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
-<!--begin::Main-->
-<!--begin::Root-->
+<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed {% if loginType == 'client' or loginType == 'firm' %} aside-enabled aside-fixed {% endif %}" style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
+
 <div class="d-flex flex-column flex-root">
     <!--begin::Page-->
     <div class="page d-flex flex-row flex-column-fluid">
+        {% if loginType == 'client' %}
+            {{ include('user/includes/client_sidebar.twig') }}
+        {% elseif loginType == 'firm' %}
             {{ include('user/includes/sidebar.twig') }}
-
+        {% endif %}
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
             {{ include('user/includes/navbar.twig') }}
             <div id="call-ringing"></div>

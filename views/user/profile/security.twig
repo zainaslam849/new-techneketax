@@ -5,7 +5,7 @@
         <!--begin::Toolbar-->
         <div class="toolbar" id="kt_toolbar">
             <!--begin::Container-->
-            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <div id="kt_toolbar_container" class="{% if loginType == 'client' or loginType == 'firm' %}container-fluid{% else %}container-xxl{% endif %} d-flex flex-stack">
                 <!--begin::Page title-->
                 <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                     <!--begin::Title-->
@@ -46,7 +46,7 @@
         <!--begin::Post-->
         <div class="post d-flex flex-column-fluid" id="kt_post">
             <!--begin::Container-->
-            <div id="kt_content_container" class="container-fluid">
+            <div id="kt_content_container" class="{% if loginType == 'client' or loginType == 'firm' %}container-fluid{% else %}container-xxl{% endif %}">
                 <!--begin::Navbar-->
                 <div class="card mb-5 mb-xl-10">
                     <div class="card-body pt-9 pb-0">
@@ -86,6 +86,7 @@
                                     </div>
 
                                 </div>
+                                {% if loginType != 'member' %}
                                 <div class="d-flex flex-wrap flex-stack">
                                     <div class="d-flex flex-column flex-grow-1 pe-8">
                                         <div class="d-flex flex-wrap">
@@ -150,6 +151,7 @@
                                     </div>
 
                                 </div>
+                                {% endif %}
                             </div>
                         </div>
                         <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder">
@@ -165,12 +167,14 @@
                             <li class="nav-item mt-2">
                                 <a class="nav-link text-active-primary ms-0 me-10 py-5 active" href="/user/profile/security">Security</a>
                             </li>
+                            {% if loginType != 'member' %}
                             <li class="nav-item mt-2">
                                 <a class="nav-link text-active-primary ms-0 me-10 py-5" href="/user/profile/billing">Billing</a>
                             </li>
                             <li class="nav-item mt-2">
                                 <a class="nav-link text-active-primary ms-0 me-10 py-5 " href="/user/profile/paymentMethod">Payment Method</a>
                             </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -253,6 +257,7 @@
                                 </div>
                                 <!--end::Wrapper-->
                             </div>
+                            {% if loginType == 'firm' %}
                             <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed p-6 mt-5">
                                 <!--begin::Icon-->
                                 <!--begin::Svg Icon | path: icons/duotune/general/gen048.svg-->
@@ -282,6 +287,7 @@
                                 </div>
                                 <!--end::Wrapper-->
                             </div>
+                            {% endif %}
                             <!--end::Notice-->
                         </div>
                         <!--end::Card body-->

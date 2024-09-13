@@ -17,8 +17,8 @@ post('/login/$path', 'controller/auth/AuthController.php');
 get('/register', 'controller/auth/AuthController.php');
 post('/register', 'controller/auth/AuthController.php');
 
-get('/join/$firm_id/$invite', 'controller/auth/AuthController.php');
-post('/join/$firm_id/$invite', 'controller/auth/AuthController.php');
+get('/join/$firm_id/$associates_id/$email/$invite', 'controller/auth/AuthController.php');
+post('/join/$firm_id/$associates_id/$email/$invite', 'controller/auth/AuthController.php');
 get('/forget-password', 'controller/auth/AuthController.php');
 post('/forget-password', 'controller/auth/AuthController.php');
 get('/invoice/view/$invoice_id', 'controller/users/InvoiceController.php');
@@ -42,133 +42,242 @@ endif;
 //get('/api/relatedListings', 'controller/public/PublicApi.php');
 //get('/api/galleryImages', 'controller/public/PublicApi.php');
 //get('/api/schedule-tour', 'controller/public/PublicApi.php');
-
-
-
 //USER DASHBOARD
 if(@$_SESSION['users']['type'] == 'firm' || @$_SESSION['users']['type'] == 'client' || @$_SESSION['users']['type'] == 'member'):
-
-    get('/user/appointment/cronjob', 'controller/users/AppointmentCronjobController.php');
-    post('/user/appointment/cronjob', 'controller/users/AppointmentCronjobController.php');
-get('/user/api', 'controller/users/UserApi.php');
-get('/user/dashboard', 'controller/users/DashboardController.php');
-get('/user/appointments', 'controller/users/AppointmentsController.php');
-get('/user/get_appointment', 'controller/users/AppointmentsController.php');
-get('/user/get_users', 'controller/users/AppointmentsController.php');
-post('/user/add/appointments', 'controller/users/AppointmentsController.php');
-post('/user/update/appointments', 'controller/users/AppointmentsController.php');
-    post('/client/download/document', 'controller/users/DocumentController.php');
-get('/user/document', 'controller/users/DocumentController.php');
-    get('/user/dochubdetails/$id', 'controller/users/DocumentController.php');
-    post('/user/dochubdetails/$id', 'controller/users/DocumentController.php');
-
-if(@$_SESSION['users']['type'] == 'firm'):
-    get('/user/template/all', 'controller/users/TemplatesController.php');
-    get('/user/template/interview-list/$slug', 'controller/users/TemplatesController.php');
-
-endif;
-if(@$_SESSION['users']['type'] == 'client'):
-    get('/client/document', 'controller/users/DocumentController.php');
-    post('/client/document/add', 'controller/users/DocumentController.php');
-    get('/client/template/request', 'controller/users/TemplatesController.php');
-
-    get('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
-    post('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
-    endif;
-    post('/user/request_for_document', 'controller/users/DocumentController.php');
-    get('/user/upload/document/all', 'controller/users/DocumentController.php');
-    post('/user/upload/document/all', 'controller/users/DocumentController.php');
-
-
-get('/user/chat', 'controller/users/ChatController.php');
-get('/user/chat/$user_id', 'controller/users/ChatController.php');
-get('/user/group/$groupId', 'controller/users/GroupChatController.php');
-get('/group/del/$groupId', 'controller/users/GroupChatController.php');
-post('/group/delete/$group_id/$member_id', 'controller/users/GroupChatController.php');
-post('/group/add-members', 'controller/users/GroupChatController.php');
-
-get('/chat/messages/group/$groupId', 'controller/users/ChatController.php');
-
-get('/chat/users', 'controller/users/ChatController.php');
-get('/chat/messages/$userId', 'controller/users/ChatController.php');
-post('/chat/upload-file', 'controller/users/ChatController.php');
-post('/chat/send-group-message', 'controller/users/ChatController.php');
-post('/group/create', 'controller/users/ChatController.php');
-
-
-
-
-get('/call/ring/$userId', 'controller/users/ChatController.php');
-get('/video-call/ring/$userId', 'controller/users/ChatController.php');
-get('/video-call/$room_id', 'controller/users/ChatController.php');
-post('/call/check', 'controller/users/ChatController.php');
-post('/call/status', 'controller/users/ChatController.php');
-post('/call/hangup/$room_id', 'controller/users/ChatController.php');
-get('/user/file', 'controller/users/FilemanagerController.php');
-get('/file', 'controller/users/FilemanagerController.php');
-get('/user/files', 'controller/users/FilemanagerController.php');
-post('/user/file/del', 'controller/users/FilemanagerController.php');
-post('/user/file/del-all', 'controller/users/FilemanagerController.php');
-
-post('/user/file/upload', 'controller/users/FilemanagerController.php');
-
-get('/file-manager', 'controller/users/FilemanagerController.php');
-
-get('/user/invoices', 'controller/users/InvoiceController.php');
-get('/user/invoice/add', 'controller/users/InvoiceController.php');
-post('/user/invoice/add', 'controller/users/InvoiceController.php');
-get('/user/invoice/update/$id', 'controller/users/InvoiceController.php');
-post('/user/invoice/update', 'controller/users/InvoiceController.php');
-post('/user/get_client_invoice', 'controller/users/InvoiceController.php');
-get('/user/invoice/view/$invoice_id', 'controller/users/InvoiceController.php');
-// profile
-get('/user/profile', 'controller/users/ProfileController.php');
-get('/user/firm-info', 'controller/users/ProfileController.php');
-post('/user/firm-info', 'controller/users/ProfileController.php');
-get('/user/profile/settings', 'controller/users/ProfileController.php');
-get('/user/profile/security', 'controller/users/ProfileController.php');
-get('/user/profile/paymentMethod', 'controller/users/ProfileController.php');
-get('/user/profile/billing', 'controller/users/ProfileController.php');
-post('/user/profile', 'controller/users/ProfileController.php');
-post('/user/fetch_profile', 'controller/users/ProfileController.php');
-post('/user/bank/profile', 'controller/users/ProfileController.php');
-post('/user/profile/password_change', 'controller/users/ProfileController.php');
-post('/user/add_billing_address', 'controller/users/ProfileController.php');
-post('/user/get_billing_address', 'controller/users/ProfileController.php');
-post('/user/update_billing_address', 'controller/users/ProfileController.php');
-post('/user/add_payment_method', 'controller/users/ProfileController.php');
-post('/user/get_payment_method', 'controller/users/ProfileController.php');
-post('/user/update_payment_method', 'controller/users/ProfileController.php');
-// user
-post('/user/get_user', 'controller/users/UsersController.php');
-post('/user/add_user', 'controller/users/UsersController.php');
-post('/user/user_edit', 'controller/users/UsersController.php');
-get('/user/clients', 'controller/users/ClientsController.php');
-get('/user/members', 'controller/users/ClientsController.php');
-post('/user/send_invite', 'controller/users/ClientsController.php');
-// plans
-    if(@$_SESSION['users']['type'] == 'firm'):
-get('/user/plans', 'controller/users/PlansController.php');
-    endif;
+if (!empty(@$plan_id) && @$plan_id != '' && $current_date <= @$plan_end_date ){
+    if (in_array('Appointment_Scheduling', $permissionValues)) {
+        if (!empty($_SESSION['member_id'])){
+            if (in_array('Appointment_Scheduling', $permissionFirmValues)) {
+                get('/user/appointment/cronjob', 'controller/users/AppointmentCronjobController.php');
+                post('/user/appointment/cronjob', 'controller/users/AppointmentCronjobController.php');
+                get('/user/appointments', 'controller/users/AppointmentsController.php');
+                get('/user/get_appointment', 'controller/users/AppointmentsController.php');
+                get('/user/get_users', 'controller/users/AppointmentsController.php');
+                post('/user/add/appointments', 'controller/users/AppointmentsController.php');
+                post('/user/update/appointments', 'controller/users/AppointmentsController.php');
+            }
+        }else{
+            get('/user/appointment/cronjob', 'controller/users/AppointmentCronjobController.php');
+            post('/user/appointment/cronjob', 'controller/users/AppointmentCronjobController.php');
+            get('/user/appointments', 'controller/users/AppointmentsController.php');
+            get('/user/get_appointment', 'controller/users/AppointmentsController.php');
+            get('/user/get_users', 'controller/users/AppointmentsController.php');
+            post('/user/add/appointments', 'controller/users/AppointmentsController.php');
+            post('/user/update/appointments', 'controller/users/AppointmentsController.php');
+        }
+        }
+    if (in_array('Secured_Document_Hub', $permissionValues)) {
+        if (!empty($_SESSION['member_id'])){
+            if (in_array('Secured_Document_Hub', $permissionFirmValues)) {
+                if (@$_SESSION['users']['type'] == 'client'):
+                    get('/client/document', 'controller/users/DocumentController.php');
+                    post('/client/document/add', 'controller/users/DocumentController.php');
+                    get('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
+                    post('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
+                endif;
+                post('/client/download/document', 'controller/users/DocumentController.php');
+                get('/user/document', 'controller/users/DocumentController.php');
+                get('/user/dochubdetails/$id', 'controller/users/DocumentController.php');
+                post('/user/dochubdetails/$id', 'controller/users/DocumentController.php');
+                post('/user/request_for_document', 'controller/users/DocumentController.php');
+                get('/user/upload/document/all', 'controller/users/DocumentController.php');
+                post('/user/upload/document/all', 'controller/users/DocumentController.php');
+            }
+            }else{
+            if (@$_SESSION['users']['type'] == 'client'):
+                get('/client/document', 'controller/users/DocumentController.php');
+                post('/client/document/add', 'controller/users/DocumentController.php');
+                get('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
+                post('/client/dochubdetails/$id', 'controller/users/DocumentController.php');
+            endif;
+            post('/client/download/document', 'controller/users/DocumentController.php');
+            get('/user/document', 'controller/users/DocumentController.php');
+            get('/user/dochubdetails/$id', 'controller/users/DocumentController.php');
+            post('/user/dochubdetails/$id', 'controller/users/DocumentController.php');
+            post('/user/request_for_document', 'controller/users/DocumentController.php');
+            get('/user/upload/document/all', 'controller/users/DocumentController.php');
+            post('/user/upload/document/all', 'controller/users/DocumentController.php');
+    }
+}
+    if (in_array('SMS_Text', $permissionValues)) {
+        if (!empty($_SESSION['member_id'])){
+            if (in_array('SMS_Text', $permissionFirmValues)) {
+            get('/user/chat', 'controller/users/ChatController.php');
+            get('/user/chat/$user_id', 'controller/users/ChatController.php');
+            get('/user/group/$groupId', 'controller/users/GroupChatController.php');
+            get('/group/del/$groupId', 'controller/users/GroupChatController.php');
+            post('/group/delete/$group_id/$member_id', 'controller/users/GroupChatController.php');
+            post('/group/add-members', 'controller/users/GroupChatController.php');
+            get('/chat/messages/group/$groupId', 'controller/users/ChatController.php');
+            get('/chat/users', 'controller/users/ChatController.php');
+            get('/chat/messages/$userId', 'controller/users/ChatController.php');
+            post('/chat/upload-file', 'controller/users/ChatController.php');
+            post('/chat/send-group-message', 'controller/users/ChatController.php');
+            post('/group/create', 'controller/users/ChatController.php');
+            get('/call/ring/$userId', 'controller/users/ChatController.php');
+            get('/video-call/ring/$userId', 'controller/users/ChatController.php');
+            get('/video-call/$room_id', 'controller/users/ChatController.php');
+            post('/call/check', 'controller/users/ChatController.php');
+            post('/call/status', 'controller/users/ChatController.php');
+            post('/call/hangup/$room_id', 'controller/users/ChatController.php');
+    }
+        }else{
+            get('/user/chat', 'controller/users/ChatController.php');
+            get('/user/chat/$user_id', 'controller/users/ChatController.php');
+            get('/user/group/$groupId', 'controller/users/GroupChatController.php');
+            get('/group/del/$groupId', 'controller/users/GroupChatController.php');
+            post('/group/delete/$group_id/$member_id', 'controller/users/GroupChatController.php');
+            post('/group/add-members', 'controller/users/GroupChatController.php');
+            get('/chat/messages/group/$groupId', 'controller/users/ChatController.php');
+            get('/chat/users', 'controller/users/ChatController.php');
+            get('/chat/messages/$userId', 'controller/users/ChatController.php');
+            post('/chat/upload-file', 'controller/users/ChatController.php');
+            post('/chat/send-group-message', 'controller/users/ChatController.php');
+            post('/group/create', 'controller/users/ChatController.php');
+            get('/call/ring/$userId', 'controller/users/ChatController.php');
+            get('/video-call/ring/$userId', 'controller/users/ChatController.php');
+            get('/video-call/$room_id', 'controller/users/ChatController.php');
+            post('/call/check', 'controller/users/ChatController.php');
+            post('/call/status', 'controller/users/ChatController.php');
+            post('/call/hangup/$room_id', 'controller/users/ChatController.php');
+        }
+        }
+    if (in_array('File_Manager', $permissionValues)) {
+        if (!empty($_SESSION['member_id'])) {
+            if (in_array('File_Manager', $permissionFirmValues)) {
+                get('/user/file', 'controller/users/FilemanagerController.php');
+                get('/file', 'controller/users/FilemanagerController.php');
+                get('/user/files', 'controller/users/FilemanagerController.php');
+                post('/user/file/del', 'controller/users/FilemanagerController.php');
+                post('/user/file/del-all', 'controller/users/FilemanagerController.php');
+                post('/user/file/upload', 'controller/users/FilemanagerController.php');
+                get('/file-manager', 'controller/users/FilemanagerController.php');
+            }
+        } else {
+            get('/user/file', 'controller/users/FilemanagerController.php');
+            get('/file', 'controller/users/FilemanagerController.php');
+            get('/user/files', 'controller/users/FilemanagerController.php');
+            post('/user/file/del', 'controller/users/FilemanagerController.php');
+            post('/user/file/del-all', 'controller/users/FilemanagerController.php');
+            post('/user/file/upload', 'controller/users/FilemanagerController.php');
+            get('/file-manager', 'controller/users/FilemanagerController.php');
+        }
+    }
+    if (in_array('Invoice_and_Payments', $permissionValues)) {
+        if (!empty($_SESSION['member_id'])) {
+            if (in_array('Invoice_and_Payments', $permissionFirmValues)) {
+                get('/user/invoices', 'controller/users/InvoiceController.php');
+                get('/user/invoice/add', 'controller/users/InvoiceController.php');
+                post('/user/invoice/add', 'controller/users/InvoiceController.php');
+                get('/user/invoice/update/$id', 'controller/users/InvoiceController.php');
+                post('/user/invoice/update', 'controller/users/InvoiceController.php');
+                post('/user/get_client_invoice', 'controller/users/InvoiceController.php');
+                get('/user/invoice/view/$invoice_id', 'controller/users/InvoiceController.php');
+            }
+        } else {
+            get('/user/invoices', 'controller/users/InvoiceController.php');
+            get('/user/invoice/add', 'controller/users/InvoiceController.php');
+            post('/user/invoice/add', 'controller/users/InvoiceController.php');
+            get('/user/invoice/update/$id', 'controller/users/InvoiceController.php');
+            post('/user/invoice/update', 'controller/users/InvoiceController.php');
+            post('/user/get_client_invoice', 'controller/users/InvoiceController.php');
+            get('/user/invoice/view/$invoice_id', 'controller/users/InvoiceController.php');
+        }
+    }
 // interviews
-get('/user/interviews/all', 'controller/users/InterviewsController.php');
-get('/user/interviews/questions', 'controller/users/InterviewsController.php');
-post('/user/interviews/questions', 'controller/users/InterviewsController.php');
+  if (in_array('Funnels', $permissionValues)) {
+      if (!empty($_SESSION['member_id'])) {
+          if (in_array('Funnels', $permissionFirmValues)) {
+              get('/user/template/all', 'controller/users/TemplatesController.php');
+              get('/user/template/interview-list/$slug', 'controller/users/TemplatesController.php');
 
-
-get('/user/interviews/questions/update/$sectionId', 'controller/users/InterviewsController.php');
-post('/user/interviews/questions/update/$sectionId', 'controller/users/InterviewsController.php');
-
+              get('/user/interviews/all', 'controller/users/InterviewsController.php');
+              get('/user/interviews/questions', 'controller/users/InterviewsController.php');
+              post('/user/interviews/questions', 'controller/users/InterviewsController.php');
+              get('/user/interviews/questions/update/$sectionId', 'controller/users/InterviewsController.php');
+              post('/user/interviews/questions/update/$sectionId', 'controller/users/InterviewsController.php');
 // Templates
-    get('/user/template/create', 'controller/users/TemplatesController.php');
-    get('/user/template/create/$templateId', 'controller/users/TemplatesController.php');
-    post('/user/template/create', 'controller/users/TemplatesController.php');
-    post('/user/template/get', 'controller/users/TemplatesController.php');
-    post('/user/templates/send_request', 'controller/users/TemplatesController.php');
+              get('/user/template/create', 'controller/users/TemplatesController.php');
+              get('/user/template/create/$templateId', 'controller/users/TemplatesController.php');
+              post('/user/template/create', 'controller/users/TemplatesController.php');
+              post('/user/template/get', 'controller/users/TemplatesController.php');
+              post('/user/templates/send_request', 'controller/users/TemplatesController.php');
+              get('/user/template/view/$slug', 'controller/users/TemplatesController.php');
+              post('/user/template/view', 'controller/users/TemplatesController.php');
+              get('/user/template/display-data/$userId/$templateId', 'controller/users/TemplatesController.php');
+              if (@$_SESSION['users']['type'] == 'client'):
+                  get('/client/template/request', 'controller/users/TemplatesController.php');
+              endif;
+          }
+      } else {
+          get('/user/template/all', 'controller/users/TemplatesController.php');
+          get('/user/template/interview-list/$slug', 'controller/users/TemplatesController.php');
 
-    get('/user/template/view/$slug', 'controller/users/TemplatesController.php');
-    post('/user/template/view', 'controller/users/TemplatesController.php');
-    get('/user/template/display-data/$userId/$templateId', 'controller/users/TemplatesController.php');
+          get('/user/interviews/all', 'controller/users/InterviewsController.php');
+          get('/user/interviews/questions', 'controller/users/InterviewsController.php');
+          post('/user/interviews/questions', 'controller/users/InterviewsController.php');
+          get('/user/interviews/questions/update/$sectionId', 'controller/users/InterviewsController.php');
+          post('/user/interviews/questions/update/$sectionId', 'controller/users/InterviewsController.php');
+// Templates
+          get('/user/template/create', 'controller/users/TemplatesController.php');
+          get('/user/template/create/$templateId', 'controller/users/TemplatesController.php');
+          post('/user/template/create', 'controller/users/TemplatesController.php');
+          post('/user/template/get', 'controller/users/TemplatesController.php');
+          post('/user/templates/send_request', 'controller/users/TemplatesController.php');
+          get('/user/template/view/$slug', 'controller/users/TemplatesController.php');
+          post('/user/template/view', 'controller/users/TemplatesController.php');
+          get('/user/template/display-data/$userId/$templateId', 'controller/users/TemplatesController.php');
+          if (@$_SESSION['users']['type'] == 'client'):
+              get('/client/template/request', 'controller/users/TemplatesController.php');
+          endif;
+      }
+  }
+    if (in_array('Associate_Accounts', $permissionValues)) {
+                get('/user/clients', 'controller/users/ClientsController.php');
+                get('/user/members', 'controller/users/ClientsController.php');
+                get('/user/manage/clients', 'controller/users/ClientsController.php');
+                post('/user/send_invite', 'controller/users/ClientsController.php');
+                post('/user/user_per', 'controller/users/ClientsController.php');
+                post('/user/user_edit', 'controller/users/UsersController.php');
+                post('/user/get_user', 'controller/users/UsersController.php');
+                post('/user/add_user', 'controller/users/UsersController.php');
+
+}
+}
+    post('/user/member/login_as_client', 'controller/auth/AuthController.php');
+    post('/user/member/login_as_member', 'controller/auth/AuthController.php');
+    get('/user/api', 'controller/users/UserApi.php');
+    get('/user/dashboard', 'controller/users/DashboardController.php');
+    // plans
+    if(@$_SESSION['users']['type'] == 'firm'):
+        get('/user/plans', 'controller/users/PlansController.php');
+        post('/user/plan/get_plan', 'controller/users/PlansController.php');
+        get('/user/plans_details/$slug', 'controller/users/PlansController.php');
+        post('/user/plan/checkout', 'controller/users/PlansController.php');
+
+    endif;
+// profile
+    get('/user/profile', 'controller/users/ProfileController.php');
+    get('/user/firm-info', 'controller/users/ProfileController.php');
+    post('/user/firm-info', 'controller/users/ProfileController.php');
+    get('/user/profile/settings', 'controller/users/ProfileController.php');
+    get('/user/profile/security', 'controller/users/ProfileController.php');
+    get('/user/profile/paymentMethod', 'controller/users/ProfileController.php');
+    get('/user/profile/billing', 'controller/users/ProfileController.php');
+    post('/user/profile', 'controller/users/ProfileController.php');
+    post('/user/fetch_profile', 'controller/users/ProfileController.php');
+    post('/user/bank/profile', 'controller/users/ProfileController.php');
+    post('/user/profile/password_change', 'controller/users/ProfileController.php');
+    post('/user/add_billing_address', 'controller/users/ProfileController.php');
+    post('/user/get_billing_address', 'controller/users/ProfileController.php');
+    post('/user/update_billing_address', 'controller/users/ProfileController.php');
+    post('/user/add_payment_method', 'controller/users/ProfileController.php');
+    post('/user/get_payment_method', 'controller/users/ProfileController.php');
+    post('/user/update_payment_method', 'controller/users/ProfileController.php');
+// user
+
+
+
 endif;
 //END OF USER DASHBOARD
 

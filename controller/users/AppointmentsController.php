@@ -3,11 +3,11 @@ require("config/env.php");
 use Carbon\Carbon;
 
 if($route == '/user/appointments'):
-$seo = array(
-    'title' => 'Appointments',
-    'description' => 'CRM',
-    'keywords' => 'Admin Panel'
-);
+    $seo = array(
+        'title' => 'Appointments',
+        'description' => 'CRM',
+        'keywords' => 'Admin Panel'
+    );
 
 
     if($loginUserType == 'firm'){
@@ -50,38 +50,38 @@ endif;
 
 
 if ($route == '/user/get_appointment'):
-if($loginUserType == 'firm'){
-    $appointments = $h->table('appointment')
-        ->select()
-        ->where('firm_id', '=', $loginUserId)
-        ->fetchAll();
-}else{
-    $users = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
-    $firm_id = $users[0]['firm_id'];
+    if($loginUserType == 'firm'){
+        $appointments = $h->table('appointment')
+            ->select()
+            ->where('firm_id', '=', $loginUserId)
+            ->fetchAll();
+    }else{
+        $users = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+        $firm_id = $users[0]['firm_id'];
 
-    $firm_appointments = $h->table('appointment')
-        ->select()
-        ->where('firm_id', '=', $firm_id)
-        ->fetchAll();
+        $firm_appointments = $h->table('appointment')
+            ->select()
+            ->where('firm_id', '=', $firm_id)
+            ->fetchAll();
 
-    $appointments = [];
+        $appointments = [];
 
-    if (!empty($firm_appointments)) {
-        foreach ($firm_appointments as $firm_appointment) {
-            $client_ids = $firm_appointment['client_id'];
+        if (!empty($firm_appointments)) {
+            foreach ($firm_appointments as $firm_appointment) {
+                $client_ids = $firm_appointment['client_id'];
 
-            // Explode the comma-separated string into an array
-            $clientIdsArray = explode(',', $client_ids);
+                // Explode the comma-separated string into an array
+                $clientIdsArray = explode(',', $client_ids);
 
-            // Check if $loginUserId exists in the array
-            if (in_array($loginUserId, $clientIdsArray)) {
-                // If match found, add to matched appointments array
-                $appointments[] = $firm_appointment;
+                // Check if $loginUserId exists in the array
+                if (in_array($loginUserId, $clientIdsArray)) {
+                    // If match found, add to matched appointments array
+                    $appointments[] = $firm_appointment;
+                }
             }
         }
-    }
 
-}
+    }
 
     echo json_encode($appointments);
     exit();
@@ -181,13 +181,13 @@ if($route == '/user/add/appointments'):
             @$dateTime = $_POST['dateTime'];
 
             @$purpose = $_POST['purpose'];
-           @$jitsi_link = random_strings(10);
+            @$jitsi_link = random_strings(10);
         }else{
             echo "2";
             exit();
         }
         if (!empty($_POST['client_id'])) {
-           @$client_ids = implode(', ', $_POST['client_id']);
+            @$client_ids = implode(', ', $_POST['client_id']);
         }else{
             @$client_ids = null;
         }
@@ -201,8 +201,8 @@ if($route == '/user/add/appointments'):
                     'purpose' => $purpose,
                     'jitsi_link' => $jitsi_link
                 ])->run();
-                if (!empty($client_ids)) {
-                    foreach ($client_ids as $client_id) {
+                if (!empty($_POST['client_id'])) {
+                    foreach ($_POST['client_id'] as $client_id) {
                         $ClientInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
                         $date = new DateTime($dateTime);
                         $formattedDate = $date->format('l, d F Y, h:i a');
@@ -280,8 +280,8 @@ if($route == '/user/update/appointments'):
                 $update = $h->update('appointment')->values(['title' => $title, 'date' => $dateTime, 'client_id' => $client_ids, 'purpose' => $purpose])->where('id', '=', $id)->run();
                 $AppointmentInfo = $h->table('appointment')->select()->where('id', '=', $id)->fetchAll();
 
-                if (!empty($client_ids)) {
-                    foreach ($client_ids as $client_id) {
+                if (!empty($_POST['client_id'])) {
+                    foreach ($_POST['client_id'] as $client_id) {
                         $ClientInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
                         $date = new DateTime($dateTime);
                         $formattedDate = $date->format('l, d F Y, h:i a');
