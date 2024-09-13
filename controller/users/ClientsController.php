@@ -15,8 +15,15 @@ if($route == '/user/members'):
         'description' => 'CRM',
         'keywords' => 'Admin Panel'
     );
-
-    echo $twig->render('user/clients/members.twig', ['seo' => $seo, 'FirmId' => $loginUserId]);
+    echo $twig->render('user/clients/members.twig', ['seo' => $seo, 'FirmId' => $loginUserId, 'permissions' => $permissions]);
+endif;
+if($route == '/user/manage/clients'):
+    $seo = array(
+        'title' => 'Clients List',
+        'description' => 'CRM',
+        'keywords' => 'Admin Panel'
+    );
+    echo $twig->render('user/clients/manage_clients.twig', ['seo' => $seo, 'FirmId' => $loginUserId, 'permissions' => $permissions]);
 endif;
 if($route == '/user/send_invite'):
         if (isset($_POST['email'])){
@@ -27,6 +34,11 @@ if($route == '/user/send_invite'):
             }else{
                 echo "2";
                 exit();
+            }
+            if (!empty($_POST['associates_id'])) {
+                $associates_id = $_POST['associates_id'];
+            }else{
+                $associates_id = NULL;
             }
             $userAvailable = $h->table('users')->select()->where('email', '=', $email);
             if($userAvailable->count() < 1) {
@@ -68,6 +80,11 @@ if($route == '/user/send_invite'):
                     @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
 
                 }
+                if ($invite == 'client'){
+                    $invite_link = $env['APP_URL'] . "join/" . $firm_id . '/' . $associates_id . '/' . $email . '/' . $invite;
+                }else{
+                    $invite_link = $env['APP_URL'] . "join/" . $firm_id . '/null/' . $email . '/' . $invite;
+                }
                 include "views/email-template/invite.php";
                 mailSender($env['SENDER_EMAIL'], $email, 'Invitation to Join '.@$company_name.' - '.$companyInfo[0]['fname'].' '.$companyInfo[0]['lname'], $message, $mail);
                 echo "1";
@@ -77,4 +94,16 @@ if($route == '/user/send_invite'):
                 exit();
             }
         }
+endif;
+if($route == '/user/user_per'):
+    if(!empty($_POST['permissions'])){
+        @$permissions = implode(',', array_filter($_POST['permissions']));
+    }else{
+        @$permissions = '';
+    }
+  $id = $_POST['id_per'];
+
+            $update = $h->update('users')->values([ 'permissions' => $permissions])->where('id','=',$id)->run();
+            echo "1";
+            exit();
 endif;

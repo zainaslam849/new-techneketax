@@ -2,6 +2,924 @@
 require("config/env.php");
 header('Content-Type: application/json');
 //FETCH ALL CATEGORIES
+if($loginUserType == "member"){
+    if($_GET['page_name']=="view_client_associates"){
+        $srNo = 0;
+        $users = $h->table('users')->select()->where('associates_id', '=', $loginUserId)->where('type', '=', 'client')->where('work_status', '!=', 'unassigned')->orderBy('id', 'desc')->fetchAll();
+        if (!empty($users)) {
+
+            foreach ($users as $user) {
+                // Determine user status
+                if ($user['work_status'] == "assigned") {
+                    $statusView = "<span class='badge badge-light-success'>Assigned</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                  <div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                } else if ($user['work_status'] == "inprogress") {
+                    $statusView = "<span class='badge badge-light-info'>In Progress</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                 ";
+                }  else if ($user['work_status'] == "completed") {
+                    $statusView = "<span class='badge badge-light-success'>Completed</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                } else {
+                        $statusView = "<span class='badge badge-light-success'>Completed</span>";
+                        $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                }
+                $action = array('action' => '<a role="button" onclick="manage('.$user['id'].')" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" >Manage</a>
+<button type="button" onclick="openAction('.$user['id'].')" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+
+                            <span class="svg-icon svg-icon-5 m-0">
+                               <i class="bi bi-three-dots-vertical"></i>
+                            </span>
+                        </button>
+                        <div id="menu-'.$user['id'].'" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
+                            	'.$userStatus.'
+                        </div>');
+
+
+                $status = array("statusView" => $statusView.'');
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                    $profile_image = $user["profile_image"];
+                }else{
+                    $profile_image = "avatar.png";
+                }
+                $userView = array(
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
+                );
+                $srNo++;
+                $ids = array("ids" => "$srNo");
+                $check_arr[] = array_merge($ids, $user,$userView, $status, $action);
+            }
+
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => count($check_arr),
+                "iTotalDisplayRecords" => count($check_arr),
+                "aaData" => $check_arr
+            );
+            echo json_encode($result);
+        } else {
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => array()
+            );
+            echo json_encode($result);
+        }
+
+    }
+//    if($_GET['page_name']=="view_clients_unassigned_associates"){
+//        $srNo = 0;
+//        $users = $h->table('users')->select()->where('associates_id', '=', $loginUserId)->where('type', '=', 'client')->where('work_status', '=', 'unassigned')->orderBy('id', 'desc')->fetchAll();
+//        if (!empty($users)) {
+//            foreach ($users as $user) {
+//                // Determine user status
+//                if ($user['work_status'] == "unassigned") {
+//                    $statusView = "<span class='badge badge-light-warning'>Un Assigned</span>";
+//                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+//                  <div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+//                } else if ($user['work_status'] == "inprogress") {
+//                    $statusView = "<span class='badge badge-light-info'>In Progress</span>";
+//                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+//                 <div class='menu-item px-3'><a href='javascript:;' onclick='userStatus(".$user['id'].", 2)' class='menu-link px-3'>Un Assigned</a></div>";
+//                }  else if ($user['work_status'] == "completed") {
+//                    $statusView = "<span class='badge badge-light-success'>Completed</span>";
+//
+//                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>
+//                   <div class='menu-item px-3'><a href='javascript:;' onclick='userStatus(".$user['id'].", 2)' class='menu-link px-3'>Un Assigned</a></div>";
+//                } else {
+//                    $statusView = "<span class='badge badge-light-warning'>Un Assigned</span>";
+//                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+//                   <div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+//                }
+//                // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+//                $action = array('action' =>  ' <a role="button" onclick="manage('.$user['id'].')" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" >Manage</a>
+// 	                                                    <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+//                                                        <span class="svg-icon svg-icon-5 m-0">
+//															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+//																<path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="currentColor"></path>
+//															</svg>
+//														</span>
+//														</a>
+//														<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true" style="">
+//															'.$userStatus.'
+//														</div>');
+//
+//
+//                $status = array("statusView" => $statusView);
+//                if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+//                    $profile_image = $user["profile_image"];
+//                }else{
+//                    $profile_image = "avatar.png";
+//                }
+//                $userView = array(
+//                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+//															<a href="#">
+//																<div class="symbol-label">
+//																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+//																</div>
+//															</a>
+//														</div> <div class="d-flex flex-column">
+//															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+//															<span>'.  $user['email'] . '</span>
+//														</div></div>'
+//                );
+//                $srNo++;
+//                $ids = array("ids" => "$srNo");
+//                $check_arr[] = array_merge($ids, $user,$userView, $status, $action);
+//            }
+//
+//            $result = array(
+//                "sEcho" => 1,
+//                "iTotalRecords" => count($check_arr),
+//                "iTotalDisplayRecords" => count($check_arr),
+//                "aaData" => $check_arr
+//            );
+//            echo json_encode($result);
+//        } else {
+//            $result = array(
+//                "sEcho" => 1,
+//                "iTotalRecords" => 0,
+//                "iTotalDisplayRecords" => 0,
+//                "aaData" => array()
+//            );
+//            echo json_encode($result);
+//        }
+//
+//    }
+    if($_GET['page_name']=="view_clients_inProgress_associates"){
+        $srNo = 0;
+        $users = $h->table('users')->select()->where('associates_id', '=', $loginUserId)->where('type', '=', 'client')->where('work_status', '=', 'inProgress')->orderBy('id', 'desc')->fetchAll();
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                // Determine user status
+                if ($user['work_status'] == "inprogress") {
+                    $statusView = "<span class='badge badge-light-info'>In Progress</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                 ";
+                }  else if ($user['work_status'] == "completed") {
+                    $statusView = "<span class='badge badge-light-success'>Completed</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                } else {
+                    $statusView = "<span class='badge badge-light-success'>Completed</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                }
+
+                // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+                $action = array('action' =>  ' <a role="button" onclick="manage('.$user['id'].')" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" >Manage</a>
+<button type="button" onclick="openAction1('.$user['id'].')" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+
+                            <span class="svg-icon svg-icon-5 m-0">
+                               <i class="bi bi-three-dots-vertical"></i>
+                            </span>
+                        </button>
+														<div id="menu1-'.$user['id'].'" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true" style="">
+															'.$userStatus.'
+														</div>');
+
+
+                $status = array("statusView" => $statusView);
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                    $profile_image = $user["profile_image"];
+                }else{
+                    $profile_image = "avatar.png";
+                }
+                $userView = array(
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
+                );
+                $srNo++;
+                $ids = array("ids" => "$srNo");
+                $check_arr[] = array_merge($ids, $user,$userView, $status, $action);
+            }
+
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => count($check_arr),
+                "iTotalDisplayRecords" => count($check_arr),
+                "aaData" => $check_arr
+            );
+            echo json_encode($result);
+        } else {
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => array()
+            );
+            echo json_encode($result);
+        }
+
+    }
+    if($_GET['page_name']=="view_clients_completed_associates"){
+        $srNo = 0;
+        $users = $h->table('users')->select()->where('associates_id', '=', $loginUserId)->where('type', '=', 'client')->where('work_status', '=', 'completed')->orderBy('id', 'desc')->fetchAll();
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                // Determine user status
+                if ($user['work_status'] == "inprogress") {
+                    $statusView = "<span class='badge badge-light-info'>In Progress</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                 ";
+                }  else if ($user['work_status'] == "completed") {
+                    $statusView = "<span class='badge badge-light-success'>Completed</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                } else {
+                    $statusView = "<span class='badge badge-light-success'>Completed</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                }
+
+                // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+                $action = array('action' => ' <a role="button" onclick="manage('.$user['id'].')" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" >Manage</a>
+<button type="button" onclick="openAction2('.$user['id'].')" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+
+                            <span class="svg-icon svg-icon-5 m-0">
+                               <i class="bi bi-three-dots-vertical"></i>
+                            </span>
+                        </button>
+														<div id="menu2-'.$user['id'].'" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true" style="">
+															'.$userStatus.'
+														</div>');
+
+
+                $status = array("statusView" => $statusView);
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                    $profile_image = $user["profile_image"];
+                }else{
+                    $profile_image = "avatar.png";
+                }
+                $userView = array(
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
+                );
+                $srNo++;
+                $ids = array("ids" => "$srNo");
+                $check_arr[] = array_merge($ids, $user,$userView, $status, $action);
+            }
+
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => count($check_arr),
+                "iTotalDisplayRecords" => count($check_arr),
+                "aaData" => $check_arr
+            );
+            echo json_encode($result);
+        } else {
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => array()
+            );
+            echo json_encode($result);
+        }
+
+    }
+}
+if($loginUserType == "firm") {
+    if ($_GET['page_name'] == "view_clients_dashboard") {
+        $srNo = 0;
+        $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'client')->orderBy('id', 'desc')->fetchAll();
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                if ($user['work_status'] == "unassigned") {
+                    $statusView = "<span class='badge badge-light-warning'>Un Assigned</span>";
+                    $userStatus = "";
+                } else if ($user['work_status'] == "assigned") {
+                    $statusView = "<span class='badge badge-light-success'>Assigned</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                <div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                }else if ($user['work_status'] == "inprogress") {
+                    $statusView = "<span class='badge badge-light-info'>In Progress</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                 <div class='menu-item px-3'><a href='javascript:;' onclick='userStatus(".$user['id'].", 2)' class='menu-link px-3'>Assigned</a></div>";
+                }  else if ($user['work_status'] == "completed") {
+                    $statusView = "<span class='badge badge-light-success'>Completed</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>
+                   <div class='menu-item px-3'><a href='javascript:;' onclick='userStatus(".$user['id'].", 2)' class='menu-link px-3'>Assigned</a></div>";
+                } else {
+                    $statusView = "<span class='badge badge-light-warning'>Un Assigned</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                   <div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                }
+
+                // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+                $action = array('action' =>'
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser(' . $user["id"] . ')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           <button type="button" onclick="openAction('.$user['id'].')" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+
+                            <span class="svg-icon svg-icon-5 m-0">
+                               <i class="bi bi-three-dots-vertical"></i>
+                            </span>
+                        </button>
+                        <div id="menu-'.$user['id'].'" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
+                            	<div class="menu-item px-3"><a  role="button" data-id="' . $user["id"] . '" data-bs-toggle="modal" data-bs-target="#editExampleModal"  class="edit menu-link px-3">Edit</a></div>
+                            	'.$userStatus.'
+                            
+                        </div>');
+
+
+                $status = array("statusView" => $statusView);
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null') {
+                    $profile_image = $user["profile_image"];
+                } else {
+                    $profile_image = "avatar.png";
+                }
+                $userView = array(
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] . ' ' . $user['lname'] . '</a>
+															<span>' . $user['email'] . '</span>
+														</div></div>'
+                );
+                $srNo++;
+                $ids = array("ids" => "$srNo");
+                $check_arr[] = array_merge($ids, $user, $userView, $status, $action);
+            }
+
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => count($check_arr),
+                "iTotalDisplayRecords" => count($check_arr),
+                "aaData" => $check_arr
+            );
+            echo json_encode($result);
+        } else {
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => array()
+            );
+            echo json_encode($result);
+        }
+
+    }
+    if ($_GET['page_name'] == "view_clients_assigned") {
+        $srNo = 0;
+        $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'client')->where('work_status', '=', 'assigned')->orderBy('id', 'desc')->fetchAll();
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                if ($user['work_status'] == "unassigned") {
+                    $statusView = "<span class='badge badge-light-warning'>Un Assigned</span>";
+                    $userStatus = "";
+                } else if ($user['work_status'] == "assigned") {
+                    $statusView = "<span class='badge badge-light-success'>Assigned</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                <div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                }else if ($user['work_status'] == "inprogress") {
+                    $statusView = "<span class='badge badge-light-info'>In Progress</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                 <div class='menu-item px-3'><a href='javascript:;' onclick='userStatus(".$user['id'].", 2)' class='menu-link px-3'>Assigned</a></div>";
+                }  else if ($user['work_status'] == "completed") {
+                    $statusView = "<span class='badge badge-light-success'>Completed</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>
+                   <div class='menu-item px-3'><a href='javascript:;' onclick='userStatus(".$user['id'].", 2)' class='menu-link px-3'>Assigned</a></div>";
+                } else {
+                    $statusView = "<span class='badge badge-light-warning'>Un Assigned</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                   <div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                }
+
+                // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+                $action = array('action' =>'
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser(' . $user["id"] . ')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           <button type="button" onclick="openAction1('.$user['id'].')" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+
+                            <span class="svg-icon svg-icon-5 m-0">
+                               <i class="bi bi-three-dots-vertical"></i>
+                            </span>
+                        </button>
+                        <div id="menu1-'.$user['id'].'" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
+                            	<div class="menu-item px-3"><a  role="button" data-id="' . $user["id"] . '" data-bs-toggle="modal" data-bs-target="#editExampleModal"  class="edit menu-link px-3">Edit</a></div>
+                            	'.$userStatus.'
+                            
+                        </div>');
+
+
+                $status = array("statusView" => $statusView);
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null') {
+                    $profile_image = $user["profile_image"];
+                } else {
+                    $profile_image = "avatar.png";
+                }
+                $userView = array(
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] . ' ' . $user['lname'] . '</a>
+															<span>' . $user['email'] . '</span>
+														</div></div>'
+                );
+                $srNo++;
+                $ids = array("ids" => "$srNo");
+                $check_arr[] = array_merge($ids, $user, $userView, $status, $action);
+            }
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => count($check_arr),
+                "iTotalDisplayRecords" => count($check_arr),
+                "aaData" => $check_arr
+            );
+            echo json_encode($result);
+        } else {
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => array()
+            );
+            echo json_encode($result);
+        }
+
+    }
+    if ($_GET['page_name'] == "view_clients_unassigned") {
+        $srNo = 0;
+        $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'client')->where('work_status', '=', 'unassigned')->orderBy('id', 'desc')->fetchAll();
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                if ($user['work_status'] == "unassigned") {
+                    $statusView = "<span class='badge badge-light-warning'>Un Assigned</span>";
+                    $userStatus = "";
+                } else if ($user['work_status'] == "assigned") {
+                    $statusView = "<span class='badge badge-light-success'>Assigned</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                <div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                }else if ($user['work_status'] == "inprogress") {
+                    $statusView = "<span class='badge badge-light-info'>In Progress</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                 <div class='menu-item px-3'><a href='javascript:;' onclick='userStatus(".$user['id'].", 2)' class='menu-link px-3'>Assigned</a></div>";
+                }  else if ($user['work_status'] == "completed") {
+                    $statusView = "<span class='badge badge-light-success'>Completed</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>
+                   <div class='menu-item px-3'><a href='javascript:;' onclick='userStatus(".$user['id'].", 2)' class='menu-link px-3'>Assigned</a></div>";
+                } else {
+                    $statusView = "<span class='badge badge-light-warning'>Un Assigned</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                   <div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                }
+
+                // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+                $action = array('action' =>'
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser(' . $user["id"] . ')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           <button type="button" onclick="openAction2('.$user['id'].')" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+
+                            <span class="svg-icon svg-icon-5 m-0">
+                               <i class="bi bi-three-dots-vertical"></i>
+                            </span>
+                        </button>
+                        <div id="menu2-'.$user['id'].'" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
+                            	<div class="menu-item px-3"><a  role="button" data-id="' . $user["id"] . '" data-bs-toggle="modal" data-bs-target="#editExampleModal"  class="edit menu-link px-3">Edit</a></div>
+                            	'.$userStatus.'
+                            
+                        </div>');
+
+
+                $status = array("statusView" => $statusView);
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null') {
+                    $profile_image = $user["profile_image"];
+                } else {
+                    $profile_image = "avatar.png";
+                }
+                $userView = array(
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] . ' ' . $user['lname'] . '</a>
+															<span>' . $user['email'] . '</span>
+														</div></div>'
+                );
+                $srNo++;
+                $ids = array("ids" => "$srNo");
+                $check_arr[] = array_merge($ids, $user, $userView, $status, $action);
+            }
+                $result = array(
+                    "sEcho" => 1,
+                    "iTotalRecords" => count($check_arr),
+                    "iTotalDisplayRecords" => count($check_arr),
+                    "aaData" => $check_arr
+                );
+            echo json_encode($result);
+        } else {
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => array()
+            );
+            echo json_encode($result);
+        }
+
+    }
+    if ($_GET['page_name'] == "view_clients_inProgress") {
+        $srNo = 0;
+        $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'client')->where('work_status', '=', 'inprogress')->orderBy('id', 'desc')->fetchAll();
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                if ($user['work_status'] == "unassigned") {
+                    $statusView = "<span class='badge badge-light-warning'>Un Assigned</span>";
+                    $userStatus = "";
+                } else if ($user['work_status'] == "assigned") {
+                    $statusView = "<span class='badge badge-light-success'>Assigned</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                <div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                }else if ($user['work_status'] == "inprogress") {
+                    $statusView = "<span class='badge badge-light-info'>In Progress</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                 <div class='menu-item px-3'><a href='javascript:;' onclick='userStatus(".$user['id'].", 2)' class='menu-link px-3'>Assigned</a></div>";
+                }  else if ($user['work_status'] == "completed") {
+                    $statusView = "<span class='badge badge-light-success'>Completed</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>
+                   <div class='menu-item px-3'><a href='javascript:;' onclick='userStatus(".$user['id'].", 2)' class='menu-link px-3'>Assigned</a></div>";
+                } else {
+                    $statusView = "<span class='badge badge-light-warning'>Un Assigned</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                   <div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                }
+
+                // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+                $action = array('action' =>'
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser(' . $user["id"] . ')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           <button type="button" onclick="openAction3('.$user['id'].')" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+
+                            <span class="svg-icon svg-icon-5 m-0">
+                               <i class="bi bi-three-dots-vertical"></i>
+                            </span>
+                        </button>
+                        <div id="menu3-'.$user['id'].'" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
+                            	<div class="menu-item px-3"><a  role="button" data-id="' . $user["id"] . '" data-bs-toggle="modal" data-bs-target="#editExampleModal"  class="edit menu-link px-3">Edit</a></div>
+                            	'.$userStatus.'
+                            
+                        </div>');
+
+
+                $status = array("statusView" => $statusView);
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null') {
+                    $profile_image = $user["profile_image"];
+                } else {
+                    $profile_image = "avatar.png";
+                }
+                $userView = array(
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] . ' ' . $user['lname'] . '</a>
+															<span>' . $user['email'] . '</span>
+														</div></div>'
+                );
+                $srNo++;
+                $ids = array("ids" => "$srNo");
+                $check_arr[] = array_merge($ids, $user, $userView, $status, $action);
+            }
+
+                $result = array(
+                    "sEcho" => 1,
+                    "iTotalRecords" => count($check_arr),
+                    "iTotalDisplayRecords" => count($check_arr),
+                    "aaData" => $check_arr
+                );
+            echo json_encode($result);
+        } else {
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => array()
+            );
+            echo json_encode($result);
+        }
+
+    }
+    if ($_GET['page_name'] == "view_clients_completed") {
+        $srNo = 0;
+        $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'client')->where('work_status', '=', 'completed')->orderBy('id', 'desc')->fetchAll();
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                if ($user['work_status'] == "unassigned") {
+                    $statusView = "<span class='badge badge-light-warning'>Un Assigned</span>";
+                    $userStatus = "";
+                } else if ($user['work_status'] == "assigned") {
+                    $statusView = "<span class='badge badge-light-success'>Assigned</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                <div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                }else if ($user['work_status'] == "inprogress") {
+                    $statusView = "<span class='badge badge-light-info'>In Progress</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                 <div class='menu-item px-3'><a href='javascript:;' onclick='userStatus(".$user['id'].", 2)' class='menu-link px-3'>Assigned</a></div>";
+                }  else if ($user['work_status'] == "completed") {
+                    $statusView = "<span class='badge badge-light-success'>Completed</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>
+                   <div class='menu-item px-3'><a href='javascript:;' onclick='userStatus(".$user['id'].", 2)' class='menu-link px-3'>Assigned</a></div>";
+                } else {
+                    $statusView = "<span class='badge badge-light-warning'>Un Assigned</span>";
+                    $userStatus = "<div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='menu-link px-3'>Completed</a></div>
+                   <div class='menu-item px-3'><a  href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='menu-link px-3'>In Progress</a></div>";
+                }
+
+                // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+                $action = array('action' =>'
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser(' . $user["id"] . ')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           <button type="button" onclick="openAction4('.$user['id'].')" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+
+                            <span class="svg-icon svg-icon-5 m-0">
+                               <i class="bi bi-three-dots-vertical"></i>
+                            </span>
+                        </button>
+                        <div id="menu4-'.$user['id'].'" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
+                            	<div class="menu-item px-3"><a  role="button" data-id="' . $user["id"] . '" data-bs-toggle="modal" data-bs-target="#editExampleModal"  class="edit menu-link px-3">Edit</a></div>
+                            	'.$userStatus.'
+                            
+                        </div>');
+
+
+                $status = array("statusView" => $statusView);
+                if ($user["profile_image"] != '' && $user["profile_image"] != 'null') {
+                    $profile_image = $user["profile_image"];
+                } else {
+                    $profile_image = "avatar.png";
+                }
+                $userView = array(
+                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] . ' ' . $user['lname'] . '</a>
+															<span>' . $user['email'] . '</span>
+														</div></div>'
+                );
+                $srNo++;
+                $ids = array("ids" => "$srNo");
+                $check_arr[] = array_merge($ids, $user, $userView, $status, $action);
+            }
+                $result = array(
+                    "sEcho" => 1,
+                    "iTotalRecords" => count($check_arr),
+                    "iTotalDisplayRecords" => count($check_arr),
+                    "aaData" => $check_arr
+                );
+            echo json_encode($result);
+        } else {
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => array()
+            );
+            echo json_encode($result);
+        }
+
+    }
+}
+if($_GET['page_name']=="view_clients"){
+    $srNo = 0;
+    $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'client')->orderBy('id', 'desc')->fetchAll();
+    if (!empty($users)) {
+        foreach ($users as $user) {
+            // Determine user status
+            if ($user['status'] == "active") {
+                $statusView = "<span class='badge badge-light-success'>Active</span>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
+            } else if ($user['status'] == "block") {
+                $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
+            } else {
+                $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
+            }
+
+            // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+            $action = array('action' =>  $userStatus.'
+                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           
+                      ');
+
+
+            $status = array("statusView" => $statusView);
+            if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                $profile_image = $user["profile_image"];
+            }else{
+                $profile_image = "avatar.png";
+            }
+            $userView = array(
+                "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
+            );
+            $srNo++;
+            $ids = array("ids" => "$srNo");
+            $check_arr[] = array_merge($ids, $user,$userView, $status, $action);
+        }
+
+        $result = array(
+            "sEcho" => 1,
+            "iTotalRecords" => count($check_arr),
+            "iTotalDisplayRecords" => count($check_arr),
+            "aaData" => $check_arr
+        );
+        echo json_encode($result);
+    } else {
+        $result = array(
+            "sEcho" => 1,
+            "iTotalRecords" => 0,
+            "iTotalDisplayRecords" => 0,
+            "aaData" => array()
+        );
+        echo json_encode($result);
+    }
+
+}
+if($_GET['page_name']=="view_members"){
+    $srNo = 0;
+    $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'member')->orderBy('id', 'desc')->fetchAll();
+    if (!empty($users)) {
+        foreach ($users as $user) {
+            // Determine user status
+            if ($user['status'] == "active") {
+                $statusView = "<span class='badge badge-light-success'>Active</span>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
+            } else if ($user['status'] == "block") {
+                $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
+            } else {
+                $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
+                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
+            }
+
+            // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
+            $action = array('action' =>  $userStatus.'
+                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+                     <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editPerModal" class="edit btn-sm btn btn-light-warning text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-user-tag"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           
+                      ');
+
+            $status = array("statusView" => $statusView);
+
+            if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                $profile_image = $user["profile_image"];
+            }else{
+                $profile_image = "avatar.png";
+            }
+            $userView = array(
+                "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>'
+            );
+
+            $srNo++;
+            $ids = array("ids" => "$srNo");
+            $check_arr[] = array_merge($ids, $user,$userView, $status, $action);
+        }
+
+        $result = array(
+            "sEcho" => 1,
+            "iTotalRecords" => count($check_arr),
+            "iTotalDisplayRecords" => count($check_arr),
+            "aaData" => $check_arr
+        );
+        echo json_encode($result);
+    } else {
+        $result = array(
+            "sEcho" => 1,
+            "iTotalRecords" => 0,
+            "iTotalDisplayRecords" => 0,
+            "aaData" => array()
+        );
+        echo json_encode($result);
+    }
+
+}
+if($_GET['page_name']=="view_manage_clients"){
+    $srNo = 0;
+    $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'client')->orderBy('id', 'desc')->fetchAll();
+    if (!empty($users)) {
+        foreach ($users as $user) {
+
+            $action = array('action' =>'
+                     <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editPerModal" class="edit btn-sm btn btn-light-warning text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-user-tag"></i></a>           
+                      ');
+            if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
+                $profile_image = $user["profile_image"];
+            }else{
+                $profile_image = "avatar.png";
+            }
+            $clientView = array(
+                "clientView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
+															<span>'.  $user['email'] . '</span>
+														</div></div>');
+            $memberinfo = $h->table('users')->select()->where('id', '=', $user['associates_id'])->fetchAll();
+            if (!empty($memberinfo)){
+                if ($memberinfo[0]["profile_image"] != '' && $memberinfo[0]["profile_image"] != 'null'){
+                    $profile_image_member = $memberinfo[0]["profile_image"];
+                }else{
+                    $profile_image_member = "avatar.png";
+                }
+                $memberView = array(
+                    "memberView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image_member.'" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $memberinfo[0]["fname"] .' '.  $memberinfo[0]['lname'] . '</a>
+															<span>'.  $memberinfo[0]['email'] . '</span>
+														</div></div>');
+            }else{
+                $memberView =array(
+                    "memberView" => 'Member Not Assigned');
+            }
+            $srNo++;
+            $ids = array("ids" => "$srNo");
+            $check_arr[] = array_merge($ids, $user,$clientView,$memberView, $action);
+        }
+
+        $result = array(
+            "sEcho" => 1,
+            "iTotalRecords" => count($check_arr),
+            "iTotalDisplayRecords" => count($check_arr),
+            "aaData" => $check_arr
+        );
+        echo json_encode($result);
+    } else {
+        $result = array(
+            "sEcho" => 1,
+            "iTotalRecords" => 0,
+            "iTotalDisplayRecords" => 0,
+            "aaData" => array()
+        );
+        echo json_encode($result);
+    }
+
+}
 if($_GET['page_name']=="view_sections"){
     $srNo = 0;
     $sections= $h->table('sections')->select()->orderBy('id', 'desc')->fetchAll();
@@ -193,380 +1111,6 @@ if($_GET['page_name']=="view_Templates_request"){
             $ids = array("ids" => "$srNo");
             $status = array("statusView" => "$statusView");
             $check_arr[] = array_merge($ids,$des,$status, $template, $action);
-        }
-
-        $result = array(
-            "sEcho" => 1,
-            "iTotalRecords" => count($check_arr),
-            "iTotalDisplayRecords" => count($check_arr),
-            "aaData" => $check_arr
-        );
-        echo json_encode($result);
-    } else {
-        $result = array(
-            "sEcho" => 1,
-            "iTotalRecords" => 0,
-            "iTotalDisplayRecords" => 0,
-            "aaData" => array()
-        );
-        echo json_encode($result);
-    }
-
-}
-if($_GET['page_name']=="view_clients"){
-    $srNo = 0;
-    $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'client')->orderBy('id', 'desc')->fetchAll();
-    if (!empty($users)) {
-        foreach ($users as $user) {
-            // Determine user status
-            if ($user['status'] == "active") {
-                $statusView = "<span class='badge badge-light-success'>Active</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
-            } else if ($user['status'] == "block") {
-                $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
-            } else {
-                $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
-            }
-
-            // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
-            $action = array('action' =>  $userStatus.'
-                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
-                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
-           
-                      ');
-
-
-            $status = array("statusView" => $statusView);
-            if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
-                $profile_image = $user["profile_image"];
-            }else{
-                $profile_image = "avatar.png";
-            }
-            $userView = array(
-                "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-															<a href="#">
-																<div class="symbol-label">
-																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
-																</div>
-															</a>
-														</div> <div class="d-flex flex-column">
-															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
-															<span>'.  $user['email'] . '</span>
-														</div></div>'
-            );
-            $srNo++;
-            $ids = array("ids" => "$srNo");
-            $check_arr[] = array_merge($ids, $user,$userView, $status, $action);
-        }
-
-        $result = array(
-            "sEcho" => 1,
-            "iTotalRecords" => count($check_arr),
-            "iTotalDisplayRecords" => count($check_arr),
-            "aaData" => $check_arr
-        );
-        echo json_encode($result);
-    } else {
-        $result = array(
-            "sEcho" => 1,
-            "iTotalRecords" => 0,
-            "iTotalDisplayRecords" => 0,
-            "aaData" => array()
-        );
-        echo json_encode($result);
-    }
-
-}
-if($_GET['page_name']=="view_clients_unassigned"){
-    $srNo = 0;
-    $saaud='1';
-    $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'client')->orderBy('id', 'desc')->fetchAll();
-    if (!empty($users)) {
-        foreach ($users as $user) {
-            $check= $h->table('template_request')->select()->where('user_id', '=', $user['id'])->count();
-                if($check < 1){
-                    $saaud='0';
-                    // Determine user status
-                    if ($user['status'] == "active") {
-                        $statusView = "<span class='badge badge-light-success'>Active</span>";
-                        $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
-                    } else if ($user['status'] == "block") {
-                        $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                        $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
-                    } else {
-                        $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                        $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
-                    }
-
-                    // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
-                    $action = array('action' =>  $userStatus.'
-                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
-                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
-           
-                      ');
-
-                $status = array("statusView" => $statusView);
-
-                    if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
-                        $profile_image = $user["profile_image"];
-                    }else{
-                        $profile_image = "avatar.png";
-                    }
-                    $userView = array(
-                        "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-															<a href="#">
-																<div class="symbol-label">
-																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
-																</div>
-															</a>
-														</div> <div class="d-flex flex-column">
-															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
-															<span>'.  $user['email'] . '</span>
-														</div></div>'
-                    );
-
-                $srNo++;
-                $ids = array("ids" => "$srNo");
-                $check_arr[] = array_merge($ids, $user,$userView, $status, $action);
-            }
-        }
-        if($saaud =='1'){
-        $result = array(
-            "sEcho" => 1,
-            "iTotalRecords" => 0,
-            "iTotalDisplayRecords" => 0,
-            "aaData" => array()
-        );
-        }else{
-            $result = array(
-                "sEcho" => 1,
-                "iTotalRecords" => count($check_arr),
-                "iTotalDisplayRecords" => count($check_arr),
-                "aaData" => $check_arr
-            );
-        }
-        echo json_encode($result);
-    } else {
-        $result = array(
-            "sEcho" => 1,
-            "iTotalRecords" => 0,
-            "iTotalDisplayRecords" => 0,
-            "aaData" => array()
-        );
-        echo json_encode($result);
-    }
-
-}
-if($_GET['page_name']=="view_clients_inProgress"){
-    $srNo = 0;
-    $saaud ='1';
-    $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'client')->orderBy('id', 'desc')->fetchAll();
-    if (!empty($users)) {
-        foreach ($users as $user) {
-            $check= $h->table('template_request')->select()->where('user_id', '=', $user['id'])->where('status', '=','pending')->fetchAll();
-            if(!empty($check)){
-                $saaud ='0';
-            // Determine user status
-                if ($user['status'] == "active") {
-                    $statusView = "<span class='badge badge-light-success'>Active</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
-                } else if ($user['status'] == "block") {
-                    $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
-                } else {
-                    $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
-                }
-
-                // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
-                $action = array('action' =>  $userStatus.'
-                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
-                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
-           
-                      ');
-
-
-            $status = array("statusView" => $statusView);
-                if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
-                    $profile_image = $user["profile_image"];
-                }else{
-                    $profile_image = "avatar.png";
-                }
-                $userView = array(
-                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-															<a href="#">
-																<div class="symbol-label">
-																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
-																</div>
-															</a>
-														</div> <div class="d-flex flex-column">
-															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
-															<span>'.  $user['email'] . '</span>
-														</div></div>'
-                );
-
-            $srNo++;
-            $ids = array("ids" => "$srNo");
-            $check_arr[] = array_merge($ids, $user,$userView, $status, $action);
-        }
-        }
-        if($saaud =='1'){
-            $result = array(
-                "sEcho" => 1,
-                "iTotalRecords" => 0,
-                "iTotalDisplayRecords" => 0,
-                "aaData" => array()
-            );
-        }else{
-            $result = array(
-                "sEcho" => 1,
-                "iTotalRecords" => count($check_arr),
-                "iTotalDisplayRecords" => count($check_arr),
-                "aaData" => $check_arr
-            );
-        }
-        echo json_encode($result);
-    } else {
-        $result = array(
-            "sEcho" => 1,
-            "iTotalRecords" => 0,
-            "iTotalDisplayRecords" => 0,
-            "aaData" => array()
-        );
-        echo json_encode($result);
-    }
-
-}
-if($_GET['page_name']=="view_clients_completed"){
-    $srNo = 0;
-    $saaud ='1';
-    $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'client')->orderBy('id', 'desc')->fetchAll();
-    if (!empty($users)) {
-        foreach ($users as $user) {
-            $check= $h->table('template_request')->select()->where('user_id', '=', $user['id'])->where('status', '=','completed')->fetchAll();
-            if(!empty($check)){
-                $saaud ='0';
-            // Determine user status
-                if ($user['status'] == "active") {
-                    $statusView = "<span class='badge badge-light-success'>Active</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
-                } else if ($user['status'] == "block") {
-                    $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
-                } else {
-                    $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
-                }
-
-                // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
-                $action = array('action' =>  $userStatus.'
-                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
-                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
-           
-                      ');
-
-
-            $status = array("statusView" => $statusView);
-
-                if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
-                    $profile_image = $user["profile_image"];
-                }else{
-                    $profile_image = "avatar.png";
-                }
-                $userView = array(
-                    "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-															<a href="#">
-																<div class="symbol-label">
-																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
-																</div>
-															</a>
-														</div> <div class="d-flex flex-column">
-															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
-															<span>'.  $user['email'] . '</span>
-														</div></div>'
-                );
-
-            $srNo++;
-            $ids = array("ids" => "$srNo");
-            $check_arr[] = array_merge($ids, $user,$userView, $status, $action);
-        }
-        }
-        if($saaud =='1'){
-            $result = array(
-                "sEcho" => 1,
-                "iTotalRecords" => 0,
-                "iTotalDisplayRecords" => 0,
-                "aaData" => array()
-            );
-        }else{
-            $result = array(
-                "sEcho" => 1,
-                "iTotalRecords" => count($check_arr),
-                "iTotalDisplayRecords" => count($check_arr),
-                "aaData" => $check_arr
-            );
-        }
-        echo json_encode($result);
-    } else {
-        $result = array(
-            "sEcho" => 1,
-            "iTotalRecords" => 0,
-            "iTotalDisplayRecords" => 0,
-            "aaData" => array()
-        );
-        echo json_encode($result);
-    }
-
-}
-if($_GET['page_name']=="view_members"){
-    $srNo = 0;
-    $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'member')->orderBy('id', 'desc')->fetchAll();
-    if (!empty($users)) {
-        foreach ($users as $user) {
-            // Determine user status
-            if ($user['status'] == "active") {
-                $statusView = "<span class='badge badge-light-success'>Active</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 0)' class='btn btn-light-success btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
-            } else if ($user['status'] == "block") {
-                $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
-            } else {
-                $statusView = "<span class='badge badge-light-danger'>Inactive</span>";
-                $userStatus = "<a href='javascript:;' onclick='userStatus(".$user['id'].", 1)' class='btn-sm btn btn-light-danger text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
-            }
-
-            // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
-            $action = array('action' =>  $userStatus.'
-                    <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
-                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
-           
-                      ');
-
-            $status = array("statusView" => $statusView);
-
-            if ($user["profile_image"] != '' && $user["profile_image"] != 'null'){
-                $profile_image = $user["profile_image"];
-            }else{
-                $profile_image = "avatar.png";
-            }
-            $userView = array(
-                "userView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-															<a href="#">
-																<div class="symbol-label">
-																	<img src="'.$env["APP_URL"].'uploads/profile/'.$profile_image.'" alt="Emma Smith" class="w-100">
-																</div>
-															</a>
-														</div> <div class="d-flex flex-column">
-															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . $user['fname'] .' '.  $user['lname'] . '</a>
-															<span>'.  $user['email'] . '</span>
-														</div></div>'
-            );
-
-            $srNo++;
-            $ids = array("ids" => "$srNo");
-            $check_arr[] = array_merge($ids, $user,$userView, $status, $action);
         }
 
         $result = array(
@@ -932,7 +1476,6 @@ if($_GET['page_name']=="userStatusUpdate") {
         $status=$_GET['status'];
         $table_name=$_GET['table_name'];
         $status_table=$_GET['status_table'];
-
         try {
             $statusUpdate = $h->table($table_name)
                 ->update([$status_table=>$status])
@@ -946,7 +1489,6 @@ if($_GET['page_name']=="userStatusUpdate") {
         }
     }
 }
-
 if($_GET['page_name']=="profileStatusUpdate") {
 //    if (!is_csrf_v_script()) {
 //        exit();

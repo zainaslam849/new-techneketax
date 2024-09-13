@@ -77,4 +77,48 @@ if ($route == '/user/plans_details/$slug') {
         'type' => $_SESSION['type']
     ]);
 }
+if ($route == '/user/plan/checkout') {
+    if (!empty($_POST['user_id'])) {
+        $current_date = date('Y-m-d H:i:s');
+        $user_id = $_POST['user_id'];
+        if (!empty($_POST['billing_address_id'])){
+            $billing_address_id = $_POST['billing_address_id'];
+        }else{
+            echo "2";
+            exit();
+        }
+        $plan_id = $_POST['plan_id'];
+        $plan_type = $_POST['plan_type'];
+        $total_price = $_POST['total_price'];
+        if ($plan_type == 'month'){
+            $date = new DateTime($current_date);
+            $date->modify('+1 month');
+            $plan_end_date = $date->format('Y-m-d H:i:s');
+        }else{
+            $date = new DateTime($current_date);
+            $date->modify('+1 year');
+            $plan_end_date = $date->format('Y-m-d H:i:s');
+        }
+        $check = $h->table('subscriptions')->select()->where('user_id', '=', $user_id)->where('status', '=', 'successful');
+        if ($check->count() < 1){
+            try {
+                $insert = $h->insert('subscriptions')->values(['user_id' => $user_id,'total_price' => $total_price,'plan_id' => $plan_id,'billing_address_id' => $billing_address_id,'plan_type' => $plan_type,'plan_end_date' => $plan_end_date,'status' => 'successful'])->run();
+            if ($insert){
+                $update = $h->update('users')->values(['plan_id' => $plan_id,'plan_end_date' => $plan_end_date])->where('id', '=', $user_id)->run();
+
+                echo "1";
+                exit();
+            }
+            } catch (PDOException $e) {
+                echo "0";
+                exit();
+            }
+        }else{
+            echo "3";
+            exit();
+        }
+
+
+    }
+}
 

@@ -13,6 +13,13 @@ if ($loginUserType == "firm") {
         'keywords' => 'Admin Panel'
     );
     echo $twig->render('user/dashboard.twig', ['seo' => $seo]);
+}else if ($loginUserType == "member"){
+    $seo = array(
+        'title' => 'Dashboard',
+        'description' => @$val,
+        'keywords' => 'Admin Panel'
+    );
+    echo $twig->render('user/member_dashboard.twig', ['seo' => $seo]);
 }else{
     $seo = array(
         'title' => 'Dashboard',

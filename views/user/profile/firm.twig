@@ -71,6 +71,7 @@
                                     </div>
 
                                 </div>
+                                {% if loginType != 'member' %}
                                 <div class="d-flex flex-wrap flex-stack">
                                     <div class="d-flex flex-column flex-grow-1 pe-8">
                                         <div class="d-flex flex-wrap">
@@ -135,6 +136,7 @@
                                     </div>
 
                                 </div>
+                                {% endif %}
                             </div>
                         </div>
                         <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder">
@@ -150,12 +152,14 @@
                             <li class="nav-item mt-2">
                                 <a class="nav-link text-active-primary ms-0 me-10 py-5 " href="/user/profile/security">Security</a>
                             </li>
+                            {% if loginType != 'member' %}
                             <li class="nav-item mt-2">
                                 <a class="nav-link text-active-primary ms-0 me-10 py-5" href="/user/profile/billing">Billing</a>
                             </li>
                             <li class="nav-item mt-2">
                                 <a class="nav-link text-active-primary ms-0 me-10 py-5" href="/user/profile/paymentMethod">Payment Method</a>
                             </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -170,11 +174,6 @@
                         </button>
                     </div>
                     <div class="card-body p-9">
-
-                        <!-- Display Company Image -->
-
-
-                        <!-- Display Contact Name -->
                         <div class="row mb-7">
                             <label class="col-lg-4 fw-bold text-muted">Contact Name</label>
                             <div class="col-lg-8">
@@ -304,7 +303,7 @@
 
                             <div class="fv-row mb-7">
 
-                                <label class="d-block fw-bold fs-6 mb-5">Avatar</label>
+                                <label class="d-block fw-bold fs-6 mb-5">Firm Logo Dark</label>
                                 <div class="image-input image-input-outline image-input-empty"
                                      data-kt-image-input="true" >
                                     <div class="image-input-wrapper w-125px h-125px"
@@ -330,7 +329,34 @@
                                 </div>
                                 <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
                             </div>
+                            <div class="fv-row mb-7">
 
+                                <label class="d-block fw-bold fs-6 mb-5">Firm Logo Light</label>
+                                <div class="image-input image-input-outline image-input-empty"
+                                     data-kt-image-input="true" id="image-input1">
+                                    <div class="image-input-wrapper w-125px h-125px"
+                                         style="background-image: none"></div>
+                                    <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                           data-kt-image-input-action="change" data-bs-toggle="tooltip" title=""
+                                           data-bs-original-title="Change avatar">
+                                        <i class="bi bi-pencil-fill fs-7"></i>
+                                        <input type="file" name="filepond2" accept=".png, .jpg, .jpeg">
+                                        <input type="hidden" name="avatar_remove" value="1">
+                                    </label>
+
+                                    <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                          data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title=""
+                                          data-bs-original-title="Cancel avatar">
+                    <i class="bi bi-x fs-2"></i>
+                </span>
+                                    <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                          data-kt-image-input-action="remove" data-bs-toggle="tooltip" title=""
+                                          data-bs-original-title="Remove avatar">
+                    <i class="bi bi-x fs-2"></i>
+                </span>
+                                </div>
+                                <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
+                            </div>
                             <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="required fw-bold fs-6 mb-2">Contact Name</label>
                                 <input type="text" name="contact_name" class="form-control form-control-solid mb-3 mb-lg-0"
@@ -582,12 +608,16 @@
                     $('#bank_name_model').val(dataResult['users'][0].bank_name);
                     $('#swift_code_model').val(dataResult['users'][0].swift_code);
                     var profileImage = dataResult['users'][0].company_image;
+                    var profileImage1 = dataResult['users'][0].company_image_light;
                     var imageUrl = profileImage !== 'avatar.png'
                         ? "{{ env.APP_URL }}uploads/profile/" + profileImage
                         : "{{ env.APP_URL }}assets/dash/assets/media/svg/avatars/blank.svg";
-
+                    var imageUrl1 = profileImage1 !== 'avatar.png'
+                        ? "{{ env.APP_URL }}uploads/profile/" + profileImage1
+                        : "{{ env.APP_URL }}assets/dash/assets/media/svg/avatars/blank.svg";
                     // Set the background image dynamically
                     $('.image-input').css('background-image', 'url(' + imageUrl + ')');
+                    $('#image-input1').css('background-image', 'url(' + imageUrl1 + ')');
                     $("#view_doc").html('');
                     if(dataResult['users'][0].company_image != 'null' && dataResult['users'][0].company_image != '' && dataResult['users'][0].company_image != null) {
                         $("#view_doc").append('<img src="{{ env.APP_URL }}uploads/profile/'+dataResult['users'][0].company_image+'" >');
@@ -609,7 +639,7 @@
                     }else{
                         $('#invoicePaid').html(0);
                     }
-                    $("#bank_country_model").val(dataResult[0].bank_country).trigger();
+                    $("#bank_country_model").val(dataResult[0].bank_country);
                 }
             });
         }

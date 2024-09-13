@@ -68,6 +68,7 @@ $dbal = new Database\DatabaseManager(
 );
 $h=$dbal->database('default');
 $GLOBALS['h']=$h;
+
 //SESSION
 ob_start();
 date_default_timezone_set($env['TIME_ZONE']);
@@ -109,6 +110,7 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
         $loginUserId=$_SESSION['users']['id'];
         $loginUserType=$_SESSION['users']['type'];
         $userInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+        @$allow=explode(',',@$userInfo['permissions']);
         $loginUserName=$userInfo[0]['fname'] .' '.$userInfo[0]['lname'];
         $twig->addGlobal('loginId', $loginUserId);
         $twig->addGlobal('loginType', @$loginUserType);
@@ -118,13 +120,42 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
         $twig->addGlobal('userProfileImage', @$userInfo[0]['profile_image']);
     if ($loginUserType == "firm"){
         $twig->addGlobal('userCompanyImage', @$userInfo[0]['company_image']);
+        $twig->addGlobal('userCompanyImageLight', @$userInfo[0]['company_image_light']);
         $twig->addGlobal('whitelabel', @$userInfo[0]['white_labeling']);
         $twig->addGlobal('company_name', @$userInfo[0]['company_name']);
-
+        $plan_id = @$userInfo[0]['plan_id'];
+        $plan_end_date = $userInfo[0]['plan_end_date'];
+        $memberInfoss = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'member')->fetchAll();
+        $twig->addGlobal('memberInfoss', @$memberInfoss);
     }else{
-        $userInfo = $h->table('users')->select()->where('id', '=', @$userInfo[0]['firm_id'])->fetchAll();
-        $twig->addGlobal('userCompanyImage', @$userInfo[0]['company_image']);
-        $twig->addGlobal('whitelabel', @$userInfo[0]['white_labeling']);
+        $userInfoo = $h->table('users')->select()->where('id', '=', @$userInfo[0]['firm_id'])->fetchAll();
+        $twig->addGlobal('userCompanyImage', @$userInfoo[0]['company_image']);
+        $twig->addGlobal('userCompanyImageLight', @$userInfoo[0]['company_image_light']);
+        $twig->addGlobal('whitelabel', @$userInfoo[0]['white_labeling']);
+        $plan_id = @$userInfoo[0]['plan_id'];
+        $plan_end_date = $userInfoo[0]['plan_end_date'];
+    }
+    $current_date = date('Y-m-d H:i:s');
+    if(!empty($plan_id)){
+        $planInfo = $h->table('plans')->select()->where('id', '=', $plan_id)->fetchAll();
+            $key_pointsArray = explode(',', $planInfo[0]['key_points']);
+        $permissions = [];
+            if (!empty($key_pointsArray)) {
+                foreach ($key_pointsArray as $key_point_id) {
+                    $permission = $h->table('permissions')->select()->where('id', '=', $key_point_id)->fetchAll();
+                    if ($permission) {
+                        $permissions[] = $permission;
+                    }
+                }
+            }
+        $permissionValues = array_map(function($permission) {
+            return $permission[0]['value'];
+        }, $permissions);
+
+        $twig->addGlobal('permissionValues', @$permissionValues);
+        $twig->addGlobal('CurrentDate', @$current_date);
+        $twig->addGlobal('planId', @$plan_id);
+        $twig->addGlobal('planEndDate', @$plan_end_date);
     }
     $twig->addFilter(new \Twig\TwigFilter('base64_encode', function ($string) {
         return base64_encode($string);
@@ -135,9 +166,23 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
     $twig->addGlobal('Stripe_public_key', 'pk_test_51OgnsKB8z2Dlcg3z0Qz8mYPgaXouytYsnflrzr3hgWNNu91PY8ApCB2A6ZTbR49TZ59ag5KuLfIVIlBo2aCqgoZ900owqKbZDQ');
     $Stripe_secret_key='sk_test_51OgnsKB8z2Dlcg3z6ZQl607w3HUhJ3SQu7FupPI2XWwTaBBLdVZpYA7fpzDQBd8n9jpa9DsBUUuYnKoT9CKRcwV700c0vbYFoi';
 endif;
+if (!empty($_SESSION['member_id'])){
+    $twig->addGlobal('session_member_id', $_SESSION['member_id']);
+    $permissionFirm = $h->table('users')->select()->where('id', '=', $loginUserId)->where('associates_id', '=', $_SESSION['member_id'])->fetchAll();
+    if(!empty($permissionFirm[0]['permissions'])){
+        $permissionFirmValues = explode(',', $permissionFirm[0]['permissions']);
+    }else{
+        $permissionFirmValues = [];
+    }
+
+    $twig->addGlobal('firmPermissionValues', @$permissionFirmValues);
+
+}
+
 //TWILIO SMS API
 $twilio_number= '+17609040397';
 $account_sid= 'ACd5c325433100e2baf794a9c92caeeb55';
 $auth_token='aa8115bbf571ff82e60ae6ef26bdf4fe';
+
 
 

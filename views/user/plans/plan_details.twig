@@ -134,10 +134,6 @@
                                                 </tr>
                                                 <!--end::Row-->
                                                 <!--begin::Row-->
-                                                <tr>
-                                                    <td class="text-gray-400">Currency:</td>
-                                                    <td class="text-gray-800">USD - US Dollar</td>
-                                                </tr>
                                                 <!--end::Row-->
                                             </table>
                                             <!--end::Details-->
@@ -244,7 +240,15 @@
                                 <!--end::Section-->
                                 <!--begin::Actions-->
                                 <div class="mb-0">
-                                    <a href="#" class="btn btn-primary w-100" id="kt_subscriptions_create_button">Checkout</a>
+                                    <form method="post" id="CheckoutForm">
+                                        <input type="hidden" name="user_id" id="user_id" value="{{ loginId }}">
+                                        <input type="hidden" name="billing_address_id" id="billing_address_id" value="{{ Billing_address[0].id }}">
+                                        <input type="hidden" name="plan_id" id="plan_id" value="{{ plans[0].id }}">
+                                        <input type="hidden" name="plan_type" id="plan_type" value="{{ type }}">
+                                        <input type="hidden" name="total_price" id="total_price" value="{{ totalPrice }}">
+                                        <button type="button"  class="btn btn-primary w-100" id="btn-plan" onclick="plan_checkout()">Checkout</button>
+                                    </form>
+
                                 </div>
                                 <!--end::Actions-->
                             </div>
@@ -260,4 +264,37 @@
         </div>
         <!--end::Post-->
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        function plan_checkout() {
+            var form_Data = new FormData(document.getElementById("CheckoutForm"));
+            document.getElementById("btn-plan").innerHTML = "Loading";
+            document.getElementById('btn-plan').disabled = true;
+            $.ajax({
+                url: "/user/plan/checkout",
+                type: "POST",
+                data: form_Data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (dataResult) {
+                    document.getElementById("btn-plan").innerHTML = "Checkout";
+                    document.getElementById('btn-plan').disabled = false;
+                    console.log(dataResult);
+
+                    if (dataResult == 1) {
+                        toastr.success('You Pan Has Been Purchased.');
+                        document.getElementById("CheckoutForm").reset();
+                    } else if (dataResult == 2) {
+                        toastr.error("Please Add Billing Address <a href='/user/profile/billing'>Add Billing Address</a>");
+                    } else if (dataResult == 3) {
+                        toastr.error("You Already Purchased A plan");
+                    } else {
+                        toastr.error('Something Went Wrong.');
+                    }
+
+                }
+            });
+        }
+    </script>
 {% endblock %}

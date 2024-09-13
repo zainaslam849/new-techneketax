@@ -112,6 +112,15 @@
                              data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px"
                              style="max-height: 570px;">
                             <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="form-label">Associates</label>
+                                <select class="form-control form-control-solid" aria-label="Associates" id="associates_update_id" name="associates_update_id">
+                                    <option  disabled selected>Choose Associate</option>
+                                    {% for memberInfos in memberInfoss %}
+                                        <option value="{{ memberInfos.id }}">{{ memberInfos.fname }} {{ memberInfos.lname }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <label class="form-label">First name</label>
                                 <input type="text" class="form-control form-control-solid" id="fname" name="fname" placeholder="First Name">
                                 <input type="hidden" name="csrf" value="{{ csrf}}">
@@ -246,13 +255,13 @@
 
                     var dataResult = JSON.parse(dataResult);
                     console.log(dataResult);
+
                     $('#fname').val(dataResult[0].fname);
                     $('#lname').val(dataResult[0].lname);
                     $('#email').val(dataResult[0].email);
                     $('#phone').val(dataResult[0].phone);
                     $('input[name=id]').val(dataResult[0].id);
-
-
+                    $('#associates_update_id').val(dataResult[0].associates_id);
                 }
             });
         });
@@ -284,6 +293,8 @@
                         toastr.error("Password doesn't Matched.");
                     } else if (dataResult == 3) {
                         toastr.error("Required fields are empty!");
+                     } else if (dataResult == 4) {
+                        toastr.error("Please Assign Associate");
                     } else {
                         toastr.error('Somthing Went Wrong.');
                     }

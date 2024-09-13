@@ -68,12 +68,17 @@ if($route == '/user/firm-info'):
                 exit();
             }
             $company_image = upload('filepond1', 'uploads/profile/');
+            $company_image_light = upload('filepond2', 'uploads/profile/');
             if ($company_image == 'null' || $company_image == '') {
                 $company_image = $UserInfo[0]['company_image'];
+            }
+            if ($company_image_light == 'null' || $company_image_light == '') {
+                $company_image_light = $UserInfo[0]['company_image_light'];
             }
             try {
                 $update = $h->update('users')->values([
                     'company_image' => $company_image,
+                    'company_image_light' => $company_image_light,
                     'contact_name' => $contact_name,
                     'company_name' => $company_name,
                     'representative_name' => $representative_name,
@@ -154,7 +159,6 @@ if ($route == '/user/fetch_profile'):
         //fetch user
         $users = $h->table('users')->select()->where('id', '=', $id)->fetchAll();
       $currentDate =  date('Y-m-d H:i:s');
-        //Appointment
         if($loginUserType == 'firm'){
             $appointments_count = $h->table('appointment')
                 ->select()

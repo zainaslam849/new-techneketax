@@ -422,6 +422,7 @@
                                         <input type="text" name="fname" class="form-control form-control-lg form-control-solid" placeholder="First Name" id="fname" />
                                         <input type="hidden" id="firm_id" value="{{ firm_id }}">
                                         <input type="hidden" id="invite" value="{{ invite }}">
+                                        <input type="hidden" id="associates_id" value="{{ associates_id }}">
                                         <input type="hidden" name="csrf" value="{{ csrf }}">
                                     </div>
                                     <div class="col-lg-6">
@@ -432,7 +433,7 @@
 
                                 <div class="fv-row mb-10">
                                     <label class="form-label required" for="email">Email</label>
-                                    <input type="email" name="email" class="form-control form-control-lg form-control-solid" placeholder="Email Address" id="email" />
+                                    <input type="email" name="email" class="form-control form-control-lg form-control-solid" placeholder="Email Address" id="email" value="{% if firm_id != "" and invite != ""and email != "" %}{{ email }}{% endif %}" {% if firm_id != "" and invite != ""and email != "" %}disabled{% endif %} />
                                 </div>
                                 <div class="fv-row mb-10">
                                     <label class="form-label required" for="phone">Phone No</label>
@@ -543,6 +544,7 @@
     function do_register() {
         document.getElementById("btn").disabled = true;
         document.getElementById("btn").innerHTML = "Loading";
+        var associates_id = $("#associates_id").val();
         var firm_id = $("#firm_id").val();
         var invite = $("#invite").val();
         var fname = $("#fname").val();
@@ -560,9 +562,10 @@
                     $.ajax
                     ({
                         type: 'post',
-                        url: '/join/$firm_id/$invite',
+                        url: '/join/$firm_id/$associates_id/$email/$invite',
                         data: {
                             do_register: "do_register",
+                            associates_id: associates_id,
                             firm_id: firm_id,
                             invite: invite,
                             fname: fname,
@@ -591,6 +594,8 @@
                                 notie.alert({type: 'error', text: 'A minimum 8 characters password contains a combination of uppercase and lowercase letter and number.', time: 2})
                             } else if(response == "4") {
                                 notie.alert({type: 'error', text: 'Password is Required.', time: 2})
+                            } else if(response == "5") {
+                                notie.alert({type: 'error', text: 'Associate Not Assigned.', time: 2})
                             }else {
                                 notie.alert({type: 'error', text: 'Something Went wrong', time: 2})
                             }
