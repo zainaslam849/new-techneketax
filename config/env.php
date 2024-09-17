@@ -119,6 +119,7 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
         $twig->addGlobal('userPhone', @$userInfo[0]['phone']);
         $twig->addGlobal('userProfileImage', @$userInfo[0]['profile_image']);
     if ($loginUserType == "firm"){
+        $white_labeling=@$userInfo[0]['white_labeling'];
         $twig->addGlobal('userCompanyImage', @$userInfo[0]['company_image']);
         $twig->addGlobal('userCompanyImageLight', @$userInfo[0]['company_image_light']);
         $twig->addGlobal('whitelabel', @$userInfo[0]['white_labeling']);
@@ -129,12 +130,14 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
         $twig->addGlobal('memberInfoss', @$memberInfoss);
     }else{
         $userInfoo = $h->table('users')->select()->where('id', '=', @$userInfo[0]['firm_id'])->fetchAll();
+        $white_labeling=@$userInfoo[0]['white_labeling'];
         $twig->addGlobal('userCompanyImage', @$userInfoo[0]['company_image']);
         $twig->addGlobal('userCompanyImageLight', @$userInfoo[0]['company_image_light']);
         $twig->addGlobal('whitelabel', @$userInfoo[0]['white_labeling']);
         $plan_id = @$userInfoo[0]['plan_id'];
         $plan_end_date = $userInfoo[0]['plan_end_date'];
     }
+    $loginUserwhite_labeling= $white_labeling;
     $current_date = date('Y-m-d H:i:s');
     if(!empty($plan_id)){
         $planInfo = $h->table('plans')->select()->where('id', '=', $plan_id)->fetchAll();

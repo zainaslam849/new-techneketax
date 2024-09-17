@@ -162,7 +162,7 @@
                                                         {% if not loop.last %}
                                                             <button type="button" class="btn btn-primary btn-nxt">Next</button>
                                                         {% else %}
-                                                            <button type="submit" class="btn btn-success me-3 submitBtn">Submit</button>
+                                                            <button type="submit" class="btn btn-success me-3 submitBtn" id="btn-template">Submit</button>
                                                         {% endif %}
                                                     </div>
                                                 </div>
@@ -332,7 +332,8 @@
                     for (var pair of formData.entries()) {
                         console.log(pair[0]+ ', ' + pair[1]);
                     }
-
+                    document.getElementById('btn-template').disabled = true;
+                    document.getElementById("btn-template").innerHTML = "Loading";
                     $.ajax({
                         url: $(this).attr('action'),
                         type: 'POST',
@@ -340,12 +341,14 @@
                         processData: false,  // Important!
                         contentType: false,  // Important!
                         success: function (response) {
+                            document.getElementById('btn-template').disabled = false;
+                            document.getElementById("btn-template").innerHTML = "Submit";
                             console.log(response);
                             if (response === 'Data saved successfully!') {
                                 toastr.success('Data saved successfully.');
                                 document.getElementById("dynamicForm").reset();
                                 setTimeout(function(){
-                                    window.location.href = '/client/template/request'; // Redirect to display page
+                                    window.location.href = '/client/document'; // Redirect to display page
                                 }, 2000); //Time before execution
 
                             } else {

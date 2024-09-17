@@ -75,6 +75,7 @@
                                             <th> Id </th>
                                             <th>Client Name</th>
                                             <th>Client Description</th>
+                                            <th >Document Type</th>
                                             <th >Status</th>
                                             <th >Action</th>
                                         </tr>
@@ -107,7 +108,7 @@
                         <div class="fv-row mb-7 fv-plugins-icon-container">
                                     <label class="form-label">Client</label>
                                     <select class="js-example-basic-single form-select form-select-solid" aria-label="Client"  name="client_id">
-                                        <option selected>Choose Client</option>
+                                        <option selected disabled>Choose Client</option>
                                         {% for client in clients %}
                                             <option value="{{ client.id }}">{{ client.fname }} {{ client.lname }}</option>
                                         {% endfor %}
@@ -156,8 +157,9 @@
                             <div class="">
                                 <label class="form-label">Interviews Documents</label>
                                 <select class="js-example-basic-single1 form-select form-select-solid" aria-label="Documents" id="document_interviews_id" name="document_interviews_id" >
-                                    {% for document in documents %}
-                                        <option value="{{ document.id }}">{{ document.file_name }}</option>
+                                    <option selected disabled>Choose Interview</option>
+                                    {% for template in templates %}
+                                        <option value="{{ template.id }}">{{ template.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -250,6 +252,7 @@
                     {mData: 'ids'},
                     {mData: 'userView'},
                     {mData: 'ClientDes'},
+                    {mData: 'statusDocView'},
                     {mData: 'statusView'},
                     {mData: 'action'},
                 ]
@@ -306,8 +309,16 @@
                         $('#editExampleModal').modal('hide');
                         toastr.success('Document Request Sent.');
                         document.getElementById("DocumentForm").reset();
-                    } else if (dataResult == 3) {
+                    } else if (dataResult == 2) {
+                        toastr.error("Please Add Client");
+                    }else if (dataResult == 3) {
                         toastr.error("Required fields are empty!");
+                    }  else if (dataResult == 4) {
+                        toastr.error("Please Select Interviews");
+                    } else if (dataResult == 5) {
+                        toastr.error("Please Select Resources Document");
+                    } else if (dataResult == 6) {
+                        toastr.info("You already sent the request to this client!");
                     } else {
                         toastr.error('Something Went Wrong.');
                     }

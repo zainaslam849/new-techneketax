@@ -290,7 +290,6 @@
                 "iDisplayLength": 10,
                 "aoColumns": [
                     {mData: 'viewDocs'},
-
                 ]
             });
             $('#search').on('keyup', function() {
@@ -313,7 +312,17 @@
                     csrf: csrf_token
                 }, success: function (data) {
                     if (data['statusCode'] == "1") {
-                        window.location.href = '/client/dochubdetails/'+data['id'];
+                        if (data['document_type'] == "interviews") {
+                            if(data['document_hub_status'] == "yes"){
+                                if(data['template_request_status'] == "completed"){
+                                    window.location.href = '/user/template/display-data/'+data['client_id']+'/'+data['template_id'];
+                                }
+                            }else{
+                                window.location.href = '/user/template/view/'+data['id'];
+                            }
+                        }else{
+                            window.location.href = '/client/dochubdetails/'+data['id'];
+                        }
                     } else {
                         toastr.error('Something went wrong.');
 

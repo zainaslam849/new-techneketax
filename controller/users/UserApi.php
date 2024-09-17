@@ -802,7 +802,6 @@ if($_GET['page_name']=="view_members"){
             // $plus = array("plusView" => "<a class='control' tabindex='0' style=""></a>");
             $action = array('action' =>  $userStatus.'
                     <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="edit btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
-                     <a role="button" data-id="'.$user["id"].'" data-bs-toggle="modal" data-bs-target="#editPerModal" class="edit btn-sm btn btn-light-warning text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-user-tag"></i></a>
                    <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$user["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
            
                       ');
@@ -1260,10 +1259,28 @@ if($_GET['page_name']=="view_document_hub"){
             } else {
                 $statusView = "<span class='badge badge-light-danger'>Not Uploaded Yet</span>";
             }
-            $action = array('action' =>'
-            <a href="/user/dochubdetails/'.$document_hub['id'].'" target="_blank" class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>
-            <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$document_hub["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
-');
+
+            if ($document_hub['document_type'] == "interviews") {
+                $statusDocView = "<span class='badge badge-light-success'>Interviews</span>";
+                $template_request = $h->table('template_request')->select()->where('doc_hub_id', '=', $document_hub['id'])->fetchAll();
+                if($template_request[0]['status'] == 'completed'){
+                    $DocDetailsView = '<a href="/user/template/display-data/'.$document_hub['client_id'].'/'.$template_request[0]['template_id'].'" target="_blank" class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>';
+                }else{
+                    $DocDetailsView = '<a class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>';
+                }
+            } else if ($document_hub['document_type'] == "resources") {
+                $statusDocView = "<span class='badge badge-light-info'>Resources</span>";
+                $DocDetailsView = '<a href="/user/dochubdetails/'.$document_hub['id'].'" target="_blank" class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>';
+            } else {
+                $statusDocView = "<span class='badge badge-light-success'>Interviews</span>";
+                $template_request = $h->table('template_request')->select()->where('doc_hub_id', '=', $document_hub['id'])->fetchAll();
+                if($template_request[0]['status'] == 'completed'){
+                    $DocDetailsView = '<a href="/user/template/display-data/'.$document_hub['client_id'].'/'.$template_request[0]['template_id'].'" target="_blank" class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>';
+                }else{
+                    $DocDetailsView = '<a class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>';
+                }
+            }
+            $action = array('action' =>$DocDetailsView.'<a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$document_hub["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>');
             if (!empty($document_hub['client_des']) && $document_hub['client_des'] != ''){
                 $words = explode(' ', $document_hub['client_des']);
                 $des = implode(' ', array_slice($words, 0, 10));
@@ -1274,6 +1291,7 @@ if($_GET['page_name']=="view_document_hub"){
             }
 
             $status = array("statusView" => $statusView);
+            $statusDoc = array("statusDocView" => $statusDocView);
 if (!empty($document_hub['client_id'])){
     $usersInfo = $h->table('users')->select()->where('id', '=', $document_hub['client_id'])->fetchAll();
     $userView = array(
@@ -1293,7 +1311,7 @@ if (!empty($document_hub['client_id'])){
 
             $srNo++;
             $ids = array("ids" => "$srNo");
-            $check_arr[] = array_merge($ids, $document_hub,$userView,$ClientDes, $status, $action);
+            $check_arr[] = array_merge($ids, $document_hub,$userView,$ClientDes, $status,$statusDoc, $action);
         }
 
         $result = array(
@@ -1364,7 +1382,6 @@ if($_GET['page_name']=="view_document_hub_client"){
                 $words = explode(' ', $document_hub['firm_des']);
                 $des = implode(' ', array_slice($words, 0, 40));
                 $firmDes = '<p><a role="button" onclick="userStatus('.$document_hub['id'].')"  class=" text-muted"><span class="text-muted fw-bold fs-6">' . $des . '....</span>Read More</a></p>';
-
             }else{
                 $firmDes = '<p>---</p>';
             }
@@ -1374,6 +1391,13 @@ if($_GET['page_name']=="view_document_hub_client"){
                 $StatusView = '<span class="badge badge-light-success my-1">Uploaded</span>';
             }else{
                 $StatusView = '<span class="badge badge-light-danger my-1">Not Uploaded</span>';
+            }
+            if ($document_hub['document_type'] == "interviews") {
+                $statusDocView = "<span class='' style='margin-left: 5px; font-weight: bold'>Interview</span>";
+            } else if ($document_hub['document_type'] == "resources") {
+                $statusDocView = "<span class='' style='margin-left: 5px; font-weight: bold'>Resource Document</span>";
+            } else {
+                $statusDocView = "<span class='' style='margin-left: 5px; font-weight: bold'>Interview</span>";
             }
             if($document_hub['see_doc'] == '0'){
                 $SeeDoc = '<span class="svg-icon svg-icon-2x me-5 ms-n1 mt-2 svg-icon-warning">
@@ -1412,6 +1436,9 @@ if($_GET['page_name']=="view_document_hub_client"){
                                                 <!--begin::Title-->
                                                 <a role="button" onclick="userStatus('.$document_hub['id'].')" class="text-dark text-hover-primary fs-4 me-3 fw-bold"><span style="color: #ED141F;">'.$UserFirmDetails[0]['fname'].' '.$UserFirmDetails[0]['lname'].'</span> Request For document.</a>
                                              '.$StatusView.'
+                                            </div>
+                                             <div class="d-flex align-items-center mb-2">
+                                              Document Type is '.$statusDocView.'
                                             </div>
                                             <!--end::Content-->
                                             <!--begin::Text-->
@@ -1453,13 +1480,31 @@ if($_GET['page_name']=="DocStatusUpdate") {
         $status=$_GET['status'];
         $table_name=$_GET['table_name'];
         $status_table=$_GET['status_table'];
+        $document_hubInfo = $h->table('document_hub')->select()->where('id', '=', $id)->fetchAll();
+        if ($document_hubInfo[0]['document_type'] == 'interviews'){
+            $template = $h->table('templates')->select()->where('id', '=', $document_hubInfo[0]['document_id'])->fetchAll();
+            $template_request = $h->table('template_request')->select()->where('doc_hub_id', '=', $id)->fetchAll();
+            $templates_slug = $template[0]['slug'];
+            $template_request_status = $template_request[0]['status'];
+            $document_hub_status = $document_hubInfo[0]['status'];
+            $document_type = $document_hubInfo[0]['document_type'];
+            $client_id = $document_hubInfo[0]['client_id'];
+            $template_id = $template_request[0]['template_id'];
+        }else{
+            $templates_slug = $id;
+            $template_request_status= '';
+            $document_hub_status= '';
+            $document_type = '';
+            $template_id = '';
+            $client_id = $document_hubInfo[0]['client_id'];
 
+        }
         try {
             $statusUpdate = $h->table($table_name)
                 ->update([$status_table=>$status])
                 ->where('id','=',$id)
                 ->run();
-            echo json_encode(array("statusCode" => "1", "id"=>$id));
+            echo json_encode(array("statusCode" => "1", "id"=>$templates_slug,"template_request_status"=>$template_request_status,"document_hub_status"=>$document_hub_status, "document_type"=>$document_type, "client_id"=>$client_id, "template_id"=>$template_id));
             exit;
         }catch (PDOException $e) {
             echo 0;

@@ -9,7 +9,8 @@ if($route == '/user/document'):
     );
     $users = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
     $documents = $h->table('firm_upload_file')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
-    echo $twig->render('user/document_hub/firm_index.twig', ['seo' => $seo,'clients' => $users,'documents' => $documents]);
+    $templates= $h->table('templates')->select()->where('status', '=', 'active')->orderBy('id', 'desc')->fetchAll();
+    echo $twig->render('user/document_hub/firm_index.twig', ['seo' => $seo,'clients' => $users,'documents' => $documents,'templates' => $templates]);
 endif;
 if($route == '/client/document'):
     $seo = array(
@@ -92,28 +93,110 @@ if($route == '/user/request_for_document'):
             echo "3";
             exit();
         }
-        if (!empty($_POST['document_id'])) {
-            @$document_id = implode(', ', $_POST['document_id']);
+        $document_type = $_POST['document_type'];
+        if ($document_type == 'interviews'){
+            if (!empty($_POST['document_interviews_id'])){
+                $document_id = $_POST['document_interviews_id'];
+            }else{
+                echo "4";
+                exit();
+            }
         }else{
-            @$document_id = null;
+            if (!empty($_POST['document_id'])) {
+                @$document_id = implode(', ', $_POST['document_id']);
+            }else{
+                echo "5";
+                exit();
+            }
         }
         $firm_des = $_POST['firm_des'];
+
         try {
-            $insert = $h->insert('document_hub')->values([ 'firm_id' => $loginUserId,'client_id' => $client_id,'firm_des' => $firm_des,'document_id' => $document_id])->run();
-            $usersInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
-            $email = $usersInfo[0]['email'];
-            if (!empty($loginUserId)){
-                $companyInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
-                if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
-                    @$company_name =  @$companyInfo[0]['company_name'];
-                    @$company_phone =  @$companyInfo[0]['phone'];
-                    @$company_email =  @$companyInfo[0]['email'];
-                    @$company_address =  @$companyInfo[0]['address'];
-                    @$company_linkedin =  @$companyInfo[0]['linkedin'];
-                    @$company_tweet =  @$companyInfo[0]['tweet'];
-                    @$company_facebook =  @$companyInfo[0]['facebook'];
-                    @$company_github =  @$companyInfo[0]['github'];
-                    @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
+            if($document_type == 'interviews'){
+                    $checkData= $h->table('template_request')->select()->where('user_id', '=', $client_id)->where('template_id', '=', $document_id)->fetchAll();
+                    if(empty($checkData)){
+                        $insert = $h->insert('document_hub')->values(['firm_id' => $loginUserId,'client_id' => $client_id,'document_type' => $document_type,'firm_des' => $firm_des,'document_id' => $document_id])->run();
+                        $res=$h->insert('template_request')->values(['doc_hub_id' => $insert,'user_id' => $client_id,'template_id' => $document_id])->run();
+                        if($res){
+                            echo 1;
+                            $ClientInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
+                            if (!empty($loginUserId)){
+                                $companyInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+                                if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
+                                    @$company_name =  @$companyInfo[0]['company_name'];
+                                    @$company_phone =  @$companyInfo[0]['phone'];
+                                    @$company_email =  @$companyInfo[0]['email'];
+                                    @$company_address =  @$companyInfo[0]['address'];
+                                    @$company_linkedin =  @$companyInfo[0]['linkedin'];
+                                    @$company_tweet =  @$companyInfo[0]['tweet'];
+                                    @$company_facebook =  @$companyInfo[0]['facebook'];
+                                    @$company_github =  @$companyInfo[0]['github'];
+                                    @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
+                                }else{
+                                    $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                                    @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                                    @$company_phone =  @$AdminInfo[0]['phone'];
+                                    @$company_email =  @$AdminInfo[0]['email'];
+                                    @$company_address =  @$AdminInfo[0]['address'];
+                                    @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                                    @$company_tweet =  @$AdminInfo[0]['tweet'];
+                                    @$company_facebook =  @$AdminInfo[0]['facebook'];
+                                    @$company_github =  @$AdminInfo[0]['github'];
+                                    @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                                }
+                            }else{
+                                $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                                @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                                @$company_phone =  @$AdminInfo[0]['phone'];
+                                @$company_email =  @$AdminInfo[0]['email'];
+                                @$company_address =  @$AdminInfo[0]['address'];
+                                @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                                @$company_tweet =  @$AdminInfo[0]['tweet'];
+                                @$company_facebook =  @$AdminInfo[0]['facebook'];
+                                @$company_github =  @$AdminInfo[0]['github'];
+                                @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                            }
+                            sendSMS($companyInfo[0]['phone'],'Invitation to Complete Your Interview Form \n We kindly invite you to complete the interview form as part of our ongoing process. Your insights are highly valued and will greatly assist us in tailoring our services to your needs.');
+                            include "views/email-template/interview_request.php";
+                            mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], 'Invitation to Complete Your Interview Form', $message, $mail);
+                            exit();
+                        }else{
+                            echo 0;
+                            exit();
+                        }
+                    }else{
+                        echo "6";
+                        exit();
+                    }
+
+            }else{
+                $insert = $h->insert('document_hub')->values([ 'firm_id' => $loginUserId,'client_id' => $client_id,'document_type' => $document_type,'firm_des' => $firm_des,'document_id' => $document_id])->run();
+                $usersInfo = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
+                $email = $usersInfo[0]['email'];
+                if (!empty($loginUserId)){
+                    $companyInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+                    if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
+                        @$company_name =  @$companyInfo[0]['company_name'];
+                        @$company_phone =  @$companyInfo[0]['phone'];
+                        @$company_email =  @$companyInfo[0]['email'];
+                        @$company_address =  @$companyInfo[0]['address'];
+                        @$company_linkedin =  @$companyInfo[0]['linkedin'];
+                        @$company_tweet =  @$companyInfo[0]['tweet'];
+                        @$company_facebook =  @$companyInfo[0]['facebook'];
+                        @$company_github =  @$companyInfo[0]['github'];
+                        @$imgUrl = $env['APP_URL'].'uploads/profile'.@$companyInfo[0]['company_image'];
+                    }else{
+                        $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
+                        @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
+                        @$company_phone =  @$AdminInfo[0]['phone'];
+                        @$company_email =  @$AdminInfo[0]['email'];
+                        @$company_address =  @$AdminInfo[0]['address'];
+                        @$company_linkedin =  @$AdminInfo[0]['linkedin'];
+                        @$company_tweet =  @$AdminInfo[0]['tweet'];
+                        @$company_facebook =  @$AdminInfo[0]['facebook'];
+                        @$company_github =  @$AdminInfo[0]['github'];
+                        @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
+                    }
                 }else{
                     $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
                     @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
@@ -126,24 +209,13 @@ if($route == '/user/request_for_document'):
                     @$company_github =  @$AdminInfo[0]['github'];
                     @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
                 }
-            }else{
-                $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
-                @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
-                @$company_phone =  @$AdminInfo[0]['phone'];
-                @$company_email =  @$AdminInfo[0]['email'];
-                @$company_address =  @$AdminInfo[0]['address'];
-                @$company_linkedin =  @$AdminInfo[0]['linkedin'];
-                @$company_tweet =  @$AdminInfo[0]['tweet'];
-                @$company_facebook =  @$AdminInfo[0]['facebook'];
-                @$company_github =  @$AdminInfo[0]['github'];
-                @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
-            }
-            sendSMS($companyInfo[0]['phone'],''.@$company_name.' Request for document\n\n '.$firm_des.' \n');
+                sendSMS($companyInfo[0]['phone'],''.@$company_name.' Request for document\n\n '.$firm_des.' \n');
 
-            include "views/email-template/firmRequestDocument.php";
-            mailSender($env['SENDER_EMAIL'],$email,'Request For Document - '.$env['SITE_NAME'],$message,$mail);
-            echo "1";
-            exit();
+                include "views/email-template/firmRequestDocument.php";
+                mailSender($env['SENDER_EMAIL'],$email,'Request For Document - '.$env['SITE_NAME'],$message,$mail);
+                echo "1";
+                exit();
+            }
         } catch (PDOException $e) {
             echo "0";
             exit();
@@ -166,6 +238,7 @@ if($route == '/client/dochubdetails/$id'):
     $clientDetails = $h->table('users')->select()->where('id', '=', $client_id)->fetchAll();
     echo $twig->render('user/document_hub/client_index_detail.twig', ['seo' => $seo,'documentHub' => $document_hub,'client_details' => $clientDetails,'firmDetail' => $firmDetails]);
 endif;
+
 
 if($route == '/user/dochubdetails/$id'):
     $seo = array(
