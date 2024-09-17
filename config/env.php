@@ -135,9 +135,8 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
         $twig->addGlobal('userCompanyImageLight', @$userInfoo[0]['company_image_light']);
         $twig->addGlobal('whitelabel', @$userInfoo[0]['white_labeling']);
         $plan_id = @$userInfoo[0]['plan_id'];
-        $plan_end_date = $userInfoo[0]['plan_end_date'];
+        $plan_end_date = @$userInfoo[0]['plan_end_date'];
     }
-    $loginUserwhite_labeling= $white_labeling;
     $current_date = date('Y-m-d H:i:s');
     if(!empty($plan_id)){
         $planInfo = $h->table('plans')->select()->where('id', '=', $plan_id)->fetchAll();

@@ -24,7 +24,11 @@ $seo = array(
         // Attach key points titles to the plan array
         $plan['key_points_titles'] = $key_points_titles;
     }
-echo $twig->render('user/plans/index.twig', ['seo' => $seo,'plans' => $plans]);
+    if (!empty($plan_end_date)){
+        $dateTime = new DateTime($plan_end_date);
+        $formattedDate = $dateTime->format('l, d F Y');
+    }
+echo $twig->render('user/plans/index.twig', ['seo' => $seo,'plans' => $plans,'formattedDate' => $formattedDate]);
 endif;
 
 if($route == '/user/plan/get_plan'):

@@ -274,6 +274,7 @@ if (!empty(@$plan_id) && @$plan_id != '' && $current_date <= @$plan_end_date ){
     post('/user/add_payment_method', 'controller/users/ProfileController.php');
     post('/user/get_payment_method', 'controller/users/ProfileController.php');
     post('/user/update_payment_method', 'controller/users/ProfileController.php');
+    post('/user/profile/change_stripe_keys', 'controller/users/ProfileController.php');
 // user
 
 
@@ -310,6 +311,8 @@ post('/admin/fetch_profile', 'controller/admin/ProfileController.php');
 post('/admin/profile', 'controller/admin/ProfileController.php');
     get('/admin/profile/security', 'controller/admin/ProfileController.php');
     post('/admin/profile/password_change', 'controller/admin/ProfileController.php');
+    get('/admin/profile/paymentMethod', 'controller/admin/ProfileController.php');
+    post('/admin/profile/change_stripe_keys', 'controller/admin/ProfileController.php');
 
 
 //get('/admin/json', 'controller/admin/JsonFileController.php');

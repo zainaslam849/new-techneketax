@@ -175,17 +175,17 @@
                         </ul>
                     </div>
                 </div>
-                <div class="card mb-5 mb-xl-10" id="editBillingModal">
+                <div class="card mb-5 mb-xl-10" style="display: none" id="editBillingModal">
 
                     <div class="card-header">
                         <div class="card-title m-0">
-                            <h3 class="fw-bolder m-0">Billing Address</h3>
+                            <h3 class="fw-bolder m-0">Payment Method</h3>
                         </div>
 
                     </div>
 
                     <div class="card-body">
-                        <div class="row gx-9 gy-6" id="reloadpayment">
+                        <div class="row gx-9 gy-6" id="reloadpaymentt">
                             {% if paymentMethods  %}
                             {% for paymentMethod in paymentMethods %}
                                 <div class="col-xl-6">
@@ -230,6 +230,39 @@
                                         <a href="#" class="btn btn-primary px-6 align-self-center text-nowrap" data-bs-toggle="modal" data-bs-target="#kt_modal_add_userww">New Payment Method</a>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card mb-5 mb-xl-10">
+
+                    <div class="card-header">
+                        <div class="card-title m-0">
+                            <h3 class="fw-bolder m-0">Stripe Key</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row gx-9 gy-6" id="reloadpayment">
+                            <div class="col-lg-6">
+                                <div class="fv-row mb-0">
+                                    <label for="public_key" class="form-label fs-6 fw-bolder mb-3">Public Key</label>
+                                    <input type="text" class="form-control form-control-lg form-control-solid" id="public_key" name="public_key" placeholder="Public Key" value="{{ stripe_keys[0].public_key }}" />
+                                    <input type="hidden"  id="stripe_keys_id"  value="{{ stripe_keys[0].id }}">
+                                    <input type="hidden" name="csrf" value="{{csrf}}">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="fv-row mb-0">
+                                    <label for="secret_key" class="form-label fs-6 fw-bolder mb-3">Secret Key</label>
+                                    <input type="text" class="form-control form-control-lg form-control-solid" id="secret_key" name="secret_key" placeholder="Secret Key" value="{{ stripe_keys[0].secret_key }}"/>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <button id="btn-stripe-keys" onclick="change_stripe_keys()" type="button" class="btn btn-primary me-2 mt-3 px-6">Update Keys</button>
+
                             </div>
                         </div>
 
@@ -402,11 +435,9 @@
         function closeModal(id,) {
             $('#' + id).modal('hide');
         }
-
         $(document).ready(function () {
             fetch_profile()
         });
-
         function fetch_profile() {
             var id = {{ loginId }};
             $.ajax({
@@ -456,7 +487,6 @@
                 }
             });
         }
-
         function add_payment_method() {
             document.getElementById('btn-payment').disabled = true;
             var formData =  new FormData(document.getElementById("PaymentMethodForm"));
@@ -548,7 +578,49 @@
                 }
             });
         }
+        function change_stripe_keys() {
+            var id = $("#stripe_keys_id").val();
+            var public_key = $("#public_key").val();
+            var secret_key = $("#secret_key").val();
+            var confirm_password = $("#confirm_password").val();
+            var csrf_token = $("input[name=csrf]").val();
+                if ( public_key != '' && secret_key != '') {
+                    document.getElementById("btn-stripe-keys").innerHTML = "Loading";
+                    $("#btn-stripe-keys").attr("disabled");
+                    $.ajax
+                    ({
+                        type: 'post',
+                        url: '/user/profile/change_stripe_keys',
+                        data: {
+                            do_profile: "do_profile",
+                            id: id,
+                            public_key: public_key,
+                            secret_key: secret_key,
+                            csrf: csrf_token,
+                        },
+                        success: function (response) {
+                            response = $.parseJSON(response);
+                            if(response== 1){
+                                $("#btn-stripe-keys").removeAttr("disabled");
+                                toastr.success('Update Successfully.');
+                                document.getElementById("btn-stripe-keys").innerHTML = "Update Keys";
+                                fetch_profile()
+                                $('#reloadpayment').load(window.location.href + ' #reloadpayment');
+                            } else{
+                                toastr.error('Somthing Went Wrong.');
+                                $("#btn-stripe-keys").removeAttr("disabled");
+                                document.getElementById("btn-stripe-keys").innerHTML = "Update Keys";
+                            }
+                        }
+                    });
+                }else{
+                    document.getElementById("btn-stripe-keys").innerHTML = "Update Keys";
+                    document.getElementById("btn-stripe-keys").disabled = false;
+                    toastr.error("Required Fields Are Empty");
+                }
 
+            return false;
+        }
         function Payment_method_make_it_primary() {
             var checkedValue = document.querySelector('.paymentMethod:checked').value;
             $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
