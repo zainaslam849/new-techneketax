@@ -356,43 +356,7 @@
                 $('#completed').DataTable().search(this.value).draw();
             });
         });
-        function send_invite() {
-            var form_Data = new FormData(document.getElementById("inviteForm"));
-            document.getElementById('btn-profile').disabled = true;
 
-            $.ajax({
-                url: "/user/send_invite",
-                type: "POST",
-                data: form_Data,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function (dataResult) {
-                    console.log(dataResult);
-                    if (dataResult == 1) {
-                        $('#table').DataTable().ajax.reload(null, false);
-                        $('#unassigned').DataTable().ajax.reload(null, false);
-                        $('#inProgress').DataTable().ajax.reload(null, false);
-                        $('#completed').DataTable().ajax.reload(null, false);
-                        document.getElementById('btn-profile').disabled = false;
-                        $('#inputFormModal').modal('hide');
-                        toastr.success('Invitation Sent.');
-                        document.getElementById("inviteForm").reset();
-
-                    } else if (dataResult == 2) {
-                        document.getElementById('btn-profile').disabled = false;
-                        toastr.error("Required fields are empty!");
-                    } else if (dataResult == 3) {
-                        document.getElementById('btn-profile').disabled = false;
-                        toastr.error("Email Already Exist");
-                    }else {
-                        document.getElementById('btn-profile').disabled = false;
-                        toastr.error('Somthing Went Wrong.');
-                    }
-
-                }
-            });
-        }
         function userStatus(userID, status) {
             if(status == 0){
                 var currStatus= "completed";
@@ -428,69 +392,8 @@
 
             });
         }
-        $('body').on('click', '.edit', function () {
-            var id = $(this).data('id');
-
-            $('#editUploadForm').trigger("reset");
-
-            $.ajax({
-                url: "/user/get_user",
-                type: "POST",
-                data: {
-                    edit: 1,
-                    id: id,
-                },
-                cache: false,
-                success: function (dataResult) {
-
-                    var dataResult = JSON.parse(dataResult);
-                    console.log(dataResult);
-                    $('#fname').val(dataResult[0].fname);
-                    $('#lname').val(dataResult[0].lname);
-                    $('#email').val(dataResult[0].email);
-                    $('#phone').val(dataResult[0].phone);
-                    $('input[name=id]').val(dataResult[0].id);
 
 
-                }
-            });
-        });
-        //Update  Data
-        function update_tool() {
-            var form_Data = new FormData(document.getElementById("editUploadForm"));
-
-            $.ajax({
-                url: "/user/user_edit",
-                type: "POST",
-                data: form_Data,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function (dataResult) {
-                    console.log(dataResult);
-
-                    $("#btn-profile").removeAttr("disabled");
-                    if (dataResult == 1) {
-                        $('#table').DataTable().ajax.reload(null, false);
-                        $('#unassigned').DataTable().ajax.reload(null, false);
-                        $('#inProgress').DataTable().ajax.reload(null, false);
-                        $('#completed').DataTable().ajax.reload(null, false);
-                        $("#btn-profile").removeAttr("enabled");
-                        $('#editExampleModal').modal('hide');
-                        toastr.success('Client Updated Successfully.');
-                        document.getElementById("editUploadForm").reset();
-
-                    } else if (dataResult == 2) {
-                        toastr.error("Password doesn't Matched.");
-                    } else if (dataResult == 3) {
-                        toastr.error("Required fields are empty!");
-                    } else {
-                        toastr.error('Somthing Went Wrong.');
-                    }
-
-                }
-            });
-        }
         function openAction(userId) {
             var actionButton = document.querySelector('button[onclick="openAction(' + userId + ')"]');
             actionButton.classList.toggle('show');

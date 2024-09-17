@@ -153,13 +153,21 @@
                              style="max-height: 570px;">
                             <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <div class="row">
+{#                                    {% for permission in permissions %}#}
+{#                                        <div class=" col-md-6 mt-2">#}
+{#                                            <div class="radioButton" style="margin-right: 10px">#}
+{#                                                <input class=" m4 required-input" type="checkbox" name="permissions[]" id="{{ permission[0].id }}"#}
+{#                                                       value="{{ permission[0].value }}">#}
+{#                                                <label  for="{{ permission[0].id }}"><button type="button" class="btn btn-light-primary">{{ permission[0].title }}</button></label>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    {% endfor %}#}
                                     {% for permission in permissions %}
                                         <div class=" col-md-6 mt-2">
-                                            <div class="radioButton" style="margin-right: 10px">
                                                 <input class=" m4 required-input" type="checkbox" name="permissions[]" id="{{ permission[0].id }}"
                                                        value="{{ permission[0].value }}">
-                                                <label  for="{{ permission[0].id }}"><button type="button" class="btn btn-light-primary">{{ permission[0].title }}</button></label>
-                                            </div>
+                                                <label  for="{{ permission[0].id }}">{{ permission[0].title }}</label>
+
                                         </div>
                                     {% endfor %}
                                 </div>
