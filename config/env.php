@@ -140,7 +140,12 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
         $twig->addGlobal('whitelabel', @$userInfoo[0]['white_labeling']);
         $plan_id = @$userInfoo[0]['plan_id'];
         $plan_end_date = @$userInfoo[0]['plan_end_date'];
+        $Firm_StripeCredentials = $h->table('firm_stripe_keys')->select()->where('firm_id', '=', $userInfo[0]['firm_id'])->fetchAll();
+        $Firm_Stripe_public_key=@$Firm_StripeCredentials[0]['public_key'];
+        $Firm_Stripe_secret_key=@$Firm_StripeCredentials[0]['secret_key'];
     }
+    $twig->addGlobal('Firm_Stripe_public_key', @$Firm_Stripe_public_key);
+    $twig->addGlobal('Firm_Stripe_secret_key', @$Firm_Stripe_secret_key);
     $current_date = date('Y-m-d H:i:s');
     if(!empty($plan_id)){
         $planInfo = $h->table('plans')->select()->where('id', '=', $plan_id)->fetchAll();

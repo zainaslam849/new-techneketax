@@ -148,7 +148,7 @@ if ($route == '/user/plan/checkout') {
                 // Here you can update your database with subscription info
                 // Store subscription details in the database
 
-                $insert = $h->insert('transactions')->values([
+                $insert = $h->insert('admin_transactions')->values([
                     'subscription_id' => $subscription_id,
                     'transaction_id' => $transaction_id,
                     'plan_id' => $package_form_id,
