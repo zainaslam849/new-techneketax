@@ -1,5 +1,6 @@
 <?php
 require("config/env.php");
+\Stripe\Stripe::setApiKey($Admin_Stripe_secret_key);
 if($route == '/user/plans'):
 $seo = array(
     'title' => 'Plans',
@@ -82,47 +83,110 @@ if ($route == '/user/plans_details/$slug') {
     ]);
 }
 if ($route == '/user/plan/checkout') {
-    if (!empty($_POST['user_id'])) {
-        $current_date = date('Y-m-d H:i:s');
-        $user_id = $_POST['user_id'];
-        if (!empty($_POST['billing_address_id'])){
-            $billing_address_id = $_POST['billing_address_id'];
-        }else{
-            echo "2";
-            exit();
-        }
-        $plan_id = $_POST['plan_id'];
-        $plan_type = $_POST['plan_type'];
-        $total_price = $_POST['total_price'];
-        if ($plan_type == 'month'){
-            $date = new DateTime($current_date);
-            $date->modify('+1 month');
-            $plan_end_date = $date->format('Y-m-d H:i:s');
-        }else{
-            $date = new DateTime($current_date);
-            $date->modify('+1 year');
-            $plan_end_date = $date->format('Y-m-d H:i:s');
-        }
-        $check = $h->table('subscriptions')->select()->where('user_id', '=', $user_id)->where('status', '=', 'successful');
-        if ($check->count() < 1){
+    if (!empty($loginUserId)) {
+        $check = $h->table('subscriptions')->select()->where('user_id', '=', $loginUserId)->where('plan_end_date', '>=', $current_date);
+        if ($check->count() < 1) {
+        \Stripe\Stripe::setApiKey($Admin_Stripe_secret_key);
+
+// Retrieve JSON from POST body
+        $jsonStr = file_get_contents('php://input');
+        $jsonObj = json_decode($jsonStr);
+
+        if ($jsonObj->request_type == 'create_customer_subscription') {
+            $subscr_plan_id = $jsonObj->subscr_plan_id;
+            $package_duration = $h->table('plans')->select()->where('id', '=', $subscr_plan_id)->fetchAll();
+
+            if ($_SESSION['type'] == 'month') {
+                $planPriceCents = $package_duration[0]['monthly_price'] * 100; // Example price (in cents)
+                $stripe_product_price = $package_duration[0]['stripe_monthly_price_id']; // Example plan name
+            } else {
+                $planPriceCents = $package_duration[0]['yearly_price'] * 100; // Example price (in cents)
+                $stripe_product_price = $package_duration[0]['stripe_yearly_price_id']; // Example plan name
+            }
+            $planInterval = $_SESSION['type'];
+
             try {
-                $insert = $h->insert('subscriptions')->values(['user_id' => $user_id,'total_price' => $total_price,'plan_id' => $plan_id,'billing_address_id' => $billing_address_id,'plan_type' => $plan_type,'plan_end_date' => $plan_end_date,'status' => 'successful'])->run();
-            if ($insert){
-                $update = $h->update('users')->values(['plan_id' => $plan_id,'plan_end_date' => $plan_end_date])->where('id', '=', $user_id)->run();
+                $customer = \Stripe\Customer::create([
+                    'name' => $loginUserName,
+                    'email' => $loginUserEmail,
+                ]);
 
-                echo "1";
-                exit();
+                $subscription = \Stripe\Subscription::create([
+                    'customer' => $customer->id,
+                    'items' => [[
+                        'price' => $stripe_product_price,
+                    ]],
+                    'payment_behavior' => 'default_incomplete',
+                    'payment_settings' => ['save_default_payment_method' => 'on_subscription'],
+                    'expand' => ['latest_invoice.payment_intent'],
+                ]);
+
+                $payment_intent = $subscription->latest_invoice->payment_intent;
+
+                echo json_encode([
+                    'subscriptionId' => $subscription->id,
+                    'transactionId' => $subscription->latest_invoice->id,
+                    'clientSecret' => $payment_intent->client_secret,
+                    'currentPeriodEnd' => $subscription->current_period_end,
+                    'customerId' => $customer->id
+                ]);
+
+            } catch (\Stripe\Exception\ApiErrorException $e) {
+                echo json_encode(['error' => $e->getMessage()]);
             }
-            } catch (PDOException $e) {
-                echo "0";
+        } elseif ($jsonObj->request_type == 'payment_insert') {
+            $payment_intent = $jsonObj->payment_intent;
+            $subscription_id = $jsonObj->subscription_id;
+            $transaction_id = $jsonObj->transaction_id;
+            $customer_id = $jsonObj->customer_id;
+            $package_form_id = $jsonObj->package_form_id;
+            $pricePackage = $jsonObj->pricePackage;
+            $current_period_end = $jsonObj->current_period_end;
+
+            // Check whether the charge was successful
+            if (!empty($payment_intent) && $payment_intent->status == 'succeeded') {
+                // Here you can update your database with subscription info
+                // Store subscription details in the database
+
+                $insert = $h->insert('transactions')->values([
+                    'subscription_id' => $subscription_id,
+                    'transaction_id' => $transaction_id,
+                    'plan_id' => $package_form_id,
+                    'price' => $pricePackage,
+                    'pay_with' => 'stripe',
+                ])->run();
+
+                if ($insert) {
+                    $res = $h->insert('subscriptions')->values([
+                        'user_id' => $loginUserId,
+                        'total_price' => $pricePackage,
+                        'plan_id' => $package_form_id,
+                        'plan_type' => $_SESSION['type'],
+                        'plan_end_date' => $plan_end_date,
+                        'status' => 'successful',
+                        'stripe_subscription_id' => $subscription_id, // Store Stripe subscription ID
+                    ])->run();
+                    $update = $h->update('users')
+                        ->values(['plan_id' => $package_form_id, 'plan_end_date' => $plan_end_date])
+                        ->where('id', '=', $loginUserId)
+                        ->run();
+                    echo json_encode(['statusCode' => '200', 'payment_id' => base64_encode($subscription_id)]);
+                    exit();
+                } else {
+                    echo json_encode(['statusCode' => '202', 'error' => 'Failed to store subscription details']);
+                    exit();
+                }
+                // Generate a response to return
+                echo json_encode(['statusCode' => '200', 'payment_id' => base64_encode($subscription_id)]);
                 exit();
+            } else {
+                echo json_encode(['error' => 'Transaction failed']);
             }
-        }else{
-            echo "3";
+        }
+    }else{
+            echo json_encode(['statusCode' => '202', 'error' => 'Plan Already Purchased']);
             exit();
         }
-
-
     }
 }
 

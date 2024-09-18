@@ -1,5 +1,51 @@
 {% extends 'user/master.twig' %}
 {% block content %}
+    <style>
+        /* Set styles for the container holding the Card Element */
+        #uploadForm #card-element {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Set styles for the Card Element container */
+        #uploadForm .StripeElement {
+            background-color: white !important;
+            padding: 10px !important;
+            border-radius: 5px !important;
+        }
+
+        /* Set styles for the Card Element inputs */
+        #uploadForm .StripeElement input {
+            border: none !important;
+            outline: none !important;
+        }
+
+        /* Style the placeholder text */
+        #uploadForm .StripeElement ::placeholder {
+            color: #aab7c4 !important;
+        }
+
+        /* Style the inputs when they are focused */
+        #uploadForm .StripeElement :focus {
+            box-shadow: 0 0 5px rgba(81, 203, 238, 1) !important;
+        }
+
+        /* Additional style for the CardField input wrapper */
+        .CardField-input-wrapper {
+            background-color: #f7f7f7 !important;
+            padding: 10px !important;
+            border: 1px solid #ccc !important;
+            border-radius: 5px !important;
+        }
+
+        /* Ensure the card element fits within the modal */
+        #uploadForm .StripeElement {
+            width: 100%;
+        }
+    </style>
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
         <!--begin::Toolbar-->
         <div class="toolbar" id="kt_toolbar">
@@ -240,15 +286,7 @@
                                 <!--end::Section-->
                                 <!--begin::Actions-->
                                 <div class="mb-0">
-                                    <form method="post" id="CheckoutForm">
-                                        <input type="hidden" name="user_id" id="user_id" value="{{ loginId }}">
-                                        <input type="hidden" name="billing_address_id" id="billing_address_id" value="{{ Billing_address[0].id }}">
-                                        <input type="hidden" name="plan_id" id="plan_id" value="{{ plans[0].id }}">
-                                        <input type="hidden" name="plan_type" id="plan_type" value="{{ type }}">
-                                        <input type="hidden" name="total_price" id="total_price" value="{{ totalPrice }}">
-                                        <button type="button"  class="btn btn-primary w-100" id="btn-plan" onclick="plan_checkout()">Checkout</button>
-                                    </form>
-
+                                        <a role="button" data-bs-toggle="modal" data-bs-target="#editExampleModal" class="btn btn-primary w-100" >Checkout</a>
                                 </div>
                                 <!--end::Actions-->
                             </div>
@@ -264,37 +302,162 @@
         </div>
         <!--end::Post-->
     </div>
+    <div class="modal fade" id="editExampleModal" tabindex="-1" aria-labelledby="editExampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-650px">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Checkout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+                </div>
+                <div class="modal-body scroll-y mx-5 mx-xl-5 my-7">
+                    <form method="post" id="CheckoutForm">
+                        <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll"
+                             data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                             data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header"
+                             data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px"
+                             style="max-height: 570px;">
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <input type="hidden" name="user_id" id="user_id" value="{{ loginId }}">
+                                <input type="hidden" name="email" id="email" value="{{ userEmail }}">
+                                <input type="hidden" name="billing_address_id" id="billing_address_id" value="{{ Billing_address[0].id }}">
+                                <input type="hidden" name="plan_id" id="plan_id" value="{{ plans[0].id }}">
+                                <input type="hidden" name="plan_type" id="plan_type" value="{{ type }}">
+                                <input type="hidden" name="total_price" id="total_price" value="{{ totalPrice }}">
+                                <h4 class="m-3 text-center">Pay with Debit/Credit Card</h4>
+                                <div id="card-element"></div>
+                                <br>
+                                <div id="card-errors" role="alert"></div>
+                                <input type="hidden" name="stripeToken" id="stripeToken">
+                                <span id="result"></span>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer justify-content-center">
+                            <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button class="btn btn-primary " id="btn-plan" type="submit">Checkout</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+
+
     <script>
-        function plan_checkout() {
-            var form_Data = new FormData(document.getElementById("CheckoutForm"));
-            document.getElementById("btn-plan").innerHTML = "Loading";
+        // Initialize Stripe
+        var stripe = Stripe('{{ Admin_Stripe_public_key }}');
+        var elements = stripe.elements();
+        var style = {
+            base: {
+                fontSize: '16px',
+                color: '#32325d',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: 'antialiased',
+                '::placeholder': {
+                    color: '#7e7e7e',
+                },
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a',
+            },
+        };
+        var cardElement = elements.create('card', { style: style });
+        cardElement.mount('#card-element');
+
+        var form = document.getElementById('CheckoutForm');
+
+        // Handle form submission
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
             document.getElementById('btn-plan').disabled = true;
-            $.ajax({
-                url: "/user/plan/checkout",
-                type: "POST",
-                data: form_Data,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function (dataResult) {
-                    document.getElementById("btn-plan").innerHTML = "Checkout";
+            document.getElementById("btn-plan").innerHTML = "Loading...";
+
+            let subscr_plan_id = document.getElementById("plan_id").value;
+            // Create customer subscription
+            const response = await fetch("/user/plan/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    request_type: 'create_customer_subscription',
+                    subscr_plan_id: subscr_plan_id
+                }),
+            });
+
+            const data = await response.json();
+            console.log(data);
+            if (data.subscriptionId && data.clientSecret) {
+                handlePayment(data.subscriptionId,data.transactionId, data.clientSecret,data.currentPeriodEnd, data.customerId);
+            } else {
+                showError(data.error);
+                document.getElementById('btn-plan').disabled = false;
+                document.getElementById("btn-plan").innerHTML = "Submit Payment";
+            }
+        });
+
+        function handlePayment(subscriptionId,transactionId, clientSecret,currentPeriodEnd, customerId) {
+            stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                        name: document.getElementById("email").value,
+                    },
+                }
+            }).then((result) => {
+                if (result.error) {
+                    showError(result.error.message);
                     document.getElementById('btn-plan').disabled = false;
-                    console.log(dataResult);
-
-                    if (dataResult == 1) {
-                        toastr.success('You Pan Has Been Purchased.');
-                        document.getElementById("CheckoutForm").reset();
-                    } else if (dataResult == 2) {
-                        toastr.error("Please Add Billing Address <a href='/user/profile/billing'>Add Billing Address</a>");
-                    } else if (dataResult == 3) {
-                        toastr.error("You Already Purchased A plan");
-                    } else {
-                        toastr.error('Something Went Wrong.');
-                    }
-
+                    document.getElementById("btn-plan").innerHTML = "Submit Payment";
+                } else {
+                    let package_form_id = document.getElementById("plan_id").value;
+                    let pricePackage = document.getElementById("total_price").value;
+                    // Payment successful
+                    fetch("/user/plan/checkout", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            request_type: 'payment_insert',
+                            pricePackage: pricePackage,
+                            package_form_id: package_form_id,
+                            current_period_end: currentPeriodEnd,
+                            transaction_id: transactionId,
+                            subscription_id: subscriptionId,
+                            customer_id: customerId,
+                            payment_intent: result.paymentIntent
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            if (data.payment_id) {
+                                showSuccess("Payment Successful!");
+                                $('#editExampleModal').modal('hide');
+                                document.getElementById("editUploadForm").reset();
+                                $('#table').DataTable().ajax.reload(null, false);
+                            } else {
+                                showError(data.error);
+                            }
+                            document.getElementById('btn-stripe').disabled = false;
+                            document.getElementById("btn-stripe").innerHTML = "Submit Payment";
+                        })
+                        .catch(console.error);
                 }
             });
+        }
+
+        function showError(message) {
+            document.getElementById('btn-plan').disabled = false;
+            document.getElementById("btn-plan").innerHTML = "Submit Payment";
+            document.getElementById("card-errors").textContent = message;
+        }
+
+        function showSuccess(message) {
+            document.getElementById('btn-plan').disabled = false;
+            document.getElementById("btn-plan").innerHTML = "Submit Payment";
+            document.getElementById("result").innerHTML = '<div class="alert-success alert alert-fill alert-dismissible alert-icon" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"></button></div>';
+            window.location.href='/user/dashboard';
         }
     </script>
 {% endblock %}

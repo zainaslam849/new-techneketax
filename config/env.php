@@ -112,6 +112,7 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
         $userInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
         @$allow=explode(',',@$userInfo['permissions']);
         $loginUserName=$userInfo[0]['fname'] .' '.$userInfo[0]['lname'];
+        $loginUserEmail=$userInfo[0]['email'];
         $twig->addGlobal('loginId', $loginUserId);
         $twig->addGlobal('loginType', @$loginUserType);
         $twig->addGlobal('loginName', @$loginUserName);
@@ -128,6 +129,9 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
         $plan_end_date = $userInfo[0]['plan_end_date'];
         $memberInfoss = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->where('type', '=', 'member')->fetchAll();
         $twig->addGlobal('memberInfoss', @$memberInfoss);
+        $Firm_StripeCredentials = $h->table('firm_stripe_keys')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
+        $Firm_Stripe_public_key=@$Firm_StripeCredentials[0]['public_key'];
+        $Firm_Stripe_secret_key=@$Firm_StripeCredentials[0]['secret_key'];
     }else{
         $userInfoo = $h->table('users')->select()->where('id', '=', @$userInfo[0]['firm_id'])->fetchAll();
         $white_labeling=@$userInfoo[0]['white_labeling'];
@@ -140,7 +144,7 @@ if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
     $current_date = date('Y-m-d H:i:s');
     if(!empty($plan_id)){
         $planInfo = $h->table('plans')->select()->where('id', '=', $plan_id)->fetchAll();
-            $key_pointsArray = explode(',', $planInfo[0]['key_points']);
+            @$key_pointsArray = explode(',', $planInfo[0]['key_points']);
         $permissions = [];
             if (!empty($key_pointsArray)) {
                 foreach ($key_pointsArray as $key_point_id) {
@@ -185,6 +189,9 @@ if (!empty($_SESSION['member_id'])){
 $twilio_number= '+17609040397';
 $account_sid= 'ACd5c325433100e2baf794a9c92caeeb55';
 $auth_token='aa8115bbf571ff82e60ae6ef26bdf4fe';
-
+$Admin_StripeCredentials = $h->table('admin_stripe_keys')->select()->where('id', '=', '1')->fetchAll();
+$Admin_Stripe_public_key=$Admin_StripeCredentials[0]['public_key'];
+$Admin_Stripe_secret_key=$Admin_StripeCredentials[0]['secret_key'];
+$twig->addGlobal('Admin_Stripe_public_key', @$Admin_Stripe_public_key);
 
 
