@@ -144,12 +144,14 @@ if($route == '/user/profile/paymentMethod'):
     $UserInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
     $CountriesInfo = $h->table('countries')->select()->fetchAll();
     $UserInfoUser_payment_method = $h->table('user_payment_method')->select()->where('user_id', '=', $loginUserId)->fetchAll();
+    $UserInfoFirm_stripe_keys = $h->table('firm_stripe_keys')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
 
     echo $twig->render('user/profile/payment_method.twig', [
         'seo' => $seo,
         'userinfo' => $UserInfo,
         'countries' => $CountriesInfo,
         'paymentMethods' => $UserInfoUser_payment_method,
+        'stripe_keys' => $UserInfoFirm_stripe_keys,
         'csrf' => set_csrf()
     ]);
 endif;
@@ -406,6 +408,36 @@ if($route == '/user/update_payment_method'):
             ])->where('id','=',$id)->run();
             echo "1";
             exit();
+        } catch (PDOException $e) {
+            echo "0";
+            exit();
+        }
+    }
+endif;
+if($route == '/user/profile/change_stripe_keys'):
+    if (isset($_POST['public_key'])){
+        $id = $_POST['id'];
+            $public_key = $_POST['public_key'];
+            $secret_key = $_POST['secret_key'];
+
+        try {
+            $CheckFirm_stripe_keys = $h->table('firm_stripe_keys')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
+            if (!empty($CheckFirm_stripe_keys)){
+                $insert = $h->update('firm_stripe_keys')->values([
+                    'public_key' => $public_key,
+                    'secret_key' => $secret_key,
+                ])->where('id','=',$id)->run();
+                echo "1";
+                exit();
+            }else{
+                $insert = $h->insert('firm_stripe_keys')->values([
+                    'firm_id' => $loginUserId,
+                    'public_key' => $public_key,
+                    'secret_key' => $secret_key,
+                ])->run();
+                echo "1";
+                exit();
+            }
         } catch (PDOException $e) {
             echo "0";
             exit();

@@ -1,0 +1,82 @@
+[
+    {
+        "user_id": "113",
+        "sections": [
+            {
+                "section_id": "1",
+                "responses": [
+                    {
+                        "label": "Business Name",
+                        "value": "dani2"
+                    },
+                    {
+                        "label": "Business EIN (Employer Identification Number)",
+                        "value": "dani2"
+                    },
+                    {
+                        "label": "Business Address",
+                        "value": "dani2"
+                    },
+                    {
+                        "label": "Fourth Input",
+                        "value": "dani2"
+                    },
+                    {
+                        "label": "Fifth Input",
+                        "value": "zotec soft"
+                    }
+                ]
+            },
+            {
+                "section_id": "2",
+                "responses": [
+                    {
+                        "label": "Full Name",
+                        "value": "dani2"
+                    },
+                    {
+                        "label": "Father Name",
+                        "value": "dani2"
+                    },
+                    {
+                        "label": "Sex",
+                        "value": "Male"
+                    },
+                    {
+                        "label": "Phone Number",
+                        "value": "235346546546546"
+                    },
+                    {
+                        "label": "Email",
+                        "value": "dani2"
+                    },
+                    {
+                        "label": "Password",
+                        "value": "dani2"
+                    },
+                    {
+                        "label": "Confirm Password",
+                        "value": "dani2"
+                    },
+                    {
+                        "label": "User Type",
+                        "value": "Firm"
+                    }
+                ]
+            },
+            {
+                "section_id": "3",
+                "responses": [
+                    {
+                        "label": "Identification Type",
+                        "value": "passport"
+                    },
+                    {
+                        "label": "Second Input ha ",
+                        "value": "2024-09-19T17:55"
+                    }
+                ]
+            }
+        ]
+    }
+]

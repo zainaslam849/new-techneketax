@@ -105,3 +105,38 @@ if($route == '/admin/profile/security'):
 
     echo $twig->render('admin/profile/security.twig', ['seo' => $seo,'userinfo' => $UserInfo,'csrf'=>set_csrf()]);
 endif;
+if($route == '/admin/profile/paymentMethod'):
+    $seo = array(
+        'title' => 'Profile',
+        'description' => 'CRM',
+        'keywords' => 'Admin Panel'
+    );
+
+    $UserInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+    $UserInfoFirm_stripe_keys = $h->table('admin_stripe_keys')->select()->where('id', '=', 1)->fetchAll();
+
+    echo $twig->render('admin/profile/payment_method.twig', [
+        'seo' => $seo,
+        'userinfo' => $UserInfo,
+        'stripe_keys' => $UserInfoFirm_stripe_keys,
+        'csrf' => set_csrf()
+    ]);
+endif;
+if($route == '/admin/profile/change_stripe_keys'):
+    if (isset($_POST['public_key'])){
+        $public_key = $_POST['public_key'];
+        $secret_key = $_POST['secret_key'];
+        try {
+                $insert = $h->update('admin_stripe_keys')->values([
+                    'public_key' => $public_key,
+                    'secret_key' => $secret_key,
+                ])->where('id','=',1)->run();
+                echo "1";
+                exit();
+
+        } catch (PDOException $e) {
+            echo "0";
+            exit();
+        }
+    }
+endif;

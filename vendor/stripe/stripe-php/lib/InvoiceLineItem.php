@@ -5,6 +5,10 @@
 namespace Stripe;
 
 /**
+ * Invoice Line Items represent the individual lines within an <a href="https://stripe.com/docs/api/invoices">invoice</a> and only exist within the context of an invoice.
+ *
+ * Each line item is backed by either an <a href="https://stripe.com/docs/api/invoiceitems">invoice item</a> or a <a href="https://stripe.com/docs/api/subscription_items">subscription item</a>.
+ *
  * @property string $id Unique identifier for the object.
  * @property string $object String representing the object's type. Objects of the same type share the same value.
  * @property int $amount The amount, in cents (or local equivalent).
@@ -26,8 +30,8 @@ namespace Stripe;
  * @property null|int $quantity The quantity of the subscription, if the line item is a subscription or a proration.
  * @property null|string|\Stripe\Subscription $subscription The subscription that the invoice item pertains to, if any.
  * @property null|string|\Stripe\SubscriptionItem $subscription_item The subscription item that generated this line item. Left empty if the line item is not an explicit result of a subscription.
- * @property null|\Stripe\StripeObject[] $tax_amounts The amount of tax calculated per tax rate for this line item
- * @property null|\Stripe\TaxRate[] $tax_rates The tax rates which apply to the line item.
+ * @property \Stripe\StripeObject[] $tax_amounts The amount of tax calculated per tax rate for this line item
+ * @property \Stripe\TaxRate[] $tax_rates The tax rates which apply to the line item.
  * @property string $type A string identifying the type of the source of this line item, either an <code>invoiceitem</code> or a <code>subscription</code>.
  * @property null|string $unit_amount_excluding_tax The amount in cents (or local equivalent) representing the unit amount for this line item, excluding all tax and discounts.
  */

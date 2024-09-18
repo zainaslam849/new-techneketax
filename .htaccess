@@ -8,7 +8,7 @@ RewriteRule .* - [L]
 RewriteRule ^assets($|/) - [L]
 
 # Ignore certain file extensions and redirect to index.php for others
-RewriteCond %{REQUEST_URI} !(\.xlsx|\.docx|\.doc|\.pdf|\.png|\.webp|\.jpg|\.ico|\.gif|\.jpeg|\.zip|\.css|\.svg|\.js|\.woff2|\.woff|\.ttf|\.eot|\.map|\.xml|\.txt|\.mp4|\.mp3)$
+RewriteCond %{REQUEST_URI} !(\.xlsx|\.docx|\.doc|\.pdf|\.png|\.webp|\.jpg|\.ico|\.gif|\.jpeg|\.zip|\.css|\.svg|\.js|\.woff2|\.woff|\.ttf|\.eot|\.map|\.xml|\.txt|\.mp4|\.mp3|\.PNG)$
 RewriteRule ^(.*)$ index.php [QSA,L]
 
 # Set the correct MIME types for font files

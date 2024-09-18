@@ -93,11 +93,11 @@
                                                                                         {% endfor %}
                                                                                     </ul>
                                                                                 {% else %}
-                                                                                    {% set fileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'xls', 'xlsx'] %}
+                                                                                    {% set fileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'xls', 'xlsx','webp'] %}
                                                                                     {% set extension = item.value|split('.')|last|lower %}
 
                                                                                     {% if extension in fileExtensions %}
-                                                                                        {% if extension in ['jpg', 'jpeg', 'png', 'gif'] %}
+                                                                                        {% if extension in ['jpg', 'jpeg', 'png', 'gif','webp'] %}
                                                                                             <img src="{{ env.APP_URL ~ '/' ~ item.value }}" alt="{{ item.label }}" style="max-width: 150px; max-height: 150px;">
                                                                                         {% elseif extension == 'pdf' %}
                                                                                             <a href="{{ env.APP_URL ~ '/' ~ item.value }}" target="_blank"><i class="fas fa-file-pdf"></i> View PDF</a>

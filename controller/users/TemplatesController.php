@@ -266,7 +266,15 @@ if ($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $data['sections'] = array_values($sections);
 
     // Update the template request status
+    $template_request = $h->table('template_request')->select()->where('user_id', '=', $userId)->where('template_id', '=', $templateId)->fetchAll();
+
+    if (!empty($template_request[0]['doc_hub_id'])){
+    $updateDoc =  $h->update('document_hub')->values(['status' => 'yes'])->where('client_id', '=', $userId)->where('id', '=', $template_request[0]['doc_hub_id'])->run();
+    }
+
     $h->update('template_request')->values(['status' => 'completed'])->where('user_id', '=', $userId)->where('template_id', '=', $templateId)->run();
+
+
 
     // Path to the JSON file
     $filePath = 'uploads/templates/' . $templateId . '.json';
@@ -286,8 +294,8 @@ if ($route == '/user/template/view' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     // Save data to the JSON file
     file_put_contents($filePath, json_encode($existingData, JSON_PRETTY_PRINT));
     $ClientInfo = $h->table('users')->select()->where('id', '=', $userId)->fetchAll();
-    $companyInfo = $h->table('users')->select()->where('id', '=', $userInfo[0]['id'])->fetchAll();
-    if (!empty($loginUserId)){
+    $companyInfo = $h->table('users')->select()->where('id', '=', $ClientInfo[0]['firm_id'])->fetchAll();
+    if (!empty($companyInfo)){
         if ($companyInfo[0]['type'] == 'firm' && $companyInfo[0]['white_labeling'] == 'yes'){
             @$company_name =  @$companyInfo[0]['company_name'];
             @$company_phone =  @$companyInfo[0]['phone'];

@@ -1,0 +1,186 @@
+[
+    {
+        "user_id": "113",
+        "sections": [
+            {
+                "section_id": "1",
+                "responses": [
+                    {
+                        "label": "Business Name",
+                        "value": "demo"
+                    },
+                    {
+                        "label": "Business EIN (Employer Identification Number)",
+                        "value": "demo"
+                    },
+                    {
+                        "label": "Business Address",
+                        "value": "demo"
+                    },
+                    {
+                        "label": "Fourth Input",
+                        "value": "demo"
+                    },
+                    {
+                        "label": "Fifth Input",
+                        "value": "zotec soft"
+                    }
+                ]
+            },
+            {
+                "section_id": "2",
+                "responses": [
+                    {
+                        "label": "Full Name",
+                        "value": "demo"
+                    },
+                    {
+                        "label": "Father Name",
+                        "value": "demo"
+                    },
+                    {
+                        "label": "Sex",
+                        "value": "Male"
+                    },
+                    {
+                        "label": "Phone Number",
+                        "value": "353453654646"
+                    },
+                    {
+                        "label": "Email",
+                        "value": "demo"
+                    },
+                    {
+                        "label": "Password",
+                        "value": "demo"
+                    },
+                    {
+                        "label": "Confirm Password",
+                        "value": "demo"
+                    },
+                    {
+                        "label": "User Type",
+                        "value": "Firm"
+                    }
+                ]
+            },
+            {
+                "section_id": "3",
+                "responses": [
+                    {
+                        "label": "Identification Type",
+                        "value": "passport"
+                    },
+                    {
+                        "label": "Second Input ha ",
+                        "value": "2024-09-18T16:56"
+                    }
+                ]
+            },
+            {
+                "section_id": "4",
+                "responses": [
+                    {
+                        "label": "Father Name",
+                        "value": "asd"
+                    }
+                ]
+            },
+            {
+                "section_id": "5",
+                "responses": [
+                    {
+                        "label": "Father Name",
+                        "value": "demo"
+                    },
+                    {
+                        "label": "Second Input",
+                        "value": "zain ga"
+                    }
+                ]
+            },
+            {
+                "section_id": "6",
+                "responses": [
+                    {
+                        "label": "asd",
+                        "value": null
+                    },
+                    {
+                        "label": "z",
+                        "value": "uploads\/template_files\/10\/539f8ab86159043b.PNG"
+                    },
+                    {
+                        "label": "Phone Number",
+                        "value": null
+                    }
+                ]
+            },
+            {
+                "section_id": "7",
+                "responses": [
+                    {
+                        "label": "Second Input",
+                        "value": "demo"
+                    }
+                ]
+            },
+            {
+                "section_id": "8",
+                "responses": [
+                    {
+                        "label": "test1",
+                        "value": "a"
+                    },
+                    {
+                        "label": "test 2",
+                        "value": "[\"b\"]"
+                    },
+                    {
+                        "label": "Sex",
+                        "value": "male"
+                    }
+                ]
+            },
+            {
+                "section_id": "9",
+                "responses": [
+                    {
+                        "label": "add",
+                        "value": "uploads\/template_files\/10\/3444766e96f612cfb1.png"
+                    }
+                ]
+            },
+            {
+                "section_id": "10",
+                "responses": [
+                    {
+                        "label": "ghh",
+                        "value": "uploads\/template_files\/10\/6397166e96f612d175.png"
+                    },
+                    {
+                        "label": "gh",
+                        "value": "uploads\/template_files\/10\/945666e96f612d302.png"
+                    }
+                ]
+            },
+            {
+                "section_id": "11",
+                "responses": [
+                    {
+                        "label": "chbgfdbhn",
+                        "value": "uploads\/template_files\/10\/4327966e96f612d517.png"
+                    },
+                    {
+                        "label": "sdgfvxdsgbv",
+                        "value": "uploads\/template_files\/10\/9428466e96f612d62e.png"
+                    },
+                    {
+                        "label": "jhh",
+                        "value": "uploads\/template_files\/10\/1068666e96f612d73a.png"
+                    }
+                ]
+            }
+        ]
+    }
+]
