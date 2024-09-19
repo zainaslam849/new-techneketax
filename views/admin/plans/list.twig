@@ -202,11 +202,19 @@
                             <div class="row">
                                 {% for permission in permissions %}
                                     <div class="col-xl-4 col-md-6 mt-2">
-                                        <div class="radioButton" style="margin-right: 10px">
-                                            <input class=" m4 required-input" type="checkbox" name="key_points[]" id="{{ permission.id }}"
-                                                   value="{{ permission.id }}">
-                                            <label  for="{{ permission.id }}"><button type="button" class="btn btn-light-primary">{{ permission.title }}</button></label>
-                                        </div>
+                                            <input type="checkbox" class="btn-check" name="key_points[]" value="{{ permission.id }}" id="{{ permission.id }}">
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex align-items-center h-100" for="{{ permission.id }}">
+                                                <span class="d-block fw-bold text-start">
+                <span class="text-dark fw-bolder d-block fs-3">{{ permission.title }}</span>
+            </span>
+                                            </label>
+
+
+{#                                        <div class="radioButton" style="margin-right: 10px">#}
+{#                                            <input class=" m4 required-input" type="checkbox" name="key_points[]" id="{{ permission.id }}"#}
+{#                                                   value="{{ permission.id }}">#}
+{#                                            <label  for="{{ permission.id }}"><button type="button" class="btn btn-light-primary">{{ permission.title }}</button></label>#}
+{#                                        </div>#}
                                     </div>
                                 {% endfor %}
                             </div>
@@ -215,7 +223,7 @@
 
                     <div class="modal-footer justify-content-center">
                         <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" name="add_new" id="btn-profile" class="btn btn-primary" onclick="update_tool()">Update</button>
+                        <button type="button" name="add_new" id="btn-edit-plan" class="btn btn-primary" onclick="update_tool()">Update</button>
                     </div>
                 </form>
             </div>
@@ -364,6 +372,8 @@
         var input = document.querySelector('input[name=basic]');
         new Tagify(input)
         function update_tool() {
+            document.getElementById('btn-edit-plan').disabled = true;
+            document.getElementById("btn-edit-plan").innerHTML = "loading";
             var tags = input.value;
             var form_Data = new FormData(document.getElementById("editUploadForm"));
             form_Data.set('basic', tags);
@@ -375,6 +385,8 @@
                 cache: false,
                 processData: false,
                 success: function (dataResult) {
+                    document.getElementById('btn-edit-plan').disabled = false;
+                    document.getElementById("btn-edit-plan").innerHTML = "Update";
                     console.log(dataResult);
 
                     $("#btn-profile").removeAttr("disabled");

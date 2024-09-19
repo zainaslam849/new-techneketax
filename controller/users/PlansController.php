@@ -25,11 +25,11 @@ $seo = array(
         // Attach key points titles to the plan array
         $plan['key_points_titles'] = $key_points_titles;
     }
-    if (!empty($plan_end_date)){
-        $dateTime = new DateTime($plan_end_date);
-        $formattedDate = $dateTime->format('l, d F Y');
+    if (!empty(@$plan_end_date)){
+       @$dateTime = new DateTime(@$plan_end_date);
+        @$formattedDate = @$dateTime->format('l, d F Y');
     }
-echo $twig->render('user/plans/index.twig', ['seo' => $seo,'plans' => $plans,'formattedDate' => $formattedDate]);
+echo $twig->render('user/plans/index.twig', ['seo' => $seo,'plans' => $plans,'formattedDate' => @$formattedDate]);
 endif;
 
 if($route == '/user/plan/get_plan'):
@@ -84,7 +84,7 @@ if ($route == '/user/plans_details/$slug') {
 }
 if ($route == '/user/plan/checkout') {
     if (!empty($loginUserId)) {
-        $check = $h->table('subscriptions')->select()->where('user_id', '=', $loginUserId)->where('plan_end_date', '>=', $current_date);
+        $check = $h->table('subscriptions')->select()->where('user_id', '=', $loginUserId)->where('plan_end_date', '>=', $current_date)->where('status', '=', 'successful');
         if ($check->count() < 1) {
         \Stripe\Stripe::setApiKey($Admin_Stripe_secret_key);
 
@@ -142,7 +142,7 @@ if ($route == '/user/plan/checkout') {
             $package_form_id = $jsonObj->package_form_id;
             $pricePackage = $jsonObj->pricePackage;
             $current_period_end = $jsonObj->current_period_end;
-
+          $end_plan_date =  date('Y-m-d H:i:s', $current_period_end);
             // Check whether the charge was successful
             if (!empty($payment_intent) && $payment_intent->status == 'succeeded') {
                 // Here you can update your database with subscription info
@@ -162,12 +162,12 @@ if ($route == '/user/plan/checkout') {
                         'total_price' => $pricePackage,
                         'plan_id' => $package_form_id,
                         'plan_type' => $_SESSION['type'],
-                        'plan_end_date' => $plan_end_date,
+                        'plan_end_date' => $end_plan_date,
                         'status' => 'successful',
                         'stripe_subscription_id' => $subscription_id, // Store Stripe subscription ID
                     ])->run();
                     $update = $h->update('users')
-                        ->values(['plan_id' => $package_form_id, 'plan_end_date' => $plan_end_date])
+                        ->values(['plan_id' => $package_form_id, 'plan_end_date' => $end_plan_date])
                         ->where('id', '=', $loginUserId)
                         ->run();
                     echo json_encode(['statusCode' => '200', 'payment_id' => base64_encode($subscription_id)]);

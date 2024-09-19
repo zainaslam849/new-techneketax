@@ -44,7 +44,7 @@ endif;
 //get('/api/schedule-tour', 'controller/public/PublicApi.php');
 //USER DASHBOARD
 if(@$_SESSION['users']['type'] == 'firm' || @$_SESSION['users']['type'] == 'client' || @$_SESSION['users']['type'] == 'member'):
-if (!empty(@$plan_id) && @$plan_id != '' && $current_date <= @$plan_end_date ){
+if (!empty(@$plan_id) && @$plan_id != '' && $current_date <= @$plan_end_date){
     if (in_array('Appointment_Scheduling', $permissionValues)) {
         if (!empty($_SESSION['member_id'])){
             if (in_array('Appointment_Scheduling', $permissionFirmValues)) {
