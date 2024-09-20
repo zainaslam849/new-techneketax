@@ -336,6 +336,12 @@
     });
 </script>
 <script>
+    window.onload = function() {
+        // Remove skeleton loader
+        document.querySelector('.skeleton-sidebar').style.display = 'none';
+        // Show actual content (replace this with the ID or class of your real sidebar)
+        document.querySelector('.real-sidebar').style.display = 'block';
+    };
     function send_invite_associate() {
         var form_Data = new FormData(document.getElementById("inviteAssociate"));
         document.getElementById('btn-profile').disabled = true;
