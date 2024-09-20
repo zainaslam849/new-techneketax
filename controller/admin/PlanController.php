@@ -145,17 +145,6 @@ if ($route == '/admin/plan_edit'):
         $monthly_price = $_POST['monthly_price'];
         $yearly_price = $_POST['yearly_price'];
 
-        $update = $h->update('plans')->values([
-            'slug' => $slug,
-            'name' => $name,
-            'tags' => $tags,
-            'key_points' => $key_points,
-            'percentage' => $percentage,
-            'monthly_price' => $monthly_price,
-            'yearly_price' => $yearly_price,
-        ])->where('id', '=', $id)->run();
-
-        if ($update) {
             try {
                 $existing_plan = $h->table('plans')->select()->where('id', '=', $id)->fetchAll();
                 $existing_plan_id = $existing_plan[0]['stripe_product_id'];
@@ -165,32 +154,62 @@ if ($route == '/admin/plan_edit'):
                 }
 
                 // Calculate final prices with discount (if applicable)
-                $discount = $existing_plan[0]['percentage'] ?? 0;
+                $discount = $percentage ?? 0;
                 $monthly_price_final = $monthly_price - ($monthly_price * $discount / 100);
                 $yearly_price_final = $yearly_price - ($yearly_price * $discount / 100);
 
-                // Update product in Stripe
-                \Stripe\Product::update($stripe_product_id, ['name' => $name]);
+//                // Update product in Stripe
+//                \Stripe\Product::update($stripe_product_id, ['name' => $name]);
+//
+//                // Create new monthly price in Stripe
+//                $newMonthlyPriceObj = \Stripe\Price::create([
+//                    'unit_amount' => round($monthly_price_final * 100),
+//                    'currency' => 'usd',
+//                    'recurring' => ['interval' => 'month'],
+//                    'product' => $existing_plan_id,
+//                ]);
+//                // Create new yearly price in Stripe
+//                $newYearlyPriceObj = \Stripe\Price::create([
+//                    'unit_amount' => round($yearly_price_final * 100),
+//                    'currency' => 'usd',
+//                    'recurring' => ['interval' => 'year'],
+//                    'product' => $existing_plan_id,
+//                ]);
+
+                \Stripe\Price::update($stripe_monthly_price_id, [
+                    'active' => false,
+                ]);
 
                 // Create new monthly price in Stripe
+                $planPriceCents = round($monthly_price_final * 100); // Convert to cents
                 $newMonthlyPriceObj = \Stripe\Price::create([
-                    'unit_amount' => round($monthly_price_final * 100),
+                    'unit_amount' => $planPriceCents,
                     'currency' => 'usd',
-                    'recurring' => ['interval' => 'month'],
-                    'product' => $existing_plan_id,
+                    'recurring' => [
+                        'interval' => 'month',
+                    ],
+                    'product' => $stripe_product_id,
+                ]);
+                $new_stripe_monthly_price_id = $newMonthlyPriceObj->id;
+
+                // Archive old yearly price in Stripe
+                \Stripe\Price::update($stripe_yearly_price_id, [
+                    'active' => false,
                 ]);
 
                 // Create new yearly price in Stripe
+                $yearlyPriceCents = round($yearly_price_final * 100); // Convert to cents
                 $newYearlyPriceObj = \Stripe\Price::create([
-                    'unit_amount' => round($yearly_price_final * 100),
+                    'unit_amount' => $yearlyPriceCents,
                     'currency' => 'usd',
-                    'recurring' => ['interval' => 'year'],
-                    'product' => $existing_plan_id,
+                    'recurring' => [
+                        'interval' => 'year',
+                    ],
+                    'product' => $stripe_product_id,
                 ]);
-
+                $new_stripe_yearly_price_id = $newYearlyPriceObj->id;
                 // Retrieve active subscriptions
                 $subscriptions = \Stripe\Subscription::all(['limit' => 100, 'status' => 'active']);
-
                 // Filter subscriptions by product and update them
                 foreach ($subscriptions->data as $subscription) {
                     foreach ($subscription->items->data as $item) {
@@ -209,14 +228,24 @@ if ($route == '/admin/plan_edit'):
                         }
                     }
                 }
-
+                $update = $h->update('plans')->values([
+                    'slug' => $slug,
+                    'name' => $name,
+                    'tags' => $tags,
+                    'key_points' => $key_points,
+                    'percentage' => $percentage,
+                    'monthly_price' => $monthly_price,
+                    'yearly_price' => $yearly_price,
+                    'stripe_monthly_price_id' => $new_stripe_monthly_price_id,
+                    'stripe_yearly_price_id' => $new_stripe_yearly_price_id
+                ])->where('id', '=', $id)->run();
                 echo "1"; // Success
             } catch (PDOException $e) {
                 echo "0"; // Database error
             } catch (\Stripe\Exception\ApiErrorException $e) {
                 echo "Stripe Error: " . $e->getMessage(); // Stripe API error
             }
-        }
+
     } else {
         echo "2"; // Error code for missing plan name
     }

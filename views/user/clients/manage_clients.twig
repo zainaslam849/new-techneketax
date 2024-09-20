@@ -48,6 +48,14 @@
             color: #000;
             font-size: 16px;
         }
+        .btn-check:checked+.btn.btn-outline.btn-outline-dashed.btn-outline-default .svg-icon, .btn-check:checked+.btn.btn-outline.btn-outline-dashed.btn-outline-default i{
+            color:#00a500 !important;
+
+        }
+        .svg-icon.svg-icon-3hx svg{
+            height: 2.5rem !important;
+            width: 2.5rem !important;
+        }
     </style>
     <!--  BEGIN CONTENT AREA  -->
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
@@ -136,7 +144,7 @@
         </div>
     </div>
     <div class="modal fade" id="editPerModal" tabindex="-1" aria-labelledby="editPerModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-dialog modal-dialog-centered mw-750px">
             <div class="modal-content bg-white">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Give Permissions To Associate</h5>
@@ -153,20 +161,22 @@
                              style="max-height: 570px;">
                             <div class="fv-row mb-7 fv-plugins-icon-container">
                                 <div class="row">
-{#                                    {% for permission in permissions %}#}
-{#                                        <div class=" col-md-6 mt-2">#}
-{#                                            <div class="radioButton" style="margin-right: 10px">#}
-{#                                                <input class=" m4 required-input" type="checkbox" name="permissions[]" id="{{ permission[0].id }}"#}
-{#                                                       value="{{ permission[0].value }}">#}
-{#                                                <label  for="{{ permission[0].id }}"><button type="button" class="btn btn-light-primary">{{ permission[0].title }}</button></label>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    {% endfor %}#}
+
                                     {% for permission in permissions %}
-                                        <div class=" col-md-6 mt-2">
-                                                <input class=" m4 required-input" type="checkbox" name="permissions[]" id="{{ permission[0].id }}"
-                                                       value="{{ permission[0].value }}">
-                                                <label  for="{{ permission[0].id }}">{{ permission[0].title }}</label>
+                                        <div class="col-xl-6 col-md-6 mt-2">
+                                            <input type="checkbox" class="btn-check permission-checkbox" name="permissions[]" value="{{ permission[0].value }}" id="{{ permission[0].value }}">
+                                            <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex align-items-center h-100" for="{{ permission[0].value }}">
+        <span class="svg-icon svg-icon-3hx svg-icon-primary" id="svg-{{ permission[0].value }}">
+            <!-- Default SVG -->
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+        </span>
+                                                <span class="d-block fw-bold text-start">
+            <span class="text-dark fw-bolder d-block fs-3">{{ permission[0].title }}</span>
+        </span>
+                                            </label>
 
                                         </div>
                                     {% endfor %}
@@ -186,6 +196,27 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!--  END CONTENT AREA  -->
     <script>
+        document.querySelectorAll('.permission-checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                var svgContainer = document.getElementById('svg-' + this.id);
+
+                if (this.checked) {
+                    svgContainer.innerHTML = `
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+                    </svg>
+                `;
+                } else {
+                    svgContainer.innerHTML = `
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                `;
+                }
+            });
+        });
         $(document).ready(function () {
             var csrf_token = $("input[name=csrf]").val();
             var table = $('#table').dataTable({
@@ -213,7 +244,18 @@
             var id = $(this).data('id');
 
             $('#editUploadForm').trigger("reset");
-
+            $('#editPerForm').trigger("reset");
+            $('#editPerForm input[name="permissions[]"]').each(function() {
+                var svgContainer = document.getElementById('svg-' + $(this).attr('id'));
+                if (svgContainer) {
+                    svgContainer.innerHTML = `
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            `;
+                }
+            });
             $.ajax({
                 url: "/user/get_user",
                 type: "POST",
@@ -233,8 +275,19 @@
                     $('#phone').val(dataResult[0].phone);
                     $('input[name=id]').val(dataResult[0].id);
                     var permissions = dataResult[0].permissions.split(',');
-                    permissions.forEach(permissions => {
-                        $('#editPerModal input[name="permissions[]"][value="' + permissions.trim() + '"]').prop('checked', true);
+
+                    permissions.forEach(permission => {
+                        var checkbox =$('#editPerModal input[name="permissions[]"][value="' + permission.trim() + '"]');
+                        checkbox.prop('checked', true);
+                        var svgContainer = document.getElementById('svg-' + checkbox.val());
+                        if (svgContainer) {
+                            svgContainer.innerHTML = `
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+                        </svg>
+                    `;
+                        }
                     });
                 }
             });

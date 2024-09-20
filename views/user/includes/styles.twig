@@ -99,4 +99,67 @@
     }
 
 </style>
+{# sidebar skelton css#}
+<style>
+    /* Sidebar Skeleton */
+    .skeleton-sidebar {
+        width: 250px;
+        height: 100vh;
+        background-color: #1c1c1e; /* Match your sidebar background color */
+        padding: 20px;
+    }
+
+    .skeleton-logo {
+        height: 50px;
+        background: #2d2d2f; /* Darker gray for the skeleton logo */
+        border-radius: 5px;
+        margin-bottom: 30px;
+    }
+
+    /* Navigation Skeleton */
+    .skeleton-nav-item {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        margin-bottom: 20px;
+    }
+
+    .skeleton-nav-item:before {
+        content: '';
+        display: block;
+        width: 24px;
+        height: 24px;
+        background: #3d3d40; /* Darker color for the icon placeholder */
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+
+    .skeleton-nav-item:after {
+        content: '';
+        display: block;
+        width: 120px;
+        height: 15px;
+        background: #2d2d2f;
+        border-radius: 4px;
+    }
+
+    /* Animation */
+    .skeleton-logo,
+    .skeleton-nav-item:before,
+    .skeleton-nav-item:after {
+        background: linear-gradient(90deg, #1e1e1e 25%, #2c2c2c 50%, #1e1e1e 75%);
+        background-size: 200% 100%;
+        animation: skeleton-loading 1.5s infinite linear;
+    }
+
+    @keyframes skeleton-loading {
+        0% {
+            background-position: 200% 0;
+        }
+        100% {
+            background-position: -200% 0;
+        }
+    }
+
+</style>
 

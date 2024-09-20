@@ -6,8 +6,12 @@ include("config/env.php");
 require 'vendor/autoload.php';
 $check_plan_status = $h->table('subscriptions')->select()->where('plan_end_date', '<', $current_date)->where('status', '=', 'successful')->fetchAll();
 if (!empty($check_plan_status)){
-  $id =  $check_plan_status['id'];
-    $res = $h->table('subscriptions')->update(['status' => 'expire'])->where('id', '=', $id)->run();
+    foreach ($check_plan_status as $plan_status) {
+        $id =  $plan_status['id'];
+        $res = $h->table('subscriptions')->update(['status' => 'expire'])->where('id', '=', $id)->run();
+        echo 1;
+        exit();
+    }
 }
 
 

@@ -251,6 +251,7 @@ if (!empty(@$plan_id) && @$plan_id != '' && $current_date <= @$plan_end_date){
     // plans
     if(@$_SESSION['users']['type'] == 'firm'):
         get('/user/plans', 'controller/users/PlansController.php');
+        get('/user/plansCronjobs', 'controller/users/PlanCronjobsController.php');
         post('/user/plan/get_plan', 'controller/users/PlansController.php');
         get('/user/plans_details/$slug', 'controller/users/PlansController.php');
         post('/user/plan/checkout', 'controller/users/PlansController.php');

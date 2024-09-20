@@ -5,7 +5,9 @@
         display: none;
     }
 </style>
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+
+
+    <div class="content d-flex flex-column flex-column-fluid actual-content" id="kt_content">
         <!--begin::Toolbar-->
         <div class="toolbar" id="kt_toolbar">
             <!--begin::Container-->
@@ -140,6 +142,8 @@
         <!--end::Post-->
     </div>
     <script>
+
+
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('[data-kt-plan]').forEach(function (btn) {
                 btn.addEventListener('click', function () {
