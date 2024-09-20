@@ -149,11 +149,17 @@
                                                         <div class="row">
                                                             {% for permission in permissions %}
                                                                 <div class="col-xl-3 col-md-4 mt-2">
-                                                                    <div class="radioButton" style="margin-right: 10px">
-                                                                        <input class=" m4 required-input" type="checkbox" name="key_points[]" id="{{ permission.id }}"
-                                                                               value="{{ permission.id }}">
-                                                                        <label  for="{{ permission.id }}"><button type="button" class="btn btn-light-primary">{{ permission.title }}</button></label>
-                                                                    </div>
+                                                                    <input type="checkbox" class="btn-check" name="key_points[]" value="{{ permission.id }}" id="{{ permission.id }}">
+                                                                    <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex align-items-center h-100" for="{{ permission.id }}">
+                                                <span class="d-block fw-bold text-start">
+                <span class="text-dark fw-bolder d-block fs-3">{{ permission.title }}</span>
+            </span>
+                                                                    </label>
+{#                                                                    <div class="radioButton" style="margin-right: 10px">#}
+{#                                                                        <input class=" m4 required-input" type="checkbox" name="key_points[]" id="{{ permission.id }}"#}
+{#                                                                               value="{{ permission.id }}">#}
+{#                                                                        <label  for="{{ permission.id }}"><button type="button" class="btn btn-light-primary">{{ permission.title }}</button></label>#}
+{#                                                                    </div>#}
                                                                 </div>
                                                             {% endfor %}
                                                         </div>

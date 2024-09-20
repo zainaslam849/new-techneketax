@@ -392,7 +392,8 @@ if($route == '/stripe/pay-invoice'):
     $token = $_POST['stripeToken'];
     $finalCent= $invoiceInfo[0]['final_total'] * 100;
     try {
-        $stripe = new \Stripe\StripeClient($Stripe_secret_key);
+
+        $stripe = new \Stripe\StripeClient($Firm_Stripe_secret_key);
         $charge = $stripe->charges->create([
             'amount' => $finalCent,
             'currency' => 'usd',
