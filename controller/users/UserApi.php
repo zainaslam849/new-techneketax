@@ -715,6 +715,162 @@ if($loginUserType == "firm") {
         }
 
     }
+    if($_GET['page_name']=="view_campaign_list"){
+        $srNo = 0;
+        $campaign_lists = $h->table('campaign_list')->select()->where('firm_id', '=', $loginUserId)->orderBy('id', 'desc')->fetchAll();
+        if (!empty($campaign_lists)) {
+            foreach ($campaign_lists as $campaign_list) {
+                // Determine user status
+                if ($campaign_list['list_type'] == "email") {
+                    $userType = "<span class='badge badge-light-success'>Email</span>";
+                } else if ($campaign_list['list_type'] == "phone") {
+                    $userType = "<span class='badge badge-light-info'>Telephone No</span>";
+                } else {
+                    $userType = "<span class='badge badge-light-success'>Email</span>";}
+
+                $action = array('action' => '
+                    <a href="/user/campaign/list_details/'.$campaign_list["id"].'"  class="btn-sm btn btn-light-info text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$campaign_list["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           
+                      ');
+
+                $user_type = array("userType" => $userType);
+                $srNo++;
+                $ids = array("ids" => "$srNo");
+                $check_arr[] = array_merge($ids, $campaign_list, $user_type, $action);
+            }
+
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => count($check_arr),
+                "iTotalDisplayRecords" => count($check_arr),
+                "aaData" => $check_arr
+            );
+            echo json_encode($result);
+        } else {
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => array()
+            );
+            echo json_encode($result);
+        }
+
+    }
+    if($_GET['page_name']=="view_campaign_list_details"){
+        $srNo = 0;
+        if (!empty($_SESSION['campaign_list_id'])){
+            $campaign_list_details = $h->table('campaign_list_detail')->select()->where('firm_id', '=', $loginUserId)->where('campaign_list_id', '=', $_SESSION['campaign_list_id'])->orderBy('id', 'desc')->fetchAll();
+            if (!empty($campaign_list_details)) {
+                foreach ($campaign_list_details as $campaign_list_detail) {
+                    $campaign_lists = $h->table('campaign_list')->select()->where('id', '=', $campaign_list_detail["campaign_list_id"])->fetchAll();
+                    if ($campaign_lists[0]['list_type'] == "email"){
+                        $userContact = array("userContact" => '<span class="inv-email"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> '.$campaign_list_detail["contact"].'</span>');
+                    }elseif($campaign_lists[0]['list_type'] == "phone"){
+                        $userContact = array("userContact" => '<span class="inv-email"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>'.$campaign_list_detail["contact"].'</span>');
+                    }
+
+                    $action = array('action' => '
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$campaign_list_detail["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+                      ');
+                    $srNo++;
+                    $ids = array("ids" => "$srNo");
+                    $check_arr[] = array_merge($ids, $campaign_list_detail,$userContact, $action);
+                }
+
+                $result = array(
+                    "sEcho" => 1,
+                    "iTotalRecords" => count($check_arr),
+                    "iTotalDisplayRecords" => count($check_arr),
+                    "aaData" => $check_arr
+                );
+                echo json_encode($result);
+            } else {
+                $result = array(
+                    "sEcho" => 1,
+                    "iTotalRecords" => 0,
+                    "iTotalDisplayRecords" => 0,
+                    "aaData" => array()
+                );
+                echo json_encode($result);
+            }
+        }else {
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => array()
+            );
+            echo json_encode($result);
+        }
+
+    }
+    if($_GET['page_name']=="view_campaign"){
+        $srNo = 0;
+       $campaigns = $h->table('campaign')->select()->where('firm_id', '=', $loginUserId)->orderBy('id', 'desc')->fetchAll();
+        if (!empty($campaigns)) {
+            foreach ($campaigns as $campaign) {
+                // Determine user status
+                if ($campaign['status'] == "start") {
+                    $statusView = "<span class='badge badge-light-success'>Started</span>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$campaign['id'].", 0)' class='btn btn-light-warning btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-pause'></i></a>";
+
+                } else if ($campaign['status'] == "pause") {
+                    $statusView = "<span class='badge badge-light-warning'>Paused</span>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$campaign['id'].", 1)' class='btn-sm btn btn-light-success text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-play'></i></a>";
+
+                }else if ($campaign['status'] == "pending") {
+                    $statusView = "<span class='badge badge-light-info'>Not Start Yet</span>";
+                    $userStatus='';
+                }else if ($campaign['status'] == "ended") {
+                    $statusView = "<span class='badge badge-light-danger'>Ended</span>";
+                    $userStatus='';
+                } else {
+                    $statusView = "<span class='badge badge-light-info'>Not Start Yet</span>";
+                    $userStatus='';
+                }
+
+                $action = array('action' => $userStatus.'
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$campaign["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           
+                      ');
+                $dateTime = new DateTime($campaign["date"]);
+                $formattedDate = $dateTime->format(' l, j F Y g:i A');
+                $date = array(
+                    "DateView" => '<span class="inv-date" >
+            <svg style="color:red" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg> ' . $formattedDate . ' 
+        </span>'
+                );
+                $status = array("statusView" => $statusView);
+                $srNo++;
+                $ids = array("ids" => "$srNo");
+                $check_arr[] = array_merge($ids, $campaign,$date, $status, $action);
+            }
+
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => count($check_arr),
+                "iTotalDisplayRecords" => count($check_arr),
+                "aaData" => $check_arr
+            );
+            echo json_encode($result);
+        } else {
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => array()
+            );
+            echo json_encode($result);
+        }
+
+    }
 }
 if($_GET['page_name']=="view_clients"){
     $srNo = 0;

@@ -8,7 +8,12 @@ $check_plan_status = $h->table('subscriptions')->select()->where('plan_end_date'
 if (!empty($check_plan_status)){
     foreach ($check_plan_status as $plan_status) {
         $id =  $plan_status['id'];
+        $user_id =  $plan_status['user_id'];
         $res = $h->table('subscriptions')->update(['status' => 'expire'])->where('id', '=', $id)->run();
+        $update = $h->update('users')
+            ->values(['plan_id' => '', 'plan_end_date' => ''])
+            ->where('id', '=', $user_id)
+            ->run();
         echo 1;
         exit();
     }

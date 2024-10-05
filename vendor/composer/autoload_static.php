@@ -28,6 +28,10 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
     );
 
     public static $prefixLengthsPsr4 = array (
+        'Z' => 
+        array (
+            'ZipStream\\' => 10,
+        ),
         'Y' => 
         array (
             'Yiisoft\\FriendlyException\\' => 26,
@@ -76,7 +80,12 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
             'Psr\\Container\\' => 14,
             'Psr\\Clock\\' => 10,
             'Psr\\Cache\\' => 10,
+            'PhpOffice\\PhpSpreadsheet\\' => 25,
             'PHPMailer\\PHPMailer\\' => 20,
+        ),
+        'M' => 
+        array (
+            'Matrix\\' => 7,
         ),
         'I' => 
         array (
@@ -105,6 +114,7 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
             'Cycle\\ORM\\' => 10,
             'Cycle\\Database\\' => 15,
             'Cycle\\Annotated\\' => 16,
+            'Complex\\' => 8,
             'Chat\\' => 5,
             'Carbon\\Doctrine\\' => 16,
             'Carbon\\' => 7,
@@ -112,6 +122,10 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
     );
 
     public static $prefixDirsPsr4 = array (
+        'ZipStream\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
+        ),
         'Yiisoft\\FriendlyException\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/friendly-exception/src',
@@ -249,9 +263,17 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
+        'PhpOffice\\PhpSpreadsheet\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
+        ),
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
+        'Matrix\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
         ),
         'Intervention\\Image\\' => 
         array (
@@ -304,6 +326,10 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
         'Cycle\\Annotated\\' => 
         array (
             0 => __DIR__ . '/..' . '/cycle/annotated/src',
+        ),
+        'Complex\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
         ),
         'Chat\\' => 
         array (

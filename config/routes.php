@@ -257,6 +257,13 @@ if (!empty(@$plan_id) && @$plan_id != '' && $current_date <= @$plan_end_date){
         post('/user/plan/checkout', 'controller/users/PlansController.php');
 
     endif;
+    get('/user/campaign/list', 'controller/users/CampaignController.php');
+    post('/user/campaign/list', 'controller/users/CampaignController.php');
+    get('/user/campaign/list_details/$id', 'controller/users/CampaignController.php');
+    get('/user/campaign/start_campaign', 'controller/users/CampaignController.php');
+    post('/user/campaign/start_campaign', 'controller/users/CampaignController.php');
+    get('/user/campaign/CampaignCronjobController', 'controller/users/CampaignCronjobController.php');
+    post('/user/campaign/CampaignCronjobController', 'controller/users/CampaignCronjobController.php');
 // profile
     get('/user/profile', 'controller/users/ProfileController.php');
     get('/user/firm-info', 'controller/users/ProfileController.php');
