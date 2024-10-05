@@ -918,7 +918,23 @@ function mailSender($admin_email,$email,$subject,$message,$mail){
     $mail->Subject = $subject;
     $mail->Body    = $message;
 
-    $mail->send();
+  return  $mail->send();
+}
+function mailSender1($admin_email,$email,$subject,$message,$mail){
+    global $env;
+    //Recipients
+    $mail->clearAddresses();
+    $mail->clearAttachments();
+    $mail->clearAllRecipients();
+    $mail->setFrom($admin_email, $env['SITE_NAME']);
+    $mail->addAddress($email);               //Name is optional
+    $mail->addReplyTo($admin_email);
+    //Content
+    $mail->isHTML(true);                                  //Set email format to HTML
+    $mail->Subject = $subject;
+    $mail->Body    = $message;
+
+    return  $mail->send();
 }
 function forgetPasswordEmail($email, $table_name){
     global $h;
