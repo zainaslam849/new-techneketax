@@ -191,12 +191,12 @@ if (!empty($_SESSION['member_id'])){
 }
 
 //TWILIO SMS API
-$twilio_number= '+17609040397';
-$account_sid= 'ACd5c325433100e2baf794a9c92caeeb55';
-$auth_token='aa8115bbf571ff82e60ae6ef26bdf4fe';
+$twilio_number= '+14322872361';
+$account_sid= 'AC4502a0299ad90a09f253b48f3b871d43';
+$auth_token='2e1cd0fbf62aa1f5e63928268fe03bd8';
 $Admin_StripeCredentials = $h->table('admin_stripe_keys')->select()->where('id', '=', '1')->fetchAll();
 $Admin_Stripe_public_key=$Admin_StripeCredentials[0]['public_key'];
 $Admin_Stripe_secret_key=$Admin_StripeCredentials[0]['secret_key'];
 $twig->addGlobal('Admin_Stripe_public_key', @$Admin_Stripe_public_key);
-
-
+// single email configration
+@$domainName = 'techneke.com';

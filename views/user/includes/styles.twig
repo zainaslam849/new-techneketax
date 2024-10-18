@@ -2,8 +2,7 @@
     <link href="{{ env.APP_URL }}assets/dash/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
     <link href="{{ env.APP_URL }}assets/dash/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="{{ env.APP_URL }}assets/dash/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
-<link href="{{ env.APP_URL }}assets/dash/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
-
+{#<link href="{{ env.APP_URL }}assets/dash/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />#}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
@@ -11,27 +10,27 @@
     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.css">
     <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" type="text/css" href="https://designreset.com/cork/html/src/assets/css/light/elements/alert.css">
 <style>
 .aside-dark .menu .menu-item .menu-link .menu-icon, .aside-dark .menu .menu-item .menu-link .menu-icon .svg-icon, .aside-dark .menu .menu-item .menu-link .menu-icon i {
     color: #d1d1d1;
 }
-    .dataTables_filter{
-        display: none !important;
-    }
-    .dataTables_length{
-        display: none !important;
-    }
+
     .dataTables_info{
         display: none !important;
     }
+.table-hover>tbody>tr:hover>* {
+    --bs-table-accent-bg:transparent !important;
+}
     .cke_notifications_area{
         display: none !important;
     }
     .page-item.active .page-link{
         background-color: #000 !important;
         color: white !important;
+    }
+    .dataTables_empty{
+        text-align: center !important;
     }
     .close{
         display: inline-block;

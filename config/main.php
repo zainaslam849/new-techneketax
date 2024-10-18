@@ -9,14 +9,398 @@ use PHRETS\Session;
 use PHRETS\Models\Search\Results;
 use Intervention\Image\ImageManagerStatic as Image;
 use Tracy\Debugger;
-//use GuzzleHttp\Client;
-use Twilio\Rest\Client;
 use Carbon\Carbon;
+use GuzzleHttp\Client as GuzzleClient;
+use Twilio\Rest\Client as TwilioClient;
+use GuzzleHttp\Exception\RequestException;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception as PHPMailerException;
+use PHPMailer\PHPMailer\SMTP;
+use PhpImap\Mailbox;
+use PhpImap\Exceptions\ConnectionException;
 Debugger::enable();
 session_start();
+$email_config = include('email_config.php');
+@$domainName = 'techneke.com';
+/**
+ * Generate a random email address.
+ *
+ * @param string $domain The domain to append.
+ * @return string Random email address.
+ */
+function generateRandomEmail($domain) {
+    $localPart = bin2hex(random_bytes(5)); // Generates a 10-character hex string
+    return "{$localPart}";
+}
+
+/**
+ *
+ *
+ * @param array $pleskConfig
+ * @param string $email
+ * @param string $password
+ * @param int $quota
+ * @return bool|string
+ */
+function createEmailAccount($pleskConfig, $email, $password, $quota = 500000000) {
+
+    $client = new GuzzleClient([
+        'base_uri' => $pleskConfig['plesk']['host'],
+        'verify' => false, // Disable SSL verification if necessary
+    ]);
+
+    // Construct XML request
+    $xml = <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<packet>
+  <mail>
+    <create>
+      <filter>
+        <site-id>4</site-id>
+        <mailname>
+          <name>{$email}</name>
+          <mailbox>
+            <enabled>true</enabled>
+            <quota>{$quota}</quota>
+          </mailbox>
+          <password>
+            <value>{$password}</value>
+            <type>plain</type>
+          </password>
+          <antivir>inout</antivir>
+        </mailname>
+      </filter>
+    </create>
+  </mail>
+</packet>
+XML;
+
+    try {
+        $response = $client->request('POST', $pleskConfig['plesk']['api_endpoint'], [
+            'headers' => [
+                'Content-Type' => 'text/xml',
+                'HTTP_AUTH_LOGIN' => $pleskConfig['plesk']['username'],
+                'HTTP_AUTH_PASSWD' => $pleskConfig['plesk']['password'],
+            ],
+            'body' => $xml,
+            'timeout' => 30,
+        ]);
+
+        $body = (string) $response->getBody();
+        // Simple check for success; you can parse the XML for more detailed error handling
+        if (strpos($body, '<status>ok</status>') === false) {
+            return "Plesk API Error: " . $body;
+        }
+
+        return true;
+    } catch (RequestException $e) {
+        if ($e->hasResponse()) {
+            return "Plesk API Request Error: " . $e->getResponse()->getBody();
+        } else {
+            return "Plesk API Connection Error: " . $e->getMessage();
+        }
+    } catch (Exception $e) {
+        return "Unexpected Error: " . $e->getMessage();
+    }
+}
+/**
+ * Send an email via SMTP using PHPMailer.
+ *
+ * @param array $smtpConfig SMTP configuration array.
+ * @param string $from Sender email address.
+ * @param string $to Recipient email address.
+ * @param string $subject Email subject.
+ * @param string $body Email body (HTML supported).
+ * @param array $attachments Array of file paths to attach.
+ * @return bool|string True on success, error message on failure.
+ */
+function sendEmail($smtpConfig, $from, $to, $cc = [], $bcc = [], $subject, $body, $attachments = []) {
+    $mail = new PHPMailer(true);
+    try {
+        // Server settings
+        // $mail->SMTPDebug = 3;
+        $mail->isSMTP();
+        $mail->Host       = $smtpConfig['host'];
+        $mail->SMTPAuth   = true;
+        $mail->Username   = $smtpConfig['username'];
+        $mail->Password   = $smtpConfig['password'];
+        $mail->SMTPSecure = $smtpConfig['encryption'];
+        $mail->Port       = $smtpConfig['port'];
+        $mail->SMTPOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true,
+            ],
+        ];
+
+        // Recipients
+        $mail->setFrom($from);
+        $mail->addAddress($to);
+
+        // Add CC addresses
+        if (!empty($cc)) {
+            foreach ($cc as $ccAddress) {
+                $mail->addCC($ccAddress);
+            }
+        }
+
+        // Add BCC addresses
+        if (!empty($bcc)) {
+            foreach ($bcc as $bccAddress) {
+                $mail->addBCC($bccAddress);
+            }
+        }
+
+        // Handle attachments
+        if (!empty($attachments)) {
+            foreach (commaSeperatedToArray($attachments) as $file) {
+                if (file_exists('uploads/email_attachment/'.$file)) {
+                    $mail->addAttachment('uploads/email_attachment/'.$file);
+                } else {
+                    return "Attachment file not found: {$file}";
+                }
+            }
+        }
+
+        // Embed images found in the email body
+        $body = embedImagesInEmail($mail, $body);
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body    = $body;
+
+        $return = $mail->send();
+        if ($return) {
+            saveSentEmailToImap($mail); // Your existing function to save the sent email
+        }
+        return $return;
+
+    } catch (PHPMailerException $e) {
+        return "PHPMailer Error: " . $e->getMessage();
+    } catch (Exception $e) {
+        return "Unexpected Error: " . $e->getMessage();
+    }
+}
+function embedImagesInEmail($mail, $htmlContent) {
+    // Find all img tags
+    preg_match_all('/<img[^>]+src="([^">]+)"/i', $htmlContent, $matches);
+
+    if (!empty($matches[1])) {
+        foreach ($matches[1] as $index => $imageUrl) {
+            // If the image is base64-encoded
+            if (preg_match('/^data:image\/([^;]+);base64,(.*)$/', $imageUrl, $imageData)) {
+                $imageType = $imageData[1]; // e.g., png, jpg, etc.
+                $imageBase64 = $imageData[2];
+
+                // Generate a temporary filename
+                $imageFilePath = sys_get_temp_dir() . "/image_{$index}.{$imageType}";
+                file_put_contents($imageFilePath, base64_decode($imageBase64));
+
+                // Embed the image in the email
+                $cid = 'cid_image_' . $index;
+                $mail->addEmbeddedImage($imageFilePath, $cid);
+
+                // Replace the image src in the body with the cid reference
+                $htmlContent = str_replace($imageUrl, 'cid:' . $cid, $htmlContent);
+            }
+        }
+    }
+
+    return $htmlContent;
+}
 
 
+function saveSentEmailToImap($mail) {
+    global $email_config;
+    // IMAP server details (adjust based on your server)
+    $server = '{'.$email_config['imap']['host'].':'.$email_config['imap']['port'].'/imap/'.$email_config['imap']['encryption'].'}';  // Example for Gmail, adjust based on your email provider
+    $email = $email_config['imap']['username'];
+    $password = $email_config['imap']['password'];
 
+    // Folder where the sent email should be saved (e.g., 'Sent', '[Gmail]/Sent Mail')
+    $sentFolder = 'INBOX.Sent'; // Adjust based on your email provider
+
+    // Get the raw MIME message from PHPMailer
+    $message = $mail->getSentMIMEMessage();
+
+    // Open an IMAP connection
+    $imapStream = imap_open($server, $email, $password);
+
+    if ($imapStream) {
+        // Use imap_append to add the message to the "Sent" folder
+        $result = imap_append(
+            $imapStream,
+            $server . $sentFolder, // Folder where email is saved
+            $message, // The raw email message
+            "\\Seen" // Mark the email as "Seen"
+        );
+
+        // Check if the message was successfully appended
+        if ($result) {
+//            echo 'Sent email saved to "Sent" folder in IMAP.';
+        } else {
+//            echo 'Failed to append sent email to the "Sent" folder: ' . imap_last_error();
+        }
+
+        // Close the IMAP connection
+        imap_close($imapStream);
+    } else {
+        echo 'IMAP connection failed: ' . imap_last_error();
+    }
+}
+function fetchEmailsFromFolder($folder)
+{
+    global $email_config;
+    // IMAP server details (adjust based on your server)
+    $server = '{'.$email_config['imap']['host'].':'.$email_config['imap']['port'].'/imap/'.$email_config['imap']['encryption'].'}';
+    $email = $email_config['imap']['username'];
+    $password = $email_config['imap']['password'];
+
+    try {
+        // Connect to the mailbox
+        $mailbox = new PhpImap\Mailbox($server . $folder, $email, $password, __DIR__, 'UTF-8');
+        $mailIds = $mailbox->searchMailbox('ALL');  // Fetch all email IDs
+
+        if (!$mailIds) {
+            return [];  // Return empty if no emails are found
+        }
+
+        $emails = [];
+        foreach ($mailIds as $mailId) {
+            // Fetch only the headers of the email (without body and attachments)
+            $mailHeaders = $mailbox->getMailsInfo([$mailId]);  // Fetch header info
+
+            if (!empty($mailHeaders)) {
+                $mailHeader = $mailHeaders[0];  // Extract the header of the current email
+
+                // Parse the "from" field
+                $from = $mailHeader->from;
+                $toaddresss = $mailHeader->to;
+
+                // Initialize variables for sender's name and email
+                $fromName = '';
+                $fromEmail = '';
+                $toEmail = '';
+
+                // Check if the "from" field contains both name and email
+                if (preg_match('/(.*)<(.+?)>/', $from, $matches)) {
+                    $fromName = trim($matches[1]);   // Name part
+                    $fromEmail = trim($matches[2]);  // Email part
+                } else {
+                    // If the "from" field doesn't have a name, it only contains an email address
+                    $fromEmail = $from;
+                }
+
+                if (!empty($toaddresss)){
+                    $toEmail = $toaddresss;
+                }
+
+                // Extract the relevant information
+                $emails[] = [
+                    'id' => $mailHeader->uid,          // Email ID
+                    'toEmail' => $toEmail,             // Recipient email
+                    'fromName' => $fromName,           // Sender's name
+                    'fromEmail' => $fromEmail,         // Sender's email
+                    'subject' => $mailHeader->subject, // Email subject
+                    'date' => strtotime($mailHeader->date),  // Email date (convert to timestamp for sorting)
+                ];
+            }
+        }
+
+        // Sort emails by date in descending order
+        usort($emails, function($a, $b) {
+            return $b['date'] <=> $a['date'];  // Sort in descending order
+        });
+
+        return $emails;  // Return the sorted email data
+
+    } catch (PhpImap\Exceptions\ConnectionException $ex) {
+        return [];  // Handle connection exceptions
+    } catch (Exception $ex) {
+        return [];  // Handle other exceptions
+    }
+}
+function fetchSpecificEmailById($folder, $emailId)
+{
+    global $email_config;
+    // IMAP server details (adjust based on your server)
+    $server = '{'.$email_config['imap']['host'].':'.$email_config['imap']['port'].'/imap/'.$email_config['imap']['encryption'].'}';  // Example for Gmail, adjust based on your email provider
+    $email = $email_config['imap']['username'];
+    $password = $email_config['imap']['password'];
+
+    try {
+        // Connect to the mailbox
+        $mailbox = new Mailbox($server . $folder, $email, $password, __DIR__, 'UTF-8');
+
+        // Fetch the specific email by ID
+        $email = $mailbox->getMail($emailId);
+        // Return the specific email details including body (plain text and HTML)
+        return [
+            'id' => $email->id,
+            'from' => $email->fromAddress,
+
+            'subject' => $email->subject,
+            'date' => $email->date,
+            'plainBody' => $email->textPlain,  // Plain text body
+            'htmlBody' => $email->textHtml,    // HTML body
+            'attachments' => $email->getAttachments(),  // Attachments if any
+            'hasAttachments' => $email->hasAttachments(),
+        ];
+
+    } catch (ConnectionException $ex) {
+        echo 'IMAP connection failed: ' . $ex->getMessage();
+        return null;
+    } catch (Exception $ex) {
+        echo 'Error fetching email: ' . $ex->getMessage();
+        return null;
+    }
+}
+function moveEmailToTrash($folder, $emailId)
+{
+    global $email_config;
+    // IMAP server details (adjust based on your server)
+    $server = '{'.$email_config['imap']['host'].':'.$email_config['imap']['port'].'/imap/'.$email_config['imap']['encryption'].'}';  // Example for Gmail, adjust based on your email provider
+    $email = $email_config['imap']['username'];
+    $password = $email_config['imap']['password'];
+
+    try {
+        // Connect to the mailbox
+        $mailbox = new Mailbox($server . $folder, $email, $password, __DIR__, 'UTF-8');
+
+        // Move the email to Trash (ensure 'INBOX.Trash' is the correct folder on your server)
+        $mailbox->moveMail($emailId, 'INBOX.Trash');
+
+        return "Email with ID $emailId moved to Trash.";
+    } catch (ConnectionException $ex) {
+        return 'IMAP connection failed: ' . $ex->getMessage();
+    } catch (Exception $ex) {
+        return 'Error moving email to Trash: ' . $ex->getMessage();
+    }
+}
+function deleteEmailFromTrash($emailId)
+{
+    global $email_config;
+    // IMAP server details (adjust based on your server)
+    $server = '{'.$email_config['imap']['host'].':'.$email_config['imap']['port'].'/imap/'.$email_config['imap']['encryption'].'}';  // Example for Gmail, adjust based on your email provider
+    $email = $email_config['imap']['username'];
+    $password = $email_config['imap']['password'];
+
+    try {
+        // Connect to the Trash mailbox
+        $mailbox = new Mailbox($server . 'INBOX.Trash', $email, $password, __DIR__, 'UTF-8');
+
+        // Delete the email permanently from Trash
+        $mailbox->deleteMail($emailId);
+
+        return "Email with ID $emailId permanently deleted from Trash.";
+    } catch (ConnectionException $ex) {
+        return 'IMAP connection failed: ' . $ex->getMessage();
+    } catch (Exception $ex) {
+        return 'Error deleting email from Trash: ' . $ex->getMessage();
+    }
+}
 function get($route, $path_to_include, $page_name=NULL){
     if( $_SERVER['REQUEST_METHOD'] == 'GET' ){
 
@@ -761,7 +1145,7 @@ function Login($email, $password,$table_name){
 }
 
 function userRegister($first_name, $last_name, $email,$phone, $password, $account_type, $table_name){
-    global $h;
+    global $h,$email_config,$domainName;
     global $env,$message,$mail,$loginUserId;
     if(isset($email) && !empty($email) && isset($password) && !empty($password) && isset($first_name) && !empty($first_name) && isset($last_name) && !empty($last_name) && isset($phone) && !empty($phone)){
 //        if( ! is_csrf_valid()){
@@ -791,6 +1175,10 @@ function userRegister($first_name, $last_name, $email,$phone, $password, $accoun
         $userAvailable = $h->table($table_name)->select()->where('email', '=', $email);
 
         if($userAvailable->count() < 1){
+            $generatedemail =  generateRandomEmail($domainName);
+            $password_email =  random_strings(9);
+         $createAccount = createEmailAccount($email_config, $generatedemail, $password_email);
+
             try{
                 $insert = $h->insert($table_name)->values([
                     'fname'=> $first_name,
@@ -799,6 +1187,8 @@ function userRegister($first_name, $last_name, $email,$phone, $password, $accoun
                     'phone'=> $phone,
                     'account_type'=> $account_type,
                     'password'=> $hashed_password,
+                    'generated_email'=> $generatedemail,
+                    'generated_email_pass'=> $password_email,
                 ])->run();
                     $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
                     @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
@@ -910,6 +1300,9 @@ function forgetPassword($email, $table_name){
 function mailSender($admin_email,$email,$subject,$message,$mail){
     global $env;
     //Recipients
+    $mail->clearAddresses();
+    $mail->clearAttachments();
+    $mail->clearAllRecipients();
     $mail->setFrom($admin_email, $env['SITE_NAME']);
     $mail->addAddress($email);               //Name is optional
     $mail->addReplyTo($admin_email);
@@ -1280,7 +1673,7 @@ function sendSMS($clientNumber, $message){
 
     $sid = $account_sid;
     $token = $auth_token;
-    $twilio = new Client($sid, $token);
+    $twilio = new TwilioClient($sid, $token);
 
     try {
         $message = $twilio->messages

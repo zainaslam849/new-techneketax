@@ -70,8 +70,9 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="table-responsive">
-                                <table id="table"  class="table dt-table-hover" style="width:100%">
+                            <div class="card-body">
+
+                                <table id="table"  class="table table-hover table-row-dashed fs-6 gy-5 my-0 dataTable no-footer" style="width:100%">
                                     <thead>
                                     <tr>
                                         <th> Id </th>
@@ -83,6 +84,7 @@
                                     <tbody>
                                     </tbody>
                                 </table>
+
                             </div>
 
                         </div>
@@ -187,11 +189,11 @@
         $(document).ready(function () {
             var csrf_token = $("input[name=csrf]").val();
             var table = $('#table').dataTable({
-                "language": {
-                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
-                },
+                // "language": {
+                //     processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only text-center">Loading...</span> '
+                // },
                 "responsive": true,
-                "bProcessing": true,
+                // "bProcessing": true,
                 "sAjaxSource": "/user/api?page_name=view_campaign_list&csrf="+csrf_token,
                 "bPaginate": true,
                 "sPaginationType": "full_numbers",

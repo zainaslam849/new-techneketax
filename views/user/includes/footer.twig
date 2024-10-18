@@ -262,23 +262,17 @@
     <!--end::Svg Icon-->
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script src="{{ env.APP_URL }}assets/dash/assets/plugins/global/plugins.bundle.js"></script>
 <script src="{{ env.APP_URL }}assets/dash/assets/js/scripts.bundle.js"></script>
 <script src="{{ env.APP_URL }}assets/dash/assets/plugins/custom/datatables/datatables.bundle.js"></script>
-<script src="{{ env.APP_URL }}assets/dashboard/src/plugins/src/table/datatable/datatables.js"></script>
+
 <script src="{{ env.APP_URL }}assets/dashboard/src/plugins/src/fullcalendar/fullcalendar.min.js"></script>
 <script src="{{ env.APP_URL }}assets/dashboard/src/plugins/src/uuid/uuid4.min.js"></script>
 <script src="{{ env.APP_URL }}assets/dashboard/src/plugins/src/fullcalendar/custom-fullcalendar.js"></script>
 <script src="{{ env.APP_URL }}assets/dash/assets/js/custom/apps/user-management/users/list/table.js"></script>
-{#<script src="{{ env.APP_URL }}assets/dash/assets/js/custom/apps/user-management/users/list/export-users.js"></script>#}
-{#<script src="{{ env.APP_URL }}assets/dash/assets/js/custom/apps/user-management/users/list/add.js"></script>#}
-
-{#<script src="{{ env.APP_URL }}assets/dash/assets/plugins/custom/datatables/datatables.bundle.js"></script>#}
 <script src="{{ env.APP_URL }}assets/dash/assets/js/widgets.bundle.js"></script>
 <script src="{{ env.APP_URL }}assets/dash/assets/js/custom/widgets.js"></script>
-{#<script src="{{ env.APP_URL }}assets/dash/assets/js/custom/apps/chat/chat.js"></script>#}
 <script src="{{ env.APP_URL }}assets/dash/assets/js/custom/utilities/modals/upgrade-plan.js"></script>
 <script src="{{ env.APP_URL }}assets/dash/assets/js/custom/utilities/modals/create-app.js"></script>
 <script src="{{ env.APP_URL }}assets/dash/assets/js/custom/utilities/modals/users-search.js"></script>
@@ -294,6 +288,7 @@
 {% if route == '/user/plans' %}
 <script src="{{ env.APP_URL }}assets/dash/assets/js/custom/pages/pricing/general.js"></script>
 {% endif %}
+{#<script src="{{ env.APP_URL }}assets/dash/assets/js/custom/apps/inbox/compose.js"></script>#}
 {#profile cdns#}
 <script type="text/javascript">
     function googleTranslateElementInit() {
@@ -798,7 +793,6 @@
         });
     }
 
-
     function BackToMember(accountId) {
 // add spinner to button
         $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> loading...');
@@ -822,6 +816,356 @@
             }
         });
     }
+
+    {% if route == '/user/email/compose' or route == '/user/email/compose/$email' %}
+    var KTAppInboxCompose = function () {
+        // Private functions
+        const initForm = () => {
+            const form = document.querySelector('#kt_inbox_compose_form');
+            const allTagify = form.querySelectorAll('[data-kt-inbox-form="tagify"]');
+
+            handleCCandBCC(form);
+            handleSubmit(form);
+
+            allTagify.forEach(tagify => {
+                initTagify(tagify);
+            });
+
+            initQuill(form);
+            initDropzone(form);
+        }
+
+        const handleCCandBCC = (el) => {
+            const ccElement = el.querySelector('[data-kt-inbox-form="cc"]');
+            const ccButton = el.querySelector('[data-kt-inbox-form="cc_button"]');
+            const ccClose = el.querySelector('[data-kt-inbox-form="cc_close"]');
+            const bccElement = el.querySelector('[data-kt-inbox-form="bcc"]');
+            const bccButton = el.querySelector('[data-kt-inbox-form="bcc_button"]');
+            const bccClose = el.querySelector('[data-kt-inbox-form="bcc_close"]');
+
+            ccButton.addEventListener('click', e => {
+                e.preventDefault();
+                ccElement.classList.remove('d-none');
+                ccElement.classList.add('d-flex');
+
+            });
+
+            ccClose.addEventListener('click', e => {
+                e.preventDefault();
+                ccElement.classList.add('d-none');
+                ccElement.classList.remove('d-flex');
+            });
+
+            bccButton.addEventListener('click', e => {
+                e.preventDefault();
+                bccElement.classList.remove('d-none');
+                bccElement.classList.add('d-flex');
+
+            });
+
+            bccClose.addEventListener('click', e => {
+                e.preventDefault();
+                bccElement.classList.add('d-none');
+                bccElement.classList.remove('d-flex');
+            });
+        }
+        const getQuillContent = () => {
+            const quillEditor = document.querySelector('#kt_inbox_form_editor');
+            if (quillEditor && quillEditor.__quill) {
+                // Get the HTML content from the Quill editor
+                const htmlContent = quillEditor.__quill.root.innerHTML;
+                return htmlContent;
+            }
+            return '';
+        }
+        let uploadedFileNames = [];
+        const initDropzone = (el) => {
+            // set the dropzone container id
+            const id = '[data-kt-inbox-form="dropzone"]';
+            const dropzone = el.querySelector(id);
+            const uploadButton = el.querySelector('[data-kt-inbox-form="dropzone_upload"]');
+
+            // set the preview element template
+            var previewNode = dropzone.querySelector(".dropzone-item");
+            previewNode.id = "";
+            var previewTemplate = previewNode.parentNode.innerHTML;
+            previewNode.parentNode.removeChild(previewNode);
+
+            var myDropzone = new Dropzone(id, { // Make the whole body a dropzone
+                url: "/user/email/upload_attachment", // Set the url for your upload script location
+                parallelUploads: 20,
+                maxFilesize: 1, // Max filesize in MB
+                previewTemplate: previewTemplate,
+                previewsContainer: id + " .dropzone-items", // Define the container to display the previews
+                clickable: uploadButton // Define the element that should be used as click trigger to select files.
+            });
+
+
+            myDropzone.on("addedfile", function (file) {
+                // Hookup the start button
+                const dropzoneItems = dropzone.querySelectorAll('.dropzone-item');
+                dropzoneItems.forEach(dropzoneItem => {
+                    dropzoneItem.style.display = '';
+                });
+            });
+
+            myDropzone.on("success", function(file, response) {
+                const data = JSON.parse(response);
+                if (data.success && data.fileName) {
+                    console.log("File uploaded successfully:", data.fileName);
+                    uploadedFileNames.push(data.fileName);
+                } else {
+                    console.error("File upload response did not contain a fileName.");
+                }
+            });
+            myDropzone.on("error", function(file, response) {
+                console.log("File upload error:", response);
+            });
+
+            // Update the total progress bar
+            myDropzone.on("totaluploadprogress", function (progress) {
+                const progressBars = dropzone.querySelectorAll('.progress-bar');
+                progressBars.forEach(progressBar => {
+                    progressBar.style.width = progress + "%";
+                });
+            });
+
+            myDropzone.on("sending", function (file) {
+                // Show the total progress bar when upload starts
+                const progressBars = dropzone.querySelectorAll('.progress-bar');
+                progressBars.forEach(progressBar => {
+                    progressBar.style.opacity = "1";
+                });
+            });
+
+            // Hide the total progress bar when nothing"s uploading anymore
+            myDropzone.on("complete", function (progress) {
+                const progressBars = dropzone.querySelectorAll('.dz-complete');
+
+                setTimeout(function () {
+                    progressBars.forEach(progressBar => {
+                        progressBar.querySelector('.progress-bar').style.opacity = "0";
+                        progressBar.querySelector('.progress').style.opacity = "0";
+                    });
+                }, 300);
+            });
+
+        }
+        const handleSubmit = (el) => {
+            const submitButton = el.querySelector('[data-kt-inbox-form="send"]');
+            const form = el;
+
+            submitButton.addEventListener("click", function (e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                // Add a loading indicator
+                submitButton.setAttribute("data-kt-indicator", "on");
+
+                // Serialize the form data
+                const form = document.querySelector('#kt_inbox_compose_form');
+                const quillContent = getQuillContent();
+                const formData = new FormData(form);
+                formData.append('body', quillContent);
+
+                if (uploadedFileNames.length > 0) {
+                    formData.append('attachment', uploadedFileNames.join(','));
+                }
+                // Make an AJAX request
+                fetch('/user/email/compose', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response1 => response1.json())
+                    .then(response1 => {
+                        // Handle success response
+                        console.log(response1);
+                        if (response1.success) {
+                            toastr.success(response1.message);
+
+                            form.reset(); // Clear the form
+                            window.location.reload()
+                        } else {
+                            toastr.error(response1.message);
+                        }
+
+                        // Remove the loading indicator
+                        submitButton.removeAttribute("data-kt-indicator");
+                    })
+                    .catch(error => {
+
+                        console.error('Error:', error);
+                        toastr.error('An error occurred while sending the email.');
+
+                        // Remove the loading indicator
+                        submitButton.removeAttribute("data-kt-indicator");
+                    });
+            });
+        }
+
+        const initTagify = (el) => {
+            if (el.tagify) return;
+
+
+            // Prevent reinitializing if already initialized
+            const fetchUsers = (tagify) => {
+                fetch('/user/email/get_users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (Array.isArray(data)) {
+                            tagify.whitelist = data; // Populate whitelist with fetched users
+                        } else {
+                            console.error('Failed to fetch users:', data.error);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+            const tagTemplate = (tagData) => `
+ <tag title="${(tagData.title || tagData.email)}"
+                        contenteditable='false'
+                        spellcheck='false'
+                        tabIndex="-1"
+                       class="tagify__tag ">
+                    <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
+                    <div class="d-flex align-items-center">
+                        <div class='tagify__tag__avatar-wrap ps-0'>
+                            <img onerror="this.style.visibility='hidden'" class="rounded-circle w-25px me-2" src="${tagData.avatar}">
+                        </div>
+                        <span class='tagify__tag-text'>${tagData.name}</span>
+                    </div>
+                </tag>
+    `;
+            const suggestionItemTemplate = (tagData) => `
+        <div class='tagify__dropdown__item d-flex align-items-center ${tagData.class ? tagData.class : ""}'
+            tabindex="0"
+            role="option"
+            data-value="${tagData.value}"
+            data-id="${tagData.id}">
+            ${tagData.avatar ? `
+                <div class='tagify__dropdown__item__avatar-wrap me-2'>
+                    <img onerror="this.style.visibility='hidden'" class="rounded-circle w-50px me-2" src="${tagData.avatar}">
+                </div>` : ''
+            }
+            <div class="d-flex flex-column">
+                <strong>${tagData.name}</strong>
+                <span>${tagData.email}</span>
+            </div>
+        </div>
+    `;
+            var tagify = new Tagify(el, {
+                tagTextProp: 'name',
+                enforceWhitelist: true,
+                skipInvalid: true,
+                dropdown: {
+                    closeOnSelect: false,
+                    enabled: 0,
+                    classname: 'users-list',
+                    searchKeys: ['name', 'email']
+                },
+                templates: {
+                    tag: tagTemplate,
+                    dropdownItem: suggestionItemTemplate
+                },
+            {% if email == '' %}
+                whitelist: []
+            {% else %}
+                whitelist: [
+                    {
+                        value: "{{ email }}",
+                        name: "{{ email }}",
+                        avatar: "{{ email }}",
+                        email: "{{ email }}"
+                    }
+                ],
+                defaultValue: [
+                    {
+                        value: "{{ email }}",
+                        name: "{{ email }}",
+                        avatar: "{{ email }}",
+                        email: "{{ email }}"
+                    }
+                ]
+            {% endif %}
+            });
+
+            el.tagify = tagify; // Store reference to the Tagify instance
+
+            // Fetch users via AJAX
+            fetchUsers(tagify);
+
+            // Add event listeners
+            tagify.on('dropdown:show dropdown:updated', onDropdownShow);
+            tagify.on('dropdown:select', onSelectSuggestion);
+            var addAllSuggestionsElm;
+            function onDropdownShow(e) {
+                var dropdownContentElm = e.detail.tagify.DOM.dropdown.content;
+
+                if (tagify.suggestedListItems.length > 1) {
+                    addAllSuggestionsElm = getAddAllSuggestionsElm();
+
+                    // insert "addAllSuggestionsElm" as the first element in the suggestions list
+                    dropdownContentElm.insertBefore(addAllSuggestionsElm, dropdownContentElm.firstChild)
+                }
+            }
+
+            function onSelectSuggestion(e) {
+                if (e.detail.elm == addAllSuggestionsElm)
+                    tagify.dropdown.selectAll.call(tagify);
+            }
+            function getAddAllSuggestionsElm() {
+                // suggestions items should be based on "dropdownItem" template
+                return tagify.parseTemplate('dropdownItem', [{
+                        class: "addAll",
+                        name: "Add all",
+                        email: tagify.settings.whitelist.reduce(function (remainingSuggestions, item) {
+                            return tagify.isTagDuplicate(item.value) ? remainingSuggestions : remainingSuggestions + 1
+                        }, 0) + " Members"
+                    }]
+                )
+            }
+        }
+
+        const initQuill = (el) => {
+            var quill = new Quill('#kt_inbox_form_editor', {
+                modules: {
+                    toolbar: [
+                        [{ header: [1, 2, false] }],
+                        ['bold', 'italic', 'underline'],
+                        ['image', 'code-block']
+                    ]
+                },
+                placeholder: 'Type your text here...',
+                theme: 'snow'
+            });
+
+            const toolbar = el.querySelector('.ql-toolbar');
+            if (toolbar) {
+                const classes = ['px-5', 'border-top-0', 'border-start-0', 'border-end-0'];
+                toolbar.classList.add(...classes);
+            }
+        }
+
+
+
+        return {
+            init: function () {
+                initForm();
+            }
+        }
+    }();
+
+    document.addEventListener("DOMContentLoaded", function() {
+        KTAppInboxCompose.init();
+    });
+    {% endif %}
 </script>
+
 </body>
 </html>

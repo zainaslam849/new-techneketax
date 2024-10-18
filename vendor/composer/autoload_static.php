@@ -81,6 +81,7 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
             'Psr\\Clock\\' => 10,
             'Psr\\Cache\\' => 10,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
+            'PhpImap\\' => 8,
             'PHPMailer\\PHPMailer\\' => 20,
         ),
         'M' => 
@@ -266,6 +267,10 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
         'PhpOffice\\PhpSpreadsheet\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
+        ),
+        'PhpImap\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-imap/php-imap/src/PhpImap',
         ),
         'PHPMailer\\PHPMailer\\' => 
         array (

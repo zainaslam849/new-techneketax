@@ -328,5 +328,115 @@
                 ]
             }
         ]
+    },
+    {
+        "user_id": "125",
+        "sections": [
+            {
+                "section_id": "1",
+                "responses": [
+                    {
+                        "label": "Business Name",
+                        "value": "bitstock"
+                    },
+                    {
+                        "label": "Business EIN (Employer Identification Number)",
+                        "value": "bitstock"
+                    },
+                    {
+                        "label": "Business Address",
+                        "value": "568 Rayleigh Rd"
+                    },
+                    {
+                        "label": "Fourth Input",
+                        "value": "demo"
+                    },
+                    {
+                        "label": "Fifth Input",
+                        "value": "zotec soft"
+                    }
+                ]
+            },
+            {
+                "section_id": "2",
+                "responses": [
+                    {
+                        "label": "Full Name",
+                        "value": "Adam Mansoor Robertson"
+                    },
+                    {
+                        "label": "Father Name",
+                        "value": "adfvdvgf"
+                    },
+                    {
+                        "label": "Sex",
+                        "value": "Male"
+                    },
+                    {
+                        "label": "Phone Number",
+                        "value": "1702511010"
+                    },
+                    {
+                        "label": "Email",
+                        "value": "support@bitstock.com"
+                    },
+                    {
+                        "label": "Password",
+                        "value": "fvdszv"
+                    },
+                    {
+                        "label": "Confirm Password",
+                        "value": "vfsxdb"
+                    },
+                    {
+                        "label": "User Type",
+                        "value": "Firm"
+                    }
+                ]
+            },
+            {
+                "section_id": "3",
+                "responses": [
+                    {
+                        "label": "Identification Type",
+                        "value": "passport"
+                    },
+                    {
+                        "label": "Second Input ha ",
+                        "value": "2024-10-10T16:26"
+                    }
+                ]
+            },
+            {
+                "section_id": "10",
+                "responses": [
+                    {
+                        "label": "ghh",
+                        "value": "uploads\/template_files\/8\/10442670e5176ad03f.png"
+                    },
+                    {
+                        "label": "gh",
+                        "value": "uploads\/template_files\/8\/16949670e5176b46b7.png"
+                    }
+                ]
+            },
+            {
+                "section_id": "11",
+                "responses": [
+                    {
+                        "label": "chbgfdbhn",
+                        "value": "uploads\/template_files\/8\/89546670e5176b4aa3.png"
+                    },
+                    {
+                        "label": "sdgfvxdsgbv",
+                        "value": "uploads\/template_files\/8\/15813670e5176b6eda.png"
+                    },
+                    {
+                        "label": "jhh",
+                        "value": "uploads\/template_files\/8\/31257670e5176b711d.png"
+                    }
+                ]
+            }
+        ]
     }
 ]

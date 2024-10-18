@@ -123,7 +123,7 @@ foreach ($email_queueDetails as $email_queueDetail) {
 }
 }
 // phone queue
-$phone_queueDetails = $h->table('phone_queue')->select()->where('status', '=', 'pending')->where('attempts', '<=', '3')->limit(10)->fetchAll();
+$phone_queueDetails = $h->table('phone_queue')->select()->where('status', '=', 'pending')->where('attempts', '<=', '3')->limit(50)->fetchAll();
 if (!empty($phone_queueDetails)){
     foreach ($phone_queueDetails as $phone_queueDetail) {
         $campaign_id = $phone_queueDetail['campaign_id'];
@@ -137,7 +137,7 @@ if (!empty($phone_queueDetails)){
             if($phone_logs_check->count() >= 1){
                 $phone_response =true;
             }else{
-                $phone_response =  sendSMS($phone_queueDetail['recipient_phone'],$subject.'\n\n'.$body);
+                $phone_response =  sendSMS($phone_queueDetail['recipient_phone'],$subject.''. $body);
             }
             if ($phone_response){
                 $delete_phone_queue =  $h->table('phone_queue')->delete()->where('id', $phone_queueDetail['id'])->run();
