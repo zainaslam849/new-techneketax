@@ -81,6 +81,7 @@ endif;
             $userAvailable = $h->table('users')->select()->where('email', '=', $email);
             if($userAvailable->count() < 1){
                 $generatedemail =  generateRandomEmail($domainName);
+                $generatedemail = strtolower($fname.$lname.$generatedemail);
                 $password_email =  random_strings(9);
                 $createAccount = createEmailAccount($email_config, $generatedemail, $password_email);
             try {

@@ -102,13 +102,15 @@ $mail->Password   = $mail_settings[0]['mail_password'];                         
 $mail->SMTPSecure = $mail_settings[0]['mail_enc'];            //Enable implicit TLS encryption
 $mail->Port       = $mail_settings[0]['mail_port'];
 //END OF VIEWS LOADER BY TWIG
-
+@$domainName = 'techneke.com';
 $settings = $h->table('site_setting')->select()->where('id', '=', 1)->fetchAll();
 $twig->addGlobal('logo', $settings[0]['logo']);
 //DEFINE YOUR GLOBAL STUFF HERE
 if(isset($_SESSION['users']) && !empty($_SESSION['users'])):
         $loginUserId=$_SESSION['users']['id'];
         $loginUserType=$_SESSION['users']['type'];
+        $loginUserGeneratedEmail=@$_SESSION['users']['generated_email'].'@'.@$domainName;
+    $twig->addGlobal('loginUserGeneratedEmail', $loginUserGeneratedEmail);
         $userInfo = $h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
         @$allow=explode(',',@$userInfo['permissions']);
         $loginUserName=$userInfo[0]['fname'] .' '.$userInfo[0]['lname'];
@@ -199,4 +201,3 @@ $Admin_Stripe_public_key=$Admin_StripeCredentials[0]['public_key'];
 $Admin_Stripe_secret_key=$Admin_StripeCredentials[0]['secret_key'];
 $twig->addGlobal('Admin_Stripe_public_key', @$Admin_Stripe_public_key);
 // single email configration
-@$domainName = 'techneke.com';
