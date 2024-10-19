@@ -12,7 +12,8 @@
         "edsdk/flmngr-server-php": "^1.6",
         "stripe/stripe-php": "^15.9",
         "twilio/sdk": "^8.2",
-        "phpoffice/phpspreadsheet": "^3.3"
+        "phpoffice/phpspreadsheet": "^3.3",
+        "php-imap/php-imap": "^5.0"
     },
     "autoload": {
         "psr-4": {

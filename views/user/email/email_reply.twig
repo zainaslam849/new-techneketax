@@ -1,0 +1,364 @@
+{% extends 'user/master.twig' %}
+{% block content %}
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Toolbar-->
+        <div class="toolbar" id="kt_toolbar">
+            <!--begin::Container-->
+            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                    <!--begin::Title-->
+                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Email</h1>
+                    <!--end::Title-->
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-300 border-start mx-4"></span>
+                    <!--end::Separator-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">Email Details</li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-dark">Email</li>
+                        <!--end::Item-->
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Toolbar-->
+        <!--begin::Post-->
+        <div class="post d-flex flex-column-fluid" id="kt_post">
+            <!--begin::Container-->
+            <div id="kt_content_container" class="container-fluid">
+                <!--begin::Inbox App - Messages -->
+                <div class="d-flex flex-column flex-lg-row">
+                    <!--begin::Sidebar-->
+                    <div class="flex-column flex-lg-row-auto w-100 w-lg-275px mb-10 mb-lg-0">
+                        <!--begin::Sticky aside-->
+                        <div class="card card-flush mb-0" data-kt-sticky="true" data-kt-sticky-name="inbox-aside-sticky" data-kt-sticky-offset="{default: false, xl: '0px'}" data-kt-sticky-width="{lg: '275px'}" data-kt-sticky-left="auto" data-kt-sticky-top="150px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
+                            <!--begin::Aside content-->
+                            <div class="card-body">
+                                <!--begin::Button-->
+                                <a href="/user/email/compose" class="btn btn-primary text-uppercase w-100 mb-10">Compose Email</a>
+                                <!--end::Button-->
+                                <!--begin::Menu-->
+                                <div class="menu menu-column menu-rounded menu-state-bg menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary mb-10">
+                                    <div class="menu-item mb-3">
+                                        <a href="/user/email/inbox" class="menu-link active">
+															<span class="menu-icon">
+																<span class="svg-icon svg-icon-2 me-3">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																		<path d="M6 8.725C6 8.125 6.4 7.725 7 7.725H14L18 11.725V12.925L22 9.725L12.6 2.225C12.2 1.925 11.7 1.925 11.4 2.225L2 9.725L6 12.925V8.725Z" fill="currentColor" />
+																		<path opacity="0.3" d="M22 9.72498V20.725C22 21.325 21.6 21.725 21 21.725H3C2.4 21.725 2 21.325 2 20.725V9.72498L11.4 17.225C11.8 17.525 12.3 17.525 12.6 17.225L22 9.72498ZM15 11.725H18L14 7.72498V10.725C14 11.325 14.4 11.725 15 11.725Z" fill="currentColor" />
+																	</svg>
+																</span>
+															</span>
+                                            <span class="menu-title text-dark fw-bolder">Inbox</span>
+                                        </a>
+                                    </div>
+
+                                    <div class="menu-item mb-3">
+                                        <a href="/user/email/sent" class="menu-link">
+															<span class="menu-icon">
+																<span class="svg-icon svg-icon-2 me-3">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																		<path d="M15.43 8.56949L10.744 15.1395C10.6422 15.282 10.5804 15.4492 10.5651 15.6236C10.5498 15.7981 10.5815 15.9734 10.657 16.1315L13.194 21.4425C13.2737 21.6097 13.3991 21.751 13.5557 21.8499C13.7123 21.9488 13.8938 22.0014 14.079 22.0015H14.117C14.3087 21.9941 14.4941 21.9307 14.6502 21.8191C14.8062 21.7075 14.9261 21.5526 14.995 21.3735L21.933 3.33649C22.0011 3.15918 22.0164 2.96594 21.977 2.78013C21.9376 2.59432 21.8452 2.4239 21.711 2.28949L15.43 8.56949Z" fill="currentColor" />
+																		<path opacity="0.3" d="M20.664 2.06648L2.62602 9.00148C2.44768 9.07085 2.29348 9.19082 2.1824 9.34663C2.07131 9.50244 2.00818 9.68731 2.00074 9.87853C1.99331 10.0697 2.04189 10.259 2.14054 10.4229C2.23919 10.5869 2.38359 10.7185 2.55601 10.8015L7.86601 13.3365C8.02383 13.4126 8.19925 13.4448 8.37382 13.4297C8.54839 13.4145 8.71565 13.3526 8.85801 13.2505L15.43 8.56548L21.711 2.28448C21.5762 2.15096 21.4055 2.05932 21.2198 2.02064C21.034 1.98196 20.8409 1.99788 20.664 2.06648Z" fill="currentColor" />
+																	</svg>
+																</span>
+                                                                <!--end::Svg Icon-->
+															</span>
+                                            <span class="menu-title text-dark fw-bolder">Sent</span>
+                                        </a>
+
+                                    </div>
+                                    <div class="menu-item">
+                                        <!--begin::Trash-->
+                                        <a href="/user/email/trash" class="menu-link">
+															<span class="menu-icon">
+																<!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
+																<span class="svg-icon svg-icon-2 me-3">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																		<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor" />
+																		<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor" />
+																		<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor" />
+																	</svg>
+																</span>
+                                                                <!--end::Svg Icon-->
+															</span>
+                                            <span class="menu-title text-dark fw-bolder">Trash</span>
+                                        </a>
+                                        <!--end::Trash-->
+                                    </div>
+                                    <!--end::Menu item-->
+                                </div>
+                            </div>
+                            <!--end::Aside content-->
+                        </div>
+                        <!--end::Sticky aside-->
+                    </div>
+                    <!--end::Sidebar-->
+                    <!--begin::Content-->
+                    <div class="flex-lg-row-fluid ms-lg-7 ms-xl-10">
+                        <!--begin::Card-->
+                        <div class="card">
+                            <div class="card-header align-items-center py-5 gap-5">
+                                <!--begin::Actions-->
+                                <div class="d-flex">
+                                    <!--begin::Back-->
+                                    <a href="/user/email/{% if folder == 'INBOX' %}inbox{% elseif folder == 'INBOX.Sent' %}sent{% else %}trash{% endif %}" class="btn btn-sm btn-icon btn-clear btn-active-light-primary me-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Back">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr063.svg-->
+                                        <span class="svg-icon svg-icon-1 m-0">
+															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																<rect opacity="0.5" x="6" y="11" width="13" height="2" rx="1" fill="currentColor" />
+																<path d="M8.56569 11.4343L12.75 7.25C13.1642 6.83579 13.1642 6.16421 12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75L5.70711 11.2929C5.31658 11.6834 5.31658 12.3166 5.70711 12.7071L11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25C13.1642 17.8358 13.1642 17.1642 12.75 16.75L8.56569 12.5657C8.25327 12.2533 8.25327 11.7467 8.56569 11.4343Z" fill="currentColor" />
+															</svg>
+														</span>
+                                        <!--end::Svg Icon-->
+                                    </a>
+
+                                    <a href='javascript:;' data-id="{{ email_id }}" class='btn btn-sm btn-icon btn-light btn-active-light-primary action-edit me-3' data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
+                                        <span class="svg-icon svg-icon-2 m-0">
+															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor" />
+																<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor" />
+																<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor" />
+															</svg>
+														</span>
+                                        <!--end::Svg Icon-->
+                                    </a>
+                                    <a href='javascript:;' onclick='download_files({{ attachmentSinglePathName|json_encode|raw }})' class='btn btn-sm btn-icon btn-light btn-active-light-primary me-3' data-bs-toggle="tooltip" data-bs-placement="top" title="Attachments">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
+                                        <span class="svg-icon svg-icon-2 m-0">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13 10H18L12 16L6 10H11V3H13V10ZM4 19H20V12H22V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V12H4V19Z"></path></svg>
+                                   	</span>
+                                    </a>
+                                    <a href="/user/email/compose/{{ email_body.from }}" class="btn btn-sm btn-icon btn-light btn-active-light-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Reply">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr076.svg-->
+                                        <span class="svg-icon svg-icon-2 m-0">
+															<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 14 4 9 9 4"></polyline><path d="M20 20v-7a4 4 0 0 0-4-4H4"></path></svg>
+														</span>
+                                        <!--end::Svg Icon-->
+                                    </a>
+                                    <!--end::Move-->
+                                </div>
+
+                            </div>
+                            <div class="card-body">
+                                <!--begin::Title-->
+                                <div class="d-flex flex-wrap gap-2 justify-content-between mb-8">
+                                    <div class="d-flex align-items-center flex-wrap gap-2">
+                                        <!--begin::Heading-->
+                                        <h2 class="fw-bold me-3 my-1">{{ email_body.subject }}</h2>
+
+                                    </div>
+                                    <div class="d-flex">
+
+
+                                    </div>
+                                </div>
+                                <!--end::Title-->
+                                <!--begin::Message accordion-->
+                                <div data-kt-inbox-message="message_wrapper">
+                                    <!--begin::Message header-->
+                                    <div class="d-flex flex-wrap gap-2 flex-stack cursor-pointer" data-kt-inbox-message="header">
+                                        <!--begin::Author-->
+                                        <div class="d-flex align-items-center">
+                                            <!--begin::Avatar-->
+                                            <div class="symbol symbol-50 me-4">
+                                                <span class="symbol-label">  <img src='https://avatar.iran.liara.run/username?username={{ email_body.from }}' alt='default' style='width: 100%;'></span>
+                                            </div>
+                                            <!--end::Avatar-->
+                                            <div class="pe-5">
+                                                <!--begin::Author details-->
+                                                <div class="d-flex align-items-center flex-wrap gap-1">
+                                                    <a href="#" class="fw-bolder text-dark text-hover-primary">{{ email_body.from }}</a>
+                                                    <!--begin::Svg Icon | path: icons/duotune/abstract/abs050.svg-->
+                                                    <span class="svg-icon svg-icon-7 svg-icon-success mx-3">
+
+																	</span>
+                                                    <!--end::Svg Icon-->
+                                                    <span class="text-muted fw-bolder">{{ formattedDate }}</span>
+                                                </div>
+                                                <!--end::Author details-->
+                                                <!--begin::Message details-->
+                                                <div data-kt-inbox-message="details">
+                                                    <span class="text-muted fw-bold">to me</span>
+                                                    <!--begin::Menu toggle-->
+                                                    <a href="#" class="me-1" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start">
+                                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                                        <span class="svg-icon svg-icon-5 m-0">
+																			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																				<path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="currentColor" />
+																			</svg>
+																		</span>
+                                                        <!--end::Svg Icon-->
+                                                    </a>
+                                                    <!--end::Menu toggle-->
+                                                    <!--begin::Menu-->
+                                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-300px p-4" data-kt-menu="true">
+                                                        <!--begin::Table-->
+                                                        <table class="table mb-0">
+                                                            <tbody style="overflow: auto;">
+                                                            <!--begin::From-->
+                                                            <!--end::From-->
+                                                            <!--begin::Date-->
+                                                            <tr>
+                                                                <td class="text-muted">Date</td>
+                                                                <td>{{ formattedDateDMY }}</td>
+                                                            </tr>
+                                                            <!--end::Date-->
+                                                            <!--begin::Subject-->
+                                                            <tr>
+                                                                <td class="text-muted">Subject</td>
+                                                                <td>{{ email_body.subject }}</td>
+                                                            </tr>
+                                                            <!--end::Subject-->
+                                                            <!--begin::Reply-to-->
+                                                            <tr>
+                                                                <td class="text-muted">Reply-to</td>
+                                                                <td>{{ email_body.from }}</td>
+                                                            </tr>
+                                                            <!--end::Reply-to-->
+                                                            </tbody>
+                                                        </table>
+                                                        <!--end::Table-->
+                                                    </div>
+                                                    <!--end::Menu-->
+                                                </div>
+                                                <!--end::Message details-->
+                                                <!--begin::Preview message-->
+                                                <div class="text-muted fw-bold mw-450px d-none" data-kt-inbox-message="preview"></div>
+                                                <!--end::Preview message-->
+                                            </div>
+                                        </div>
+                                        <!--end::Author-->
+                                        <!--begin::Actions-->
+                                        <div class="d-flex align-items-center flex-wrap gap-2">
+                                            <!--begin::Date-->
+                                            <span class="fw-bold text-muted text-end me-3">{{ formattedDateDMY }}</span>
+                                            <!--end::Date-->
+                                            <div class="d-flex">
+                                            </div>
+                                        </div>
+                                        <!--end::Actions-->
+                                    </div>
+                                    <!--end::Message header-->
+                                    <!--begin::Message content-->
+                                    <div class="collapse fade show" data-kt-inbox-message="message">
+                                        <div class="py-5">
+                                            {% if email_body.htmlBody != '' %}
+                                            {{ email_body.htmlBody|raw }}
+                                            {% else %}
+                                                {{ email_body.plainBody|raw }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+
+                                            <div class="d-flex">
+                                                {% for attachment in attachmentNames %}
+                                                <div class="d-flex align-items-center me-2">
+                                                    <!--begin::Svg Icon | path: icons/duotune/files/fil003.svg-->
+                                                    <span class="svg-icon svg-icon-2x svg-icon-primary me-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor"></path>
+                    <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
+                </svg>
+            </span>
+                                                    <!--end::Svg Icon-->
+                                                    <a href="{{ env.APP_URL }}uploads/email_attachment/{{ attachment.path }}" download="{{ attachment.path }}" class="text-gray-800 text-hover-primary">{{ attachment.name }}</a>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--end::Card-->
+                    </div>
+
+                    <!--end::Content-->
+                </div>
+                <!--end::Inbox App - Messages -->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Post-->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!--  END CONTENT AREA  -->
+    <script>
+
+        $('.action-edit').off('click').on('click', function () {
+            var emailId = $(this).data('id');
+            if (confirm('Are you sure you want to delete this email?')) {
+                var csrf_token = $("input[name=csrf]").val();
+                $.ajax({
+                    url: '{% if folder == 'INBOX.Trash' %}/user/email/deleteEmailFromTrash{% else %}/user/email/sentToTrash{% endif %}',
+                    type: 'POST',
+                    data: {
+                        id: emailId,
+                        folder: '{{ folder }}',
+                        csrf: csrf_token
+                    },
+                    success: function (data) {
+                        data = JSON.parse(data);
+                        if (data['statusCode'] == 1) {
+                            toastr.info(data['message']);
+                            window.location.href = '/user/email/{% if folder == 'INBOX' %}inbox{% elseif folder == 'INBOX.Sent' %}sent{% else %}trash{% endif %}';
+                        } else {
+                            toastr.error(data['message']);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Delete failed: ' + error);
+                    }
+                });
+            }
+        });
+        function download_files(attachmentNames) {
+            var csrf_token = $("input[name=csrf]").val();
+            $.ajax({
+                url: '/user/email/attachment',
+                type: 'POST',
+                data: {
+                    attachmentNames: attachmentNames,
+                    csrf: csrf_token
+                },
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (data) {
+                    var blob = new Blob([data], { type: 'application/zip' });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+
+                    // Generate a random number and append it to the file name
+                    var randomNum = Math.floor(Math.random() * 1000000); // Adjust the range if needed
+                    link.download =  randomNum + '.zip';
+
+                    link.click();
+                    toastr.success('Successfully downloaded.');
+                },
+                error: function () {
+                    toastr.error('Something went wrong.');
+                }
+            });
+        }
+    </script>
+{% endblock %}

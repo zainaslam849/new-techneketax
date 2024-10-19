@@ -247,6 +247,7 @@ if (!empty(@$plan_id) && @$plan_id != '' && $current_date <= @$plan_end_date){
     post('/user/member/login_as_client', 'controller/auth/AuthController.php');
     post('/user/member/login_as_member', 'controller/auth/AuthController.php');
     get('/user/api', 'controller/users/UserApi.php');
+    get('/api/users/email_inbox', 'controller/users/UserApi.php');
     get('/user/dashboard', 'controller/users/DashboardController.php');
     // plans
     if(@$_SESSION['users']['type'] == 'firm'):
@@ -262,8 +263,28 @@ if (!empty(@$plan_id) && @$plan_id != '' && $current_date <= @$plan_end_date){
     get('/user/campaign/list_details/$id', 'controller/users/CampaignController.php');
     get('/user/campaign/start_campaign', 'controller/users/CampaignController.php');
     post('/user/campaign/start_campaign', 'controller/users/CampaignController.php');
+    post('/user/get_campaign_list', 'controller/users/CampaignController.php');
+    post('/user/get_campaign_list_details', 'controller/users/CampaignController.php');
+    post('/user/campaign/list_detail/add', 'controller/users/CampaignController.php');
     get('/user/campaign/CampaignCronjobController', 'controller/users/CampaignCronjobController.php');
     post('/user/campaign/CampaignCronjobController', 'controller/users/CampaignCronjobController.php');
+
+    // email
+    get('/user/email/inbox', 'controller/users/EmailController.php');
+    get('/user/email/sent', 'controller/users/EmailController.php');
+    get('/user/email/trash', 'controller/users/EmailController.php');
+    get('/user/email/compose', 'controller/users/EmailController.php');
+    post('/user/email/compose', 'controller/users/EmailController.php');
+    post('/user/email/get_users', 'controller/users/EmailController.php');
+    get('/user/email/upload_attachment', 'controller/users/EmailController.php');
+    post('/user/email/upload_attachment', 'controller/users/EmailController.php');
+    post('/user/email/sentToTrash', 'controller/users/EmailController.php');
+    post('/user/email/deleteEmailFromTrash', 'controller/users/EmailController.php');
+    post('/user/email/deleteEmailFromTrashBulk', 'controller/users/EmailController.php');
+    post('/user/email/sentToTrashBulk', 'controller/users/EmailController.php');
+    get('/user/email/email_reply/$folder/$email_id', 'controller/users/EmailController.php');
+    get('/user/email/compose/$email', 'controller/users/EmailController.php');
+    post('/user/email/attachment', 'controller/users/EmailController.php');
 // profile
     get('/user/profile', 'controller/users/ProfileController.php');
     get('/user/firm-info', 'controller/users/ProfileController.php');

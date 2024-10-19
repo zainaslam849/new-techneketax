@@ -1,6 +1,6 @@
 <?php
 require("config/env.php");
-
+$email_config = include('config/email_config.php');
 if ($route == '/user/get_user'):
     if(isset($_POST['edit']) && !empty($_POST['edit'])){
         $id= $_POST['id'];
@@ -80,8 +80,11 @@ endif;
             }
             $userAvailable = $h->table('users')->select()->where('email', '=', $email);
             if($userAvailable->count() < 1){
+                $generatedemail =  generateRandomEmail($domainName);
+                $password_email =  random_strings(9);
+                $createAccount = createEmailAccount($email_config, $generatedemail, $password_email);
             try {
-            $insert = $h->insert('users')->values([ 'associates_id' => $associates_add_id,'firm_id' => $firm_id,'fname' => $fname, 'lname' => $lname, 'email' => $email, 'phone' => $phone,'type' => $type, 'password' => $hashed_password])->run();
+            $insert = $h->insert('users')->values([ 'associates_id' => $associates_add_id,'firm_id' => $firm_id,'fname' => $fname, 'lname' => $lname, 'email' => $email, 'phone' => $phone,'type' => $type, 'password' => $hashed_password,'generated_email'=> $generatedemail,'generated_email_pass'=> $password_email])->run();
             echo "1";
             exit();
         } catch (PDOException $e) {

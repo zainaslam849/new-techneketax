@@ -38,7 +38,11 @@ if($route == '/user/campaign/list'):
                                 continue;
                             }
                             $srno = $row[0];
-                            $contact = $row[1];
+                            if ($list_type == 'email'){
+                                $contact = $row[1];
+                            }else{
+                                $contact = $row[2];
+                            }
                             if (empty($contact)) {
                                 continue;
                             }
@@ -83,20 +87,19 @@ endif;
     unset($_SESSION['campaign_list_id']);
         $_SESSION['campaign_list_id'] = $id;
         $listDetails = $h->table('campaign_list')->select()->where('id', '=', $id)->fetchAll();
-
         echo $twig->render('user/campaign/list_detail.twig', ['seo' => $seo, 'listDetails' => $listDetails]);
-
 endif;
 if($route == '/user/campaign/start_campaign'):
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_POST['list'])){
-            if (!empty($_POST['list']) && !empty($_POST['name'])&&!empty($_POST['subject'])&& !empty($_POST['body'])&& !empty($_POST['date']) && !empty($_POST['timezone'])) {
+            if (!empty($_POST['list']) && !empty($_POST['name'])&&!empty($_POST['subject'])&& !empty($_POST['body'])&& !empty($_POST['date']) && !empty($_POST['timezone'])&& !empty($_POST['campaign_type'])) {
                 $list_id = $_POST['list'];
                 $subject = $_POST['subject'];
                 $body = $_POST['body'];
                 $date = $_POST['date'];
                 $name = $_POST['name'];
                 $timezone = $_POST['timezone'];
+                $campaign_type = $_POST['campaign_type'];
             }else{
                 echo "3";
                 exit();
@@ -105,6 +108,7 @@ if($route == '/user/campaign/start_campaign'):
                 'name' => $name,
                 'firm_id' => $loginUserId,
                 'list_id' => $list_id,
+                'campaign_type' => $campaign_type,
                 'subject' => $subject,
                 'body' => $body,
                 'timezone' => $timezone,
@@ -128,3 +132,26 @@ if($route == '/user/campaign/start_campaign'):
     }
 
 endif;
+if($route == '/user/get_campaign_list'):
+    $list_type = $_POST['list_type'];
+    $campaign_lists = $h->table('campaign_list')->select()->where('firm_id', '=', $loginUserId)->where('list_type', $list_type)->fetchAll();
+
+
+    $output = '';
+    foreach ($campaign_lists as $campaign_list) {
+        $output .= '<option value="'.$campaign_list['id'].'">'.$campaign_list['name'].'</option>  ';
+    }
+    echo $output;
+    exit();
+        endif;
+if($route == '/user/campaign/list_detail/add'):
+    $list_id = $_POST['list_id'];
+    $contact = $_POST['contact'];
+    $campaign_list_detail = $h->insert('campaign_list_detail')->values([
+        'firm_id' => $loginUserId,
+        'campaign_list_id' => $list_id,
+        'contact' => $contact,
+    ])->run();
+    echo '1';
+    exit();
+        endif;

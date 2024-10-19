@@ -1,6 +1,7 @@
 <?php
 require("config/env.php");
 header('Content-Type: application/json');
+use Carbon\Carbon;
 //FETCH ALL CATEGORIES
 if($loginUserType == "member"){
     if($_GET['page_name']=="view_client_associates"){
@@ -766,9 +767,9 @@ if($loginUserType == "firm") {
                 foreach ($campaign_list_details as $campaign_list_detail) {
                     $campaign_lists = $h->table('campaign_list')->select()->where('id', '=', $campaign_list_detail["campaign_list_id"])->fetchAll();
                     if ($campaign_lists[0]['list_type'] == "email"){
-                        $userContact = array("userContact" => '<span class="inv-email"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> '.$campaign_list_detail["contact"].'</span>');
+                        $userContact = array("userContact" => '<span class="inv-email" style="font-size: 15px;"><svg style="width: 17px; margin-right: 7px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> '.$campaign_list_detail["contact"].'</span>');
                     }elseif($campaign_lists[0]['list_type'] == "phone"){
-                        $userContact = array("userContact" => '<span class="inv-email"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>'.$campaign_list_detail["contact"].'</span>');
+                        $userContact = array("userContact" => '<span class="inv-email" style="font-size: 15px;"><svg style="width: 17px; margin-right: 7px;" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>'.$campaign_list_detail["contact"].'</span>');
                     }
 
                     $action = array('action' => '
@@ -830,7 +831,12 @@ if($loginUserType == "firm") {
                     $statusView = "<span class='badge badge-light-info'>Not Start Yet</span>";
                     $userStatus='';
                 }
-
+                if ($campaign['campaign_type'] == "email") {
+                    $listView = "<span class='badge badge-light-success'>Email</span>";
+                }else{
+                    $listView = "<span class='badge badge-light-info'>Phone</span>";
+                }
+                $listViews = array("listView" => $listView);
                 $action = array('action' => $userStatus.'
                    <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$campaign["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
            
@@ -850,7 +856,7 @@ if($loginUserType == "firm") {
                 $status = array("statusView" => $statusView);
                 $srNo++;
                 $ids = array("ids" => "$srNo");
-                $check_arr[] = array_merge($ids, $campaign,$date, $status, $action);
+                $check_arr[] = array_merge($ids, $campaign,$date,$listViews, $status, $action);
             }
 
             $result = array(
@@ -870,6 +876,219 @@ if($loginUserType == "firm") {
             echo json_encode($result);
         }
 
+    }
+    if ($_GET['page_name'] == "view_inbox") {
+   $inboxEmails = fetchEmailsFromFolder('INBOX');
+        if (!empty($inboxEmails)) {
+            $srNo = 0;
+            $check_arr = [];
+
+            foreach ($inboxEmails as $email) {
+                $srNo++;
+                    $email_id = $email['id'];
+                $userName = $email['fromName'];
+                $subject = $email['subject'];
+                $dateTime = Carbon::parse($email['date']);
+                $formattedDate = $dateTime->diffForHumans();
+                $action = "<a href='javascript:;' data-id='".$email_id."' class='btn btn-sm btn-icon btn-light btn-active-light-primary action-edit' data-bs-toggle='tooltip' data-bs-placement='top' title='Send To Trash' data-bs-original-title='Delete'>
+                 
+                                        <span class='svg-icon svg-icon-2'>
+															<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
+																<path d='M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z' fill='currentColor'></path>
+																<path opacity='0.5' d='M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z' fill='currentColor'></path>
+																<path opacity='0.5' d='M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z' fill='currentColor'></path>
+															</svg>
+														</span></a>";
+
+                $emailData = [
+                    "select" => "<div class='form-check form-check-sm form-check-custom form-check-solid me-3 mt-3'>
+                                        <input class='form-check-input' type='checkbox' name='bulk_action'  value='".$email_id."'>
+                </div>",
+                    "from" => "<a href='/user/email/email_reply/INBOX/".$email_id."' class='d-flex align-items-center text-dark'>
+                                <div class='symbol symbol-35px me-3'>
+                                    <div class='symbol-label'>
+                                        <img src='https://avatar.iran.liara.run/username?username={$userName}' alt='default' style='width: 100%;'>
+                                    </div>
+                                </div>
+                                <span class='fw-bold'>{$userName}</span>
+                            </a>",
+                    "subject" => "
+    <div class='text-dark mb-1'>
+        <!--begin::Heading-->
+        <a href='/user/email/email_reply/INBOX/".$email_id."' class='text-dark'>
+            <span class='fw-bolder'>" . str_replace('Fwd: ', '', $subject) . "</span>
+        </a>
+        <!--end::Heading-->
+    </div>",
+                    "DateView" => "<span class='inv-date'>{$formattedDate}</span>",
+                    "actions" => $action
+                ];
+
+                $check_arr[] = $emailData;
+            }
+
+            $result = [
+                "sEcho" => 1,
+                "iTotalRecords" => count($check_arr),
+                "iTotalDisplayRecords" => count($check_arr),
+                "aaData" => $check_arr
+            ];
+
+            echo json_encode($result);
+        } else {
+            $result = [
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => []
+            ];
+
+            echo json_encode($result);
+        }
+    }
+    if ($_GET['page_name'] == "view_sent") {
+        $inboxEmails = fetchEmailsFromFolder('INBOX.Sent');
+
+        if (!empty($inboxEmails)) {
+            $srNo = 0;
+            $check_arr = [];
+
+            foreach ($inboxEmails as $email) {
+                $srNo++;
+                $email_id = $email['id'];
+                $userName = $email['toEmail'];
+                $subject = $email['subject'];
+                $dateTime = Carbon::parse($email['date']);
+                $formattedDate = $dateTime->diffForHumans();
+                $action = "<a href='javascript:;' data-id='".$email_id."' class='btn btn-sm btn-icon btn-light btn-active-light-primary action-edit' data-bs-toggle='tooltip' data-bs-placement='top' title='Send To Trash' data-bs-original-title='Delete'>
+                 
+                                        <span class='svg-icon svg-icon-2'>
+															<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
+																<path d='M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z' fill='currentColor'></path>
+																<path opacity='0.5' d='M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z' fill='currentColor'></path>
+																<path opacity='0.5' d='M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z' fill='currentColor'></path>
+															</svg>
+														</span></a>";
+
+                $emailData = [
+                    "select" => "<div class='form-check form-check-sm form-check-custom form-check-solid me-3 mt-3'>
+                                        <input class='form-check-input' type='checkbox' name='bulk_action'  value='".$email_id."'>
+                </div>",
+                    "from" => "<a href='/user/email/email_reply/INBOX.Sent/".$email_id."' class='d-flex align-items-center text-dark'>
+                                <div class='symbol symbol-35px me-3'>
+                                    <div class='symbol-label'>
+                                        <img src='https://avatar.iran.liara.run/username?username={$userName}' alt='default' style='width: 100%;'>
+                                    </div>
+                                </div>
+                                <span class='fw-bold'>{$userName}</span>
+                            </a>",
+                    "subject" => "
+    <div class='text-dark mb-1'>
+        <!--begin::Heading-->
+        <a href='/user/email/email_reply/INBOX.Sent/".$email_id."' class='text-dark'>
+            <span class='fw-bolder'>" . str_replace('Fwd: ', '', $subject) . "</span>
+        </a>
+        <!--end::Heading-->
+    </div>",
+                    "DateView" => "<span class='inv-date'>{$formattedDate}</span>",
+                    "actions" => $action
+                ];
+
+                $check_arr[] = $emailData;
+            }
+
+            $result = [
+                "sEcho" => 1,
+                "iTotalRecords" => count($check_arr),
+                "iTotalDisplayRecords" => count($check_arr),
+                "aaData" => $check_arr
+            ];
+
+            echo json_encode($result);
+        } else {
+            $result = [
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => []
+            ];
+
+            echo json_encode($result);
+        }
+    }
+    if ($_GET['page_name'] == "view_trash") {
+        $inboxEmails = fetchEmailsFromFolder('INBOX.Trash');
+
+        if (!empty($inboxEmails)) {
+            $srNo = 0;
+            $check_arr = [];
+
+            foreach ($inboxEmails as $email) {
+                $srNo++;
+                $email_id = $email['id'];
+                if (!empty($email['fromName'])){
+                    $userName = $email['fromName'];
+                }else{
+                    $userName = $email['toEmail'];
+                }
+                $subject = $email['subject'];
+                $dateTime = Carbon::parse($email['date']);
+                $formattedDate = $dateTime->diffForHumans();
+                $action = "<a href='javascript:;' data-id='".$email_id."' class='btn btn-sm btn-icon btn-light btn-active-light-primary action-edit' data-bs-toggle='tooltip' data-bs-placement='top' title='Send To Trash' data-bs-original-title='Delete'>
+                 
+                                        <span class='svg-icon svg-icon-2'>
+															<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
+																<path d='M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z' fill='currentColor'></path>
+																<path opacity='0.5' d='M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z' fill='currentColor'></path>
+																<path opacity='0.5' d='M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z' fill='currentColor'></path>
+															</svg>
+														</span></a>";
+
+                $emailData = [
+                    "select" => "<div class='form-check form-check-sm form-check-custom form-check-solid me-3 mt-3'>
+                                        <input class='form-check-input' type='checkbox' name='bulk_action'  value='".$email_id."'>
+                </div>",
+                    "from" => "<a href='/user/email/email_reply/INBOX.Trash/".$email_id."' class='d-flex align-items-center text-dark'>
+                                <div class='symbol symbol-35px me-3'>
+                                    <div class='symbol-label'>
+                                        <img src='https://avatar.iran.liara.run/username?username={$userName}' alt='default' style='width: 100%;'>
+                                    </div>
+                                </div>
+                                <span class='fw-bold'>{$userName}</span>
+                            </a>",
+                    "subject" => "
+    <div class='text-dark mb-1'>
+        <!--begin::Heading-->
+        <a href='/user/email/email_reply/INBOX.Trash/".$email_id."' class='text-dark'>
+            <span class='fw-bolder'>" . str_replace('Fwd: ', '', $subject) . "</span>
+        </a>
+        <!--end::Heading-->
+    </div>",
+                    "DateView" => "<span class='inv-date'>{$formattedDate}</span>",
+                    "actions" => $action
+                ];
+
+                $check_arr[] = $emailData;
+            }
+
+            $result = [
+                "sEcho" => 1,
+                "iTotalRecords" => count($check_arr),
+                "iTotalDisplayRecords" => count($check_arr),
+                "aaData" => $check_arr
+            ];
+
+            echo json_encode($result);
+        } else {
+            $result = [
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => []
+            ];
+
+            echo json_encode($result);
+        }
     }
 }
 if($_GET['page_name']=="view_clients"){

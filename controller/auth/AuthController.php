@@ -1,5 +1,6 @@
 <?php
 require("config/env.php");
+$email_config = include('config/email_config.php');
 if($route == '/admin'):
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -216,6 +217,9 @@ if($route == '/join/$firm_id/$associates_id/$email/$invite'):
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $userAvailable = $h->table('users')->select()->where('email', '=', $email);
             if($userAvailable->count() < 1) {
+                $generatedemail =  generateRandomEmail($domainName);
+                $password_email =  random_strings(9);
+                $createAccount = createEmailAccount($email_config, $generatedemail, $password_email);
                 try {
 
                     $h->table('users')->insertOne([
@@ -228,6 +232,8 @@ if($route == '/join/$firm_id/$associates_id/$email/$invite'):
                         'password' => $hashed_password,
                         'type' => $invite,
                         'work_status' => $work_status,
+                        'generated_email'=> $generatedemail,
+                        'generated_email_pass'=> $password_email
                     ]);
                     $AdminInfo = $h->table('users')->select()->where('type', '=', 'admin')->fetchAll();
                     @$company_name =  @$AdminInfo[0]['fname'].' '.@$AdminInfo[0]['lname'];
