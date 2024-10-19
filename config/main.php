@@ -29,7 +29,7 @@ $email_config = include('email_config.php');
  * @return string Random email address.
  */
 function generateRandomEmail($domain) {
-    $localPart = bin2hex(random_bytes(5)); // Generates a 10-character hex string
+    $localPart = random_number(5); // Generates a 10-character hex string
     return "{$localPart}";
 }
 
@@ -1009,6 +1009,11 @@ function random_strings($length_of_string)
     $str_result = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz';
     return substr(str_shuffle($str_result), 0, $length_of_string);
 }
+function random_number($length_of_string)
+{
+    $str_result = '1234567890';
+    return substr(str_shuffle($str_result), 0, $length_of_string);
+}
 function TwoFA($email, $password, $table_name){
     global $h,$sql,$settings,$message,$env,$mail,$loginUserId;
     if(isset($email) && !empty($email) && isset($password) && !empty($password)){
@@ -1176,9 +1181,9 @@ function userRegister($first_name, $last_name, $email,$phone, $password, $accoun
 
         if($userAvailable->count() < 1){
             $generatedemail =  generateRandomEmail($domainName);
+            $generatedemail = strtolower($first_name.$last_name.$generatedemail);
             $password_email =  random_strings(9);
          $createAccount = createEmailAccount($email_config, $generatedemail, $password_email);
-
             try{
                 $insert = $h->insert($table_name)->values([
                     'fname'=> $first_name,

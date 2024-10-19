@@ -16,18 +16,29 @@
                     <!--begin::Breadcrumb-->
                     <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
 
-                        <li class="breadcrumb-item text-muted">Trash</li>
-                        <!--end::Item-->
-                        <!--begin::Item-->
-                        <li class="breadcrumb-item">
-                            <span class="bullet bg-gray-300 w-5px h-2px"></span>
-                        </li>
-                        <!--end::Item-->
-                        <!--begin::Item-->
-                        <li class="breadcrumb-item text-dark">Email</li>
-                        <!--end::Item-->
+                        <li class="breadcrumb-item text-dark">Trash</li>
+
                     </ul>
                     <!--end::Breadcrumb-->
+                </div>
+                <div class="d-flex align-items-center gap-2 gap-lg-3">
+                    <!--begin::Filter menu-->
+                    <div class="m-0">
+                        <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+
+                            <li class="breadcrumb-item text-muted">Your Email</li>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <li class="breadcrumb-item">
+                                <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                            </li>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <li class="breadcrumb-item text-dark">{{ loginUserGeneratedEmail }}</li>
+                            <!--end::Item-->
+                        </ul>
+                    </div>
+
                 </div>
             </div>
             <!--end::Container-->
@@ -46,7 +57,7 @@
                             <!--begin::Aside content-->
                             <div class="card-body">
                                 <!--begin::Button-->
-                                <a href="/user/email/compose" class="btn btn-primary text-uppercase w-100 mb-10">Compose Email</a>
+                                <a href="/user/email/compose" class="btn btn-primary text-uppercase w-100 mb-10">Compose </a>
                                 <!--end::Button-->
                                 <!--begin::Menu-->
                                 <div class="menu menu-column menu-rounded menu-state-bg menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary mb-10">

@@ -203,7 +203,12 @@ if($route == '/user/email/upload_attachment'):
 endif;
 if($route == '/user/email/get_users'):
     try {
+    if ($loginUserType == 'firm'){
         $usersDetails = $h->table('users')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
+    }else{
+        $usersDetails = $h->table('users')->select()->where('id', '=', @$userInfo[0]['firm_id'])->fetchAll();
+    }
+
 
         $response = [];
         foreach ($usersDetails as $user) {
@@ -217,7 +222,7 @@ if($route == '/user/email/get_users'):
                 'value' => $user['id'],
                 'name' => $user['fname'].' '.$user['lname'],
                 'avatar' => $avatar,
-                'email' => $user['email']
+                'email' => $user['generated_email'].'@'.$domainName
             ];
         }
         echo json_encode($response);
