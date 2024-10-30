@@ -76,7 +76,7 @@ if($route == '/user/email/compose' or $route == '/user/email/compose/$email'):
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
      if(!empty($_POST['compose_to']) && !empty($_POST['compose_subject']) && !empty($_POST['body'])){
-         $compose_to = $_POST['compose_to'];
+        $compose_to = $_POST['compose_to'];
          $compose_cc = $_POST['compose_cc'] ?? '';
          $compose_bcc = $_POST['compose_bcc'] ?? '';
          $compose_subject = $_POST['compose_subject'];
@@ -114,19 +114,19 @@ if($route == '/user/email/compose' or $route == '/user/email/compose/$email'):
 
         if (is_array($compose_to_array)) {
             foreach ($compose_to_array as $item) {
-
                 if (isset($item['email'])) {
                     $toEmails[] = $item['email'];
-
+                } elseif (isset($item['value'])) {
+                    $toEmails[] = $item['value'];
                 }
             }
         }
-
-
         if (is_array($compose_cc_array)) {
             foreach ($compose_cc_array as $item) {
                 if (isset($item['email'])) {
                     $ccEmails[] = $item['email'];
+                } elseif (isset($item['value'])) {
+                    $ccEmails[] = $item['value'];
                 }
             }
         }
@@ -134,6 +134,8 @@ if($route == '/user/email/compose' or $route == '/user/email/compose/$email'):
             foreach ($compose_bcc_array as $item) {
                 if (isset($item['email'])) {
                     $bccEmails[] = $item['email'];
+                } elseif (isset($item['value'])) {
+                    $bccEmails[] = $item['value'];
                 }
             }
         }

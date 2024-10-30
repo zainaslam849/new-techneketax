@@ -1061,8 +1061,8 @@
     `;
             var tagify = new Tagify(el, {
                 tagTextProp: 'name',
-                enforceWhitelist: true,
-                skipInvalid: true,
+                enforceWhitelist: false,
+                skipInvalid: false,
                 dropdown: {
                     closeOnSelect: false,
                     enabled: 0,
@@ -1073,9 +1073,9 @@
                     tag: tagTemplate,
                     dropdownItem: suggestionItemTemplate
                 },
-            {% if email == '' %}
-                whitelist: []
-            {% else %}
+{#            {% if email == '' %}#}
+{#                whitelist: []#}
+{#            {% else %}#}
                 whitelist: [
                     {
                         value: "{{ email }}",
@@ -1092,7 +1092,7 @@
                         email: "{{ email }}"
                     }
                 ]
-            {% endif %}
+{#            {% endif %}#}
             });
 
             el.tagify = tagify; // Store reference to the Tagify instance
