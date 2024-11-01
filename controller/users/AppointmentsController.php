@@ -104,13 +104,18 @@ if ($route == '/user/get_users'):
     }
 
     $output = '';
-    $output .= '  <div class="text-center mb-8">
-                    <h1 class="mb-3">' . $appointment[0]['title'] . '</h1>
-                    <div class="text-muted fw-bold fs-5">' . $formattedDate . '</div>
-                    <a href="/meet/' . $appointment[0]['jitsi_link'] . '" class="btn btn-primary fw-bolder w-100  mt-5">
-                        Join with Techneke Meet
-                    </a>
-                </div>';
+    $output .= '  
+<div class="text-center mb-8">
+    <h1 class="mb-3">' . htmlspecialchars($appointment[0]['title'], ENT_QUOTES, 'UTF-8') . '</h1>
+    <div class="text-muted fw-bold fs-5">' . htmlspecialchars($formattedDate, ENT_QUOTES, 'UTF-8') . '</div>
+    <a href="/meet/' . htmlspecialchars($appointment[0]['jitsi_link'], ENT_QUOTES, 'UTF-8') . '" class="btn btn-primary fw-bolder w-100 mt-5">
+        Join with Techneke Meet
+    </a>
+    <a class="btn btn-info fw-bolder w-100 mt-5"   href="' . $env['APP_URL'] . 'user/add-to-calendar?event_name=' . urlencode($appointment[0]['title']) .
+        '&start_date=' . $appointment_date .'">
+        Add to Calendar
+    </a>
+</div>';
 
 // Check if $UserInfo is not empty and contains at least one non-empty sub-array
     $hasValidUserInfo = false;
@@ -340,5 +345,11 @@ if($route == '/user/update/appointments'):
         echo "2";
         exit();
     }
+endif;
+if ($route == '/user/add-to-calendar'):
+
+    $event_name = $_GET['event_name'];
+    $start_date = $_GET['start_date'];
+    generateICS($event_name, $start_date);
 endif;
 

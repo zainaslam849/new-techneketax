@@ -408,6 +408,54 @@ function get($route, $path_to_include, $page_name=NULL){
 
     }
 }
+function escapeStringForICS($string) {
+
+    return addcslashes($string, "\,;\\");
+}
+
+function foldLine($string, $length = 75) {
+    $output = '';
+    while (mb_strlen($string, 'UTF-8') > $length) {
+        // Add a folded line
+        $output .= mb_substr($string, 0, $length, 'UTF-8') . "\r\n ";
+        $string = mb_substr($string, $length, null, 'UTF-8');
+    }
+    return $output . $string;
+}
+
+function generateICS($eventName, $startDate)
+{
+    $uid = uniqid();
+    $dtStamp = gmdate('Ymd\THis\Z'); // The current time when the event is generated (UTC)
+
+    // Set Dubai timezone and create DateTime objects for start and end dates
+    $dubaiTimeZone = new DateTimeZone('Asia/Dubai');
+    $startDateTime = new DateTime($startDate, $dubaiTimeZone);
+
+    // Format the start and end dates to ICS format (without timezone)
+    $icsStartDate = $startDateTime->format('Ymd\THis');
+
+    $icsContent = "BEGIN:VCALENDAR\r\n";
+    $icsContent .= "VERSION:2.0\r\n";
+    $icsContent .= "PRODID:-//TECHNEKE//Event//EN\r\n";
+    $icsContent .= "BEGIN:VEVENT\r\n";
+    $icsContent .= "UID:{$uid}\r\n";
+    $icsContent .= "DTSTAMP:{$dtStamp}\r\n";
+    $icsContent .= "SUMMARY:" . foldLine(escapeStringForICS($eventName)) . "\r\n";
+    $icsContent .= "DTSTART:{$icsStartDate}\r\n";
+    $icsContent .= "END:VEVENT\r\n";
+    $icsContent .= "END:VCALENDAR\r\n";
+
+    // ICS file
+    header('Content-Type: text/calendar; charset=utf-8');
+    header('Content-Disposition: attachment; filename="event.ics"');
+
+    // Output the ICS content
+    echo $icsContent;
+    exit;
+}
+
+
 function post($route, $path_to_include,$page_name=NULL){
     if( $_SERVER['REQUEST_METHOD'] == 'POST' ){ route($route, $path_to_include,$page_name ); }
 }

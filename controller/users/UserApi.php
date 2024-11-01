@@ -877,7 +877,52 @@ if($loginUserType == "firm") {
         }
 
     }
+        if($_GET['page_name']=="view_email_template"){
+            $srNo = 0;
+            $email_templates = $h->table('email_template')->select()->where('firm_id', '=', $loginUserId)->orderBy('id', 'desc')->fetchAll();
+            if (!empty($email_templates)) {
+                foreach ($email_templates as $email_template) {
+                    // Determine user status
+                    if ($email_template['status'] == "active") {
+                        $statusView = "<span class='badge badge-light-success'>Active</span>";
+                        $userStatus = "<a href='javascript:;' onclick='userStatus(".$email_template['id'].", 0)' class='btn btn-light-danger btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-lock'></i></a>";
 
+                    } else if ($email_template['status'] == "block") {
+                        $statusView = "<span class='badge badge-light-danger'>Block</span>";
+                        $userStatus = "<a href='javascript:;' onclick='userStatus(".$email_template['id'].", 1)' class='btn-sm btn btn-light-success text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-unlock'></i></a>";
+
+                    } else {
+                        $statusView = "<span class='badge badge-light-info'>Not Start Yet</span>";
+                        $userStatus='';
+                    }
+                    $action = array('action' => $userStatus.'
+                    <a href="/user/email-template/edit/'.$email_template["id"].'" class="btn-sm btn btn-light-info text-start me-2" ><i style="font-size: 16px;" class="fa-solid fa-pen-to-square"></i></a>
+                      <a role="button" data-id="'.$email_template["id"].'" data-bs-toggle="modal" data-bs-target="#viewExampleModal" class="view btn-sm btn btn-light-warning text-start me-2 action-edit" ><i style="font-size: 16px;" class="fa-solid fa-eye fa-fw"></i></a>
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$email_template["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>');
+                    $status = array("statusView" => $statusView);
+                    $srNo++;
+                    $ids = array("ids" => "$srNo");
+                    $check_arr[] = array_merge($ids,$email_template, $status, $action);
+                }
+
+                $result = array(
+                    "sEcho" => 1,
+                    "iTotalRecords" => count($check_arr),
+                    "iTotalDisplayRecords" => count($check_arr),
+                    "aaData" => $check_arr
+                );
+                echo json_encode($result);
+            } else {
+                $result = array(
+                    "sEcho" => 1,
+                    "iTotalRecords" => 0,
+                    "iTotalDisplayRecords" => 0,
+                    "aaData" => array()
+                );
+                echo json_encode($result);
+            }
+
+        }
 }
 if ($_GET['page_name'] == "view_inbox") {
     $inboxEmails = fetchEmailsFromFolder('INBOX');

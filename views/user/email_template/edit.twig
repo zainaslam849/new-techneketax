@@ -1,0 +1,166 @@
+{% extends 'user/master.twig' %}
+{% block content %}
+    <script src="https://editor.unlayer.com/embed.js"></script>
+    <style>
+        .blockbuilder-branding {
+            visibility: hidden !important;
+        }
+    </style>
+    <style>
+        #editor-container {
+            height: 100%;
+            min-height: 500px; /* Fallback height */
+        }
+        iframe{
+            min-width: 100% !important;
+        }
+    </style>
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <div class="toolbar" id="kt_toolbar">
+            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                     data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                     class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                    <!--begin::Title-->
+                    <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Add Email Template</h1>
+                    <!--end::Title-->
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-300 border-start mx-4"></span>
+                    <!--end::Separator-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">Email Template</li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-dark">Add Email Template</li>
+                        <!--end::Item-->
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+            </div>
+        </div>
+
+
+        <div class="post d-flex flex-column-fluid" id="kt_post">
+            <div id="kt_content_container" class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card p-12">
+                            <div class="body">
+                                <!-- Hidden Input for Template ID -->
+                                <input type="hidden" id="template_id" value="{{ id }}">
+
+                                <!-- Template Name Input -->
+                                <div class="mb-4">
+                                    <label for="template_name" class="form-label">Template Name</label>
+                                    <input type="text" id="template_name" class="form-control form-control-solid" placeholder="Enter Template Name">
+                                </div>
+
+                                <!-- Unlayer Editor -->
+                                <div id="editor-container" style="height: 500px;"></div>
+
+                                <!-- Save Button -->
+                                <button id="save-template" class="btn btn-primary mt-4">
+                                    {{ id ? "Update Template" : "Save Template" }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        unlayer.init({
+            version: 'stable',
+            id: 'editor-container',
+            displayMode: 'email',
+        });
+
+console.log(unlayer.version);
+        $(document).ready(function() {
+            // Check if there's a template ID for edit mode
+            var templateId = $('#template_id').val();
+            if (templateId) {
+                loadTemplate(templateId);
+            }
+        });
+
+        // Function to load existing template in edit mode
+        function loadTemplate(templateId) {
+            $.ajax({
+                url: `/get-template`,
+                type: 'GET',
+                data: { id: templateId },
+                cache: false,
+                success: function (dataResult) {
+                    var dataResult = JSON.parse(dataResult);
+                    $('#template_name').val(dataResult[0].name);
+
+                    let design = JSON.parse(dataResult[0].design_json);
+                    console.log(design);
+                    unlayer.loadDesign(design);
+                },
+                error: function (error) {
+                    alert('Error loading template.');
+                    console.error(error);
+                }
+            });
+        }
+
+        // Save or update template on button click
+        $('#save-template').on('click', function () {
+            var templateName = $('#template_name').val();
+            var templateId = $('#template_id').val();
+
+            // Get Unlayer HTML content
+            unlayer.exportHtml(function (data) {
+                var htmlContent = data.html;
+                var jsonData = data.design;
+
+                // Determine if this is an update or a new template creation
+                var ajaxUrl = templateId ? `/user/email-template/edit/${templateId}` : '/user/email-template/create';
+                var ajaxMethod = templateId ? 'POST' : 'POST'; // Adjust if needed for PUT method
+
+                // Send AJAX request to save or update template
+                $.ajax({
+                    url: ajaxUrl,
+                    type: ajaxMethod,
+                    data: {
+                        name: templateName,
+                        content: htmlContent,
+                        design_json: jsonData
+                    },
+                    success: function (response1) {
+                        var response1 = JSON.parse(response1);
+                        console.log(response1['statusCode']);
+                        if (response1['statusCode'] == 1){
+                            toastr.success(response1['message']);
+                            setTimeout(function() {
+                                window.location.href = '/user/email-template/all';
+                            }, 2000);
+                        }else if(response1['statusCode'] == 2){
+                            toastr.error(response1['message']);
+                        }else if(response1['statusCode'] == 3){
+                            toastr.error(response1['message']);
+                        }else{
+                            toastr.error(response1['message']);
+                        }
+                    },
+                    error: function (error) {
+                        toastr.error('An error occurred while saving the template.');
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
