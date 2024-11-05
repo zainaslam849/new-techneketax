@@ -266,7 +266,7 @@
                 success: function (dataResult) {
                     var dataResult = JSON.parse(dataResult);
                     console.log(dataResult);
-                    $('#contentView').html(dataResult[0].content);
+                    $('#contentView').html(atob(dataResult[0].content));
                     $('#updateBtn').html('<a href="/user/email-template/edit/' + dataResult[0].id + '" class="btn btn-primary">Update</a>');
                 }
             });

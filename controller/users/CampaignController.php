@@ -73,6 +73,7 @@ if($route == '/user/campaign/list'):
             'description' => 'CRM',
             'keywords' => 'Admin Panel'
         );
+
         echo $twig->render('user/campaign/list.twig', ['seo' => $seo]);
     }
 
@@ -92,10 +93,9 @@ endif;
 if($route == '/user/campaign/start_campaign'):
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_POST['list'])){
-            if (!empty($_POST['list']) && !empty($_POST['name'])&&!empty($_POST['subject'])&& !empty($_POST['body'])&& !empty($_POST['date']) && !empty($_POST['timezone'])&& !empty($_POST['campaign_type'])) {
+            if (!empty($_POST['list']) && !empty($_POST['name'])&& !empty($_POST['date']) && !empty($_POST['timezone'])&& !empty($_POST['campaign_type'])) {
                 $list_id = $_POST['list'];
-                $subject = $_POST['subject'];
-                $body = $_POST['body'];
+
                 $date = $_POST['date'];
                 $name = $_POST['name'];
                 $timezone = $_POST['timezone'];
@@ -104,6 +104,46 @@ if($route == '/user/campaign/start_campaign'):
                 echo "3";
                 exit();
             }
+            if ($campaign_type == 'email'){
+                if (!empty($_POST['template_type'])){
+                    $template_type = $_POST['template_type'];
+                }else{
+                    echo "3";
+                    exit();
+                }
+
+if($template_type == 'your_email_template'){
+    $body = '';
+    if (!empty($_POST['template']) && !empty($_POST['subject'])){
+        $template = $_POST['template'];
+        $subject = $_POST['subject'];
+    }else{
+        echo "3";
+        exit();
+    }
+
+}else{
+    if (!empty($_POST['subject']) && !empty($_POST['body'])){
+        $subject = $_POST['subject'];
+        $body = $_POST['body'];
+        $template = '';
+    }else{
+        echo "3";
+        exit();
+    }
+}
+            }else{
+                $template_type = '';
+                if (!empty($_POST['subject']) && !empty($_POST['body'])){
+                    $subject = $_POST['subject'];
+                    $body = $_POST['body'];
+                    $template = '';
+                }else{
+                    echo "3";
+                    exit();
+                }
+            }
+
             $campaign = $h->insert('campaign')->values([
                 'name' => $name,
                 'firm_id' => $loginUserId,
@@ -111,6 +151,8 @@ if($route == '/user/campaign/start_campaign'):
                 'campaign_type' => $campaign_type,
                 'subject' => $subject,
                 'body' => $body,
+                'template_type' => $template_type,
+                'template_id' => $template,
                 'timezone' => $timezone,
                 'date' => $date,
             ])->run();
@@ -128,7 +170,8 @@ if($route == '/user/campaign/start_campaign'):
         );
         $ListDetails = $h->table('campaign_list')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
         $world_time_zonesDetails = $h->table('world_time_zones')->select()->fetchAll();
-        echo $twig->render('user/campaign/campaign.twig', ['seo' => $seo,'ListDetails' => $ListDetails,'world_time_zonesDetails' => $world_time_zonesDetails]);
+        $templatesDetails = $h->table('email_template')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
+        echo $twig->render('user/campaign/campaign.twig', ['seo' => $seo,'ListDetails' => $ListDetails,'world_time_zonesDetails' => $world_time_zonesDetails,'templatesDetails' => $templatesDetails]);
     }
 
 endif;
@@ -138,9 +181,15 @@ if($route == '/user/get_campaign_list'):
 
 
     $output = '';
-    foreach ($campaign_lists as $campaign_list) {
-        $output .= '<option value="'.$campaign_list['id'].'">'.$campaign_list['name'].'</option>  ';
+    if (!empty($campaign_lists)){
+        foreach ($campaign_lists as $campaign_list) {
+
+            $output .= '<option value="" selected >Choose List</option><option value="'.$campaign_list['id'].'">'.$campaign_list['name'].'</option>  ';
+        }
+    }else{
+        $output .= '<option value="" selected >Choose List</option>';
     }
+
     echo $output;
     exit();
         endif;

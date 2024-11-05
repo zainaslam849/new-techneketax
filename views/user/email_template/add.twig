@@ -78,11 +78,9 @@
 
     <script>
         unlayer.init({
+            version: '1.63.2',
             id: 'editor-container',
             displayMode: 'email',
-            appearance: {
-                theme: 'modern_dark',
-            },
         });
         $('#save-template').on('click', function () {
             var templateName = $('#template_name').val();
@@ -90,38 +88,53 @@
                 unlayer.exportHtml(function (htmlData) {
                     var htmlContent = htmlData.html;
                     var jsonData = htmlData.design;
-                    $.ajax({
-                        url: '/user/email-template/add',
-                        type: 'POST',
-                        data: {
-                            name: templateName,
-                            content: htmlContent,
-                            design_json: jsonData
-                        },
-                        success: function (response) {
-                            if (response == 1){
-                                toastr.success('Email Template saved successfully!');
-                                $('#kt_content_container').load(location.href + ' #kt_content_container > *', function() {
-                                    unlayer.init({
-                                        id: 'editor-container',
-                                        displayMode: 'email',
+                    design = jsonData;
+                    if (templateName != '' && htmlContent != '' && jsonData != ''){
+                        $.ajax({
+                            url: '/user/email-template/add',
+                            type: 'POST',
+                            data: JSON.stringify({
+                                name: templateName,
+                                content: htmlContent,
+                                design_json: design // convert to JSON string if necessary
+                            }),
+                            success: function (response) {
+                                if (response == 1){
+                                    toastr.success('Email Template saved successfully!');
+                                    $('#kt_content_container').load(location.href + ' #kt_content_container > *', function() {
+                                        unlayer.init({
+                                            version: '1.63.2',
+                                            id: 'editor-container',
+                                            displayMode: 'email',
+                                        });
                                     });
-                                });
-                            }else if(response == 2){
-                                toastr.error('Please add Template name');
-                            }else if(response == 3){
-                                toastr.error('Please make Template');
-                            }else{
+                                }else{
+                                    toastr.error('An error occurred while saving the template.');
+                                }
+                            },
+                            error: function (error) {
                                 toastr.error('An error occurred while saving the template.');
                             }
-                        },
-                        error: function (error) {
-                            toastr.error('An error occurred while saving the template.');
-                        }
-                    });
+                        });
+                    }else{
+                        toastr.error('Please Fill All Required Fields');
+                    }
+
                 });
 
         });
+        function convertNumericStringsToNumbers(obj) {
+            if (typeof obj === 'object' && obj !== null) {
+                for (let key in obj) {
+                    if (typeof obj[key] === 'object') {
+                        convertNumericStringsToNumbers(obj[key]);
+                    } else if (typeof obj[key] === 'string' && !isNaN(obj[key])) {
+                        obj[key] = Number(obj[key]);
+                    }
+                }
+            }
+            return obj;
+        }
     </script>
 
 

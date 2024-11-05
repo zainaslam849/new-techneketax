@@ -188,7 +188,7 @@ if($route == '/user/add/appointments'):
             @$purpose = $_POST['purpose'];
             @$jitsi_link = random_strings(10);
         }else{
-            echo "2";
+            echo json_encode(['statusCode' => '2']);
             exit();
         }
         if (!empty($_POST['client_id'])) {
@@ -249,21 +249,31 @@ if($route == '/user/add/appointments'):
                         }
                         sendSMS($ClientInfo[0]['phone'],'Your Appointment Has Been Scheduled - ' .$title.'\n\n Title : '.$title.' \n Date & Time : '.$formattedDate.' \n Purpose of this appointment is '.$purpose.'.');
                         include "views/email-template/add_appointment.php";
-                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], 'Your Appointment Has Been Scheduled - ' .$title, $message, $mail);
+                        $sendResult = mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], 'Your Appointment Has Been Scheduled - ' .$title, $message, $mail);
+                        if ($sendResult) {
+                            $sendSuccess = true;
+                        }
                     }
                 }
-                echo "1";
-                exit();
+                if ($sendSuccess) {
+                    $icsContent = generateICSEmail($title, $dateTime);
+                    header('Content-Type: application/json');
+                    echo json_encode(['statusCode' => '1', 'icsContent' => $icsContent]);
+                    exit();
+                } else {
+                    echo json_encode(['statusCode' => '0']);
+                    exit();
+                }
             }else{
-                echo "3";
+                echo json_encode(['statusCode' => '3']);
                 exit();
             }
         } catch (PDOException $e) {
-            echo "0";
+            echo json_encode(['statusCode' => '0']);
             exit();
         }
     }else{
-        echo "2";
+        echo json_encode(['statusCode' => '2']);
         exit();
     }
 endif;
@@ -328,21 +338,31 @@ if($route == '/user/update/appointments'):
                         }
                         sendSMS($ClientInfo[0]['phone'],'Your Appointment Has Been Rescheduled - '.$title.'\n\n Title : '.$title.' \n Date & Time : '.$formattedDate.' \n Purpose of this appointment is '.$purpose.'.');
                         include "views/email-template/update_appointment.php";
-                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], 'Your Appointment Has Been Rescheduled - '.$title, $message, $mail);
+                        $sendResult =  mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], 'Your Appointment Has Been Rescheduled - '.$title, $message, $mail);
+                        if ($sendResult) {
+                            $sendSuccess = true;
+                        }
                     }
                 }
-                echo "1";
-                exit();
+                if ($sendSuccess) {
+                    $icsContent = generateICSEmail($title, $dateTime);
+                    header('Content-Type: application/json');
+                    echo json_encode(['statusCode' => '1', 'icsContent' => $icsContent]);
+                    exit();
+                } else {
+                    echo json_encode(['statusCode' => '0']);
+                    exit();
+                }
             }else{
-                echo "3";
+                echo json_encode(['statusCode' => '3']);
                 exit();
             }
         } catch (PDOException $e) {
-            echo "0";
+            echo json_encode(['statusCode' => '0']);
             exit();
         }
     }else{
-        echo "2";
+        echo json_encode(['statusCode' => '2']);
         exit();
     }
 endif;

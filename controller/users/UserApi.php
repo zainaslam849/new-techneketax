@@ -364,9 +364,42 @@ if($loginUserType == "firm") {
 															<span>' . $user['email'] . '</span>
 														</div></div>'
                 );
+                if (!empty($user["associates_id"])){
+                    $associate = $h->table('users')->select()->where('id', '=', $user["associates_id"])->fetchAll();
+                    if (@$associate[0]["profile_image"] != '' && @$associate[0]["profile_image"] != 'null') {
+                        $associate_profile_image = @$associate[0]["profile_image"];
+                    } else {
+                        $associate_profile_image = "avatar.png";
+                    }
+                    $associateView = array("associateView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $associate_profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . @$associate[0]['fname'] . ' ' . @$associate[0]['lname'] . '</a>
+															<span>' . @$associate[0]['email'] . '</span>
+														</div></div>'
+                    );
+                }else{
+                    $associate_profile_image = "avatar.png";
+                    $associateView = array("associateView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $associate_profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">N/A</a>
+															<span>N/A</span>
+														</div></div>'
+                    );
+                }
+
                 $srNo++;
                 $ids = array("ids" => "$srNo");
-                $check_arr[] = array_merge($ids, $user, $userView, $status, $action);
+                $check_arr[] = array_merge($ids, $user, $userView,$associateView, $status, $action);
             }
 
             $result = array(
@@ -447,9 +480,41 @@ if($loginUserType == "firm") {
 															<span>' . $user['email'] . '</span>
 														</div></div>'
                 );
+                if (!empty($user["associates_id"])){
+                    $associate = $h->table('users')->select()->where('id', '=', $user["associates_id"])->fetchAll();
+                    if (@$associate[0]["profile_image"] != '' && @$associate[0]["profile_image"] != 'null') {
+                        $associate_profile_image = @$associate[0]["profile_image"];
+                    } else {
+                        $associate_profile_image = "avatar.png";
+                    }
+                    $associateView = array("associateView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $associate_profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . @$associate[0]['fname'] . ' ' . @$associate[0]['lname'] . '</a>
+															<span>' . @$associate[0]['email'] . '</span>
+														</div></div>'
+                    );
+                }else{
+                    $associate_profile_image = "avatar.png";
+                    $associateView = array("associateView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $associate_profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">N/A</a>
+															<span>N/A</span>
+														</div></div>'
+                    );
+                }
                 $srNo++;
                 $ids = array("ids" => "$srNo");
-                $check_arr[] = array_merge($ids, $user, $userView, $status, $action);
+                $check_arr[] = array_merge($ids, $user, $userView,$associateView, $status, $action);
             }
             $result = array(
                 "sEcho" => 1,
@@ -529,9 +594,41 @@ if($loginUserType == "firm") {
 															<span>' . $user['email'] . '</span>
 														</div></div>'
                 );
+                if (!empty($user["associates_id"])){
+                    $associate = $h->table('users')->select()->where('id', '=', $user["associates_id"])->fetchAll();
+                    if (@$associate[0]["profile_image"] != '' && @$associate[0]["profile_image"] != 'null') {
+                        $associate_profile_image = @$associate[0]["profile_image"];
+                    } else {
+                        $associate_profile_image = "avatar.png";
+                    }
+                    $associateView = array("associateView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $associate_profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . @$associate[0]['fname'] . ' ' . @$associate[0]['lname'] . '</a>
+															<span>' . @$associate[0]['email'] . '</span>
+														</div></div>'
+                    );
+                }else{
+                    $associate_profile_image = "avatar.png";
+                    $associateView = array("associateView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $associate_profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">N/A</a>
+															<span>N/A</span>
+														</div></div>'
+                    );
+                }
                 $srNo++;
                 $ids = array("ids" => "$srNo");
-                $check_arr[] = array_merge($ids, $user, $userView, $status, $action);
+                $check_arr[] = array_merge($ids, $user, $userView,$associateView, $status, $action);
             }
                 $result = array(
                     "sEcho" => 1,
@@ -611,9 +708,41 @@ if($loginUserType == "firm") {
 															<span>' . $user['email'] . '</span>
 														</div></div>'
                 );
+                if (!empty($user["associates_id"])){
+                    $associate = $h->table('users')->select()->where('id', '=', $user["associates_id"])->fetchAll();
+                    if (@$associate[0]["profile_image"] != '' && @$associate[0]["profile_image"] != 'null') {
+                        $associate_profile_image = @$associate[0]["profile_image"];
+                    } else {
+                        $associate_profile_image = "avatar.png";
+                    }
+                    $associateView = array("associateView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $associate_profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . @$associate[0]['fname'] . ' ' . @$associate[0]['lname'] . '</a>
+															<span>' . @$associate[0]['email'] . '</span>
+														</div></div>'
+                    );
+                }else{
+                    $associate_profile_image = "avatar.png";
+                    $associateView = array("associateView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $associate_profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">N/A</a>
+															<span>N/A</span>
+														</div></div>'
+                    );
+                }
                 $srNo++;
                 $ids = array("ids" => "$srNo");
-                $check_arr[] = array_merge($ids, $user, $userView, $status, $action);
+                $check_arr[] = array_merge($ids, $user, $userView,$associateView, $status, $action);
             }
 
                 $result = array(
@@ -694,9 +823,41 @@ if($loginUserType == "firm") {
 															<span>' . $user['email'] . '</span>
 														</div></div>'
                 );
+                if (!empty($user["associates_id"])){
+                    $associate = $h->table('users')->select()->where('id', '=', $user["associates_id"])->fetchAll();
+                    if (@$associate[0]["profile_image"] != '' && @$associate[0]["profile_image"] != 'null') {
+                        $associate_profile_image = @$associate[0]["profile_image"];
+                    } else {
+                        $associate_profile_image = "avatar.png";
+                    }
+                    $associateView = array("associateView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $associate_profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">' . @$associate[0]['fname'] . ' ' . @$associate[0]['lname'] . '</a>
+															<span>' . @$associate[0]['email'] . '</span>
+														</div></div>'
+                    );
+                }else{
+                    $associate_profile_image = "avatar.png";
+                    $associateView = array("associateView" => '<div class="d-flex align-items-center"> <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+															<a href="#">
+																<div class="symbol-label">
+																	<img src="' . $env["APP_URL"] . 'uploads/profile/' . $associate_profile_image . '" alt="Emma Smith" class="w-100">
+																</div>
+															</a>
+														</div> <div class="d-flex flex-column">
+															<a href="#" class="text-gray-800 text-hover-primary mb-1">N/A</a>
+															<span>N/A</span>
+														</div></div>'
+                    );
+                }
                 $srNo++;
                 $ids = array("ids" => "$srNo");
-                $check_arr[] = array_merge($ids, $user, $userView, $status, $action);
+                $check_arr[] = array_merge($ids, $user, $userView,$associateView, $status, $action);
             }
                 $result = array(
                     "sEcho" => 1,

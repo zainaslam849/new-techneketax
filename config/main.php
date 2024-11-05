@@ -454,7 +454,26 @@ function generateICS($eventName, $startDate)
     echo $icsContent;
     exit;
 }
+function generateICSEmail($eventName, $startDate) {
+    $uid = uniqid();
+    $dtStamp = gmdate('Ymd\THis\Z'); // The current time when the event is generated (UTC)
+    $dubaiTimeZone = new DateTimeZone('Asia/Dubai');
+    $startDateTime = new DateTime($startDate, $dubaiTimeZone);
+    $icsStartDate = $startDateTime->format('Ymd\THis');
 
+    $icsContent = "BEGIN:VCALENDAR\r\n";
+    $icsContent .= "VERSION:2.0\r\n";
+    $icsContent .= "PRODID:-//TECHNEKE//Event//EN\r\n";
+    $icsContent .= "BEGIN:VEVENT\r\n";
+    $icsContent .= "UID:{$uid}\r\n";
+    $icsContent .= "DTSTAMP:{$dtStamp}\r\n";
+    $icsContent .= "SUMMARY:" . foldLine(escapeStringForICS($eventName)) . "\r\n";
+    $icsContent .= "DTSTART:{$icsStartDate}\r\n";
+    $icsContent .= "END:VEVENT\r\n";
+    $icsContent .= "END:VCALENDAR\r\n";
+
+    return $icsContent;
+}
 
 function post($route, $path_to_include,$page_name=NULL){
     if( $_SERVER['REQUEST_METHOD'] == 'POST' ){ route($route, $path_to_include,$page_name ); }

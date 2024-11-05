@@ -89,14 +89,22 @@ foreach ($email_queueDetails as $email_queueDetail) {
         @$company_github =  @$AdminInfo[0]['github'];
         @$imgUrl = $env['APP_URL'].'assets/techneketax-black.png';
     }
-     $subject = $campaignDetails[0]['subject'];
-     $body = $campaignDetails[0]['body'];
-    include "views/email-template/campaign.php";
+
         $email_logs_check = $h->table('email_logs')->select()->where('campaign_id', '=', $email_queueDetail['campaign_id'])->where('recipient_email', '=', $email_queueDetail['recipient_email'])->where('status', '=', 'sent');
    if($email_logs_check->count() >= 1){
        $email_response =true;
    }else{
-       $email_response = mailSender1(@$company_email, $email_queueDetail['recipient_email'], $subject, $message, $mail);
+          if ($campaignDetails[0]['template_type'] == 'your_email_template'){
+              $emailTemplate = $h->table('email_template')->select()->where('id', '=', $campaignDetails[0]['template_id'])->fetchAll();
+              $subject = $campaignDetails[0]['subject'];
+              $message = base64_decode($emailTemplate[0]['content']);
+              $email_response = mailSender1(@$company_email, $email_queueDetail['recipient_email'], $subject, $message, $mail);
+          }else{
+              $subject = $campaignDetails[0]['subject'];
+              $body = $campaignDetails[0]['body'];
+              include "views/email-template/campaign.php";
+              $email_response = mailSender1(@$company_email, $email_queueDetail['recipient_email'], $subject, $message, $mail);
+          }
    }
    if ($email_response){
        $delete_email_queue =  $h->table('email_queue')->delete()->where('id', $email_queueDetail['id'])->run();
@@ -128,11 +136,11 @@ if (!empty($phone_queueDetails)){
     foreach ($phone_queueDetails as $phone_queueDetail) {
         $campaign_id = $phone_queueDetail['campaign_id'];
         $attempts = $phone_queueDetail['attempts'];
-        $campaignDetails = $h->table('campaign')->select()->where('id', '=', $campaign_id)->fetchAll();
-        $firm_id = $campaignDetails[0]['firm_id'];
-        if ($campaignDetails[0]['status'] == 'start'){
-            $subject = $campaignDetails[0]['subject'];
-            $body = $campaignDetails[0]['body'];
+        $campaignPhoneDetails = $h->table('campaign')->select()->where('id', '=', $campaign_id)->fetchAll();
+        $firm_id = $campaignPhoneDetails[0]['firm_id'];
+        if ($campaignPhoneDetails[0]['status'] == 'start'){
+            $subject = $campaignPhoneDetails[0]['subject'];
+            $body = $campaignPhoneDetails[0]['body'];
             $phone_logs_check = $h->table('phone_logs')->select()->where('campaign_id', '=', $phone_queueDetail['campaign_id'])->where('status', '=', 'sent');
             if($phone_logs_check->count() >= 1){
                 $phone_response =true;
