@@ -8,22 +8,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fileName = $_FILES['templateZip']['name'];
         $uploadDir = 'uploads/email_templates/';
         $uploadFilePath = $uploadDir . $fileName;
-
-        // Ensure the upload directory exists
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
-
-        // Move the uploaded file to the uploads directory
         if (move_uploaded_file($fileTmpPath, $uploadFilePath)) {
             $zip = new ZipArchive();
             if ($zip->open($uploadFilePath) === true) {
-                // Extract the zip file contents
                 $extractDir = $uploadDir . pathinfo($fileName, PATHINFO_FILENAME) . '/';
                 $zip->extractTo($extractDir);
                 $zip->close();
-
-                // Find the HTML file in the extracted directory
                 $htmlFile = glob($extractDir . '*.html')[0] ?? null;
                 if ($htmlFile) {
                     echo json_encode([
@@ -57,7 +50,8 @@ if($route == '/user/email-template/add'):
         $input = file_get_contents("php://input");
         $data = json_decode($input, true);
         $templateName = $data['name'] ?? null;
-        $htmlContent = base64_encode($data['content'] ?? null);
+        $content = mb_convert_encoding($data['content'] ?? '', 'UTF-8', 'auto');
+        $htmlContent = base64_encode($content);
         $design = base64_encode(json_encode($data['design_json'] ?? null));
         $insert = $h->insert('email_template')->values(['firm_id' => $loginUserId,'name' => $templateName, 'content' => $htmlContent, 'design_json' => $design])->run();
         if ($insert){
@@ -84,7 +78,8 @@ if ($route === '/user/email-template/edit/$id') {
         $data = json_decode($input, true);
 
         $templateName = $data['name'] ?? null;
-        $htmlContent = base64_encode($data['content'] ?? null);
+        $content = mb_convert_encoding($data['content'] ?? '', 'UTF-8', 'auto');
+        $htmlContent = base64_encode($content);
         $design = base64_encode(json_encode($data['design_json'] ?? null));
         if ($templateId) {
             $update = $h->update('email_template')
