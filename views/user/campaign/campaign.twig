@@ -150,9 +150,9 @@
                                 <div class="">
                                     <label class="form-label">Choose Timezone</label>
                                     <select class="js-example-basic-single form-select form-select-solid" aria-label="timezone" id="timezone" name="timezone" >
-                                        <option selected disabled>Choose Timezone</option>
+                                        <option value="" selected >Choose Timezone</option>
                                         {% for world_time_zonesDetail in world_time_zonesDetails %}
-                                            <option value="{{ world_time_zonesDetail.id }}">{{ world_time_zonesDetail.time_zone }}</option>
+                                            <option  value="{{ world_time_zonesDetail.id }}">{{ world_time_zonesDetail.time_zone }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -165,18 +165,55 @@
                                 <div class="">
                                     <label class="form-label">Choose List</label>
                                     <select class="js-example-basic-single1 form-select form-select-solid" aria-label="list" id="viewLists" name="list" >
-                                        <option selected disabled>Choose List</option>
+                                        <option value="" selected >Choose List</option>
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <div class="fv-row mb-7 fv-plugins-icon-container" id="emailTemplatesSection">
+                                <div class="row row-cols-1 row-cols-md-2 g-5">
+                                    <div class="col">
+                                        <input type="radio" class="btn-check" name="template_type" value="your_email_template" id="yourEmailTemplate">
+                                        <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex align-items-center h-100" for="yourEmailTemplate">
+                <span class="svg-icon svg-icon-3hx svg-icon-primary">
+                    <!-- Your Email Template Icon SVG -->
+                </span>
+                                            <span class="d-block fw-bold text-start">
+                    <span class="text-dark fw-bolder d-block fs-3">Select Your Templates</span>
+                </span>
+                                        </label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="radio" class="btn-check" name="template_type" value="default_email_template" id="defaultEmailTemplate">
+                                        <label class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex align-items-center h-100" for="defaultEmailTemplate">
+                <span class="svg-icon svg-icon-3hx svg-icon-primary">
+                    <!-- Default Email Template Icon SVG -->
+                </span>
+                                            <span class="d-block fw-bold text-start">
+                    <span class="text-dark fw-bolder d-block fs-3">Write An Email</span>
+                </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Subject and Body Fields -->
+                            <div class="fv-row mb-7 fv-plugins-icon-container" id="subjectField">
                                 <label class="form-label">Subject</label>
                                 <input type="text" class="form-control form-control-solid" id="subject" name="subject" placeholder="Subject">
                             </div>
-                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                            <div class="fv-row mb-7 fv-plugins-icon-container" id="bodyField">
                                 <label class="form-label">Body</label>
                                 <textarea class="form-control form-control-solid" id="body" name="body" placeholder="Body"></textarea>
+                            </div>
+                            <div class="fv-row mb-7 fv-plugins-icon-container" id="templateShow" >
+                                <div class="">
+                                    <label class="form-label">Choose Template</label>
+                                    <select class="js-example-basic-single2 form-select form-select-solid" aria-label="Template" id="template" name="template" >
+                                        <option value="" selected >Choose Template</option>
+                                        {% for templatesDetail in templatesDetails %}
+                                            <option value="{{ templatesDetail.id }}">{{ templatesDetail.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -196,9 +233,26 @@
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script src="https://cdn.ckeditor.com/4.19.0/standard/ckeditor.js"></script>
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById('emailTemplatesSection').style.display = 'none';
+            document.getElementById('subjectField').style.display = 'none';
+            document.getElementById('bodyField').style.display = 'none';
+            document.getElementById('templateShow').style.display = 'none';
+        });
+
         function handleListChange(selectElement) {
             var list_type = selectElement.value;
-            $('#viewLists').html('');
+            if (list_type === 'email') {
+                document.getElementById('emailTemplatesSection').style.display = 'block';
+                document.getElementById('subjectField').style.display = 'none';
+                document.getElementById('bodyField').style.display = 'none';
+            } else if (list_type === 'phone') {
+                document.getElementById('emailTemplatesSection').style.display = 'none';
+                document.getElementById('subjectField').style.display = 'block';
+                document.getElementById('bodyField').style.display = 'block';
+                document.getElementById('templateShow').style.display = 'none';
+            }
+            $('#viewLists').html('<option value="" selected >Choose List</option>');
             if (list_type) {
                 $.ajax({
                     url: "/user/get_campaign_list",
@@ -212,10 +266,34 @@
                         $('#viewLists').html(dataResult);
                     }
                 });
-            } else {
-                $('#viewLists').html('');
             }
         }
+        function handleTemplateSelection(templateType) {
+            if (templateType === 'default_email_template') {
+                document.getElementById('subjectField').style.display = 'block';
+                document.getElementById('bodyField').style.display = 'block';
+                document.getElementById('templateShow').style.display = 'none'; // Hide custom template list
+            } else if (templateType === 'your_email_template') {
+                document.getElementById('subjectField').style.display = 'block';
+                document.getElementById('bodyField').style.display = 'none';
+                document.getElementById('templateShow').style.display = 'block'; // Show custom template list
+            }
+        }
+
+        // Attach event listeners to template options
+        document.getElementById('yourEmailTemplate').addEventListener('click', function() {
+            handleTemplateSelection('your_email_template');
+        });
+        document.getElementById('defaultEmailTemplate').addEventListener('click', function() {
+            handleTemplateSelection('default_email_template');
+        });
+        // Initialize with the correct display based on current selection
+        document.addEventListener("DOMContentLoaded", function() {
+            var selectedType = document.querySelector('input[name="campaign_type"]:checked');
+            if (selectedType) {
+                handleListChange(selectedType);
+            }
+        });
         $(document).ready(function () {
             var csrf_token = $("input[name=csrf]").val();
             var table = $('#table').dataTable({
@@ -246,6 +324,9 @@
                 dropdownParent: $('#editExampleModal')
             });
             $('.js-example-basic-single1').select2({
+                dropdownParent: $('#editExampleModal')
+            });
+            $('.js-example-basic-single2').select2({
                 dropdownParent: $('#editExampleModal')
             });
         });
@@ -279,12 +360,29 @@
             });
         }
         //Update  Data
+        function resetCampaignModal() {
+            // Hide sections
+            document.getElementById('emailTemplatesSection').style.display = 'none';
+            document.getElementById('bodyField').style.display = 'none';
+            document.getElementById('templateShow').style.display = 'none';
+            document.getElementById('subjectField').style.display = 'none';
+            document.getElementById("CampaignForm").reset();
+            $('#viewLists').html('<option value="" selected >Choose List</option>');
+            $('#template').val(null).trigger('change');
+            document.getElementById('btnCampaign').disabled = false;
+            document.getElementById("btnCampaign").innerHTML = "Add";
+            $('.js-example-basic-single').select2();
+            $('.js-example-basic-single1').select2();
+            $('.js-example-basic-single2').select2();
+        }
         function add_tool() {
+            // Update CKEditor elements if present
             for (instance in CKEDITOR.instances) {
                 CKEDITOR.instances[instance].updateElement();
             }
             document.getElementById('btnCampaign').disabled = true;
             document.getElementById("btnCampaign").innerHTML = "Loading";
+
             var form_Data = new FormData(document.getElementById("CampaignForm"));
             $.ajax({
                 url: "/user/campaign/start_campaign",
@@ -295,14 +393,11 @@
                 processData: false,
                 success: function (dataResult) {
                     console.log(dataResult);
-                    document.getElementById('btnCampaign').disabled = false;
-                    document.getElementById("btnCampaign").innerHTML = "Add";
                     if (dataResult == 1) {
-                        $('#table').DataTable().ajax.reload(null, false);
-                        $('#editExampleModal').modal('hide');
+                        $('#table').DataTable().ajax.reload(null, false); // Reload DataTable
+                        $('#editExampleModal').modal('hide'); // Hide the modal
                         toastr.success('Added Successfully.');
-                        document.getElementById("CampaignForm").reset();
-
+                        resetCampaignModal(); // Reset the modal contents
                     } else if (dataResult == 2) {
                         toastr.error("Please Choose List");
                     } else if (dataResult == 3) {
@@ -312,10 +407,14 @@
                     } else {
                         toastr.error('Something Went Wrong.');
                     }
-
+                    document.getElementById('btnCampaign').disabled = false;
+                    document.getElementById("btnCampaign").innerHTML = "Add";
                 }
             });
         }
+        $('#editExampleModal').on('hidden.bs.modal', function () {
+            resetCampaignModal();
+        });
         $(document).ready(function(){
             $(document).on('click', '.see-more', function(e){
                 e.preventDefault();

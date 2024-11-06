@@ -558,17 +558,22 @@
                 cache: false,
                 processData: false,
                 success: function (dataResult) {
-                    console.log(dataResult);
                     document.getElementById('btn-profile').disabled = false;
                     document.getElementById("btn-profile").innerHTML = "Add Appointment";
-                    if (dataResult == 1) {
+                    if (dataResult.statusCode == 1) {
                         $('#exampleModal').modal('hide');
-                        toastr.success('Appointment Add Successfully.');
+                        toastr.success('Appointment Added Successfully.');
                         loadData();
                         document.getElementById("addEventForm").reset();
-                    } else if (dataResult == 2) {
+                        var blob = new Blob([dataResult.icsContent], { type: "text/calendar;charset=utf-8" });
+                        var link = document.createElement("a");
+                        link.href = URL.createObjectURL(blob);
+                        link.download = "event.ics";
+                        link.click();
+                        document.getElementById("addEventForm").reset();
+                    } else if (dataResult.statusCode == 2) {
                         toastr.error("Required fields are empty!");
-                    }else if (dataResult == 3) {
+                    }else if (dataResult.statusCode == 3) {
                         toastr.error("You Can't Add An Appointment");
                     } else {
                         toastr.error('Something Went Wrong.');
@@ -602,17 +607,22 @@
                         purpose: purpose,
                         csrf: csrf_token,
                     },
-                    success: function (response) {
-                        response = $.parseJSON(response);
-                        if(response== 1){
+                    success: function (dataResult) {
+                        if(dataResult.statusCode == 1){
                             $("#btn").removeAttr("disabled");
                             toastr.success('Update Successfully.');
                             $('#kt_modal_edit_event').modal('hide');
                             loadData();
+                            document.getElementById("addEventForm").reset();
+                            var blob = new Blob([dataResult.icsContent], { type: "text/calendar;charset=utf-8" });
+                            var link = document.createElement("a");
+                            link.href = URL.createObjectURL(blob);
+                            link.download = "event.ics";
+                            link.click();
                             document.getElementById("btn").innerHTML = "Update Appointment";
-                        } else if (dataResult == 2) {
+                        } else if (dataResult.statusCode == 2) {
                             toastr.error("Required fields are empty!");
-                        } else if (dataResult == 3) {
+                        } else if (dataResult.statusCode == 3) {
                             toastr.error("You Can't Update An Appointment");
                         }else{
                             toastr.error('Something Went Wrong.');

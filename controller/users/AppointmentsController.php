@@ -104,13 +104,18 @@ if ($route == '/user/get_users'):
     }
 
     $output = '';
-    $output .= '  <div class="text-center mb-8">
-                    <h1 class="mb-3">' . $appointment[0]['title'] . '</h1>
-                    <div class="text-muted fw-bold fs-5">' . $formattedDate . '</div>
-                    <a href="/meet/' . $appointment[0]['jitsi_link'] . '" class="btn btn-primary fw-bolder w-100  mt-5">
-                        Join with Techneke Meet
-                    </a>
-                </div>';
+    $output .= '  
+<div class="text-center mb-8">
+    <h1 class="mb-3">' . htmlspecialchars($appointment[0]['title'], ENT_QUOTES, 'UTF-8') . '</h1>
+    <div class="text-muted fw-bold fs-5">' . htmlspecialchars($formattedDate, ENT_QUOTES, 'UTF-8') . '</div>
+    <a href="/meet/' . htmlspecialchars($appointment[0]['jitsi_link'], ENT_QUOTES, 'UTF-8') . '" class="btn btn-primary fw-bolder w-100 mt-5">
+        Join with Techneke Meet
+    </a>
+    <a class="btn btn-info fw-bolder w-100 mt-5"   href="' . $env['APP_URL'] . 'user/add-to-calendar?event_name=' . urlencode($appointment[0]['title']) .
+        '&start_date=' . $appointment_date .'">
+        Add to Calendar
+    </a>
+</div>';
 
 // Check if $UserInfo is not empty and contains at least one non-empty sub-array
     $hasValidUserInfo = false;
@@ -183,7 +188,7 @@ if($route == '/user/add/appointments'):
             @$purpose = $_POST['purpose'];
             @$jitsi_link = random_strings(10);
         }else{
-            echo "2";
+            echo json_encode(['statusCode' => '2']);
             exit();
         }
         if (!empty($_POST['client_id'])) {
@@ -244,21 +249,31 @@ if($route == '/user/add/appointments'):
                         }
                         sendSMS($ClientInfo[0]['phone'],'Your Appointment Has Been Scheduled - ' .$title.'\n\n Title : '.$title.' \n Date & Time : '.$formattedDate.' \n Purpose of this appointment is '.$purpose.'.');
                         include "views/email-template/add_appointment.php";
-                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], 'Your Appointment Has Been Scheduled - ' .$title, $message, $mail);
+                        $sendResult = mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], 'Your Appointment Has Been Scheduled - ' .$title, $message, $mail);
+                        if ($sendResult) {
+                            $sendSuccess = true;
+                        }
                     }
                 }
-                echo "1";
-                exit();
+                if ($sendSuccess) {
+                    $icsContent = generateICSEmail($title, $dateTime);
+                    header('Content-Type: application/json');
+                    echo json_encode(['statusCode' => '1', 'icsContent' => $icsContent]);
+                    exit();
+                } else {
+                    echo json_encode(['statusCode' => '0']);
+                    exit();
+                }
             }else{
-                echo "3";
+                echo json_encode(['statusCode' => '3']);
                 exit();
             }
         } catch (PDOException $e) {
-            echo "0";
+            echo json_encode(['statusCode' => '0']);
             exit();
         }
     }else{
-        echo "2";
+        echo json_encode(['statusCode' => '2']);
         exit();
     }
 endif;
@@ -323,22 +338,38 @@ if($route == '/user/update/appointments'):
                         }
                         sendSMS($ClientInfo[0]['phone'],'Your Appointment Has Been Rescheduled - '.$title.'\n\n Title : '.$title.' \n Date & Time : '.$formattedDate.' \n Purpose of this appointment is '.$purpose.'.');
                         include "views/email-template/update_appointment.php";
-                        mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], 'Your Appointment Has Been Rescheduled - '.$title, $message, $mail);
+                        $sendResult =  mailSender($_SESSION['users']['email'], $ClientInfo[0]['email'], 'Your Appointment Has Been Rescheduled - '.$title, $message, $mail);
+                        if ($sendResult) {
+                            $sendSuccess = true;
+                        }
                     }
                 }
-                echo "1";
-                exit();
+                if ($sendSuccess) {
+                    $icsContent = generateICSEmail($title, $dateTime);
+                    header('Content-Type: application/json');
+                    echo json_encode(['statusCode' => '1', 'icsContent' => $icsContent]);
+                    exit();
+                } else {
+                    echo json_encode(['statusCode' => '0']);
+                    exit();
+                }
             }else{
-                echo "3";
+                echo json_encode(['statusCode' => '3']);
                 exit();
             }
         } catch (PDOException $e) {
-            echo "0";
+            echo json_encode(['statusCode' => '0']);
             exit();
         }
     }else{
-        echo "2";
+        echo json_encode(['statusCode' => '2']);
         exit();
     }
+endif;
+if ($route == '/user/add-to-calendar'):
+
+    $event_name = $_GET['event_name'];
+    $start_date = $_GET['start_date'];
+    generateICS($event_name, $start_date);
 endif;
 

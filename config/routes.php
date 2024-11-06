@@ -55,6 +55,7 @@ if (!empty(@$plan_id) && @$plan_id != '' && $current_date <= @$plan_end_date){
                 get('/user/get_users', 'controller/users/AppointmentsController.php');
                 post('/user/add/appointments', 'controller/users/AppointmentsController.php');
                 post('/user/update/appointments', 'controller/users/AppointmentsController.php');
+                get('/user/add-to-calendar', 'controller/users/AppointmentsController.php');
             }
         }else{
             get('/user/appointment/cronjob', 'controller/users/AppointmentCronjobController.php');
@@ -64,6 +65,7 @@ if (!empty(@$plan_id) && @$plan_id != '' && $current_date <= @$plan_end_date){
             get('/user/get_users', 'controller/users/AppointmentsController.php');
             post('/user/add/appointments', 'controller/users/AppointmentsController.php');
             post('/user/update/appointments', 'controller/users/AppointmentsController.php');
+            get('/user/add-to-calendar', 'controller/users/AppointmentsController.php');
         }
         }
     if (in_array('Secured_Document_Hub', $permissionValues)) {
@@ -241,6 +243,11 @@ if (!empty(@$plan_id) && @$plan_id != '' && $current_date <= @$plan_end_date){
                 post('/user/user_edit', 'controller/users/UsersController.php');
                 post('/user/get_user', 'controller/users/UsersController.php');
                 post('/user/add_user', 'controller/users/UsersController.php');
+                get('/user/clients/archive/all', 'controller/users/ClientArchiveController.php');
+                get('/user/clients/archive/assigned', 'controller/users/ClientArchiveController.php');
+                get('/user/clients/archive/unassigned', 'controller/users/ClientArchiveController.php');
+                get('/user/clients/archive/inprogress', 'controller/users/ClientArchiveController.php');
+                get('/user/clients/archive/completed', 'controller/users/ClientArchiveController.php');
 
 }
 }
@@ -304,6 +311,16 @@ if (!empty(@$plan_id) && @$plan_id != '' && $current_date <= @$plan_end_date){
     post('/user/get_payment_method', 'controller/users/ProfileController.php');
     post('/user/update_payment_method', 'controller/users/ProfileController.php');
     post('/user/profile/change_stripe_keys', 'controller/users/ProfileController.php');
+    get('/user/email-template/add', 'controller/users/EmailTemplateController.php');
+    post('/user/email-template/add', 'controller/users/EmailTemplateController.php');
+    get('/user/email-template/edit/$id', 'controller/users/EmailTemplateController.php');
+    post('/user/email-template/edit/$id', 'controller/users/EmailTemplateController.php');
+    get('/user/email-template/all', 'controller/users/EmailTemplateController.php');
+    post('/user/email-template/all', 'controller/users/EmailTemplateController.php');
+    post('/user/get_email_template', 'controller/users/EmailTemplateController.php');
+    get('/get-template', 'controller/users/EmailTemplateController.php');
+    get('/user/email-template/test', 'controller/users/EmailTemplateController.php');
+    post('/user/email-template/test', 'controller/users/EmailTemplateController.php');
 // user
 
 
