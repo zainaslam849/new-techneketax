@@ -1,5 +1,38 @@
 <?php
 require("config/env.php");
+require_once 'vendor/autoload.php';
+if ($route == '/login/google') {
+    $client = new Google_Client();
+    $client->setClientId('YOUR_CLIENT_ID');
+    $client->setClientSecret('YOUR_CLIENT_SECRET');
+    $client->setRedirectUri($env['APP_URL'].'login/google/callback'); // Absolute URI
+    $client->addScope('email');
+    $client->addScope('profile');
+
+    // Step 1: Redirect to Google’s OAuth 2.0 server.
+    if (!isset($_GET['code'])) {
+        $authUrl = $client->createAuthUrl();
+        header('Location: ' . filter_var($authUrl, FILTER_SANITIZE_URL));
+        exit;
+    } else {
+        // Step 2: Exchange authorization code for access token.
+        $client->authenticate($_GET['code']);
+        $accessToken = $client->getAccessToken();
+        $oauth2 = new Google_Service_Oauth2($client);
+        $googleAccountInfo = $oauth2->userinfo->get();
+        $email = $googleAccountInfo->email;
+
+        // Check if the user exists in your database, then log them in.
+        $user = $h->table('users')->select()->where('email', '=', $email)->fetch();
+        if ($user) {
+            $_SESSION['users'] = $user;
+            header('Location: /user/dashboard');
+        } else {
+            // Redirect to registration page or show an error
+        }
+        exit;
+    }
+}
 $email_config = include('config/email_config.php');
 if($route == '/admin'):
 

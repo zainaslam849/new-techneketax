@@ -12,8 +12,18 @@ post('/admin', 'controller/auth/AuthController.php');
 
 get('/login', 'controller/auth/AuthController.php');
 post('/login', 'controller/auth/AuthController.php');
-get('/login/$path', 'controller/auth/AuthController.php');
-post('/login/$path', 'controller/auth/AuthController.php');
+//get('/login/$path', 'controller/auth/AuthController.php');
+//post('/login/$path', 'controller/auth/AuthController.php');
+//google
+get('/login/google', 'controller/auth/AuthController.php');
+get('/login/google/callback', 'controller/auth/AuthController.php');
+//// Microsoft
+//get('/login/microsoft', 'controller/auth/AuthController.php');
+//get('/login/microsoft/callback', 'controller/auth/AuthController.php');
+////Apple
+//get('/login/apple', 'controller/auth/AuthController.php');
+//get('/login/apple/callback', 'controller/auth/AuthController.php');
+
 get('/register', 'controller/auth/AuthController.php');
 post('/register', 'controller/auth/AuthController.php');
 
