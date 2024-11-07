@@ -8,8 +8,6 @@ if ($route == '/login/google') {
     $client->setRedirectUri($env['APP_URL'].'login/google/callback'); // Absolute URI
     $client->addScope('email');
     $client->addScope('profile');
-    var_dump($client);
-    exit();
     // Step 1: Redirect to Google’s OAuth 2.0 server.
     if (!isset($_GET['code'])) {
         $authUrl = $client->createAuthUrl();
