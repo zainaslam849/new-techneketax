@@ -160,6 +160,18 @@ $message='<!DOCTYPE html>
                                                                                                                 </a>
                                                                                                             </td>
                                                                                                         </tr>
+                                                                                                          <tr>
+                                                                                                          <td class="text-16 lh-26 a-center pb-25" style="font-size:16px; color:#6e6e6e !important; font-family:PT Sans, Arial, sans-serif; min-width:auto !important; line-height: 26px; text-align:center; padding-bottom: 25px;">
+                                                                                                                 <br>  OR <br>
+                                                                                                </td>
+                                                                                                        </tr>
+                                                                                                           <tr>
+                                                                                                            <td class="btn-16 c-white l-white"  style="background-color:#7239ea !important; font-size:16px; line-height:20px; mso-padding-alt:15px 35px; font-family:PT Sans, Arial, sans-serif; text-align:center; font-weight:bold; text-transform:uppercase; border-radius:25px; min-width:auto !important; color:#ffffff;">
+                                                                                                                <a href="'.$env['APP_URL'].'add_to_calendar/'.$title.'/'.$dateTime.'" target="_blank" class="link c-white" style="display: block; padding: 15px 35px; text-decoration:none; color:#ffffff;">
+                                                                                                                    <span class="link c-white" style="text-decoration:none; color:#ffffff;">Add to Calendar</span>
+                                                                                                                </a>
+                                                                                                            </td>
+                                                                                                        </tr>
                                                                                                     </table>
                                                                                                     <!-- END Button -->
                                                                                                 </td>
