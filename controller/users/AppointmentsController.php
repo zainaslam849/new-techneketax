@@ -366,10 +366,14 @@ if($route == '/user/update/appointments'):
         exit();
     }
 endif;
-if ($route == '/user/add-to-calendar'):
+if ($route == '/add_to_calendar/$title/$dateTime'):
 
-    $event_name = $_GET['event_name'];
-    $start_date = $_GET['start_date'];
-    generateICS($event_name, $start_date);
+  if (empty($title)){
+      exit();
+  }
+    if (empty($dateTime)){
+        exit();
+    }
+    generateICS($title, $dateTime);
 endif;
 

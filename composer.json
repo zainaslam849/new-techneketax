@@ -14,7 +14,9 @@
         "twilio/sdk": "^8.2",
         "phpoffice/phpspreadsheet": "^3.3",
         "php-imap/php-imap": "^5.0",
-        "google/apiclient": "^2.18"
+        "google/apiclient": "^2.18",
+        "thenetworg/oauth2-azure": "^2.2",
+        "firebase/php-jwt": "^6.10"
     },
     "autoload": {
         "psr-4": {

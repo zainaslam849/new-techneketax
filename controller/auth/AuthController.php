@@ -3,12 +3,11 @@ require("config/env.php");
 require_once 'vendor/autoload.php';
 if ($route == '/login/google') {
     $client = new Google_Client();
-    $client->setClientId('YOUR_CLIENT_ID');
-    $client->setClientSecret('YOUR_CLIENT_SECRET');
+    $client->setClientId('961017410790-ln5h7gagt6tprjr71hng8rokaps4gn8i.apps.googleusercontent.com');
+    $client->setClientSecret('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');
     $client->setRedirectUri($env['APP_URL'].'login/google/callback'); // Absolute URI
     $client->addScope('email');
     $client->addScope('profile');
-
     // Step 1: Redirect to Google’s OAuth 2.0 server.
     if (!isset($_GET['code'])) {
         $authUrl = $client->createAuthUrl();
@@ -33,6 +32,144 @@ if ($route == '/login/google') {
         exit;
     }
 }
+use League\OAuth2\Client\Provider\GenericProvider;
+
+if ($route == '/login/microsoft') {
+    $provider = new GenericProvider([
+        'clientId'                => 'YOUR_MICROSOFT_CLIENT_ID',
+        'clientSecret'            => 'YOUR_MICROSOFT_CLIENT_SECRET',
+        'redirectUri'             => $env['APP_URL'].'login/microsoft/callback',
+        'urlAuthorize'            => 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+        'urlAccessToken'          => 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        'urlResourceOwnerDetails' => 'https://graph.microsoft.com/v1.0/me'
+    ]);
+
+    // Step 1: Redirect to Microsoft’s OAuth server with the scope parameter.
+    if (!isset($_GET['code'])) {
+        $authorizationUrl = $provider->getAuthorizationUrl([
+            'scope' => 'openid profile email User.Read offline_access'  // Add the scope here
+        ]);
+        $_SESSION['oauth2state'] = $provider->getState();
+        header('Location: ' . $authorizationUrl);
+        exit;
+    } elseif (isset($_GET['state']) && $_GET['state'] !== $_SESSION['oauth2state']) {
+        unset($_SESSION['oauth2state']);
+        exit('Invalid state');
+    } else {
+        // Step 2: Obtain access token
+        try {
+            $accessToken = $provider->getAccessToken('authorization_code', [
+                'code' => $_GET['code']
+            ]);
+
+            // Step 3: Get user info
+            $response = $provider->getAuthenticatedRequest(
+                'GET',
+                'https://graph.microsoft.com/v1.0/me',
+                $accessToken
+            );
+            $user = json_decode($response->getBody()->getContents());
+
+            // Step 4: Log in or register the user
+            $email = $user->mail ?: $user->userPrincipalName;
+            $existingUser = $h->table('users')->select()->where('email', '=', $email)->fetch();
+
+            if ($existingUser) {
+                $_SESSION['users'] = $existingUser;
+                header('Location: /user/dashboard');
+            } else {
+                // Redirect to registration or show an error
+            }
+            exit;
+        } catch (Exception $e) {
+            exit('Failed to get access token: ' . $e->getMessage());
+        }
+    }
+}
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+// Apple OAuth route handler
+if ($route == '/login/apple') {
+    $clientID = 'YOUR_APPLE_CLIENT_ID';
+    $teamID = 'YOUR_APPLE_TEAM_ID';
+    $keyID = 'YOUR_APPLE_KEY_ID';
+    $redirectUri = $env['APP_URL'].'login/apple/callback';
+    $privateKey = file_get_contents('/path/to/your/apple_private_key.p8');
+
+    // Step 1: Create JWT
+    $header = [
+        'alg' => 'ES256',
+        'kid' => $keyID
+    ];
+
+    $claims = [
+        'iss' => $teamID,
+        'iat' => time(),
+        'exp' => time() + 86400 * 180,
+        'aud' => 'https://appleid.apple.com',
+        'sub' => $clientID
+    ];
+
+    $jwt = JWT::encode($claims, $privateKey, 'ES256', $keyID);
+
+    // Step 2: Redirect to Apple’s OAuth server
+    $authorizationUrl = 'https://appleid.apple.com/auth/authorize?' . http_build_query([
+            'response_type' => 'code',
+            'client_id' => $clientID,
+            'redirect_uri' => $redirectUri,
+            'scope' => 'email name',
+            'response_mode' => 'form_post'
+        ]);
+
+    header('Location: ' . $authorizationUrl);
+    exit;
+}
+
+// Apple OAuth callback handler
+//if ($route == '/login/apple/callback') {
+//    if (isset($_POST['code'])) {
+//        $code = $_POST['code'];
+//
+//        // Step 3: Exchange code for access token
+//        $tokenUrl = 'https://appleid.apple.com/auth/token';
+//        $response = file_get_contents($tokenUrl, false, stream_context_create([
+//            'http' => [
+//                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+//                'method'  => 'POST',
+//                'content' => http_build_query([
+//                    'client_id'     => $clientID,
+//                    'client_secret' => $jwt,
+//                    'code'          => $code,
+//                    'grant_type'    => 'authorization_code',
+//                    'redirect_uri'  => $redirectUri
+//                ]),
+//            ]
+//        ]));
+//
+//        $data = json_decode($response, true);
+//        $accessToken = $data['access_token'];
+//
+//        // Step 4: Verify token and get user info
+//        $idToken = $data['id_token'];
+//        $user = JWT::decode($idToken, new Key($publicKey, 'ES256'));
+//
+//        // Step 5: Check if user exists in your DB
+//        $email = $user->email;
+//        $existingUser = $h->table('users')->select()->where('email', '=', $email)->fetch();
+//
+//        if ($existingUser) {
+//            $_SESSION['users'] = $existingUser;
+//            header('Location: /user/dashboard');
+//        } else {
+//            // Redirect to registration or show an error
+//        }
+//        exit;
+//    } else {
+//        exit('Authorization code not provided.');
+//    }
+//}
+
+
 $email_config = include('config/email_config.php');
 if($route == '/admin'):
 

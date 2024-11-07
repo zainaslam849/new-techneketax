@@ -190,6 +190,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'league/oauth2-client' => array(
+            'pretty_version' => '2.7.0',
+            'version' => '2.7.0.0',
+            'reference' => '160d6274b03562ebeb55ed18399281d8118b76c8',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../league/oauth2-client',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'maennchen/zipstream-php' => array(
             'pretty_version' => '3.1.0',
             'version' => '3.1.0.0',
@@ -627,6 +636,15 @@
             'provided' => array(
                 0 => '2.3|3.0',
             ),
+        ),
+        'thenetworg/oauth2-azure' => array(
+            'pretty_version' => 'v2.2.2',
+            'version' => '2.2.2.0',
+            'reference' => 'be204a5135f016470a9c33e82ab48785bbc11af2',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../thenetworg/oauth2-azure',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'tracy/tracy' => array(
             'pretty_version' => 'v2.10.7',

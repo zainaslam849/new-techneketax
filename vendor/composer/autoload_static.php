@@ -47,6 +47,7 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
         array (
             'Twilio\\' => 7,
             'Twig\\' => 5,
+            'TheNetworg\\OAuth2\\Client\\' => 25,
         ),
         'S' => 
         array (
@@ -96,6 +97,10 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
         array (
             'Monolog\\' => 8,
             'Matrix\\' => 7,
+        ),
+        'L' => 
+        array (
+            'League\\OAuth2\\Client\\' => 21,
         ),
         'I' => 
         array (
@@ -158,6 +163,10 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
         'Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
+        ),
+        'TheNetworg\\OAuth2\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/thenetworg/oauth2-azure/src',
         ),
         'Symfony\\Polyfill\\Php83\\' => 
         array (
@@ -307,6 +316,10 @@ class ComposerStaticInit937a2eb2fb05f881b7fd49053821b337
         'Matrix\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
+        ),
+        'League\\OAuth2\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/oauth2-client/src',
         ),
         'Intervention\\Image\\' => 
         array (
