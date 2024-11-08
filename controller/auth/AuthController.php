@@ -27,7 +27,7 @@ if ($route == '/login/google') {
         $email = $googleAccountInfo->email;
 
         // Check if the user exists in your database, then log them in.
-        $user = $h->table('users')->select()->where('email', '=', $email)->fetch();
+        $user = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
         if ($user) {
             $_SESSION['users'] = $user;
             header('Location: /user/dashboard');
