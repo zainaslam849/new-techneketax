@@ -1,11 +1,11 @@
 <?php
 require("config/env.php");
 require_once 'vendor/autoload.php';
-if ($route == '/login/google' || $route == 'login/google/callback') {
+if ($route == '/login/google') {
     $client = new Google_Client();
     $client->setClientId('961017410790-ln5h7gagt6tprjr71hng8rokaps4gn8i.apps.googleusercontent.com');
     $client->setClientSecret('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');
-    $client->setRedirectUri($env['APP_URL'].'login/google/callback');
+    $client->setRedirectUri($env['APP_URL'].'login/google');
     $client->addScope('email');
     $client->addScope('profile');
     // Step 1: Redirect to Google’s OAuth 2.0 server.
