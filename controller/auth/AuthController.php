@@ -11,10 +11,14 @@ if ($route == '/login/google') {
     // Step 1: Redirect to Google’s OAuth 2.0 server.
 
     if (!isset($_GET['code'])) {
+        var_dump($_GET['code']);
+        var_dump('lassan');
         $authUrl = $client->createAuthUrl();
         header('Location: ' . filter_var($authUrl, FILTER_SANITIZE_URL));
         exit;
     } else {
+        var_dump($_GET['code']);
+        var_dump('lora');
         // Step 2: Exchange authorization code for access token.
         $client->authenticate($_GET['code']);
         $accessToken = $client->getAccessToken();
