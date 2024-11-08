@@ -1,7 +1,7 @@
 <?php
 require("config/env.php");
 require_once 'vendor/autoload.php';
-if ($route == '/login/google') {
+if ($route == '/login/google' || $route == 'login/google/callback') {
     $client = new Google_Client();
     $client->setClientId('961017410790-ln5h7gagt6tprjr71hng8rokaps4gn8i.apps.googleusercontent.com');
     $client->setClientSecret('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');
@@ -11,28 +11,22 @@ if ($route == '/login/google') {
     // Step 1: Redirect to Google’s OAuth 2.0 server.
 
     if (!isset($_GET['code'])) {
-        var_dump($_GET['code']);
-        var_dump('lassan');
         $authUrl = $client->createAuthUrl();
         header('Location: ' . filter_var($authUrl, FILTER_SANITIZE_URL));
         exit;
     } else {
-        var_dump($_GET['code']);
-        var_dump('lora');
-        // Step 2: Exchange authorization code for access token.
         $client->authenticate($_GET['code']);
         $accessToken = $client->getAccessToken();
         $oauth2 = new Google_Service_Oauth2($client);
         $googleAccountInfo = $oauth2->userinfo->get();
         $email = $googleAccountInfo->email;
-
+        var_dump($email);
         // Check if the user exists in your database, then log them in.
-        $user = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
-        if ($user) {
-            $_SESSION['users'] = $user;
+        $users = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
+        if ($users) {
+            $_SESSION['users'] = $users;
             header('Location: /user/dashboard');
-        } else {
-            // Redirect to registration page or show an error
+        }else{
         }
         exit;
     }
