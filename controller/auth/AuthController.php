@@ -20,7 +20,6 @@ if ($route == '/login/google') {
         $oauth2 = new Google_Service_Oauth2($client);
         $googleAccountInfo = $oauth2->userinfo->get();
         $email = $googleAccountInfo->email;
-        var_dump($email);
         // Check if the user exists in your database, then log them in.
         $users = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
         if ($users) {
