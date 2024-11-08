@@ -17,6 +17,7 @@ if ($route == '/login/google') {
     }
 }
 if ($route == 'login/google/callback') {
+    var_dump($_GET['code']);
     $client->authenticate($_GET['code']);
     $accessToken = $client->getAccessToken();
     $oauth2 = new Google_Service_Oauth2($client);
