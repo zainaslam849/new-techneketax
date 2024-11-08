@@ -16,6 +16,8 @@ post('/login', 'controller/auth/AuthController.php');
 //get('/login/$path', 'controller/auth/AuthController.php');
 //post('/login/$path', 'controller/auth/AuthController.php');
 //google
+get('/login/facebook', 'controller/auth/AuthController.php');
+get('/login/facebook/callback', 'controller/auth/AuthController.php');
 get('/login/google', 'controller/auth/AuthController.php');
 // Microsoft
 get('/login/microsoft', 'controller/auth/AuthController.php');

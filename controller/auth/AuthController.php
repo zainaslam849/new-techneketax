@@ -1,6 +1,44 @@
 <?php
 require("config/env.php");
 require_once 'vendor/autoload.php';
+use Facebook\Facebook;
+
+$facebook = new Facebook([
+    'app_id' => '588093053656460',
+    'app_secret' => '7b13f8db7bcd5490c1401c42fca4bc29',
+    'default_graph_version' => 'v10.0',
+]);
+
+$helper = $facebook->getRedirectLoginHelper();
+$permissions = ['email']; // Define permissions
+
+if ($route == '/login/facebook') {
+    $loginUrl = $helper->getLoginUrl($env['APP_URL'] . 'login/facebook/callback', $permissions);
+    header('Location: ' . $loginUrl);
+    exit;
+}
+if ($route == '/login/facebook/callback') {
+    try {
+        $accessToken = $helper->getAccessToken();
+        if (!$accessToken) {
+            throw new Exception('Failed to get access token');
+        }
+        $response = $facebook->get('/me?fields=id,name,email', $accessToken);
+        $user = $response->getGraphUser();
+        $email = $user->getEmail();
+        $dbUser = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
+        if ($dbUser) {
+            $_SESSION['users'] = $dbUser;
+            header('Location: /user/dashboard');
+        } else {
+            // Redirect to registration page or handle new user registration
+        }
+        exit;
+    } catch (Exception $e) {
+        echo 'Error: ' . $e->getMessage();
+        exit;
+    }
+}
 if ($route == '/login/google') {
     $client = new Google_Client();
     $client->setClientId('961017410790-ln5h7gagt6tprjr71hng8rokaps4gn8i.apps.googleusercontent.com');
