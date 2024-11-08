@@ -14,24 +14,24 @@ if ($route == '/login/google') {
         $authUrl = $client->createAuthUrl();
         header('Location: ' . filter_var($authUrl, FILTER_SANITIZE_URL));
         exit;
-    }
-}
-if ($route == 'login/google/callback') {
-    var_dump($_GET['code']);
-    $client->authenticate($_GET['code']);
-    $accessToken = $client->getAccessToken();
-    $oauth2 = new Google_Service_Oauth2($client);
-    $googleAccountInfo = $oauth2->userinfo->get();
-    $email = $googleAccountInfo->email;
-    $user = $h->table('users')->select()->where('email', '=', $email)->fetch();
-    if ($user) {
-        $_SESSION['users'] = $user;
-        header('Location: /user/dashboard');
     } else {
-       echo 'google not found';
-       exit();
+        // Step 2: Exchange authorization code for access token.
+        $client->authenticate($_GET['code']);
+        $accessToken = $client->getAccessToken();
+        $oauth2 = new Google_Service_Oauth2($client);
+        $googleAccountInfo = $oauth2->userinfo->get();
+        $email = $googleAccountInfo->email;
+
+        // Check if the user exists in your database, then log them in.
+        $user = $h->table('users')->select()->where('email', '=', $email)->fetch();
+        if ($user) {
+            $_SESSION['users'] = $user;
+            header('Location: /user/dashboard');
+        } else {
+            // Redirect to registration page or show an error
+        }
+        exit;
     }
-    exit;
 }
 use League\OAuth2\Client\Provider\GenericProvider;
 
