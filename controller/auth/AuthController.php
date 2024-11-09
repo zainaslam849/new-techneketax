@@ -1,6 +1,7 @@
 <?php
 require("config/env.php");
 $email_config = include('config/email_config.php');
+$social_login_keysData = $h->table('social_login_keys')->select()->where('id', '=', 1)->fetchAll();
 require_once 'vendor/autoload.php';
 use Facebook\Facebook;
 use Facebook\Exceptions\FacebookResponseException;
@@ -9,8 +10,8 @@ use League\OAuth2\Client\Provider\GenericProvider;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 $facebook = new Facebook([
-    'app_id' => $social_login_keysData[0]['app_id'],
-    'app_secret' => $social_login_keysData[0]['app_secret'],
+    'app_id' => $social_login_keysData[0]['facebook_app_id'],
+    'app_secret' => $social_login_keysData[0]['facebook_app_secret'],
     'default_graph_version' => 'v21.0',
 ]);
 $helper = $facebook->getRedirectLoginHelper();
