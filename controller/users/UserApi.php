@@ -992,6 +992,136 @@ if($loginUserType == "firm") {
                     $statusView = "<span class='badge badge-light-info'>Not Start Yet</span>";
                     $userStatus='';
                 }
+
+                $action = array('action' => $userStatus.'
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$campaign["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           
+                      ');
+                $dateTime = new DateTime($campaign["date"]);
+                $formattedDate = $dateTime->format(' l, j F Y g:i A');
+                $date = array(
+                    "DateView" => '<span class="inv-date" >
+            <svg style="color:red" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg> ' . $formattedDate . ' 
+        </span>'
+                );
+                $status = array("statusView" => $statusView);
+                $srNo++;
+                $ids = array("ids" => "$srNo");
+                $check_arr[] = array_merge($ids, $campaign,$date, $status, $action);
+            }
+
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => count($check_arr),
+                "iTotalDisplayRecords" => count($check_arr),
+                "aaData" => $check_arr
+            );
+            echo json_encode($result);
+        } else {
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => array()
+            );
+            echo json_encode($result);
+        }
+
+    }
+    if($_GET['page_name']=="view_bulk_email"){
+        $srNo = 0;
+        $campaigns = $h->table('campaign')->select()->where('firm_id', '=', $loginUserId)->where('campaign_type', '=', 'email')->orderBy('id', 'desc')->fetchAll();
+        if (!empty($campaigns)) {
+            foreach ($campaigns as $campaign) {
+                // Determine user status
+                if ($campaign['status'] == "start") {
+                    $statusView = "<span class='badge badge-light-success'>Started</span>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$campaign['id'].", 0)' class='btn btn-light-warning btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-pause'></i></a>";
+
+                } else if ($campaign['status'] == "pause") {
+                    $statusView = "<span class='badge badge-light-warning'>Paused</span>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$campaign['id'].", 1)' class='btn-sm btn btn-light-success text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-play'></i></a>";
+
+                }else if ($campaign['status'] == "pending") {
+                    $statusView = "<span class='badge badge-light-info'>Not Start Yet</span>";
+                    $userStatus='';
+                }else if ($campaign['status'] == "ended") {
+                    $statusView = "<span class='badge badge-light-danger'>Ended</span>";
+                    $userStatus='';
+                } else {
+                    $statusView = "<span class='badge badge-light-info'>Not Start Yet</span>";
+                    $userStatus='';
+                }
+
+                $action = array('action' => $userStatus.'
+                   <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$campaign["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
+           
+                      ');
+                $dateTime = new DateTime($campaign["date"]);
+                $formattedDate = $dateTime->format(' l, j F Y g:i A');
+                $date = array(
+                    "DateView" => '<span class="inv-date" >
+            <svg style="color:red" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg> ' . $formattedDate . ' 
+        </span>'
+                );
+                $status = array("statusView" => $statusView);
+                $srNo++;
+                $ids = array("ids" => "$srNo");
+                $check_arr[] = array_merge($ids, $campaign,$date, $status, $action);
+            }
+
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => count($check_arr),
+                "iTotalDisplayRecords" => count($check_arr),
+                "aaData" => $check_arr
+            );
+            echo json_encode($result);
+        } else {
+            $result = array(
+                "sEcho" => 1,
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => array()
+            );
+            echo json_encode($result);
+        }
+
+    }
+    if($_GET['page_name']=="view_bulk_phone"){
+        $srNo = 0;
+        $campaigns = $h->table('campaign')->select()->where('firm_id', '=', $loginUserId)->where('campaign_type', '=', 'phone')->orderBy('id', 'desc')->fetchAll();
+        if (!empty($campaigns)) {
+            foreach ($campaigns as $campaign) {
+                // Determine user status
+                if ($campaign['status'] == "start") {
+                    $statusView = "<span class='badge badge-light-success'>Started</span>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$campaign['id'].", 0)' class='btn btn-light-warning btn-sm text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-pause'></i></a>";
+
+                } else if ($campaign['status'] == "pause") {
+                    $statusView = "<span class='badge badge-light-warning'>Paused</span>";
+                    $userStatus = "<a href='javascript:;' onclick='userStatus(".$campaign['id'].", 1)' class='btn-sm btn btn-light-success text-start me-2 action-edit' ><i style='font-size: 16px;' class='fa-solid fa-play'></i></a>";
+
+                }else if ($campaign['status'] == "pending") {
+                    $statusView = "<span class='badge badge-light-info'>Not Start Yet</span>";
+                    $userStatus='';
+                }else if ($campaign['status'] == "ended") {
+                    $statusView = "<span class='badge badge-light-danger'>Ended</span>";
+                    $userStatus='';
+                } else {
+                    $statusView = "<span class='badge badge-light-info'>Not Start Yet</span>";
+                    $userStatus='';
+                }
                 if ($campaign['campaign_type'] == "email") {
                     $listView = "<span class='badge badge-light-success'>Email</span>";
                 }else{

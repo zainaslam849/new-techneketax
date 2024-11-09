@@ -22,12 +22,12 @@ if($route == '/user/campaign/list'):
                     $fileType = $_FILES['file']['type'];
                     $allowed = ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
                     if (in_array($fileType, $allowed)) {
-                $insert = $h->insert('campaign_list')->values([
-                    'firm_id' => $loginUserId,
-                    'name' => $name,
-                    'list_type' => $list_type,
-                    'des' => $des,
-                ])->run();
+                        $insert = $h->insert('campaign_list')->values([
+                            'firm_id' => $loginUserId,
+                            'name' => $name,
+                            'list_type' => $list_type,
+                            'des' => $des,
+                        ])->run();
                         $spreadsheet = IOFactory::load($fileTmp);
                         $sheet = $spreadsheet->getActiveSheet();
                         $rows = $sheet->toArray();
@@ -77,6 +77,30 @@ if($route == '/user/campaign/list'):
         echo $twig->render('user/campaign/list.twig', ['seo' => $seo]);
     }
 
+endif;
+if($route == '/user/email/bulk_email'):
+        $seo = array(
+            'title' => 'Campaign List',
+            'description' => 'CRM',
+            'keywords' => 'Admin Panel'
+        );
+    $ListDetails = $h->table('campaign_list')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
+    $world_time_zonesDetails = $h->table('world_time_zones')->select()->fetchAll();
+    $templatesDetails = $h->table('email_template')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
+    $campaign_lists = $h->table('campaign_list')->select()->where('firm_id', '=', $loginUserId)->where('list_type', 'email')->fetchAll();
+    echo $twig->render('user/campaign/bulk_email.twig', ['seo' => $seo,'ListDetails' => $ListDetails,'world_time_zonesDetails' => $world_time_zonesDetails,'templatesDetails' => $templatesDetails,'campaign_lists' => $campaign_lists]);
+endif;
+if($route == '/user/sms/bulk_sms'):
+        $seo = array(
+            'title' => 'Campaign List',
+            'description' => 'CRM',
+            'keywords' => 'Admin Panel'
+        );
+    $ListDetails = $h->table('campaign_list')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
+    $world_time_zonesDetails = $h->table('world_time_zones')->select()->fetchAll();
+    $templatesDetails = $h->table('email_template')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
+    $campaign_lists = $h->table('campaign_list')->select()->where('firm_id', '=', $loginUserId)->where('list_type', 'phone')->fetchAll();
+    echo $twig->render('user/campaign/bulk_sms.twig', ['seo' => $seo,'ListDetails' => $ListDetails,'world_time_zonesDetails' => $world_time_zonesDetails,'templatesDetails' => $templatesDetails,'campaign_lists' => $campaign_lists]);
 endif;
     if($route == '/user/campaign/list_details/$id'):
 
@@ -172,6 +196,7 @@ if($template_type == 'your_email_template'){
         $world_time_zonesDetails = $h->table('world_time_zones')->select()->fetchAll();
         $templatesDetails = $h->table('email_template')->select()->where('firm_id', '=', $loginUserId)->fetchAll();
         echo $twig->render('user/campaign/campaign.twig', ['seo' => $seo,'ListDetails' => $ListDetails,'world_time_zonesDetails' => $world_time_zonesDetails,'templatesDetails' => $templatesDetails]);
+
     }
 
 endif;

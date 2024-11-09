@@ -201,3 +201,4 @@ $Admin_Stripe_public_key=$Admin_StripeCredentials[0]['public_key'];
 $Admin_Stripe_secret_key=$Admin_StripeCredentials[0]['secret_key'];
 $twig->addGlobal('Admin_Stripe_public_key', @$Admin_Stripe_public_key);
 // single email configration
+$social_login_keysData = $h->table('social_login_keys')->select()->where('id', '=', 1)->fetchAll();
