@@ -288,7 +288,8 @@ if (!empty(@$plan_id) && @$plan_id != '' && $current_date <= @$plan_end_date){
     post('/user/campaign/list_detail/add', 'controller/users/CampaignController.php');
     get('/user/campaign/CampaignCronjobController', 'controller/users/CampaignCronjobController.php');
     post('/user/campaign/CampaignCronjobController', 'controller/users/CampaignCronjobController.php');
-
+    get('/user/email/bulk_email', 'controller/users/CampaignController.php');
+    get('/user/sms/bulk_sms', 'controller/users/CampaignController.php');
     // email
     get('/user/email/inbox', 'controller/users/EmailController.php');
     get('/user/email/sent', 'controller/users/EmailController.php');
@@ -367,11 +368,14 @@ post('/admin/plan_edit', 'controller/admin/PlanController.php');
 
 get('/admin/profile', 'controller/admin/ProfileController.php');
 post('/admin/fetch_profile', 'controller/admin/ProfileController.php');
+post('/admin/fetch_social_key_data', 'controller/admin/ProfileController.php');
 post('/admin/profile', 'controller/admin/ProfileController.php');
     get('/admin/profile/security', 'controller/admin/ProfileController.php');
     post('/admin/profile/password_change', 'controller/admin/ProfileController.php');
     get('/admin/profile/paymentMethod', 'controller/admin/ProfileController.php');
     post('/admin/profile/change_stripe_keys', 'controller/admin/ProfileController.php');
+    get('/admin/profile/social-login-key', 'controller/admin/ProfileController.php');
+    post('/admin/profile/social-login-key', 'controller/admin/ProfileController.php');
 
 
 //get('/admin/json', 'controller/admin/JsonFileController.php');

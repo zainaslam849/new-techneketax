@@ -135,13 +135,12 @@
                             </div>
                         </div>
                     </div>
-                    <div data-kt-menu-trigger="click" class="menu-item {% if route == '/user/chat' or route == '/user/email/inbox'  %} here show {% endif %} menu-accordion">
+                    <div data-kt-menu-trigger="click" class="menu-item {% if route == '/user/chat' or route == '/user/email/inbox' or route == '/user/email/bulk_email' or route == '/user/sms/bulk_sms' %} here show {% endif %} menu-accordion">
 									<span class="menu-link">
 										<span class="menu-icon">
 											<!--begin::Svg Icon | path: icons/duotune/technology/teh004.svg-->
 											<span class="svg-icon svg-icon-2">
-												<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+											<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
 											</span>
                                             <!--end::Svg Icon-->
 										</span>
@@ -150,14 +149,14 @@
 									</span>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
-                                <a class="menu-link {% if route == '/user/files' %}active{% endif %}" href="/user/files">
+                                <a class="menu-link {% if route == '/user/chat' %}active{% endif %}" href="/user/chat">
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>
                                     <span class="menu-title">In House Chat</span>
                                 </a>
                             </div>
-                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                            <div data-kt-menu-trigger="click" class="menu-item {% if route == '/user/email/inbox' or route == '/user/email/bulk_email'  %} here show {% endif %} menu-accordion">
 											<span class="menu-link">
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
@@ -167,7 +166,7 @@
 											</span>
                                 <div class="menu-sub menu-sub-accordion menu-active-bg">
                                     <div class="menu-item">
-                                        <a class="menu-link" href="/">
+                                        <a class="menu-link {% if route == '/user/email/inbox' %}active{% endif %}" href="/user/email/inbox">
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
@@ -175,7 +174,7 @@
                                         </a>
                                     </div>
                                     <div class="menu-item">
-                                        <a class="menu-link" href="/">
+                                        <a class="menu-link {% if route == '/user/email/bulk_email' %}active{% endif %}" href="/user/email/bulk_email">
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
@@ -184,7 +183,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                            <div data-kt-menu-trigger="click" class="menu-item {% if route == '/user/sms/bulk_sms'  %} here show {% endif %} menu-accordion">
 											<span class="menu-link">
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
@@ -194,7 +193,7 @@
 											</span>
                                 <div class="menu-sub menu-sub-accordion menu-active-bg">
                                     <div class="menu-item">
-                                        <a class="menu-link" href="/">
+                                        <a class="menu-link " href="#">
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
@@ -202,7 +201,7 @@
                                         </a>
                                     </div>
                                     <div class="menu-item">
-                                        <a class="menu-link" href="/">
+                                        <a class="menu-link {% if route == '/user/sms/bulk_sms' %}active{% endif %}" href="/user/sms/bulk_sms">
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
@@ -212,7 +211,7 @@
                                 </div>
                             </div>
                             <div class="menu-item">
-                                <a class="menu-link {% if route == '/user/files' %}active{% endif %}" href="/user/files">
+                                <a class="menu-link " href="#">
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>

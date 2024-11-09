@@ -1,17 +1,20 @@
 <?php
 require("config/env.php");
+$email_config = include('config/email_config.php');
 require_once 'vendor/autoload.php';
 use Facebook\Facebook;
-
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
+use League\OAuth2\Client\Provider\GenericProvider;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 $facebook = new Facebook([
-    'app_id' => '588093053656460',
-    'app_secret' => '7b13f8db7bcd5490c1401c42fca4bc29',
-    'default_graph_version' => 'v10.0',
+    'app_id' => $social_login_keysData[0]['app_id'],
+    'app_secret' => $social_login_keysData[0]['app_secret'],
+    'default_graph_version' => 'v21.0',
 ]);
-
 $helper = $facebook->getRedirectLoginHelper();
-$permissions = ['email']; // Define permissions
-
+$permissions = ['email'];
 if ($route == '/login/facebook') {
     $loginUrl = $helper->getLoginUrl($env['APP_URL'] . 'login/facebook/callback', $permissions);
     header('Location: ' . $loginUrl);
@@ -23,16 +26,40 @@ if ($route == '/login/facebook/callback') {
         if (!$accessToken) {
             throw new Exception('Failed to get access token');
         }
-        $response = $facebook->get('/me?fields=id,name,email', $accessToken);
+
+        $response = $facebook->get('/me?fields=id,name,email,first_name,last_name,picture', $accessToken);
         $user = $response->getGraphUser();
         $email = $user->getEmail();
+        $fname = $user->getFirstName();
+        $lname = $user->getLastName();
+        $profile_image = $user->getPicture()->getUrl();
+        $phone = ''; // Phone is not provided by Facebook by default
+
         $dbUser = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
+
         if ($dbUser) {
             $_SESSION['users'] = $dbUser;
-            header('Location: /user/dashboard');
         } else {
-            // Redirect to registration page or handle new user registration
+            $generatedemail = generateRandomEmail($domainName);
+            $generatedemail = strtolower($fname . $lname . $generatedemail);
+            $password_email = random_strings(9);
+            $createAccount = createEmailAccount($email_config, $generatedemail, $password_email);
+
+            $insert = $h->insert('users')->values([
+                'email' => $email,
+                'fname' => $fname,
+                'lname' => $lname,
+                'profile_image' => $profile_image,
+                'generated_email' => $generatedemail,
+                'generated_email_pass' => $password_email,
+                'signup_from' => 'facebook',
+            ])->run();
+
+            $newUser = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
+            $_SESSION['users'] = $newUser;
         }
+
+        header('Location: /user/dashboard');
         exit;
     } catch (Exception $e) {
         echo 'Error: ' . $e->getMessage();
@@ -41,8 +68,8 @@ if ($route == '/login/facebook/callback') {
 }
 if ($route == '/login/google') {
     $client = new Google_Client();
-    $client->setClientId('961017410790-ln5h7gagt6tprjr71hng8rokaps4gn8i.apps.googleusercontent.com');
-    $client->setClientSecret('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');
+    $client->setClientId($social_login_keysData[0]['google_client_id']);
+    $client->setClientSecret($social_login_keysData[0]['google_client_secret']);
     $client->setRedirectUri($env['APP_URL'].'login/google');
     $client->addScope('email');
     $client->addScope('profile');
@@ -58,77 +85,92 @@ if ($route == '/login/google') {
         $oauth2 = new Google_Service_Oauth2($client);
         $googleAccountInfo = $oauth2->userinfo->get();
         $email = $googleAccountInfo->email;
-        // Check if the user exists in your database, then log them in.
-        $users = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
-        if ($users) {
-            $_SESSION['users'] = $users;
-            header('Location: /user/dashboard');
-        }else{
+        $fname = $googleAccountInfo->givenName;
+        $lname = $googleAccountInfo->familyName;
+        $profile_image = $googleAccountInfo->picture;
+
+        $dbUser = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
+        if ($dbUser) {
+            $_SESSION['users'] = $dbUser;
+        } else {
+            $generatedemail = generateRandomEmail($domainName);
+            $generatedemail = strtolower($fname . $lname . $generatedemail);
+            $password_email = random_strings(9);
+            $createAccount = createEmailAccount($email_config, $generatedemail, $password_email);
+            $insert = $h->insert('users')->values([
+                'email' => $email,
+                'fname' => $fname,
+                'lname' => $lname,
+                'profile_image' => $profile_image,
+                'generated_email' => $generatedemail,
+                'generated_email_pass' => $password_email,
+                'signup_from' => 'google',
+            ])->run();
+            $newUser = $h->table('users')->select()->where('email', '=', $email)->fetch();
+            $_SESSION['users'] = $newUser;
         }
+
+        header('Location: /user/dashboard');
         exit;
     }
 }
-use League\OAuth2\Client\Provider\GenericProvider;
-
 if ($route == '/login/microsoft') {
     $provider = new GenericProvider([
-        'clientId'                => 'YOUR_MICROSOFT_CLIENT_ID',
-        'clientSecret'            => 'YOUR_MICROSOFT_CLIENT_SECRET',
+        'clientId'                => $social_login_keysData[0]['microsoft_client_id'],
+        'clientSecret'            => $social_login_keysData[0]['microsoft_client_secret'],
         'redirectUri'             => $env['APP_URL'].'login/microsoft/callback',
         'urlAuthorize'            => 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
         'urlAccessToken'          => 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
         'urlResourceOwnerDetails' => 'https://graph.microsoft.com/v1.0/me'
     ]);
-
-    // Step 1: Redirect to Microsoft’s OAuth server with the scope parameter.
     if (!isset($_GET['code'])) {
         $authorizationUrl = $provider->getAuthorizationUrl([
-            'scope' => 'openid profile email User.Read offline_access'  // Add the scope here
+            'scope' => 'openid profile email User.Read offline_access'
         ]);
         $_SESSION['oauth2state'] = $provider->getState();
         header('Location: ' . $authorizationUrl);
         exit;
-    } elseif (isset($_GET['state']) && $_GET['state'] !== $_SESSION['oauth2state']) {
-        unset($_SESSION['oauth2state']);
-        exit('Invalid state');
     } else {
-        // Step 2: Obtain access token
         try {
-            $accessToken = $provider->getAccessToken('authorization_code', [
-                'code' => $_GET['code']
-            ]);
-
-            // Step 3: Get user info
-            $response = $provider->getAuthenticatedRequest(
-                'GET',
-                'https://graph.microsoft.com/v1.0/me',
-                $accessToken
-            );
+            $accessToken = $provider->getAccessToken('authorization_code', ['code' => $_GET['code']]);
+            $response = $provider->getAuthenticatedRequest('GET', 'https://graph.microsoft.com/v1.0/me', $accessToken);
             $user = json_decode($response->getBody()->getContents());
-
-            // Step 4: Log in or register the user
             $email = $user->mail ?: $user->userPrincipalName;
-            $existingUser = $h->table('users')->select()->where('email', '=', $email)->fetch();
-
-            if ($existingUser) {
-                $_SESSION['users'] = $existingUser;
-                header('Location: /user/dashboard');
+            $fname = $user->givenName;
+            $lname = $user->surname;
+            $profile_image = '';
+            $phone = '';
+            $dbUser = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
+            if ($dbUser) {
+                $_SESSION['users'] = $dbUser;
             } else {
-                // Redirect to registration or show an error
+                $generatedemail = generateRandomEmail($domainName);
+                $generatedemail = strtolower($fname . $lname . $generatedemail);
+                $password_email = random_strings(9);
+                $createAccount = createEmailAccount($email_config, $generatedemail, $password_email);
+                $insert = $h->insert('users')->values([
+                    'email' => $email,
+                    'fname' => $fname,
+                    'lname' => $lname,
+                    'profile_image' => $profile_image,
+                    'generated_email' => $generatedemail,
+                    'generated_email_pass' => $password_email,
+                    'signup_from' => 'microsoft',
+                ])->run();
+                $newUser = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
+                $_SESSION['users'] = $newUser;
             }
+            header('Location: /user/dashboard');
             exit;
         } catch (Exception $e) {
             exit('Failed to get access token: ' . $e->getMessage());
         }
     }
 }
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-// Apple OAuth route handler
 if ($route == '/login/apple') {
-    $clientID = 'YOUR_APPLE_CLIENT_ID';
-    $teamID = 'YOUR_APPLE_TEAM_ID';
-    $keyID = 'YOUR_APPLE_KEY_ID';
+    $clientID = $social_login_keysData[0]['apple_client_id'];
+    $teamID = $social_login_keysData[0]['apple_team_id'];
+    $keyID = $social_login_keysData[0]['apple_key_id'];
     $redirectUri = $env['APP_URL'].'login/apple/callback';
     $privateKey = file_get_contents('/path/to/your/apple_private_key.p8');
 
@@ -160,55 +202,66 @@ if ($route == '/login/apple') {
     header('Location: ' . $authorizationUrl);
     exit;
 }
+if ($route == '/login/apple/callback') {
+    if (isset($_POST['code'])) {
+        $code = $_POST['code'];
 
-// Apple OAuth callback handler
-//if ($route == '/login/apple/callback') {
-//    if (isset($_POST['code'])) {
-//        $code = $_POST['code'];
-//
-//        // Step 3: Exchange code for access token
-//        $tokenUrl = 'https://appleid.apple.com/auth/token';
-//        $response = file_get_contents($tokenUrl, false, stream_context_create([
-//            'http' => [
-//                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-//                'method'  => 'POST',
-//                'content' => http_build_query([
-//                    'client_id'     => $clientID,
-//                    'client_secret' => $jwt,
-//                    'code'          => $code,
-//                    'grant_type'    => 'authorization_code',
-//                    'redirect_uri'  => $redirectUri
-//                ]),
-//            ]
-//        ]));
-//
-//        $data = json_decode($response, true);
-//        $accessToken = $data['access_token'];
-//
-//        // Step 4: Verify token and get user info
-//        $idToken = $data['id_token'];
-//        $user = JWT::decode($idToken, new Key($publicKey, 'ES256'));
-//
-//        // Step 5: Check if user exists in your DB
-//        $email = $user->email;
-//        $existingUser = $h->table('users')->select()->where('email', '=', $email)->fetch();
-//
-//        if ($existingUser) {
-//            $_SESSION['users'] = $existingUser;
-//            header('Location: /user/dashboard');
-//        } else {
-//            // Redirect to registration or show an error
-//        }
-//        exit;
-//    } else {
-//        exit('Authorization code not provided.');
-//    }
-//}
+        $tokenUrl = 'https://appleid.apple.com/auth/token';
+        $response = file_get_contents($tokenUrl, false, stream_context_create([
+            'http' => [
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query([
+                    'client_id'     => $clientID,
+                    'client_secret' => $jwt,
+                    'code'          => $code,
+                    'grant_type'    => 'authorization_code',
+                    'redirect_uri'  => $redirectUri
+                ]),
+            ]
+        ]));
 
+        $data = json_decode($response, true);
+        $accessToken = $data['access_token'];
+        $idToken = $data['id_token'];
+        $user = JWT::decode($idToken, new Key($publicKey, 'ES256'));
 
-$email_config = include('config/email_config.php');
+        $email = $user->email;
+        $fname = $user->name->firstName ?? 'AppleUser';
+        $lname = $user->name->lastName ?? 'AppleUser';
+        $profile_image = ''; // Apple doesn't provide profile image
+        $phone = ''; // Apple doesn’t provide phone by default
+
+        $dbUser = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
+
+        if ($dbUser) {
+            $_SESSION['users'] = $dbUser;
+        } else {
+            $generatedemail = generateRandomEmail($domainName);
+            $generatedemail = strtolower($fname . $lname . $generatedemail);
+            $password_email = random_strings(9);
+            $createAccount = createEmailAccount($email_config, $generatedemail, $password_email);
+
+            $insert = $h->insert('users')->values([
+                'email' => $email,
+                'fname' => $fname,
+                'lname' => $lname,
+                'profile_image' => $profile_image,
+                'generated_email' => $generatedemail,
+                'generated_email_pass' => $password_email,
+                'signup_from' => 'apple',
+            ])->run();
+            $newUser = $h->table('users')->select()->where('email', '=', $email)->fetchAll();
+            $_SESSION['users'] = $newUser;
+        }
+
+        header('Location: /user/dashboard');
+        exit;
+    } else {
+        exit('Authorization code not provided.');
+    }
+}
 if($route == '/admin'):
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //LOGIN
         if(isset($_POST['email']) && isset($_POST['password'])):
@@ -247,7 +300,6 @@ if($route == '/admin'):
     }
 endif;
 if($route == '/login'):
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //LOGIN
         if(isset($_POST['email']) && isset($_POST['password'])):
@@ -285,7 +337,6 @@ if($route == '/login'):
     }
 endif;
 if($route == '/2fa/login'):
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //LOGIN
         if(isset($_POST['email']) && isset($_POST['password'])&& isset($_POST['twofa'])):
@@ -482,7 +533,6 @@ if($route == '/join/$firm_id/$associates_id/$email/$invite'):
     }
 endif;
 if($route == '/user/member/login_as_client'):
-
     $client_id = $_POST['client_id'];
 unset($_SESSION['member_id']);
     $_SESSION['member_id'] = $loginUserId;

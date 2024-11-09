@@ -51,6 +51,81 @@ if($route == '/admin/profile'):
         echo $twig->render('admin/profile/profile.twig', ['seo' => $seo,'userinfo' => $UserInfo,'csrf'=>set_csrf()]);
 }
 endif;
+if($route == '/admin/profile/social-login-key'):
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!empty($_POST['facebook_app_id']) && !empty($_POST['facebook_app_secret'])){
+                $facebook_app_id = $_POST['facebook_app_id'];
+                $facebook_app_secret = $_POST['facebook_app_secret'];
+
+            try {
+                $update = $h->update('social_login_keys')->values([
+                    'facebook_app_id' => $facebook_app_id,
+                    'facebook_app_secret' => $facebook_app_secret,
+                ])->where('id','=',1)->run();
+                echo "1";
+                exit();
+            } catch (PDOException $e) {
+                echo "0";
+                exit();
+            }
+        }
+        if (!empty($_POST['google_client_id']) && !empty($_POST['google_client_secret'])){
+            $google_client_id = $_POST['google_client_id'];
+            $google_client_secret = $_POST['google_client_secret'];
+            try {
+                $update = $h->update('social_login_keys')->values([
+                    'google_client_id' => $google_client_id,
+                    'google_client_secret' => $google_client_secret,
+                ])->where('id','=',1)->run();
+                echo "1";
+                exit();
+            } catch (PDOException $e) {
+                echo "0";
+                exit();
+            }
+        }
+        if (!empty($_POST['microsoft_client_id']) && !empty($_POST['microsoft_client_secret'])){
+            $microsoft_client_id = $_POST['microsoft_client_id'];
+            $microsoft_client_secret = $_POST['microsoft_client_secret'];
+            try {
+                $update = $h->update('social_login_keys')->values([
+                    'microsoft_client_id' => $microsoft_client_id,
+                    'microsoft_client_secret' => $microsoft_client_secret,
+                ])->where('id','=',1)->run();
+                echo "1";
+                exit();
+            } catch (PDOException $e) {
+                echo "0";
+                exit();
+            }
+        }
+        if (!empty($_POST['apple_client_id']) && !empty($_POST['apple_team_id']) && !empty($_POST['apple_key_id'])){
+            $apple_client_id = $_POST['apple_client_id'];
+            $apple_team_id = $_POST['apple_team_id'];
+            $apple_key_id = $_POST['apple_key_id'];
+            try {
+                $update = $h->update('social_login_keys')->values([
+                    'apple_client_id' => $apple_client_id,
+                    'apple_team_id' => $apple_team_id,
+                    'apple_key_id' => $apple_key_id,
+                ])->where('id','=',1)->run();
+                echo "1";
+                exit();
+            } catch (PDOException $e) {
+                echo "0";
+                exit();
+            }
+        }
+    }else{
+        $seo = array(
+            'title' => 'Social Login Keys',
+            'description' => 'CRM',
+            'keywords' => 'Admin Panel'
+        );
+        $UserInfo=$h->table('users')->select()->where('id', '=', $loginUserId)->fetchAll();
+        echo $twig->render('admin/profile/social_login_keys.twig', ['seo' => $seo,'userinfo' => $UserInfo,'csrf'=>set_csrf()]);
+    }
+endif;
 if ($route == '/admin/fetch_profile'):
     if(isset($_POST['edit']) && !empty($_POST['edit'])){
         $id= $_POST['id'];
@@ -69,6 +144,11 @@ if ($route == '/admin/fetch_profile'):
         echo json_encode(array("users"=>$users ,"appointment"=>$appointments_count,"invoiceUnpaid"=>$invoiceUnpaid,"invoicePaid"=>$invoicePaid));
         exit();
     }
+endif;
+if ($route == '/admin/fetch_social_key_data'):
+        $social_login_keys = $h->table('social_login_keys')->select()->where('id', '=', 1)->fetchAll();
+        echo json_encode($social_login_keys);
+        exit();
 endif;
 if($route == '/admin/profile/password_change'):
     if (!empty($_POST['current_password'])){
