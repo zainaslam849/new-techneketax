@@ -97,7 +97,7 @@ foreach ($email_queueDetails as $email_queueDetail) {
           if ($campaignDetails[0]['template_type'] == 'your_email_template'){
               $emailTemplate = $h->table('email_template')->select()->where('id', '=', $campaignDetails[0]['template_id'])->fetchAll();
               $subject = $campaignDetails[0]['subject'];
-              $htmlContent = base64_decode($emailTemplate[0]['content']);
+              $htmlContent = $emailTemplate[0]['content'];
               $decodedContent = base64_decode($htmlContent);
               $message = mb_convert_encoding($decodedContent, 'UTF-8', 'auto');
               $email_response = mailSender1(@$company_email, $email_queueDetail['recipient_email'], $subject, $message, $mail);
