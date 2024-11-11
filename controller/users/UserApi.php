@@ -992,7 +992,12 @@ if($loginUserType == "firm") {
                     $statusView = "<span class='badge badge-light-info'>Not Start Yet</span>";
                     $userStatus='';
                 }
-
+             if ($campaign['campaign_type'] == "email") {
+                    $list_view = "<span class='badge badge-light-warning'>Email</span>";
+                } else {
+                    $list_view = "<span class='badge badge-light-info'>Phone</span>";
+                }
+                $listView = array('listView' => $list_view );
                 $action = array('action' => $userStatus.'
                    <a href="javascript:;" class="btn-sm btn btn-light-danger text-start me-2 action-edit" onclick="deleteUser('.$campaign["id"].')" ><i style="font-size: 16px;" class="fa-regular fa-trash-can"></i></a>
            
@@ -1012,7 +1017,7 @@ if($loginUserType == "firm") {
                 $status = array("statusView" => $statusView);
                 $srNo++;
                 $ids = array("ids" => "$srNo");
-                $check_arr[] = array_merge($ids, $campaign,$date, $status, $action);
+                $check_arr[] = array_merge($ids, $campaign,$date,$listView, $status, $action);
             }
 
             $result = array(
