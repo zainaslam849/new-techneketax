@@ -1,21 +1,79 @@
-#ZOTEC FRAME FRAMEWORKS
+Certainly! Below is a refined and professional version of your `README.md` that includes examples, detailed descriptions of the key components, and explanations for using **Cycle ORM**, **Intervention Image**, **Tracy Debug Bar**, and **Twig** within your project. Additionally, I have added a note on configuring the **database** and **routing system** in the `config/env.php` file.
 
-#DATABASE Builder
-https://cycle-orm.dev/docs/database-query-builders/current/en#quick-inserts
+---
 
-#Insert Builder
+# Zotec Framework Documentation
 
-To get an instance of InsertBuilder (responsible for insertions), we have to execute following code:
+Welcome to the Zotec Framework! This documentation covers the essential components used in the framework, including **Cycle ORM**, **Twig**, **Intervention Image**, **Tracy Debug Bar**, and configuration details for setting up **database** and **routing** in your project. The framework is designed to streamline your development process with a clean and efficient structure.
 
+## Key Components
 
+1. **Cycle ORM** – A powerful object-relational mapper (ORM) for handling database operations.
+2. **Twig** – A flexible and fast template engine for PHP, used for rendering views.
+3. **Intervention Image** – A simple image handling and manipulation library.
+4. **Tracy Debug Bar** – A powerful debugger for PHP to help with error tracking and debugging.
+5. **Routing System** – Handles routing for your application, making URL management simple.
+
+---
+
+## Installation
+
+1. Clone or download the repository.
+2. Run `composer install` to install dependencies.
+3. Configure your `.env` file with the correct settings for the database, routing, and other services.
+
+---
+
+## Configuration: `config/env.php`
+
+All configuration settings related to your database, routing system, and other components are defined in the `config/env.php` file. Below is an example of how to configure these services:
+
+```php
+return [
+    'database' => [
+        'driver'   => 'mysql',
+        'host'     => 'localhost',
+        'dbname'   => 'your_database',
+        'username' => 'root',
+        'password' => '',
+        'charset'  => 'utf8mb4',
+    ],
+    'routing' => [
+        'base_url' => 'http://localhost',
+        'routes' => [
+            '/home' => 'HomeController@index',
+            '/about' => 'AboutController@index',
+            // Add more routes here
+        ],
+    ],
+    'twig' => [
+        'cache' => '/path/to/cache',
+        'debug' => true,
+    ],
+    'intervention_image' => [
+        'driver' => 'gd', // Or 'imagick'
+    ],
+    'tracy_debug_bar' => [
+        'enabled' => true,
+    ],
+];
 ```
+
+---
+
+## **Cycle ORM** Usage
+
+Cycle ORM is an advanced object-relational mapper (ORM) used to handle database interactions in your project. Here's how you can perform various database operations.
+
+### **Database Insert Builder**
+
+To insert data into a table, we use the `InsertBuilder`:
+
+```php
+// Get InsertBuilder instance
 $insert = $db->insert('test');
-```
-Now we can add some values to our builder to be inserted into related table:
 
-```
-$insert = $db->insert('test');
-
+// Insert a single row
 $insert->values([
     'time_created' => new \DateTime(),
     'name'         => 'Anton',
@@ -24,19 +82,20 @@ $insert->values([
 ]);
 ```
 
-#Batch Insert
-You add as many values into insert builder as your database can support:
+### **Batch Insert**
 
-```
+To insert multiple rows efficiently, use a batch insert:
+
+```php
 $insert->columns([
-    'time_created', 
-    'name', 
-    'email', 
+    'time_created',
+    'name',
+    'email',
     'balance'
 ]);
 
 for ($i = 0; $i < 20; $i++) {
-    // we don't need to specify key names in this case
+    // Add multiple values
     $insert->values([
         new \DateTime(),
         $this->faker->randomNumber(2),
@@ -45,13 +104,15 @@ for ($i = 0; $i < 20; $i++) {
     ]);
 }
 
+// Execute the insert operation
 $insert->run();
 ```
 
-#Quick Inserts
-You can skip InsertQuery creation by talking to your table directly:
+### **Quick Inserts**
 
-```
+You can skip the `InsertQuery` creation by directly interacting with the table:
+
+```php
 $table = $db->table('test');
 
 print_r($table->insertOne([
@@ -62,159 +123,134 @@ print_r($table->insertOne([
 ]));
 ```
 
-#SelectQuery Builder
-SelectQuery builder can be retrieved two very similar ways, you can either get it from database or from table instances:
+### **Select Query Builder**
 
-```
+Cycle ORM’s `SelectQuery` builder allows you to fetch data from the database efficiently.
+
+```php
+// Select from 'test' table
 $select = $db->table('test')->select();
 
-// alternative
-$select = $db->select()->from('test');
-
-// alternative
-$select = $db->test->select();
-```
-#Select Columns
-By default, SelectQuery selects every column (*) from its related table. We can always change the set of requested columns using the columns method.
-
-```
-$db->users->select()
-    ->columns('name')
-    ->fetchAll();
-```
-You can use your select query as proper iterator or use run method which will return instance of Cycle\Database\Statement:
-
-```
-foreach($select->getIterator() as $row) {
+// Fetch specific columns
+$select->columns(['id', 'status', 'name']);
+foreach ($select as $row) {
     print_r($row);
 }
 ```
-To select all values as array use fetchAll:
 
-```
-foreach($select->fetchAll() as $row) {
-    print_r($row);
-}
-```
-You can always view what SQL is generated by your query by dumping it or via method sqlStatement:
+### **Where Statements**
 
-```
-print_r(
-    $db->users->select()
-        ->columns('name')
-        ->sqlStatement()
-);
-```
-#Where Statements
-Add WHERE conditions to your query using where, andWhere, orWhere methods.
+You can add `WHERE` conditions to your queries:
 
-#Basics
-Let's add simple condition on status column of our table:
-
-```
+```php
 $select = $db->select()
     ->from('test')
-    ->columns(['id', 'status', 'name']);
-
-$select->where('status', '=', 'active');
+    ->columns(['id', 'status', 'name'])
+    ->where('status', '=', 'active');
 
 foreach ($select as $row) {
     print_r($row);
 }
 ```
-```
-SELECT `id`,
-       `status`,
-       `name`
-FROM `primary_test`
-WHERE `status` = 'active'        
-```
-Note that prepared statements used behind the scenes.
 
-You can skip '=' in your conditions:
+You can also chain multiple conditions:
 
-```
-$select->where('status', 'active');
-Image
-#Where Operators
-Second argument can be used to declare operator:
-
-```
-$select->where('id', '>', 10);
-$select->where('status', 'like', 'active');
-Image
-For between and not between conditions you can also use forth argument of where method:
-
-```
-$select->where('id', 'between', 10, 20);
-```
-Resulted SQL:
-
-```
-SELECT `id`,
-       `status`,
-       `name`
-FROM `primary_test`
-WHERE `id` BETWEEN 10 AND 20  
-```
-#Multiple Where Conditions
-Chain multiple where conditions using fluent calls:
-
-```
-$select
-    ->where('id', 1)
-    ->where('status', 'active');
-```
-Method andWhere is an alias for where, so we can rewrite such condition to make it more readable:
-
-```
-$select
-    ->where('id', 1)
+```php
+$select->where('id', 1)
     ->andWhere('status', 'active');
 ```
-Resulted SQL:
 
-```
-SELECT `id`,
-       `status`,
-       `name`
-FROM `primary_test`
-WHERE `id` = 1
-  AND `status` = 'active'
-```
-SelectQuery will generate SQL based respecting your operator order and boolean operators:
+### **Debugging Queries**
 
-```
-$select
-    ->where('id', 1)
-    ->orWhere('id', 2)
-    ->orWhere('status', 'active');
-```
-```
-SELECT `id`,
-       `status`,
-       `name`
-FROM `primary_test`
-WHERE `id` = 1
-   OR `id` = 2
-   OR `status` = 'active'
+To debug the generated SQL statement, use:
+
+```php
+print_r($db->users->select()->columns('name')->sqlStatement());
 ```
 
-#Tracy For Debugging
+---
 
-The Tracy Bar is a floating panel. It is displayed in the bottom right corner of a page. You can move it using the mouse. It will remember its position after the page reloading.
+## **Intervention Image** – Image Manipulation
 
+The **Intervention Image** library allows you to easily manipulate images in your application.
 
+### **Basic Example**
 
-
-#INTERVENTION/IMAGE
-```
-// import the Intervention Image Manager Class
+```php
+// Import the Intervention Image Manager Class
 use Intervention\Image\ImageManager;
 
-// create an image manager instance with favored driver
+// Create an ImageManager instance with the favored driver
 $manager = new ImageManager(['driver' => 'imagick']);
 
-// to finally create image instances
+// Create an image instance and resize it
 $image = $manager->make('public/foo.jpg')->resize(300, 200);
+$image->save('public/foo_resized.jpg');
 ```
+
+---
+
+## **Tracy Debug Bar** – Debugging Tool
+
+Tracy is a powerful PHP debugger that provides real-time insights into your application. It includes a Debug Bar for viewing logs, exceptions, and more.
+
+### **Enable Tracy Debug Bar**
+
+To use the Tracy Debug Bar, ensure it is enabled in the configuration:
+
+```php
+// Example configuration in env.php
+'tracy_debug_bar' => [
+    'enabled' => true,
+]
+```
+
+In your application, you can trigger Tracy’s debugging features:
+
+```php
+// Enable Tracy Debugging
+if ($config['tracy_debug_bar']['enabled']) {
+    \Tracy\Debugger::enable();
+}
+```
+
+Once enabled, the Tracy Debug Bar will appear at the bottom of the page, providing real-time debugging information.
+
+---
+
+## **Twig** – Template Engine
+
+Twig is the templating engine used in this framework for rendering views. It is highly flexible and fast, making it ideal for building dynamic web applications.
+
+### **Using Twig**
+
+Here’s how you can render a template with Twig:
+
+```php
+// Load Twig environment
+$loader = new \Twig\Loader\FilesystemLoader('/path/to/templates');
+$twig = new \Twig\Environment($loader);
+
+// Render a template
+echo $twig->render('index.twig', ['name' => 'Anton']);
+```
+
+### **Template Example**
+
+In the `index.twig` file:
+
+```twig
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }}'s Page</title>
+</head>
+<body>
+    <h1>Hello, {{ name }}!</h1>
+</body>
+</html>
+```
+
+---
