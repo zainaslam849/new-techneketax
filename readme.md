@@ -1,7 +1,3 @@
-Certainly! Below is a refined and professional version of your `README.md` that includes examples, detailed descriptions of the key components, and explanations for using **Cycle ORM**, **Intervention Image**, **Tracy Debug Bar**, and **Twig** within your project. Additionally, I have added a note on configuring the **database** and **routing system** in the `config/env.php` file.
-
----
-
 # Zotec Framework Documentation
 
 Welcome to the Zotec Framework! This documentation covers the essential components used in the framework, including **Cycle ORM**, **Twig**, **Intervention Image**, **Tracy Debug Bar**, and configuration details for setting up **database** and **routing** in your project. The framework is designed to streamline your development process with a clean and efficient structure.
